@@ -37,6 +37,9 @@
 #endif
 #endif
 
+#define COMMAND_LIST	1
+#define COMMAND_LIST_OK	2
+
 #ifdef MPD_HAVE_IPV6        
 int mpd_ipv6Supported() {
         int s;          
@@ -375,7 +378,7 @@ void mpd_executeCommand(mpd_Connection * connection, char * command) {
 	}
 
 	if(!connection->commandList) connection->doneProcessing = 0;
-	else if(connection->listOks >= 0) {
+	else if(connection->commandList == COMMAND_LIST_OK) {
 		connection->listOks++;
 	}
 }
@@ -463,6 +466,7 @@ void mpd_getNextReturnElement(mpd_Connection * connection) {
 			strcpy(connection->errorStr, "expected more list_OK's");
 			connection->error = 1;
 		}
+		connection->listOks = 0;
 		connection->doneProcessing = 1;
 		return;
 	}
@@ -1342,7 +1346,7 @@ void mpd_sendCommandListBegin(mpd_Connection * connection) {
 		connection->error = 1;
 		return;
 	}
-	connection->commandList = 1;
+	connection->commandList = COMMAND_LIST;
 	mpd_executeCommand(connection,"command_list_begin\n");
 }
 
@@ -1352,7 +1356,7 @@ void mpd_sendCommandListOkBegin(mpd_Connection * connection) {
 		connection->error = 1;
 		return;
 	}
-	connection->commandList = 1;
+	connection->commandList = COMMAND_LIST_OK;
 	mpd_executeCommand(connection,"command_list_ok_begin\n");
 	connection->listOks = 0;
 }
@@ -1364,6 +1368,5 @@ void mpd_sendCommandListEnd(mpd_Connection * connection) {
 		return;
 	}
 	connection->commandList = 0;
-	connection->doneListOk = 0;
 	mpd_executeCommand(connection,"command_list_end\n");
 }
