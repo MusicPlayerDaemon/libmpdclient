@@ -8,7 +8,7 @@
 int main(int argc, char ** argv) {
 	mpd_Connection * conn;
 
-	conn = mpd_newConnection("localhost",2100,10);
+	conn = mpd_newConnection("localhost",6600,10);
 
 	if(conn->error) {
 		fprintf(stderr,"%s\n",conn->errorStr);
@@ -73,8 +73,14 @@ int main(int argc, char ** argv) {
 				if(song->track) {
 					printf("track: %s\n",song->track);
 				}
+				if(song->name) {
+					printf("name: %s\n",song->name);
+				}
 				if(song->time!=MPD_SONG_NO_TIME) {
 					printf("time: %i\n",song->time);
+				}
+				if(song->num!=MPD_SONG_NO_NUM) {
+					printf("num: %i\n",song->num);
 				}
 
 				mpd_freeInfoEntity(entity);

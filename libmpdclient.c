@@ -688,7 +688,9 @@ void mpd_initSong(mpd_Song * song) {
 	song->album = NULL;
 	song->track = NULL;
 	song->title = NULL;
+	song->name = NULL;
 	song->time = MPD_SONG_NO_TIME;
+	song->num = MPD_SONG_NO_NUM;
 }
 
 void mpd_finishSong(mpd_Song * song) {
@@ -697,6 +699,7 @@ void mpd_finishSong(mpd_Song * song) {
 	if(song->album) free(song->album);
 	if(song->title) free(song->title);
 	if(song->track) free(song->track);
+	if(song->name) free(song->name);
 }
 
 mpd_Song * mpd_newSong() {
@@ -720,7 +723,9 @@ mpd_Song * mpd_songDup(mpd_Song * song) {
 	if(song->album) ret->album = strdup(song->album);
 	if(song->title) ret->title = strdup(song->title);
 	if(song->track) ret->track = strdup(song->track);
+	if(song->name) ret->name = strdup(song->name);
 	ret->time = song->time;
+	ret->num = song->num;
 
 	return ret;
 }
@@ -883,9 +888,17 @@ mpd_InfoEntity * mpd_getNextInfoEntity(mpd_Connection * connection) {
 					strcmp(re->name,"Track")==0) {
 				entity->info.song->track = strdup(re->value);
 			}
+			else if(!entity->info.song->name &&
+					strcmp(re->name,"Name")==0) {
+				entity->info.song->name = strdup(re->value);
+			}
 			else if(entity->info.song->time==MPD_SONG_NO_TIME &&
 					strcmp(re->name,"Time")==0) {
 				entity->info.song->time = atoi(re->value);
+			}
+			else if(entity->info.song->num==MPD_SONG_NO_NUM &&
+					strcmp(re->name,"Num")==0) {
+				entity->info.song->num = atoi(re->value);
 			}
 		}
 		else if(entity->type == MPD_INFO_ENTITY_TYPE_DIRECTORY) {

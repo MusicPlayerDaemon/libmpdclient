@@ -168,6 +168,7 @@ void mpd_freeStats(mpd_Stats * stats);
 /* SONG STUFF */
 
 #define MPD_SONG_NO_TIME	-1
+#define MPD_SONG_NO_NUM		-1
 
 /* mpd_Song
  * for storing song info returned by mpd
@@ -183,8 +184,14 @@ typedef struct _mpd_Song {
 	char * album;
 	/* track, maybe NULL if there is no tag */
 	char * track;
+	/* name, maybe NULL if there is no tag; it's the name of the current
+	 * song, f.e. the icyName of the stream */
+	char * name;
 	/* length of song in seconds, check that it is not MPD_SONG_NO_TIME  */
 	int time;
+	/* if plchanges or playlistinfo used, is the number of the song in
+	 * the playlist */
+	int num;
 } mpd_Song;
 
 /* mpd_newSong
