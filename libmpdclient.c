@@ -1392,12 +1392,12 @@ void mpd_sendCommandListEnd(mpd_Connection * connection) {
 	mpd_executeCommand(connection,"command_list_end\n");
 }
 
-void mpd_sendDevicesCommand(mpd_Connection * connection) {
-	mpd_executeCommand(connection,"devices\n");
+void mpd_sendOutputsCommand(mpd_Connection * connection) {
+	mpd_executeCommand(connection,"outputs\n");
 }
 
-mpd_Device * mpd_getNextDevice(mpd_Connection * connection) {
-	mpd_Device * device = NULL;
+mpd_Output * mpd_getNextOutput(mpd_Connection * connection) {
+	mpd_Output * output = NULL;
 
 	if(connection->doneProcessing || (connection->listOks &&
 			connection->doneListOk))
@@ -1407,47 +1407,47 @@ mpd_Device * mpd_getNextDevice(mpd_Connection * connection) {
 
 	if(connection->error) return NULL;
 
-	device = malloc(sizeof(mpd_Device));
-	device->id = -10;
-	device->name = NULL;
-	device->enabled = 0;
+	output = malloc(sizeof(mpd_Output));
+	output->id = -10;
+	output->name = NULL;
+	output->enabled = 0;
 
 	if(!connection->returnElement) mpd_getNextReturnElement(connection);
 
 	while(connection->returnElement) {
 		mpd_ReturnElement * re = connection->returnElement;
-		if(strcmp(re->name,"deviceid")==0) {
-			if(device!=NULL && device->id>=0) return device;
-			device->id = atoi(re->value);
+		if(strcmp(re->name,"outputid")==0) {
+			if(output!=NULL && output->id>=0) return output;
+			output->id = atoi(re->value);
 		}
-		else if(strcmp(re->name,"devicename")==0) {
-			device->name = strdup(re->value);
+		else if(strcmp(re->name,"outputname")==0) {
+			output->name = strdup(re->value);
 		}
-		else if(strcmp(re->name,"deviceenabled")==0) {
-			device->enabled = atoi(re->value);
+		else if(strcmp(re->name,"outputenabled")==0) {
+			output->enabled = atoi(re->value);
 		}
 
 		mpd_getNextReturnElement(connection);
 		if(connection->error) {
-			free(device);
+			free(output);
 			return NULL;
 		}
 		
 	}
 
-	return device;
+	return output;
 }
 
-void mpd_sendEnableDeviceCommand(mpd_Connection * connection, int deviceId) {
-	char * string = malloc(strlen("enabledevice")+25);
-	sprintf(string,"enabledevice \"%i\"\n",deviceId);
+void mpd_sendEnableOutputCommand(mpd_Connection * connection, int outputId) {
+	char * string = malloc(strlen("enableoutput")+25);
+	sprintf(string,"enableoutput \"%i\"\n",outputId);
 	mpd_executeCommand(connection,string);
 	free(string);
 }
 
-void mpd_sendDisableDeviceCommand(mpd_Connection * connection, int deviceId) {
-	char * string = malloc(strlen("disabledevice")+25);
-	sprintf(string,"disabledevice \"%i\"\n",deviceId);
+void mpd_sendDisableOutputCommand(mpd_Connection * connection, int outputId) {
+	char * string = malloc(strlen("disableoutput")+25);
+	sprintf(string,"disableoutput \"%i\"\n",outputId);
 	mpd_executeCommand(connection,string);
 	free(string);
 }
