@@ -462,7 +462,7 @@ void mpd_getNextReturnElement(mpd_Connection * connection) {
 	
 		strcpy(connection->errorStr, output);
 		connection->error = MPD_ERROR_ACK;
-		connection->errorCode = MPD_ERROR_CODE_UNK;
+		connection->errorCode = MPD_ACK_ERROR_UNK;
 		connection->errorAt = MPD_ERROR_AT_UNK;
 		connection->doneProcessing = 1;
 
