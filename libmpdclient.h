@@ -73,7 +73,6 @@ typedef struct _mpd_Connection {
  * use this to open a new connection
  * you should use mpd_closeConnection, when your done with the connection,
  * even if an error has occurred
- * _host_ format can include the password for the host: password@host
  * _timeout_ is the connection timeout period in seconds
  */
 mpd_Connection * mpd_newConnection(const char * host, int port, float timeout);
