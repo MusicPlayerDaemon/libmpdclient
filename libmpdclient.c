@@ -468,7 +468,7 @@ void mpd_getNextReturnElement(mpd_Connection * connection) {
 
 		needle = strchr(output, '[');
 		if(!needle) return;
-		val = strtol(needle, &test, 10);
+		val = strtol(needle+1, &test, 10);
 		if(*test != '@') return;
 		connection->errorCode = val;
 		val = strtol(test+1, &test, 10);
