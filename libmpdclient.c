@@ -1396,8 +1396,8 @@ void mpd_sendOutputsCommand(mpd_Connection * connection) {
 	mpd_executeCommand(connection,"outputs\n");
 }
 
-mpd_Output * mpd_getNextOutput(mpd_Connection * connection) {
-	mpd_Output * output = NULL;
+mpd_OutputEntity * mpd_getNextOutput(mpd_Connection * connection) {
+	mpd_OutputEntity * output = NULL;
 
 	if(connection->doneProcessing || (connection->listOks &&
 			connection->doneListOk))
@@ -1407,7 +1407,7 @@ mpd_Output * mpd_getNextOutput(mpd_Connection * connection) {
 
 	if(connection->error) return NULL;
 
-	output = malloc(sizeof(mpd_Output));
+	output = malloc(sizeof(mpd_OutputEntity));
 	output->id = -10;
 	output->name = NULL;
 	output->enabled = 0;
