@@ -1451,3 +1451,8 @@ void mpd_sendDisableOutputCommand(mpd_Connection * connection, int outputId) {
 	mpd_executeCommand(connection,string);
 	free(string);
 }
+
+void mpd_freeOutputElement(mpd_OutputEntity * output) {
+	free(output->name);
+	free(output);
+}

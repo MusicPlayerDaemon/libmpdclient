@@ -489,6 +489,8 @@ void mpd_sendEnableOutputCommand(mpd_Connection * connection, int outputId);
 
 void mpd_sendDisableOutputCommand(mpd_Connection * connection, int outputId);
 
+void mpd_freeReturnElement(mpd_OutputEntity * output);
+
 #ifdef __cplusplus
 }
 #endif
