@@ -327,7 +327,7 @@ void mpd_freeInfoEntity(mpd_InfoEntity * entity);
 /* use this function to loop over after calling Info/Listall functions */
 mpd_InfoEntity * mpd_getNextInfoEntity(mpd_Connection * connection);
 
-void mpd_sendCurrentCommand(mpd_Connection * connection);
+void mpd_sendCurrentSongCommand(mpd_Connection * connection);
 
 /* songNum of -1, means to display the whole list */
 void mpd_sendPlaylistInfoCommand(mpd_Connection * connection, int songNum);

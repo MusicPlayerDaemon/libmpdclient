@@ -29,7 +29,7 @@ int main(int argc, char ** argv) {
 
 		mpd_sendCommandListOkBegin(conn);
 		mpd_sendStatusCommand(conn);
-		mpd_sendCurrentCommand(conn);
+		mpd_sendCurrentSongCommand(conn);
 		mpd_sendCommandListEnd(conn);
 
 		if((status = mpd_getStatus(conn))==NULL) {

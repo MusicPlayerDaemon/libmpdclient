@@ -1059,8 +1059,8 @@ void mpd_sendLsInfoCommand(mpd_Connection * connection, const char * dir) {
 	free(sDir);
 }
 
-void mpd_sendCurrentCommand(mpd_Connection * connection) {
-	mpd_executeCommand(connection,"current\n");
+void mpd_sendCurrentSongCommand(mpd_Connection * connection) {
+	mpd_executeCommand(connection,"currentsong\n");
 }
 
 void mpd_sendSearchCommand(mpd_Connection * connection, int table, 
