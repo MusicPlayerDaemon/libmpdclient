@@ -484,7 +484,6 @@ void mpd_finishCommand(mpd_Connection * connection) {
 	while(!connection->doneProcessing) mpd_getNextReturnElement(connection);
 }
 
-
 mpd_Status * mpd_getStatus(mpd_Connection * connection) {
 	mpd_Status * status;
 
@@ -939,6 +938,13 @@ char * mpd_getNextAlbum(mpd_Connection * connection) {
 void mpd_sendPlaylistInfoCommand(mpd_Connection * connection, int songNum) {
 	char * string = malloc(strlen("playlistinfo")+25);
 	sprintf(string,"playlistinfo \"%i\"\n",songNum);
+	mpd_sendInfoCommand(connection,string);
+	free(string);
+}
+
+void mpd_sendPlChangesCommand(mpd_Connection * connection, long long playlist) {
+	char * string = malloc(strlen("plchanges")+25);
+	sprintf(string,"plchanges \"%i\"\n",playlist);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 }

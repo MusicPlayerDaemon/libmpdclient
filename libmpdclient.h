@@ -304,6 +304,9 @@ mpd_InfoEntity * mpd_getNextInfoEntity(mpd_Connection * connection);
 /* songNum of -1, means to display the whole list */
 void mpd_sendPlaylistInfoCommand(mpd_Connection * connection, int songNum);
 
+/* use this to get the changes in the playlist since version _playlist_ */
+void mpd_sendPlChangesCommand(mpd_Connection * connection, long long playlist);
+
 void mpd_sendListallCommand(mpd_Connection * connection, const char * dir);
 
 void mpd_sendListallInfoCommand(mpd_Connection * connection, const char * dir);
