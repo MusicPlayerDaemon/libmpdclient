@@ -1,3 +1,4 @@
+CFLAGS = -Wall
 SOURCES = example.c libmpdclient.c
 
 example: $(SOURCES)

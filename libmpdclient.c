@@ -959,7 +959,7 @@ void mpd_sendPlaylistInfoCommand(mpd_Connection * connection, int songNum) {
 
 void mpd_sendPlChangesCommand(mpd_Connection * connection, long long playlist) {
 	char * string = malloc(strlen("plchanges")+25);
-	sprintf(string,"plchanges \"%i\"\n",playlist);
+	sprintf(string,"plchanges \"%lld\"\n",playlist);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 }
