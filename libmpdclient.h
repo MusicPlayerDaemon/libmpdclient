@@ -183,6 +183,8 @@ typedef struct _mpd_Stats {
 	unsigned long dbPlayTime;
 } mpd_Stats;
 
+void mpd_sendStatsCommand(mpd_Connection * connection);
+
 mpd_Stats * mpd_getStats(mpd_Connection * connection);
 
 void mpd_freeStats(mpd_Stats * stats);

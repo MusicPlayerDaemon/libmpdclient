@@ -668,12 +668,24 @@ void mpd_freeStatus(mpd_Status * status) {
 	free(status);
 }
 
+void mpd_sendStatsCommand(mpd_Connection * connection) {
+	mpd_executeCommand(connection,"stats\n");
+}
+
 mpd_Stats * mpd_getStats(mpd_Connection * connection) {
 	mpd_Stats * stats;
 
-	mpd_executeCommand(connection,"stats\n");
+	/*mpd_executeCommand(connection,"stats\n");
 		
-	if(connection->error) return NULL;
+	if(connection->error) return NULL;*/
+
+	if(connection->doneProcessing || (connection->listOks && 
+			connection->doneListOk))
+	{
+		return NULL;
+	}
+
+	if(!connection->returnElement) mpd_getNextReturnElement(connection);
 
 	stats = malloc(sizeof(mpd_Stats));
 	stats->numberOfArtists = 0;
@@ -684,7 +696,6 @@ mpd_Stats * mpd_getStats(mpd_Connection * connection) {
 	stats->playTime = 0;
 	stats->dbPlayTime = 0;
 
-	mpd_getNextReturnElement(connection);
 	if(connection->error) {
 		free(stats);
 		return NULL;
