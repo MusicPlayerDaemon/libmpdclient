@@ -1,4 +1,4 @@
-CFLAGS = -Wall
+CFLAGS = -Wall -ggdb
 SOURCES = example.c libmpdclient.c
 
 example: $(SOURCES)

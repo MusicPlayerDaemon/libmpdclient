@@ -26,6 +26,12 @@ int main(int argc, char ** argv) {
 	if(argc==1) {
 		mpd_Status * status;
 		mpd_InfoEntity * entity;
+
+		mpd_sendCommandListOkBegin(conn);
+		mpd_sendStatusCommand(conn);
+		mpd_sendCurrentCommand(conn);
+		mpd_sendCommandListEnd(conn);
+
 		if((status = mpd_getStatus(conn))==NULL) {
 			fprintf(stderr,"%s\n",conn->errorStr);
 			mpd_closeConnection(conn);
@@ -44,60 +50,61 @@ int main(int argc, char ** argv) {
 			printf("elaspedTime: %i\n",status->elapsedTime);
 			printf("totalTime: %i\n",status->totalTime);
 			printf("bitRate: %i\n",status->bitRate);
+		}
 
-			mpd_sendPlaylistInfoCommand(conn,status->song);
-			if(conn->error) {
-				fprintf(stderr,"%s\n",conn->errorStr);
-				mpd_closeConnection(conn);
-				return -1;
-			}
+		if(conn->error) {
+			fprintf(stderr,"%s\n",conn->errorStr);
+			mpd_closeConnection(conn);
+			return -1;
+		}
 
-			while((entity = mpd_getNextInfoEntity(conn))) {
-				if(entity->type!=MPD_INFO_ENTITY_TYPE_SONG) {
-					mpd_freeInfoEntity(entity);
-					continue;
-				}
+		mpd_nextListOkCommand(conn);
 
-				mpd_Song * song = entity->info.song;
-
-				printf("file: %s\n",song->file);
-				if(song->artist) {
-					printf("artist: %s\n",song->artist);
-				}
-				if(song->album) {
-					printf("album: %s\n",song->album);
-				}
-				if(song->title) {
-					printf("title: %s\n",song->title);
-				}
-				if(song->track) {
-					printf("track: %s\n",song->track);
-				}
-				if(song->name) {
-					printf("name: %s\n",song->name);
-				}
-				if(song->time!=MPD_SONG_NO_TIME) {
-					printf("time: %i\n",song->time);
-				}
-				if(song->num!=MPD_SONG_NO_NUM) {
-					printf("num: %i\n",song->num);
-				}
-
+		while((entity = mpd_getNextInfoEntity(conn))) {
+			if(entity->type!=MPD_INFO_ENTITY_TYPE_SONG) {
 				mpd_freeInfoEntity(entity);
+				continue;
 			}
 
-			if(conn->error) {
-				fprintf(stderr,"%s\n",conn->errorStr);
-				mpd_closeConnection(conn);
-				return -1;
+			mpd_Song * song = entity->info.song;
+
+			printf("file: %s\n",song->file);
+			if(song->artist) {
+				printf("artist: %s\n",song->artist);
+			}
+			if(song->album) {
+				printf("album: %s\n",song->album);
+			}
+			if(song->title) {
+				printf("title: %s\n",song->title);
+			}
+			if(song->track) {
+				printf("track: %s\n",song->track);
+			}
+			if(song->name) {
+				printf("name: %s\n",song->name);
+			}
+			if(song->time!=MPD_SONG_NO_TIME) {
+				printf("time: %i\n",song->time);
+			}
+			if(song->num!=MPD_SONG_NO_NUM) {
+				printf("num: %i\n",song->num);
 			}
 
-			mpd_finishCommand(conn);
-			if(conn->error) {
-				fprintf(stderr,"%s\n",conn->errorStr);
-				mpd_closeConnection(conn);
-				return -1;
-			}
+			mpd_freeInfoEntity(entity);
+		}
+
+		if(conn->error) {
+			fprintf(stderr,"%s\n",conn->errorStr);
+			mpd_closeConnection(conn);
+			return -1;
+		}
+
+		mpd_finishCommand(conn);
+		if(conn->error) {
+			fprintf(stderr,"%s\n",conn->errorStr);
+			mpd_closeConnection(conn);
+			return -1;
 		}
 	
 		mpd_freeStatus(status);
