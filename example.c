@@ -87,8 +87,8 @@ int main(int argc, char ** argv) {
 			if(song->time!=MPD_SONG_NO_TIME) {
 				printf("time: %i\n",song->time);
 			}
-			if(song->num!=MPD_SONG_NO_NUM) {
-				printf("num: %i\n",song->num);
+			if(song->pos!=MPD_SONG_NO_NUM) {
+				printf("pos: %i\n",song->pos);
 			}
 
 			mpd_freeInfoEntity(entity);
