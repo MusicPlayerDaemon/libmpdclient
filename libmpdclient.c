@@ -456,9 +456,24 @@ void mpd_getNextReturnElement(mpd_Connection * connection) {
 		return;
 	}
 	if(strncmp(output,"ACK",strlen("ACK"))==0) {
-		strcpy(connection->errorStr,output);
+		char * test;
+		char * needle;
+		int val;
+	
+		strcpy(connection->errorStr, output);
 		connection->error = MPD_ERROR_ACK;
+		connection->errorCode = MPD_ERROR_CODE_UNK;
+		connection->errorAt = MPD_ERROR_AT_UNK;
 		connection->doneProcessing = 1;
+
+		needle = strchr(output, '[');
+		if(!needle) return;
+		val = strtol(needle, &test, 10);
+		if(*test != '@') return;
+		connection->errorCode = val;
+		val = strtol(test+1, &test, 10);
+		if(*test != ']') return;
+		connection->errorAt = val;
 		return;
 	}
 
