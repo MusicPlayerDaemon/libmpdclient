@@ -773,6 +773,7 @@ void mpd_initSong(mpd_Song * song) {
 	song->track = NULL;
 	song->title = NULL;
 	song->name = NULL;
+	song->date = NULL;
 	song->time = MPD_SONG_NO_TIME;
 	song->pos = MPD_SONG_NO_NUM;
 	song->id = MPD_SONG_NO_ID;
@@ -785,6 +786,7 @@ void mpd_finishSong(mpd_Song * song) {
 	if(song->title) free(song->title);
 	if(song->track) free(song->track);
 	if(song->name) free(song->name);
+	if(song->date) free(song->date);
 }
 
 mpd_Song * mpd_newSong() {
@@ -809,6 +811,7 @@ mpd_Song * mpd_songDup(mpd_Song * song) {
 	if(song->title) ret->title = strdup(song->title);
 	if(song->track) ret->track = strdup(song->track);
 	if(song->name) ret->name = strdup(song->name);
+	if(song->date) ret->date = strdup(song->date);
 	ret->time = song->time;
 	ret->pos = song->pos;
 	ret->id = song->id;
@@ -993,6 +996,10 @@ mpd_InfoEntity * mpd_getNextInfoEntity(mpd_Connection * connection) {
 			else if(entity->info.song->id==MPD_SONG_NO_ID &&
 					strcmp(re->name,"Id")==0) {
 				entity->info.song->id = atoi(re->value);
+			}
+			else if(!entity->info.song->date &&
+					strcmp(re->name, "Date") == 0) {
+				entity->info.song->date = strdup(re->value);
 			}
 		}
 		else if(entity->type == MPD_INFO_ENTITY_TYPE_DIRECTORY) {

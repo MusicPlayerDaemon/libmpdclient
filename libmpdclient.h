@@ -231,6 +231,8 @@ typedef struct _mpd_Song {
 	/* name, maybe NULL if there is no tag; it's the name of the current
 	 * song, f.e. the icyName of the stream */
 	char * name;
+	/* date */
+	char *date;
 	/* length of song in seconds, check that it is not MPD_SONG_NO_TIME  */
 	int time;
 	/* if plchanges/playlistinfo/playlistid used, is the position of the 

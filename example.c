@@ -7,9 +7,24 @@
 
 int main(int argc, char ** argv) {
 	mpd_Connection * conn;
+	char *hostname = getenv("MPD_HOST");
+	char *port = getenv("MPD_PORT");
 
-	conn = mpd_newConnection("localhost",6600,10);
+	if(hostname == NULL)
+	{
+		hostname = strdup("localhost");
+	}
+	if(port == NULL)
+	{
+		port = strdup("6600");
+	}
+	
 
+	conn = mpd_newConnection(hostname,atoi(port),10);
+
+	free(hostname);
+	free(port);
+	
 	if(conn->error) {
 		fprintf(stderr,"%s\n",conn->errorStr);
 		mpd_closeConnection(conn);
@@ -84,6 +99,9 @@ int main(int argc, char ** argv) {
 			if(song->name) {
 				printf("name: %s\n",song->name);
 			}
+			if(song->date) {
+				printf("date: %s\n",song->date);
+			}                                      			
 			if(song->time!=MPD_SONG_NO_TIME) {
 				printf("time: %i\n",song->time);
 			}
