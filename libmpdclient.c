@@ -522,6 +522,7 @@ void mpd_finishCommand(mpd_Connection * connection) {
 		if(connection->doneListOk) connection->doneListOk = 0;
 		mpd_getNextReturnElement(connection);
 	}
+	connection->doneListOk = 0;
 }
 
 void mpd_finishListOkCommand(mpd_Connection * connection) {
