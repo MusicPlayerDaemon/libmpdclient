@@ -378,13 +378,13 @@ void mpd_executeCommand(mpd_Connection * connection, char * command) {
 void mpd_getNextReturnElement(mpd_Connection * connection) {
 	char * output = NULL;
 	char * rt = NULL;
-	char * name;
-	char * value;
+	char * name = NULL;
+	char * value = NULL;
 	fd_set fds;
 	struct timeval tv;
-	char * tok;
+	char * tok = NULL;
 	int readed;
-	char * bufferCheck;
+	char * bufferCheck = NULL;
 	int err;
 
 	if(connection->returnElement) mpd_freeReturnElement(connection->returnElement);
