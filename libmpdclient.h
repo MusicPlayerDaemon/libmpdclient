@@ -377,8 +377,6 @@ void mpd_sendVolumeCommand(mpd_Connection * connection, int volumeChange);
 
 void mpd_sendCrossfadeCommand(mpd_Connection * connection, int seconds);
 
-int mpd_getCrossfade(mpd_Connection * connection);
-
 void mpd_sendUpdateCommand(mpd_Connection * connection);
 
 void mpd_sendPasswordCommand(mpd_Connection * connection, const char * pass);
