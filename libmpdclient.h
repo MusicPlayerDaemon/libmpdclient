@@ -363,6 +363,7 @@ void mpd_sendRandomCommand(mpd_Connection * connection, int randomMode);
 
 void mpd_sendSetvolCommand(mpd_Connection * connection, int volumeChange);
 
+/* WARNING: don't use volume command, its depreacted */
 void mpd_sendVolumeCommand(mpd_Connection * connection, int volumeChange);
 
 void mpd_sendCrossfadeCommand(mpd_Connection * connection, int seconds);
