@@ -65,6 +65,13 @@ int mpd_ipv6Supported() {
 }                       
 #endif  
 
+/*
+	This is added for cygwin support, there is no equalivent in the win world for 
+		MSG_DONTWAIT so we take care of it here
+*/
+#ifdef WIN32
+#define MSG_DONTWAIT ioctlsocket(connection->sock, commandLen, commandPtr)
+#endif
 
 char * mpd_sanitizeArg(const char * arg) {
 	size_t i;
