@@ -20,7 +20,6 @@
 #ifndef LIBMPDCLIENT_H
 #define LIBMPDCLIENT_H
 
-#include <sys/param.h>
 #include <sys/time.h>
 
 #define MPD_BUFFER_MAX_LENGTH	50000
