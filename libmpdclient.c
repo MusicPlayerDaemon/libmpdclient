@@ -527,6 +527,10 @@ mpd_Status * mpd_getStatus(mpd_Connection * connection) {
 	status->elapsedTime = 0;
 	status->totalTime = 0;
 	status->bitRate = 0;
+	status->sampleRate = 0;
+	status->bits = 0;
+	status->channels = 0;
+	status->crossfade = -1;
 	status->error = NULL;
 
 	mpd_getNextReturnElement(connection);
@@ -581,6 +585,18 @@ mpd_Status * mpd_getStatus(mpd_Connection * connection) {
 		}
 		else if(strcmp(re->name,"error")==0) {
 			status->error = strdup(re->value);
+		}
+		else if(strcmp(re->name,"xfade")==0) {
+			status->crossfade = atoi(re->value);
+		}
+		else if(strcmp(re->name,"audio")==0) {
+			char * tok;
+			char * copy;
+			copy = strdup(re->value);
+			status->sampleRate = atoi(strtok_r(copy,":",&tok));
+			status->bits = atoi(strtok_r(NULL,":",&tok));
+			status->channels = atoi(strtok_r(NULL,"",&tok));
+			free(copy);
 		}
 
 		mpd_getNextReturnElement(connection);
@@ -1141,31 +1157,6 @@ void mpd_sendCrossfadeCommand(mpd_Connection * connection, int seconds) {
 	sprintf(string,"crossfade \"%i\"\n",seconds);
 	mpd_executeCommand(connection,string);
 	free(string);
-}
-
-int mpd_getCrossfade(mpd_Connection * connection) {
-	int crossfade = -1;
-
-	mpd_executeCommand(connection,"crossfade\n");
-		
-	if(connection->error) return -1;
-
-	mpd_getNextReturnElement(connection);
-	if(connection->error) return -1;
-
-	while(connection->returnElement) {
-		mpd_ReturnElement * re = connection->returnElement;
-		if(strcmp(re->name,"crossfade")==0) {
-			crossfade = atoi(re->value);
-		}
-
-		mpd_getNextReturnElement(connection);
-		if(connection->error) return -1;
-	}
-
-	if(connection->error) return -1;
-
-	return crossfade;
 }
 
 void mpd_sendPasswordCommand(mpd_Connection * connection, const char * pass) {
