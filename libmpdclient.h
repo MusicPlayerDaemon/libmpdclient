@@ -135,6 +135,8 @@ typedef struct mpd_Status {
 	int bits;
 	/* audio channels */
 	int channels;
+	/* 1 if mpd is updating, 0 otherwise */
+	int updatingDb;
 	/* error */
 	char * error;
 } mpd_Status;
