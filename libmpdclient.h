@@ -473,6 +473,20 @@ void mpd_sendCommandListEnd(mpd_Connection * connection);
  * returns -1 if it advanced to an OK or ACK */
 int mpd_nextListOkCommand(mpd_Connection * connection);
 
+typedef struct _mpd_Device {
+	int id;
+	char * name;
+	int enabled;
+} mpd_Device;
+
+void mpd_sendDevicesCommand(mpd_Connection * connection);
+
+mpd_Device * mpd_getNextDevice(mpd_Connection * connection);
+
+void mpd_sendEnableDeviceCommand(mpd_Connection * connection, int deviceId);
+
+void mpd_sendDisableDeviceCommand(mpd_Connection * connection, int deviceId);
+
 #ifdef __cplusplus
 }
 #endif
