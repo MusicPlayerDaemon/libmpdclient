@@ -327,9 +327,6 @@ char * mpd_getNextAlbum(mpd_Connection * connection);
 void mpd_sendListCommand(mpd_Connection * connection, int table, 
 		const char * arg1);
 
-void mpd_sendListAlbumsCommand(mpd_Connection * connection, 
-		const char * artist);
-
 /* SIMPLE COMMANDS */
 
 void mpd_sendAddCommand(mpd_Connection * connection, const char * file);
