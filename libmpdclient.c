@@ -69,25 +69,33 @@ int mpd_ipv6Supported() {
 }                       
 #endif  
 
-
-char * mpd_sanitizeArg(const char * arg) {
+static char * mpd_sanitizeArg(const char * arg) {
 	size_t i;
-	int count=0;
 	char * ret;
-
-	for(i=0;i<strlen(arg);i++) {
-		if(arg[i]=='"' || arg[i]=='\\') count++;
+	register const char *c;
+	register char *rc;
+	
+	/* 
+	unsigned int count = 0;
+	
+	c = arg;
+	for(i = strlen(arg); i != 0; --i) {
+		if(*c=='"' || *c=='\\') count++;
+		c++;
 	}
-
 	ret = malloc(strlen(arg)+count+1);
+	*/
+	/* instead of counting in that loop above, just
+	 * use a bit more memory and half running time
+	 */
+	ret = malloc(strlen(arg) * 2 + 1);
 
-	count = 0;
-	for(i=0;i<strlen(arg)+1;i++) {
-		if(arg[i]=='"' || arg[i]=='\\') {
-			ret[i+count] = '\\';
-			count++;
-		}
-		ret[i+count] = arg[i];
+	c = arg;
+	rc = ret;
+	for(i = strlen(arg)+1; i != 0; --i) {
+		if(*c=='"' || *c=='\\')
+			*rc++ = '\\';
+		*(rc++) = *(c++);
 	}
 
 	return ret;
