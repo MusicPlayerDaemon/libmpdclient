@@ -797,6 +797,10 @@ void mpd_initSong(mpd_Song * song) {
 	song->title = NULL;
 	song->name = NULL;
 	song->date = NULL;
+	/* added by Qball */
+	song->genre = NULL;
+	song->composer = NULL;
+
 	song->time = MPD_SONG_NO_TIME;
 	song->pos = MPD_SONG_NO_NUM;
 	song->id = MPD_SONG_NO_ID;
@@ -810,6 +814,8 @@ void mpd_finishSong(mpd_Song * song) {
 	if(song->track) free(song->track);
 	if(song->name) free(song->name);
 	if(song->date) free(song->date);
+	if(song->genre) free(song->genre);
+	if(song->composer) free(song->composer);
 }
 
 mpd_Song * mpd_newSong() {
@@ -835,6 +841,8 @@ mpd_Song * mpd_songDup(mpd_Song * song) {
 	if(song->track) ret->track = strdup(song->track);
 	if(song->name) ret->name = strdup(song->name);
 	if(song->date) ret->date = strdup(song->date);
+	if(song->genre) ret->genre= strdup(song->genre);
+	if(song->composer) ret->composer= strdup(song->composer);
 	ret->time = song->time;
 	ret->pos = song->pos;
 	ret->id = song->id;
@@ -1024,6 +1032,15 @@ mpd_InfoEntity * mpd_getNextInfoEntity(mpd_Connection * connection) {
 					strcmp(re->name, "Date") == 0) {
 				entity->info.song->date = strdup(re->value);
 			}
+			else if(!entity->info.song->genre &&
+					strcmp(re->name, "Genre") == 0) {
+				entity->info.song->genre = strdup(re->value);
+			}
+			else if(!entity->info.song->composer &&
+					strcmp(re->name, "Composer") == 0) {
+				entity->info.song->composer = strdup(re->value);
+			}                                                    			
+			
 		}
 		else if(entity->type == MPD_INFO_ENTITY_TYPE_DIRECTORY) {
 		}

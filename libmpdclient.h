@@ -233,6 +233,11 @@ typedef struct _mpd_Song {
 	char * name;
 	/* date */
 	char *date;
+
+	/* added by qball */
+	char *genre;
+	char *composer;
+
 	/* length of song in seconds, check that it is not MPD_SONG_NO_TIME  */
 	int time;
 	/* if plchanges/playlistinfo/playlistid used, is the position of the 
