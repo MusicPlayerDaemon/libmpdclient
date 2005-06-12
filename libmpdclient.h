@@ -255,7 +255,7 @@ typedef struct _mpd_Song {
  * use mpd_freeSong to free the memory for the mpd_Song, it will also
  * free memory for file, artist, etc, so don't do it yourself
  */
-mpd_Song * mpd_newSong();
+mpd_Song * mpd_newSong(void);
 
 /* mpd_freeSong
  * use to free memory allocated by mpd_newSong
@@ -281,7 +281,7 @@ typedef struct _mpd_Directory {
  * allocates memory for a new directory
  * use mpd_freeDirectory to free this memory
  */
-mpd_Directory * mpd_newDirectory ();
+mpd_Directory * mpd_newDirectory (void);
 
 /* mpd_freeDirectory
  * used to free memory allocated with mpd_newDirectory, and it frees
@@ -307,7 +307,7 @@ typedef struct _mpd_PlaylistFile {
  * allocates memory for new mpd_PlaylistFile, path is set to NULL
  * free this memory with mpd_freePlaylistFile
  */
-mpd_PlaylistFile * mpd_newPlaylistFile();
+mpd_PlaylistFile * mpd_newPlaylistFile(void);
 
 /* mpd_freePlaylist
  * free memory allocated for freePlaylistFile, will also free
@@ -345,7 +345,7 @@ typedef struct mpd_InfoEntity {
 	} info;
 } mpd_InfoEntity;
 
-mpd_InfoEntity * mpd_newInfoEntity();
+mpd_InfoEntity * mpd_newInfoEntity(void);
 
 void mpd_freeInfoEntity(mpd_InfoEntity * entity);
 

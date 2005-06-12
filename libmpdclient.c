@@ -60,7 +60,7 @@
 #define COMMAND_LIST_OK	2
 
 #ifdef MPD_HAVE_IPV6        
-int mpd_ipv6Supported() {
+int mpd_ipv6Supported(void) {
         int s;          
         s = socket(AF_INET6,SOCK_STREAM,0);
         if(s == -1) return 0;
@@ -818,7 +818,7 @@ void mpd_finishSong(mpd_Song * song) {
 	if(song->composer) free(song->composer);
 }
 
-mpd_Song * mpd_newSong() {
+mpd_Song * mpd_newSong(void) {
 	mpd_Song * ret = malloc(sizeof(mpd_Song));
 
 	mpd_initSong(ret);
@@ -858,7 +858,7 @@ void mpd_finishDirectory(mpd_Directory * directory) {
 	if(directory->path) free(directory->path);
 }
 
-mpd_Directory * mpd_newDirectory () {
+mpd_Directory * mpd_newDirectory (void) {
 	mpd_Directory * directory = malloc(sizeof(mpd_Directory));;
 
 	mpd_initDirectory(directory);
@@ -888,7 +888,7 @@ void mpd_finishPlaylistFile(mpd_PlaylistFile * playlist) {
 	if(playlist->path) free(playlist->path);
 }
 
-mpd_PlaylistFile * mpd_newPlaylistFile() {
+mpd_PlaylistFile * mpd_newPlaylistFile(void) {
 	mpd_PlaylistFile * playlist = malloc(sizeof(mpd_PlaylistFile));
 
 	mpd_initPlaylistFile(playlist);
@@ -927,7 +927,7 @@ void mpd_finishInfoEntity(mpd_InfoEntity * entity) {
 	}
 }
 
-mpd_InfoEntity * mpd_newInfoEntity() {
+mpd_InfoEntity * mpd_newInfoEntity(void) {
 	mpd_InfoEntity * entity = malloc(sizeof(mpd_InfoEntity));
 	
 	mpd_initInfoEntity(entity);
