@@ -129,6 +129,41 @@ void mpd_setConnectionTimeout(mpd_Connection * connection, float timeout) {
 				connection->timeout.tv_sec*1000000+0.5);
 }
 
+static int mpd_parseWelcome(mpd_Connection * connection, const char * host, int port,
+			    char * rt, char * output) {
+
+	char * tmp;
+	char * test;
+	int i;
+
+	if(strncmp(output,MPD_WELCOME_MESSAGE,strlen(MPD_WELCOME_MESSAGE))) {
+		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
+				"mpd not running on port %i on host \"%s\"",
+				port,host);
+		connection->error = MPD_ERROR_NOTMPD;
+		return 1;
+	}
+
+	tmp = &output[strlen(MPD_WELCOME_MESSAGE)];
+	
+	for(i=0;i<3;i++) {
+		if(tmp) connection->version[i] = strtol(tmp,&test,10);
+
+		if (!tmp || (test[0] != '.' && test[0] != '\0')) {
+			snprintf(connection->errorStr,
+			MPD_BUFFER_MAX_LENGTH,
+			"error parsing version number at "
+			"\"%s\"",
+			&output[strlen(MPD_WELCOME_MESSAGE)]);
+			connection->error = MPD_ERROR_NOTMPD;
+			return 1;
+		}
+		tmp = ++test;
+	}
+
+	return 0;
+}
+
 mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 	int err;
 	struct hostent * he;
@@ -147,9 +182,6 @@ mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 #ifdef MPD_HAVE_IPV6
 	struct sockaddr_in6 sin6;
 #endif
-#ifdef WIN32
-	WSADATA wsaData;
-#endif
 	strcpy(connection->buffer,"");
 	connection->buflen = 0;
 	connection->bufstart = 0;
@@ -162,18 +194,13 @@ mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 	connection->returnElement = NULL;
 
 #ifdef WIN32
-	if ((WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0) {
+	WSADATA wsaData;
+	if ((WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0 ||
+	    LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2 ) {
 		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
 				"Could not find usable WinSock DLL.");
 		connection->error = MPD_ERROR_SYSTEM;
 		return connection;
-	}
-
-	if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2) {
-		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
-				"Could not find usable WinSock DLL.");
-		connection->error = MPD_ERROR_SYSTEM;
-	return connection;
 	}
 #endif
 
@@ -273,8 +300,6 @@ mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 			}
 			connection->buflen+=readed;
 			connection->buffer[connection->buflen] = '\0';
-			tv.tv_sec = connection->timeout.tv_sec;
-			tv.tv_usec = connection->timeout.tv_usec;
 		}
 		else if(err<0) {
 			switch(errno) {
@@ -303,49 +328,9 @@ mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 	strcpy(connection->buffer,rt+1);
 	connection->buflen = strlen(connection->buffer);
 
-	if(strncmp(output,MPD_WELCOME_MESSAGE,strlen(MPD_WELCOME_MESSAGE))) {
-		free(output);
-		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
-				"mpd not running on port %i on host \"%s\"",
-				port,host);
-		connection->error = MPD_ERROR_NOTMPD;
-		return connection;
-	}
-
-	{
-		char * test;
-		char * tmp = &output[strlen(MPD_WELCOME_MESSAGE)];
-		int i;
-
-		for(i=0;i<3;i++) {
-			if (!tmp) {
-				free(output);
-				snprintf(connection->errorStr,
-					MPD_BUFFER_MAX_LENGTH,
-					"error parsing version number at "
-					"\"%s\"",
-					&output[strlen(MPD_WELCOME_MESSAGE)]);
-				connection->error = MPD_ERROR_NOTMPD;
-				return connection;
-			}
-			connection->version[i] = strtol(tmp,&test,10);
-			if (test[0] != '.' && test[0] != '\0') {
-				free(output);
-				snprintf(connection->errorStr,
-					MPD_BUFFER_MAX_LENGTH,
-					"error parsing version number at "
-					"\"%s\"",
-					&output[strlen(MPD_WELCOME_MESSAGE)]);
-				connection->error = MPD_ERROR_NOTMPD;
-				return connection;
-			}
-			tmp = ++test;
-		}
-	}
+	if(mpd_parseWelcome(connection,host,port,rt,output) == 0) connection->doneProcessing = 1;
 
 	free(output);
-
-	connection->doneProcessing = 1;
 
 	return connection;
 }
