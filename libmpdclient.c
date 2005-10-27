@@ -547,22 +547,15 @@ void mpd_getNextReturnElement(mpd_Connection * connection) {
 	if (!tok) return;
 	pos = tok - output;
 	value = ++tok;
-	name = (char *)malloc(pos+1);
-	strncpy(name, output, pos);
+	name = output;
 	name[pos] = '\0';
 	
-	if(name && value && value[0]==' ') {
+	if(value[0]==' ') {
 		connection->returnElement = mpd_newReturnElement(name,&(value[1]));
 	}
 	else {
-		if(!name || !value) {
-			snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
-					"error parsing: %s",output);
-		}
-		else {
-			snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
+		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
 					"error parsing: %s:%s",name,value);
-		}
 		connection->errorStr[MPD_BUFFER_MAX_LENGTH] = '\0';
 		connection->error = 1;
 	}
