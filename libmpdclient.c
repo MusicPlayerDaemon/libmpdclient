@@ -666,14 +666,13 @@ mpd_Status * mpd_getStatus(mpd_Connection * connection) {
 			status->songid = atoi(re->value);
 		}
 		else if(strcmp(re->name,"time")==0) {
-			char * copy;
-			char * temp;
-			copy = strdup(re->value);
-			status->elapsedTime = atoi(copy);
-			temp = strchr(copy, ':');
-			if (temp)
-				status->totalTime = atoi(++temp);
-			free(copy);
+			char * tok = strchr(re->value,':');
+			/* the second strchr below is a safety check */
+			if (tok && (strchr(tok,0) > (tok+1))) {
+				/* atoi stops at the first non-[0-9] char: */
+				status->elapsedTime = atoi(re->value);
+				status->totalTime = atoi(tok+1);
+			}
 		}
 		else if(strcmp(re->name,"error")==0) {
 			status->error = strdup(re->value);
@@ -685,19 +684,14 @@ mpd_Status * mpd_getStatus(mpd_Connection * connection) {
 			status->updatingDb = atoi(re->value);
 		}
 		else if(strcmp(re->name,"audio")==0) {
-			char * copy;
-			char * temp;
-			copy = strdup(re->value);
-			status->sampleRate = atoi(copy);
-			temp = strchr(copy,':');
-			if(temp) {
-				status->bits = atoi(++temp);
-				temp = strchr(temp,':');
-				if(temp) {
-					status->channels = atoi(++temp);
-				}
+			char * tok = strchr(re->value,':');
+			if (tok && (strchr(tok,0) > (tok+1))) {
+				status->sampleRate = atoi(re->value);
+				status->bits = atoi(++tok);
+				tok = strchr(tok,':');
+				if (tok && (strchr(tok,0) > (tok+1)))
+					status->channels = atoi(tok+1);
 			}
-			free(copy);
 		}
 
 		mpd_getNextReturnElement(connection);

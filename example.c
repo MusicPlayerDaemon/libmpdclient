@@ -65,6 +65,9 @@ int main(int argc, char ** argv) {
 			printf("elaspedTime: %i\n",status->elapsedTime);
 			printf("totalTime: %i\n",status->totalTime);
 			printf("bitRate: %i\n",status->bitRate);
+			printf("sampleRate: %i\n",status->sampleRate);
+			printf("bits: %i\n",status->bits);
+			printf("channels: %i\n",status->channels);
 		}
 
 		if(conn->error) {
