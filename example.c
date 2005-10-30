@@ -11,20 +11,12 @@ int main(int argc, char ** argv) {
 	char *port = getenv("MPD_PORT");
 
 	if(hostname == NULL)
-	{
-		hostname = strdup("localhost");
-	}
+		hostname = "localhost";
 	if(port == NULL)
-	{
-		port = strdup("6600");
-	}
-	
+		port = "6600";
 
 	conn = mpd_newConnection(hostname,atoi(port),10);
 
-	free(hostname);
-	free(port);
-	
 	if(conn->error) {
 		fprintf(stderr,"%s\n",conn->errorStr);
 		mpd_closeConnection(conn);
