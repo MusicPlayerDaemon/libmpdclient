@@ -559,6 +559,7 @@ void mpd_getNextReturnElement(mpd_Connection * connection) {
 		connection->errorStr[MPD_BUFFER_MAX_LENGTH] = '\0';
 		connection->error = 1;
 	}
+	if(name)free(name);
 }
 
 void mpd_finishCommand(mpd_Connection * connection) {
