@@ -260,7 +260,7 @@ mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 	/* connect stuff */
 	{
 #ifdef WIN32
-		int iMode = 1; // 0 = blocking, else non-blocking
+		int iMode = 1; /* 0 = blocking, else non-blocking */
 		ioctlsocket(connection->sock, FIONBIO, (u_long FAR*) &iMode);
 		if(connect(connection->sock,dest,destlen) == SOCKET_ERROR
 			       	&& WSAGetLastError() != WSAEWOULDBLOCK)
