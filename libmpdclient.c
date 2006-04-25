@@ -984,6 +984,12 @@ mpd_InfoEntity * mpd_getNextInfoEntity(mpd_Connection * connection) {
 			entity->info.playlistFile->path = 
 				strdup(connection->returnElement->value);
 		}
+		else if(strcmp(connection->returnElement->name, "cpos") == 0){
+			entity = mpd_newInfoEntity();
+			entity->type = MPD_INFO_ENTITY_TYPE_SONG;
+			entity->info.song = mpd_newSong();
+			entity->info.song->pos = atoi(connection->returnElement->value);
+		}
 		else {
 			connection->error = 1;
 			strcpy(connection->errorStr,"problem parsing song info");
@@ -999,6 +1005,8 @@ mpd_InfoEntity * mpd_getNextInfoEntity(mpd_Connection * connection) {
 		if(strcmp(re->name,"file")==0) return entity;
 		else if(strcmp(re->name,"directory")==0) return entity;
 		else if(strcmp(re->name,"playlist")==0) return entity;
+		else if(strcmp(re->name,"cpos")==0) return entity;
+
 
 		if(entity->type == MPD_INFO_ENTITY_TYPE_SONG && 
 				strlen(re->value)) {
@@ -1104,6 +1112,13 @@ void mpd_sendPlaylistIdCommand(mpd_Connection * connection, int id) {
 void mpd_sendPlChangesCommand(mpd_Connection * connection, long long playlist) {
 	char * string = malloc(strlen("plchanges")+25);
 	sprintf(string,"plchanges \"%lld\"\n",playlist);
+	mpd_sendInfoCommand(connection,string);
+	free(string);
+}
+
+void mpd_sendPlChangesPosIdCommand(mpd_Connection * connection, long long playlist) {
+	char * string = malloc(strlen("plchangesposid")+25);
+	sprintf(string,"plchangesposid \"%lld\"\n",playlist);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 }

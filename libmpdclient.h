@@ -367,6 +367,14 @@ void mpd_sendPlaylistIdCommand(mpd_Connection * connection, int songId);
 /* use this to get the changes in the playlist since version _playlist_ */
 void mpd_sendPlChangesCommand(mpd_Connection * connection, long long playlist);
 
+/**
+ * @param connection: A valid and connected mpd_Connection.
+ * @param playlist: The playlist version you want the diff with.
+ * A more bandwidth efficient version of the mpd_sendPlChangesCommand.
+ * It only returns the pos+id of the changes song.
+ */
+void mpd_sendPlChangesPosIdCommand(mpd_Connection * connection, long long playlist);
+
 /* recursivel fetches all songs/dir/playlists in "dir* (no metadata is 
  * returned) */
 void mpd_sendListallCommand(mpd_Connection * connection, const char * dir);
