@@ -509,6 +509,30 @@ void mpd_freeOutputElement(mpd_OutputEntity * output);
 
 
 /**
+ * @param connection a #mpd_Connection
+ * 
+ * Queries mpd for the allowed commands
+ */
+void mpd_sendCommandsCommand(mpd_Connection * connection);
+/**
+ * @param connection a #mpd_Connection
+ * 
+ * Queries mpd for the not allowed commands
+ */
+void mpd_sendNotCommandsCommand(mpd_Connection * connection);
+
+
+/**
+ * @param connection a #mpd_Connection
+ *
+ * returns the next supported command.
+ *
+ * @returns a string, needs to be free'ed
+ */
+char *mpd_getNextCommand(mpd_Connection *connection);
+
+
+/**
  * @param connection a MpdConnection
  * @param path	the path to the playlist. 
  * 
