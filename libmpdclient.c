@@ -791,6 +791,8 @@ void mpd_initSong(mpd_Song * song) {
 	/* added by Qball */
 	song->genre = NULL;
 	song->composer = NULL;
+	song->disc = NULL;
+	song->comment = NULL;
 
 	song->time = MPD_SONG_NO_TIME;
 	song->pos = MPD_SONG_NO_NUM;
@@ -807,6 +809,8 @@ void mpd_finishSong(mpd_Song * song) {
 	if(song->date) free(song->date);
 	if(song->genre) free(song->genre);
 	if(song->composer) free(song->composer);
+	if(song->disc) free(song->disc);
+	if(song->comment) free(song->comment);	
 }
 
 mpd_Song * mpd_newSong(void) {
@@ -834,6 +838,8 @@ mpd_Song * mpd_songDup(mpd_Song * song) {
 	if(song->date) ret->date = strdup(song->date);
 	if(song->genre) ret->genre= strdup(song->genre);
 	if(song->composer) ret->composer= strdup(song->composer);
+	if(song->disc) ret->disc = strdup(song->disc);
+	if(song->comment) ret->comment = strdup(song->comment);	
 	ret->time = song->time;
 	ret->pos = song->pos;
 	ret->id = song->id;
@@ -1039,7 +1045,14 @@ mpd_InfoEntity * mpd_getNextInfoEntity(mpd_Connection * connection) {
 					strcmp(re->name, "Composer") == 0) {
 				entity->info.song->composer = strdup(re->value);
 			}                                                    			
-			
+			else if(!entity->info.song->disc &&
+					strcmp(re->name, "Disc") == 0) {
+				entity->info.song->disc = strdup(re->value);
+			}
+			else if(!entity->info.song->comment &&
+					strcmp(re->name, "Comment") == 0) {    			
+				entity->info.song->comment = strdup(re->value);
+			}
 		}
 		else if(entity->type == MPD_INFO_ENTITY_TYPE_DIRECTORY) {
 		}
@@ -1056,7 +1069,7 @@ char * mpd_getNextReturnElementNamed(mpd_Connection * connection,
 		const char * name) 
 {
 	if(connection->doneProcessing || (connection->listOks && 
-			connection->doneListOk)) 
+				connection->doneListOk)) 
 	{
 		return NULL;
 	}
@@ -1446,7 +1459,7 @@ mpd_OutputEntity * mpd_getNextOutput(mpd_Connection * connection) {
 	mpd_OutputEntity * output = NULL;
 
 	if(connection->doneProcessing || (connection->listOks &&
-			connection->doneListOk))
+				connection->doneListOk))
 	{
 		return NULL;
 	}
@@ -1478,7 +1491,7 @@ mpd_OutputEntity * mpd_getNextOutput(mpd_Connection * connection) {
 			free(output);
 			return NULL;
 		}
-		
+
 	}
 
 	return output;

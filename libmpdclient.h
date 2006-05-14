@@ -235,8 +235,14 @@ typedef struct _mpd_Song {
 	char *date;
 
 	/* added by qball */
+	/* Genre */
 	char *genre;
+	/* Composer */
 	char *composer;
+	/* Disc */
+	char *disc;
+	/* Comment */
+	char *comment;
 
 	/* length of song in seconds, check that it is not MPD_SONG_NO_TIME  */
 	int time;
