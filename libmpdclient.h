@@ -71,6 +71,28 @@
 extern "C" {
 #endif
 
+typedef enum mpd_TagItems
+{
+	MPD_TAG_ITEM_ARTIST,
+	MPD_TAG_ITEM_ALBUM,
+	MPD_TAG_ITEM_TITLE,
+	MPD_TAG_ITEM_TRACK,
+	MPD_TAG_ITEM_NAME,
+	MPD_TAG_ITEM_GENRE,
+	MPD_TAG_ITEM_DATE,
+	MPD_TAG_ITEM_COMPOSER,
+	MPD_TAG_ITEM_PERFORMER,
+	MPD_TAG_ITEM_COMMENT,
+	MPD_TAG_ITEM_DISC,
+	MPD_TAG_ITEM_FILENAME,
+	MPD_TAG_NUM_OF_ITEM_TYPES
+}mpd_TagItems;
+
+
+extern char * mpdTagItemKeys[MPD_TAG_NUM_OF_ITEM_TYPES];
+
+	
+
 /* internal stuff don't touch this struct */
 typedef struct _mpd_ReturnElement {
 	char * name;
@@ -101,6 +123,7 @@ typedef struct _mpd_Connection {
 	int commandList;
 	mpd_ReturnElement * returnElement;
 	struct timeval timeout;
+	char *request;
 } mpd_Connection;
 
 /* mpd_newConnection
@@ -556,7 +579,47 @@ void mpd_sendListPlaylistInfoCommand(mpd_Connection *connection, char *path);
 void mpd_sendListPlaylistCommand(mpd_Connection *connection, char *path);
 
 
+/**
+ * @param connection a #mpd_Connection
+ * @param exact if to match exact
+ *
+ * starts a search, use mpd_addConstraintSearch to add 
+ * a constraint to the search, and mpd_commitSearch to do the actual search
+ */
+void mpd_startSearch(mpd_Connection * connection,int exact);
+/**
+ * @param connection a #mpd_Connection
+ * @param field
+ * @param name
+ *
+ */
+void mpd_addConstraintSearch(mpd_Connection *connection, int field, char *name);
+/**
+ * @param connection a #mpd_Connection
+ *
+ */
+void mpd_commitSearch(mpd_Connection *connection);
 
+/**
+ * @param connection a #mpd_Connection
+ * @param field The field to search
+ *
+ * starts a search for fields... f.e. get a list of artists would be:
+ * mpd_startFieldSearch(connection, MPD_TAG_ITEM_ARTIST);
+ * mpd_commitSearch(connection);
+ *
+ * or get a list of artist in genre "jazz" would be:
+ * @code
+ * mpd_startFieldSearch(connection, MPD_TAG_ITEM_ARTIST);
+ * mpd_addConstraintSearch(connection, MPD_TAG_ITEM_GENRE, "jazz")
+ * mpd_commitSearch(connection);
+ * @endcode
+ *
+ * mpd_startSearch will return  a list of songs (and you need mpd_getNextInfoEntity)
+ * this one will return a list of only one field (the field specified with field) and you need
+ * mpd_getNextTag to get the results
+ */
+void mpd_startFieldSearch(mpd_Connection * connection,int field);
 
 #ifdef __cplusplus
 }

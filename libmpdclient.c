@@ -59,6 +59,22 @@
 #define COMMAND_LIST	1
 #define COMMAND_LIST_OK	2
 
+char * mpdTagItemKeys[MPD_TAG_NUM_OF_ITEM_TYPES] =
+{
+	"Artist",
+	"Album",
+	"Title",
+	"Track",
+	"Name",
+	"Genre",
+	"Date",
+	"Composer",
+	"Performer",
+	"Comment",
+	"Disc",
+	"filename"
+};
+
 static char * mpd_sanitizeArg(const char * arg) {
 	size_t i;
 	char * ret;
@@ -161,6 +177,9 @@ mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 	connection->listOks = 0;
 	connection->doneListOk = 0;
 	connection->returnElement = NULL;
+	connection->request = NULL;
+
+	
 #ifdef WIN32
 	WSADATA wsaData;
 	if ((WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0 ||
@@ -312,6 +331,7 @@ void mpd_closeConnection(mpd_Connection * connection) {
 	close(connection->sock);
 #endif
 	if(connection->returnElement) free(connection->returnElement);
+	if(connection->request) free(connection->request);
 	free(connection);
 #ifdef WIN32
 	WSACleanup();
@@ -917,7 +937,7 @@ void mpd_freeInfoEntity(mpd_InfoEntity * entity) {
 	free(entity);
 }
 
-void mpd_sendInfoCommand(mpd_Connection * connection, char * command) {
+static void mpd_sendInfoCommand(mpd_Connection * connection, char * command) {
 	mpd_executeCommand(connection,command);
 }
 
@@ -1520,6 +1540,103 @@ char * mpd_getNextCommand(mpd_Connection * connection) {
 	return mpd_getNextReturnElementNamed(connection,"command");
 }
 
+void mpd_startSearch(mpd_Connection * connection,int exact) {
+	if(connection->request) {
+		/* search/find allready in progress */
+		/* TODO: set error here?  */
+		return;
+	}
+	if(exact){
+		connection->request = strdup("find");
+	}
+	else{
+		connection->request = strdup("search");
+	}
+}
+
+
+void mpd_startFieldSearch(mpd_Connection * connection,int field) {
+	if(connection->request) {
+		/* search/find allready in progress */
+		/* TODO: set error here?  */
+		return;
+	}
+	if(field < 0 || field >= MPD_TAG_NUM_OF_ITEM_TYPES) {
+		/* set error here */
+		return;
+	}
+
+	connection->request = malloc(sizeof(char)*(
+				/* length of the field name */
+				strlen(mpdTagItemKeys[field])+ 	
+				/* "list"+space+\0 */
+				6 
+				));
+	sprintf(connection->request, "list %s", mpdTagItemKeys[field]);
+}
+
+
+
+void mpd_addConstraintSearch(mpd_Connection *connection, 
+		int field, 
+		char *name)
+{
+	char *arg = NULL;
+	if(!connection->request){
+		return;
+	}
+	if(name == NULL) {
+		return;
+	}
+	if(field < 0 || field >= MPD_TAG_NUM_OF_ITEM_TYPES) {
+		return;
+	}
+	/* clean up the query */
+	arg = mpd_sanitizeArg(name);
+	/* create space for the query */
+	connection->request = realloc(connection->request, (
+			 /* length of the old string */
+			 strlen(connection->request)+ 
+			 /* space between */
+			 1+
+			 /* length of the field name */
+			 strlen(mpdTagItemKeys[field])+ 
+			 /* space plus starting " */
+			 2+
+			 /* length of search term */
+			 strlen(arg)+
+			 /* closign " +\0 that is added sprintf */
+			 2
+			)*sizeof(char));
+	/* and form the query */
+	sprintf(connection->request, "%s %s \"%s\"",
+			connection->request,
+			mpdTagItemKeys[field],
+			arg);
+	free(arg);
+}
+
+
+void mpd_commitSearch(mpd_Connection *connection) 
+{
+	if(connection->request)
+	{
+		int length = strlen(connection->request);
+		/* fixing up the string for mpd to like */
+		connection->request = realloc(connection->request, 
+				(length+	/* old length */
+				 2		/* closing \n and \0 */
+				)*sizeof(char));
+		connection->request[length] = '\n';
+		connection->request[length+1] = '\0';
+		/* and off we go */
+		mpd_sendInfoCommand(connection, connection->request);
+		/* clean up a bit */
+		free(connection->request);
+		connection->request = NULL;
+	}
+}
+
 
 /**
  * @param connection a MpdConnection
@@ -1555,3 +1672,4 @@ void mpd_sendListPlaylistCommand(mpd_Connection *connection, char *path)
 	free(arg);
 	free(query);
 }
+
