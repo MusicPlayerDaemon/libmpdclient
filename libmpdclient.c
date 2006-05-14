@@ -59,32 +59,12 @@
 #define COMMAND_LIST	1
 #define COMMAND_LIST_OK	2
 
-#ifdef MPD_HAVE_IPV6        
-int mpd_ipv6Supported(void) {
-        int s;          
-        s = socket(AF_INET6,SOCK_STREAM,0);
-        if(s == -1) return 0;
-        close(s);       
-        return 1;                       
-}                       
-#endif  
-
 static char * mpd_sanitizeArg(const char * arg) {
 	size_t i;
 	char * ret;
 	register const char *c;
 	register char *rc;
 	
-	/* 
-	unsigned int count = 0;
-	
-	c = arg;
-	for(i = strlen(arg); i != 0; --i) {
-		if(*c=='"' || *c=='\\') count++;
-		c++;
-	}
-	ret = malloc(strlen(arg)+count+1);
-	*/
 	/* instead of counting in that loop above, just
 	 * use a bit more memory and half running time
 	 */
