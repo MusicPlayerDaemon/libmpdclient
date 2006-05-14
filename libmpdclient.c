@@ -847,11 +847,11 @@ mpd_Song * mpd_songDup(mpd_Song * song) {
 	return ret;
 }
 
-void mpd_initDirectory(mpd_Directory * directory) {
+static void mpd_initDirectory(mpd_Directory * directory) {
 	directory->path = NULL;
 }
 
-void mpd_finishDirectory(mpd_Directory * directory) {
+static void mpd_finishDirectory(mpd_Directory * directory) {
 	if(directory->path) free(directory->path);
 }
 
@@ -877,11 +877,11 @@ mpd_Directory * mpd_directoryDup(mpd_Directory * directory) {
 	return ret;
 }
 
-void mpd_initPlaylistFile(mpd_PlaylistFile * playlist) {
+static void mpd_initPlaylistFile(mpd_PlaylistFile * playlist) {
 	playlist->path = NULL;
 }
 
-void mpd_finishPlaylistFile(mpd_PlaylistFile * playlist) {
+static void mpd_finishPlaylistFile(mpd_PlaylistFile * playlist) {
 	if(playlist->path) free(playlist->path);
 }
 
@@ -906,11 +906,11 @@ mpd_PlaylistFile * mpd_playlistFileDup(mpd_PlaylistFile * playlist) {
 	return ret;
 }
 
-void mpd_initInfoEntity(mpd_InfoEntity * entity) {
+static void mpd_initInfoEntity(mpd_InfoEntity * entity) {
 	entity->info.directory = NULL;
 } 
 
-void mpd_finishInfoEntity(mpd_InfoEntity * entity) {
+static void mpd_finishInfoEntity(mpd_InfoEntity * entity) {
 	if(entity->info.directory) {
 		if(entity->type == MPD_INFO_ENTITY_TYPE_DIRECTORY) {
 			mpd_freeDirectory(entity->info.directory);
@@ -1065,7 +1065,7 @@ mpd_InfoEntity * mpd_getNextInfoEntity(mpd_Connection * connection) {
 	return entity;
 }
 
-char * mpd_getNextReturnElementNamed(mpd_Connection * connection, 
+static char * mpd_getNextReturnElementNamed(mpd_Connection * connection, 
 		const char * name) 
 {
 	if(connection->doneProcessing || (connection->listOks && 
