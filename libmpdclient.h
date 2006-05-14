@@ -34,8 +34,12 @@
 #ifndef LIBMPDCLIENT_H
 #define LIBMPDCLIENT_H
 
-#include <sys/time.h>
+#ifdef WIN32
+        #define __W32API_USE_DLLIMPORT__ 1
+#endif
 
+#include <sys/time.h>
+#include <stdarg.h>
 #define MPD_BUFFER_MAX_LENGTH	50000
 #define MPD_WELCOME_MESSAGE	"OK MPD "
 
@@ -434,6 +438,8 @@ char * mpd_getNextArtist(mpd_Connection * connection);
 
 char * mpd_getNextAlbum(mpd_Connection * connection);
 
+char * mpd_getNextTag(mpd_Connection *connection, int table);
+
 /* list artist or albums by artist, arg1 should be set to the artist if
  * listing albums by a artist, otherwise NULL for listing all artists or albums
  */
@@ -577,7 +583,6 @@ void mpd_sendListPlaylistInfoCommand(mpd_Connection *connection, char *path);
  * 
  */
 void mpd_sendListPlaylistCommand(mpd_Connection *connection, char *path);
-
 
 /**
  * @param connection a #mpd_Connection
