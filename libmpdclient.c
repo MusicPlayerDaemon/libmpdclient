@@ -1517,3 +1517,38 @@ void mpd_freeOutputElement(mpd_OutputEntity * output) {
 	free(output->name);
 	free(output);
 }
+
+/**
+ * @param connection a MpdConnection
+ * @param path	the path to the playlist. 
+ * 
+ * List the content, with full metadata, of a stored playlist.
+ * 
+ */
+void mpd_sendListPlaylistInfoCommand(mpd_Connection *connection, char *path)
+{
+	char *arg = mpd_sanitizeArg(path);
+	char *query = malloc(strlen("listplaylistinfo")+strlen(arg)+5);
+	sprintf(query, "listplaylistinfo \"%s\"\n",arg);
+	mpd_sendInfoCommand(connection, query);
+	free(arg);
+	free(query);
+}
+
+
+/**
+ * @param connection a MpdConnection
+ * @param path	the path to the playlist. 
+ * 
+ * List the content of a stored playlist.
+ * 
+ */
+void mpd_sendListPlaylistCommand(mpd_Connection *connection, char *path)
+{
+	char *arg = mpd_sanitizeArg(path);
+	char *query = malloc(strlen("listplaylist")+strlen(arg)+5);
+	sprintf(query, "listplaylist \"%s\"\n",arg);
+	mpd_sendInfoCommand(connection, query);
+	free(arg);
+	free(query);
+}
