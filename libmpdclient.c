@@ -43,17 +43,61 @@
 #include <fcntl.h>
 
 #ifdef WIN32
-#include <ws2tcpip.h>
-#include <winsock.h>
-#else
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#endif
+#  include <ws2tcpip.h>
+#  include <winsock.h>
+static int winsock_dll_error(mpd_Connection *connection)
+{
+	WSADATA wsaData;
+	if ((WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0 ||
+			LOBYTE(wsaData.wVersion) != 2 ||
+			HIBYTE(wsaData.wVersion) != 2 ) {
+		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
+				"Could not find usable WinSock DLL.");
+		connection->error = MPD_ERROR_SYSTEM;
+		return 1;
+	}
+	return 0;
+}
+
+static int do_connect_fail(mpd_Connection *connection, struct addrinfo *res)
+{
+	int iMode = 1; /* 0 = blocking, else non-blocking */
+	ioctlsocket(connection->sock, FIONBIO, (u_long FAR*) &iMode);
+	return (connect(connection->sock,res->ai_addr,res->ai_addrlen)
+					== SOCKET_ERROR
+			&& WSAGetLastError() != WSAEWOULDBLOCK);
+}
+
+static int select_errno_ignore(const int my_errno)
+{
+	return (my_errno == EINPROGRESS || my_errno == EINTR);
+}
+#else /* !WIN32 (sane operating systems) */
+#  include <netinet/in.h>
+#  include <arpa/inet.h>
+#  include <sys/socket.h>
+#  include <netdb.h>
+#  define winsock_dll_error(c)		0
+#  define closesocket(s)		close(s)
+#  define WSACleanup()			do { /* nothing */ } while (0)
+
+static int do_connect_fail(mpd_Connection *connection, struct addrinfo *res)
+{
+	int flags = fcntl(connection->sock, F_GETFL, 0);
+	fcntl(connection->sock, F_SETFL, flags | O_NONBLOCK);
+
+	return ( connect(connection->sock,res->ai_addr,res->ai_addrlen)<0 &&
+				errno!=EINPROGRESS );
+}
+
+static int select_errno_ignore(const int my_errno)
+{
+	return (my_errno == EINTR);
+}
+#endif /* !WIN32 */
 
 #ifndef MSG_DONTWAIT
-#define MSG_DONTWAIT 0
+#  define MSG_DONTWAIT 0
 #endif
 
 #define COMMAND_LIST	1
@@ -179,17 +223,9 @@ mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 	connection->returnElement = NULL;
 	connection->request = NULL;
 
-	
-#ifdef WIN32
-	WSADATA wsaData;
-	if ((WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0 ||
-			LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2 ) {
-		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
-				"Could not find usable WinSock DLL.");
-		connection->error = MPD_ERROR_SYSTEM;
+	if (winsock_dll_error(connection))
 		return connection;
-	}
-#endif
+
 	/**
 	 * Setup hints
 	 */
@@ -227,27 +263,11 @@ mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 		mpd_setConnectionTimeout(connection,timeout);
 
 		/* connect stuff */
-		{
-#ifdef WIN32
-			int iMode = 1; /* 0 = blocking, else non-blocking*/
-			ioctlsocket(connection->sock, FIONBIO, (u_long FAR*) &iMode);
-			if(connect(connection->sock,res->ai_addr,res->ai_addrlen) == SOCKET_ERROR
-				&& WSAGetLastError() != WSAEWOULDBLOCK)
-#else
-				int flags = fcntl(connection->sock, F_GETFL, 0);
-			fcntl(connection->sock, F_SETFL, flags | O_NONBLOCK);
-
-			if(connect(connection->sock,res->ai_addr,res->ai_addrlen)<0 && 
-					errno!=EINPROGRESS) 
-#endif
-			{
-				/* try the next address family */
-				close(connection->sock);
-				connection->sock = -1;
-				continue;
-			}
-
-			break;
+ 		if (do_connect_fail(connection, res)) {
+ 			/* try the next address family */
+ 			closesocket(connection->sock);
+ 			connection->sock = -1;
+ 			continue;
 		}
 	}
 	freeaddrinfo(addrinfo);
@@ -282,20 +302,14 @@ mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 			connection->buffer[connection->buflen] = '\0';
 		}
 		else if(err<0) {
-			switch(errno) {
-#ifndef WIN32
-				case EINPROGRESS:
-#endif
-				case EINTR:
-					continue;
-				default:
-					snprintf(connection->errorStr,
-							MPD_BUFFER_MAX_LENGTH,
-							"problems connecting to \"%s\" on port"
-							" %i",host,port);
-					connection->error = MPD_ERROR_CONNPORT;
-					return connection;
-			}
+ 			if (select_errno_ignore(errno))
+				continue;
+			snprintf(connection->errorStr,
+					MPD_BUFFER_MAX_LENGTH,
+					"problems connecting to \"%s\" on port"
+					" %i",host,port);
+			connection->error = MPD_ERROR_CONNPORT;
+			return connection;
 		}
 		else {
 			snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
@@ -325,17 +339,11 @@ void mpd_clearError(mpd_Connection * connection) {
 }
 
 void mpd_closeConnection(mpd_Connection * connection) {
-#ifdef WIN32
 	closesocket(connection->sock);
-#else
-	close(connection->sock);
-#endif
 	if(connection->returnElement) free(connection->returnElement);
 	if(connection->request) free(connection->request);
 	free(connection);
-#ifdef WIN32
 	WSACleanup();
-#endif
 }
 
 static void mpd_executeCommand(mpd_Connection * connection, char * command) {
@@ -360,12 +368,7 @@ static void mpd_executeCommand(mpd_Connection * connection, char * command) {
 
 	while((ret = select(connection->sock+1,NULL,&fds,NULL,&tv)==1) || 
 			(ret==-1 && errno==EINTR)) {
-		ret = send(connection->sock,commandPtr,commandLen,
-#ifdef WIN32
-			0);
-#else
-			MSG_DONTWAIT);
-#endif
+		ret = send(connection->sock,commandPtr,commandLen,MSG_DONTWAIT);
 		if(ret<=0)
 		{
 			if(ret==EAGAIN || ret==EINTR) continue;
@@ -446,13 +449,9 @@ void mpd_getNextReturnElement(mpd_Connection * connection) {
 		FD_SET(connection->sock,&fds);
 		if((err = select(connection->sock+1,&fds,NULL,NULL,&tv) == 1)) {
 			readed = recv(connection->sock,
-				connection->buffer+connection->buflen,
-				MPD_BUFFER_MAX_LENGTH-connection->buflen,
-#ifdef WIN32
-				0);
-#else
-				MSG_DONTWAIT);
-#endif
+					connection->buffer+connection->buflen,
+					MPD_BUFFER_MAX_LENGTH-connection->buflen,
+					MSG_DONTWAIT);
 			if(readed<0 && (errno==EAGAIN || errno==EINTR)) {
 				continue;
 			}
