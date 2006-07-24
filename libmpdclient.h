@@ -538,7 +538,6 @@ void mpd_sendDisableOutputCommand(mpd_Connection * connection, int outputId);
 
 void mpd_freeOutputElement(mpd_OutputEntity * output);
 
-
 /**
  * @param connection a #mpd_Connection
  *
@@ -552,7 +551,6 @@ void mpd_sendCommandsCommand(mpd_Connection * connection);
  */
 void mpd_sendNotCommandsCommand(mpd_Connection * connection);
 
-
 /**
  * @param connection a #mpd_Connection
  *
@@ -561,7 +559,6 @@ void mpd_sendNotCommandsCommand(mpd_Connection * connection);
  * @returns a string, needs to be free'ed
  */
 char *mpd_getNextCommand(mpd_Connection *connection);
-
 
 /**
  * @param connection a MpdConnection
@@ -621,7 +618,6 @@ void mpd_commitSearch(mpd_Connection *connection);
  * mpd_getNextTag to get the results
  */
 void mpd_startFieldSearch(mpd_Connection * connection,int field);
-
 #ifdef __cplusplus
 }
 #endif
