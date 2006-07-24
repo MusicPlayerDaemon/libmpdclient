@@ -41,6 +41,12 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
+#ifndef MPD_NO_GAI
+#  ifdef AI_PASSIVE
+#    define MPD_HAVE_GAI
+#  endif
+#endif
+
 #ifndef HAVE_SOCKLEN_T
 #  define socklen_t int
 #endif
@@ -202,33 +208,14 @@ static int mpd_parseWelcome(mpd_Connection * connection, const char * host, int 
 
 	return 0;
 }
-
-mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
-	int err;
+#ifdef MPD_HAVE_GAI
+static int mpd_connect(mpd_Connection * connection, const char * host, int port,
+                       float timeout) {
 	int error;
-	char * rt;
-	char * output =  NULL;
 	char service[20];
-	mpd_Connection * connection = malloc(sizeof(mpd_Connection));
-	struct timeval tv;
 	struct addrinfo hints;
 	struct addrinfo *res = NULL;
 	struct addrinfo *addrinfo = NULL;
-	fd_set fds;
-	strcpy(connection->buffer,"");
-	connection->buflen = 0;
-	connection->bufstart = 0;
-	strcpy(connection->errorStr,"");
-	connection->error = 0;
-	connection->doneProcessing = 0;
-	connection->commandList = 0;
-	connection->listOks = 0;
-	connection->doneListOk = 0;
-	connection->returnElement = NULL;
-	connection->request = NULL;
-
-	if (winsock_dll_error(connection))
-		return connection;
 
 	/**
 	 * Setup hints
@@ -250,7 +237,7 @@ mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
 				"host \"%s\" not found: %s",host, gai_strerror(error));
 		connection->error = MPD_ERROR_UNKHOST;
-		return connection;
+		return -1;
 	}
 
 	for (res = addrinfo; res; res = res->ai_next) {
@@ -260,7 +247,7 @@ mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 			strcpy(connection->errorStr,"problems creating socket");
 			connection->error = MPD_ERROR_SYSTEM;
 			freeaddrinfo(addrinfo);
-			return connection;
+			return -1;
 		}
 
 		mpd_setConnectionTimeout(connection,timeout);
@@ -281,8 +268,90 @@ mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 				" %i: %s",host,port, strerror(errno));
 		connection->error = MPD_ERROR_CONNPORT;
 
-		return connection;
+		return -1;
 	}
+
+	return 0;
+}
+#else /* !MPD_HAVE_GAI */
+static int mpd_connect(mpd_Connection * connection, const char * host, int port,
+                       float timeout) {
+	struct hostent * he;
+	struct sockaddr * dest;
+	socklen_t destlen;
+	struct sockaddr_in sin;
+
+	if(!(he=gethostbyname(host))) {
+		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
+				"host \"%s\" not found",host);
+		connection->error = MPD_ERROR_UNKHOST;
+		return -1;
+	}
+
+	memset(&sin,0,sizeof(struct sockaddr_in));
+	/*dest.sin_family = he->h_addrtype;*/
+	sin.sin_family = AF_INET;
+	sin.sin_port = htons(port);
+
+	switch(he->h_addrtype) {
+	case AF_INET:
+		memcpy((char *)&sin.sin_addr.s_addr,(char *)he->h_addr,
+				he->h_length);
+		dest = (struct sockaddr *)&sin;
+		destlen = sizeof(struct sockaddr_in);
+		break;
+	default:
+		strcpy(connection->errorStr,"address type is not IPv4\n");
+		connection->error = MPD_ERROR_SYSTEM;
+		return -1;
+		break;
+	}
+
+	if((connection->sock = socket(dest->sa_family,SOCK_STREAM,0))<0) {
+		strcpy(connection->errorStr,"problems creating socket");
+		connection->error = MPD_ERROR_SYSTEM;
+		return -1;
+	}
+
+	mpd_setConnectionTimeout(connection,timeout);
+
+	/* connect stuff */
+	if (do_connect_fail(connection, dest, destlen)) {
+		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
+				"problems connecting to \"%s\" on port"
+				" %i",host,port);
+		connection->error = MPD_ERROR_CONNPORT;
+		return -1;
+	}
+
+	return 0;
+}
+#endif /* !MPD_HAVE_GAI */
+
+mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
+	int err;
+	char * rt;
+	char * output =  NULL;
+	mpd_Connection * connection = malloc(sizeof(mpd_Connection));
+	struct timeval tv;
+	fd_set fds;
+	strcpy(connection->buffer,"");
+	connection->buflen = 0;
+	connection->bufstart = 0;
+	strcpy(connection->errorStr,"");
+	connection->error = 0;
+	connection->doneProcessing = 0;
+	connection->commandList = 0;
+	connection->listOks = 0;
+	connection->doneListOk = 0;
+	connection->returnElement = NULL;
+	connection->request = NULL;
+
+	if (winsock_dll_error(connection))
+		return connection;
+
+	if (mpd_connect(connection, host, port, timeout) < 0)
+		return connection;
 
 	while(!(rt = strstr(connection->buffer,"\n"))) {
 		tv.tv_sec = connection->timeout.tv_sec;
