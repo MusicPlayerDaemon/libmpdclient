@@ -41,6 +41,10 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
+#ifndef HAVE_SOCKLEN_T
+#  define socklen_t int
+#endif
+
 #ifdef WIN32
 #  include <ws2tcpip.h>
 #  include <winsock.h>
