@@ -58,11 +58,12 @@ static int winsock_dll_error(mpd_Connection *connection)
 	return 0;
 }
 
-static int do_connect_fail(mpd_Connection *connection, struct addrinfo *res)
+static int do_connect_fail(mpd_Connection *connection,
+                           const struct sockaddr *serv_addr, socklen_t addrlen)
 {
 	int iMode = 1; /* 0 = blocking, else non-blocking */
 	ioctlsocket(connection->sock, FIONBIO, (u_long FAR*) &iMode);
-	return (connect(connection->sock,res->ai_addr,res->ai_addrlen)
+	return (connect(connection->sock,serv_addr,addrlen)
 					== SOCKET_ERROR
 			&& WSAGetLastError() != WSAEWOULDBLOCK);
 }
@@ -80,12 +81,13 @@ static int select_errno_ignore(const int my_errno)
 #  define closesocket(s)		close(s)
 #  define WSACleanup()			do { /* nothing */ } while (0)
 
-static int do_connect_fail(mpd_Connection *connection, struct addrinfo *res)
+static int do_connect_fail(mpd_Connection *connection,
+                           const struct sockaddr *serv_addr, socklen_t addrlen)
 {
 	int flags = fcntl(connection->sock, F_GETFL, 0);
 	fcntl(connection->sock, F_SETFL, flags | O_NONBLOCK);
 
-	return ( connect(connection->sock,res->ai_addr,res->ai_addrlen)<0 &&
+	return ( connect(connection->sock,serv_addr,addrlen)<0 &&
 				errno!=EINPROGRESS );
 }
 
@@ -260,7 +262,7 @@ mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 		mpd_setConnectionTimeout(connection,timeout);
 
 		/* connect stuff */
- 		if (do_connect_fail(connection, res)) {
+ 		if (do_connect_fail(connection, res->ai_addr, res->ai_addrlen)) {
  			/* try the next address family */
  			closesocket(connection->sock);
  			connection->sock = -1;
