@@ -140,7 +140,7 @@ static char * mpd_sanitizeArg(const char * arg) {
 	return ret;
 }
 
-mpd_ReturnElement * mpd_newReturnElement(const char * name, const char * value)
+static mpd_ReturnElement * mpd_newReturnElement(const char * name, const char * value)
 {
 	mpd_ReturnElement * ret = malloc(sizeof(mpd_ReturnElement));
 
@@ -150,7 +150,7 @@ mpd_ReturnElement * mpd_newReturnElement(const char * name, const char * value)
 	return ret;
 }
 
-void mpd_freeReturnElement(mpd_ReturnElement * re) {
+static void mpd_freeReturnElement(mpd_ReturnElement * re) {
 	free(re->name);
 	free(re->value);
 	free(re);
@@ -396,7 +396,7 @@ static void mpd_executeCommand(mpd_Connection * connection, char * command) {
 	}
 }
 
-void mpd_getNextReturnElement(mpd_Connection * connection) {
+static void mpd_getNextReturnElement(mpd_Connection * connection) {
 	char * output = NULL;
 	char * rt = NULL;
 	char * name = NULL;
@@ -549,7 +549,7 @@ void mpd_finishCommand(mpd_Connection * connection) {
 	}
 }
 
-void mpd_finishListOkCommand(mpd_Connection * connection) {
+static void mpd_finishListOkCommand(mpd_Connection * connection) {
 	while(!connection->doneProcessing && connection->listOks &&
 			!connection->doneListOk)
 	{
@@ -776,7 +776,7 @@ void mpd_freeStats(mpd_Stats * stats) {
 	free(stats);
 }
 
-void mpd_initSong(mpd_Song * song) {
+static void mpd_initSong(mpd_Song * song) {
 	song->file = NULL;
 	song->artist = NULL;
 	song->album = NULL;
@@ -795,7 +795,7 @@ void mpd_initSong(mpd_Song * song) {
 	song->id = MPD_SONG_NO_ID;
 }
 
-void mpd_finishSong(mpd_Song * song) {
+static void mpd_finishSong(mpd_Song * song) {
 	if(song->file) free(song->file);
 	if(song->artist) free(song->artist);
 	if(song->album) free(song->album);
