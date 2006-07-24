@@ -810,7 +810,7 @@ void mpd_finishSong(mpd_Song * song) {
 	if(song->comment) free(song->comment);
 }
 
-mpd_Song * mpd_newSong() {
+mpd_Song * mpd_newSong(void) {
 	mpd_Song * ret = malloc(sizeof(mpd_Song));
 
 	mpd_initSong(ret);
@@ -852,7 +852,7 @@ static void mpd_finishDirectory(mpd_Directory * directory) {
 	if(directory->path) free(directory->path);
 }
 
-mpd_Directory * mpd_newDirectory() {
+mpd_Directory * mpd_newDirectory(void) {
 	mpd_Directory * directory = malloc(sizeof(mpd_Directory));;
 
 	mpd_initDirectory(directory);
@@ -882,7 +882,7 @@ static void mpd_finishPlaylistFile(mpd_PlaylistFile * playlist) {
 	if(playlist->path) free(playlist->path);
 }
 
-mpd_PlaylistFile * mpd_newPlaylistFile() {
+mpd_PlaylistFile * mpd_newPlaylistFile(void) {
 	mpd_PlaylistFile * playlist = malloc(sizeof(mpd_PlaylistFile));
 
 	mpd_initPlaylistFile(playlist);
@@ -921,7 +921,7 @@ static void mpd_finishInfoEntity(mpd_InfoEntity * entity) {
 	}
 }
 
-mpd_InfoEntity * mpd_newInfoEntity() {
+mpd_InfoEntity * mpd_newInfoEntity(void) {
 	mpd_InfoEntity * entity = malloc(sizeof(mpd_InfoEntity));
 
 	mpd_initInfoEntity(entity);
