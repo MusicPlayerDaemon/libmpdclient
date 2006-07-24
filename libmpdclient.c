@@ -41,16 +41,6 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-#ifndef MPD_NO_GAI
-#  ifdef AI_PASSIVE
-#    define MPD_HAVE_GAI
-#  endif
-#endif
-
-#ifndef HAVE_SOCKLEN_T
-#  define socklen_t int
-#endif
-
 #ifdef WIN32
 #  include <ws2tcpip.h>
 #  include <winsock.h>
@@ -69,7 +59,7 @@ static int winsock_dll_error(mpd_Connection *connection)
 }
 
 static int do_connect_fail(mpd_Connection *connection,
-                           const struct sockaddr *serv_addr, socklen_t addrlen)
+                           const struct sockaddr *serv_addr, int addrlen)
 {
 	int iMode = 1; /* 0 = blocking, else non-blocking */
 	ioctlsocket(connection->sock, FIONBIO, (u_long FAR*) &iMode);
@@ -92,13 +82,13 @@ static int select_errno_ignore(const int my_errno)
 #  define WSACleanup()			do { /* nothing */ } while (0)
 
 static int do_connect_fail(mpd_Connection *connection,
-                           const struct sockaddr *serv_addr, socklen_t addrlen)
+                           const struct sockaddr *serv_addr, int addrlen)
 {
 	int flags = fcntl(connection->sock, F_GETFL, 0);
 	fcntl(connection->sock, F_SETFL, flags | O_NONBLOCK);
 
-	return ( connect(connection->sock,serv_addr,addrlen)<0 &&
-				errno!=EINPROGRESS );
+	return (connect(connection->sock,serv_addr,addrlen)<0 &&
+				errno!=EINPROGRESS);
 }
 
 static int select_errno_ignore(const int my_errno)
@@ -110,6 +100,132 @@ static int select_errno_ignore(const int my_errno)
 #ifndef MSG_DONTWAIT
 #  define MSG_DONTWAIT 0
 #endif
+
+#ifndef MPD_NO_GAI
+#  ifdef AI_PASSIVE
+#    define MPD_HAVE_GAI
+#  endif
+#endif
+
+#ifdef MPD_HAVE_GAI
+static int mpd_connect(mpd_Connection * connection, const char * host, int port,
+                       float timeout) {
+	int error;
+	char service[20];
+	struct addrinfo hints;
+	struct addrinfo *res = NULL;
+	struct addrinfo *addrinfo = NULL;
+
+	/**
+	 * Setup hints
+	 */
+	hints.ai_flags          = 0;
+	hints.ai_family         = PF_UNSPEC;
+	hints.ai_socktype       = SOCK_STREAM;
+	hints.ai_protocol       = IPPROTO_TCP;
+	hints.ai_addrlen        = 0;
+	hints.ai_addr           = NULL;
+	hints.ai_canonname      = NULL;
+	hints.ai_next           = NULL;
+
+	snprintf(service, sizeof(service), "%d", port);
+
+	error = getaddrinfo(host, service, &hints, &addrinfo);
+
+	if (error) {
+		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
+				"host \"%s\" not found: %s",host, gai_strerror(error));
+		connection->error = MPD_ERROR_UNKHOST;
+		return -1;
+	}
+
+	for (res = addrinfo; res; res = res->ai_next) {
+		/* create socket */
+
+		if((connection->sock = socket(res->ai_family,SOCK_STREAM,res->ai_protocol))<0) {
+			strcpy(connection->errorStr,"problems creating socket");
+			connection->error = MPD_ERROR_SYSTEM;
+			freeaddrinfo(addrinfo);
+			return -1;
+		}
+
+		mpd_setConnectionTimeout(connection,timeout);
+
+		/* connect stuff */
+ 		if (do_connect_fail(connection, res->ai_addr, res->ai_addrlen)) {
+ 			/* try the next address family */
+ 			closesocket(connection->sock);
+ 			connection->sock = -1;
+ 			continue;
+		}
+	}
+	freeaddrinfo(addrinfo);
+
+	if (connection->sock < 0) {
+		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
+				"problems connecting to \"%s\" on port"
+				" %i: %s",host,port, strerror(errno));
+		connection->error = MPD_ERROR_CONNPORT;
+
+		return -1;
+	}
+
+	return 0;
+}
+#else /* !MPD_HAVE_GAI */
+static int mpd_connect(mpd_Connection * connection, const char * host, int port,
+                       float timeout) {
+	struct hostent * he;
+	struct sockaddr * dest;
+	int destlen;
+	struct sockaddr_in sin;
+
+	if(!(he=gethostbyname(host))) {
+		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
+				"host \"%s\" not found",host);
+		connection->error = MPD_ERROR_UNKHOST;
+		return -1;
+	}
+
+	memset(&sin,0,sizeof(struct sockaddr_in));
+	/*dest.sin_family = he->h_addrtype;*/
+	sin.sin_family = AF_INET;
+	sin.sin_port = htons(port);
+
+	switch(he->h_addrtype) {
+	case AF_INET:
+		memcpy((char *)&sin.sin_addr.s_addr,(char *)he->h_addr,
+				he->h_length);
+		dest = (struct sockaddr *)&sin;
+		destlen = sizeof(struct sockaddr_in);
+		break;
+	default:
+		strcpy(connection->errorStr,"address type is not IPv4\n");
+		connection->error = MPD_ERROR_SYSTEM;
+		return -1;
+		break;
+	}
+
+	if((connection->sock = socket(dest->sa_family,SOCK_STREAM,0))<0) {
+		strcpy(connection->errorStr,"problems creating socket");
+		connection->error = MPD_ERROR_SYSTEM;
+		return -1;
+	}
+
+	mpd_setConnectionTimeout(connection,timeout);
+
+	/* connect stuff */
+	if (do_connect_fail(connection, dest, destlen)) {
+		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
+				"problems connecting to \"%s\" on port"
+				" %i",host,port);
+		connection->error = MPD_ERROR_CONNPORT;
+		return -1;
+	}
+
+	return 0;
+}
+#endif /* !MPD_HAVE_GAI */
 
 #define COMMAND_LIST	1
 #define COMMAND_LIST_OK	2
@@ -208,125 +324,6 @@ static int mpd_parseWelcome(mpd_Connection * connection, const char * host, int 
 
 	return 0;
 }
-#ifdef MPD_HAVE_GAI
-static int mpd_connect(mpd_Connection * connection, const char * host, int port,
-                       float timeout) {
-	int error;
-	char service[20];
-	struct addrinfo hints;
-	struct addrinfo *res = NULL;
-	struct addrinfo *addrinfo = NULL;
-
-	/**
-	 * Setup hints
-	 */
-	hints.ai_flags          = 0;
-	hints.ai_family         = PF_UNSPEC;
-	hints.ai_socktype       = SOCK_STREAM;
-	hints.ai_protocol       = IPPROTO_TCP;
-	hints.ai_addrlen        = 0;
-	hints.ai_addr           = NULL;
-	hints.ai_canonname      = NULL;
-	hints.ai_next           = NULL;
-
-	snprintf(service, sizeof(service), "%d", port);
-
-	error = getaddrinfo(host, service, &hints, &addrinfo);
-
-	if (error) {
-		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
-				"host \"%s\" not found: %s",host, gai_strerror(error));
-		connection->error = MPD_ERROR_UNKHOST;
-		return -1;
-	}
-
-	for (res = addrinfo; res; res = res->ai_next) {
-		/* create socket */
-
-		if((connection->sock = socket(res->ai_family,SOCK_STREAM,res->ai_protocol))<0) {
-			strcpy(connection->errorStr,"problems creating socket");
-			connection->error = MPD_ERROR_SYSTEM;
-			freeaddrinfo(addrinfo);
-			return -1;
-		}
-
-		mpd_setConnectionTimeout(connection,timeout);
-
-		/* connect stuff */
- 		if (do_connect_fail(connection, res->ai_addr, res->ai_addrlen)) {
- 			/* try the next address family */
- 			closesocket(connection->sock);
- 			connection->sock = -1;
- 			continue;
-		}
-	}
-	freeaddrinfo(addrinfo);
-
-	if (connection->sock < 0) {
-		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
-				"problems connecting to \"%s\" on port"
-				" %i: %s",host,port, strerror(errno));
-		connection->error = MPD_ERROR_CONNPORT;
-
-		return -1;
-	}
-
-	return 0;
-}
-#else /* !MPD_HAVE_GAI */
-static int mpd_connect(mpd_Connection * connection, const char * host, int port,
-                       float timeout) {
-	struct hostent * he;
-	struct sockaddr * dest;
-	socklen_t destlen;
-	struct sockaddr_in sin;
-
-	if(!(he=gethostbyname(host))) {
-		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
-				"host \"%s\" not found",host);
-		connection->error = MPD_ERROR_UNKHOST;
-		return -1;
-	}
-
-	memset(&sin,0,sizeof(struct sockaddr_in));
-	/*dest.sin_family = he->h_addrtype;*/
-	sin.sin_family = AF_INET;
-	sin.sin_port = htons(port);
-
-	switch(he->h_addrtype) {
-	case AF_INET:
-		memcpy((char *)&sin.sin_addr.s_addr,(char *)he->h_addr,
-				he->h_length);
-		dest = (struct sockaddr *)&sin;
-		destlen = sizeof(struct sockaddr_in);
-		break;
-	default:
-		strcpy(connection->errorStr,"address type is not IPv4\n");
-		connection->error = MPD_ERROR_SYSTEM;
-		return -1;
-		break;
-	}
-
-	if((connection->sock = socket(dest->sa_family,SOCK_STREAM,0))<0) {
-		strcpy(connection->errorStr,"problems creating socket");
-		connection->error = MPD_ERROR_SYSTEM;
-		return -1;
-	}
-
-	mpd_setConnectionTimeout(connection,timeout);
-
-	/* connect stuff */
-	if (do_connect_fail(connection, dest, destlen)) {
-		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
-				"problems connecting to \"%s\" on port"
-				" %i",host,port);
-		connection->error = MPD_ERROR_CONNPORT;
-		return -1;
-	}
-
-	return 0;
-}
-#endif /* !MPD_HAVE_GAI */
 
 mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 	int err;
