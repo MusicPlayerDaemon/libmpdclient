@@ -44,6 +44,27 @@
 #ifdef WIN32
 #  include <ws2tcpip.h>
 #  include <winsock.h>
+#else
+#  include <netinet/in.h>
+#  include <arpa/inet.h>
+#  include <sys/socket.h>
+#  include <netdb.h>
+#endif
+
+#ifndef MSG_DONTWAIT
+#  define MSG_DONTWAIT 0
+#endif
+
+#define COMMAND_LIST    1
+#define COMMAND_LIST_OK 2
+
+#ifndef WIN32
+#  define winsock_dll_error(c)  0
+#  define closesocket(s)        close(s)
+#  define WSACleanup()          do { /* nothing */ } while (0)
+#endif
+
+#ifdef WIN32
 static int winsock_dll_error(mpd_Connection *connection)
 {
 	WSADATA wsaData;
@@ -72,14 +93,6 @@ static int select_errno_ignore(const int my_errno)
 	return (my_errno == WSAEINPROGRESS || my_errno == WSAEINTR);
 }
 #else /* !WIN32 (sane operating systems) */
-#  include <netinet/in.h>
-#  include <arpa/inet.h>
-#  include <sys/socket.h>
-#  include <netdb.h>
-#  define winsock_dll_error(c)		0
-#  define closesocket(s)		close(s)
-#  define WSACleanup()			do { /* nothing */ } while (0)
-
 static int do_connect_fail(mpd_Connection *connection,
                            const struct sockaddr *serv_addr, int addrlen)
 {
@@ -95,13 +108,10 @@ static int select_errno_ignore(const int my_errno)
 }
 #endif /* !WIN32 */
 
-#ifndef MSG_DONTWAIT
-#  define MSG_DONTWAIT 0
-#endif
-
 #ifndef MPD_NO_GAI
 static int mpd_connect(mpd_Connection * connection, const char * host, int port,
-                       float timeout) {
+                       float timeout)
+{
 	int error;
 	char service[20];
 	struct addrinfo hints;
@@ -168,7 +178,8 @@ static int mpd_connect(mpd_Connection * connection, const char * host, int port,
 }
 #else /* !MPD_NO_GAI */
 static int mpd_connect(mpd_Connection * connection, const char * host, int port,
-                       float timeout) {
+                       float timeout)
+{
 	struct hostent * he;
 	struct sockaddr * dest;
 	int destlen;
@@ -220,9 +231,6 @@ static int mpd_connect(mpd_Connection * connection, const char * host, int port,
 	return 0;
 }
 #endif /* !MPD_NO_GAI */
-
-#define COMMAND_LIST	1
-#define COMMAND_LIST_OK	2
 
 char * mpdTagItemKeys[MPD_TAG_NUM_OF_ITEM_TYPES] =
 {
