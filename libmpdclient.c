@@ -70,7 +70,7 @@ static int do_connect_fail(mpd_Connection *connection,
 
 static int select_errno_ignore(const int my_errno)
 {
-	return (my_errno == EINPROGRESS || my_errno == EINTR);
+	return (my_errno == WSAEINPROGRESS || my_errno == WSAEINTR);
 }
 #else /* !WIN32 (sane operating systems) */
 #  include <netinet/in.h>
