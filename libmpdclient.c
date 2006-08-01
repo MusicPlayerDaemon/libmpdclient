@@ -66,8 +66,10 @@
 
 #ifdef WIN32
 #  define SELECT_ERRNO_IGNORE   (errno == WSAEINTR || errno == WSAEINPROGRESS)
+#  define SENDRECV_ERRNO_IGNORE SELECT_ERRNO_IGNORE
 #else
 #  define SELECT_ERRNO_IGNORE   (errno == EINTR)
+#  define SENDRECV_ERRNO_IGNORE (errno == EINTR || errno == EAGAIN)
 #  define winsock_dll_error(c)  0
 #  define closesocket(s)        close(s)
 #  define WSACleanup()          do { /* nothing */ } while (0)
@@ -441,7 +443,7 @@ static void mpd_executeCommand(mpd_Connection * connection, char * command) {
 		ret = send(connection->sock,commandPtr,commandLen,MSG_DONTWAIT);
 		if(ret<=0)
 		{
-			if(ret==EAGAIN || ret==EINTR) continue;
+			if (SENDRECV_ERRNO_IGNORE) continue;
 			snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
 			         "problems giving command \"%s\"",command);
 			connection->error = MPD_ERROR_SENDING;
@@ -522,7 +524,7 @@ static void mpd_getNextReturnElement(mpd_Connection * connection) {
 					connection->buffer+connection->buflen,
 					MPD_BUFFER_MAX_LENGTH-connection->buflen,
 					MSG_DONTWAIT);
-			if(readed<0 && (errno==EAGAIN || errno==EINTR)) {
+			if(readed<0 && SENDRECV_ERRNO_IGNORE) {
 				continue;
 			}
 			if(readed<=0) {
