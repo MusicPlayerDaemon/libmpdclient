@@ -55,6 +55,12 @@
 #  define MSG_DONTWAIT 0
 #endif
 
+#ifndef MPD_NO_GAI
+#  ifdef AI_ADDRCONFIG
+#    define MPD_HAVE_GAI
+#  endif
+#endif
+
 #define COMMAND_LIST    1
 #define COMMAND_LIST_OK 2
 
@@ -108,7 +114,7 @@ static int select_errno_ignore(const int my_errno)
 }
 #endif /* !WIN32 */
 
-#ifndef MPD_NO_GAI
+#ifdef MPD_HAVE_GAI
 static int mpd_connect(mpd_Connection * connection, const char * host, int port,
                        float timeout)
 {
@@ -176,7 +182,7 @@ static int mpd_connect(mpd_Connection * connection, const char * host, int port,
 
 	return 0;
 }
-#else /* !MPD_NO_GAI */
+#else /* !MPD_HAVE_GAI */
 static int mpd_connect(mpd_Connection * connection, const char * host, int port,
                        float timeout)
 {
@@ -230,7 +236,7 @@ static int mpd_connect(mpd_Connection * connection, const char * host, int port,
 
 	return 0;
 }
-#endif /* !MPD_NO_GAI */
+#endif /* !MPD_HAVE_GAI */
 
 char * mpdTagItemKeys[MPD_TAG_NUM_OF_ITEM_TYPES] =
 {
