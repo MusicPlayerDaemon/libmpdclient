@@ -64,7 +64,11 @@
 #define COMMAND_LIST    1
 #define COMMAND_LIST_OK 2
 
-#ifndef WIN32
+#ifdef WIN32
+#  define select_errno_ignore(errno) (errno == WSAEINTR || \
+                                      errno == WSAEINPROGRESS)
+#else
+#  define select_errno_ignore(errno) (errno == EINTR)
 #  define winsock_dll_error(c)  0
 #  define closesocket(s)        close(s)
 #  define WSACleanup()          do { /* nothing */ } while (0)
@@ -93,11 +97,6 @@ static int do_connect_fail(mpd_Connection *connection,
 	return (connect(connection->sock,serv_addr,addrlen) == SOCKET_ERROR
 			&& WSAGetLastError() != WSAEWOULDBLOCK);
 }
-
-static int select_errno_ignore(const int my_errno)
-{
-	return (my_errno == WSAEINPROGRESS || my_errno == WSAEINTR);
-}
 #else /* !WIN32 (sane operating systems) */
 static int do_connect_fail(mpd_Connection *connection,
                            const struct sockaddr *serv_addr, int addrlen)
@@ -106,11 +105,6 @@ static int do_connect_fail(mpd_Connection *connection,
 	fcntl(connection->sock, F_SETFL, flags | O_NONBLOCK);
 	return (connect(connection->sock,serv_addr,addrlen)<0 &&
 				errno!=EINPROGRESS);
-}
-
-static int select_errno_ignore(const int my_errno)
-{
-	return (my_errno == EINTR);
 }
 #endif /* !WIN32 */
 
