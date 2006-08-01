@@ -63,8 +63,7 @@ static int do_connect_fail(mpd_Connection *connection,
 {
 	int iMode = 1; /* 0 = blocking, else non-blocking */
 	ioctlsocket(connection->sock, FIONBIO, (u_long FAR*) &iMode);
-	return (connect(connection->sock,serv_addr,addrlen)
-					== SOCKET_ERROR
+	return (connect(connection->sock,serv_addr,addrlen) == SOCKET_ERROR
 			&& WSAGetLastError() != WSAEWOULDBLOCK);
 }
 
@@ -86,7 +85,6 @@ static int do_connect_fail(mpd_Connection *connection,
 {
 	int flags = fcntl(connection->sock, F_GETFL, 0);
 	fcntl(connection->sock, F_SETFL, flags | O_NONBLOCK);
-
 	return (connect(connection->sock,serv_addr,addrlen)<0 &&
 				errno!=EINPROGRESS);
 }
@@ -113,14 +111,14 @@ static int mpd_connect(mpd_Connection * connection, const char * host, int port,
 	/**
 	 * Setup hints
 	 */
-	hints.ai_flags          = 0;
-	hints.ai_family         = PF_UNSPEC;
-	hints.ai_socktype       = SOCK_STREAM;
-	hints.ai_protocol       = IPPROTO_TCP;
-	hints.ai_addrlen        = 0;
-	hints.ai_addr           = NULL;
-	hints.ai_canonname      = NULL;
-	hints.ai_next           = NULL;
+	hints.ai_flags     = 0;
+	hints.ai_family    = PF_UNSPEC;
+	hints.ai_socktype  = SOCK_STREAM;
+	hints.ai_protocol  = IPPROTO_TCP;
+	hints.ai_addrlen   = 0;
+	hints.ai_addr      = NULL;
+	hints.ai_canonname = NULL;
+	hints.ai_next      = NULL;
 
 	snprintf(service, sizeof(service), "%d", port);
 
