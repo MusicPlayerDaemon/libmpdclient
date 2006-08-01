@@ -438,7 +438,7 @@ static void mpd_executeCommand(mpd_Connection * connection, char * command) {
 	tv.tv_usec = connection->timeout.tv_usec;
 
 	while((ret = select(connection->sock+1,NULL,&fds,NULL,&tv)==1) ||
-			(ret==-1 && errno==EINTR)) {
+			(ret==-1 && select_errno_ignore(errno))) {
 		ret = send(connection->sock,commandPtr,commandLen,MSG_DONTWAIT);
 		if(ret<=0)
 		{
@@ -537,7 +537,7 @@ static void mpd_getNextReturnElement(mpd_Connection * connection) {
 			connection->buflen+=readed;
 			connection->buffer[connection->buflen] = '\0';
 		}
-		else if(err<0 && errno==EINTR) continue;
+		else if(err<0 && select_errno_ignore(errno)) continue;
 		else {
 			strcpy(connection->errorStr,"connection timeout");
 			connection->error = MPD_ERROR_TIMEOUT;
