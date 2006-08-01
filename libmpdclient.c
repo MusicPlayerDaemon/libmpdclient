@@ -102,12 +102,6 @@ static int select_errno_ignore(const int my_errno)
 #endif
 
 #ifndef MPD_NO_GAI
-#  ifdef AI_PASSIVE
-#    define MPD_HAVE_GAI
-#  endif
-#endif
-
-#ifdef MPD_HAVE_GAI
 static int mpd_connect(mpd_Connection * connection, const char * host, int port,
                        float timeout) {
 	int error;
