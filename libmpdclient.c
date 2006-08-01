@@ -65,10 +65,9 @@
 #define COMMAND_LIST_OK 2
 
 #ifdef WIN32
-#  define select_errno_ignore(errno) (errno == WSAEINTR || \
-                                      errno == WSAEINPROGRESS)
+#  define SELECT_ERRNO_IGNORE   (errno == WSAEINTR || errno == WSAEINPROGRESS)
 #else
-#  define select_errno_ignore(errno) (errno == EINTR)
+#  define SELECT_ERRNO_IGNORE   (errno == EINTR)
 #  define winsock_dll_error(c)  0
 #  define closesocket(s)        close(s)
 #  define WSACleanup()          do { /* nothing */ } while (0)
@@ -374,7 +373,7 @@ mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 			connection->buffer[connection->buflen] = '\0';
 		}
 		else if(err<0) {
- 			if (select_errno_ignore(errno))
+ 			if (SELECT_ERRNO_IGNORE)
 				continue;
 			snprintf(connection->errorStr,
 					MPD_BUFFER_MAX_LENGTH,
@@ -438,7 +437,7 @@ static void mpd_executeCommand(mpd_Connection * connection, char * command) {
 	tv.tv_usec = connection->timeout.tv_usec;
 
 	while((ret = select(connection->sock+1,NULL,&fds,NULL,&tv)==1) ||
-			(ret==-1 && select_errno_ignore(errno))) {
+			(ret==-1 && SELECT_ERRNO_IGNORE)) {
 		ret = send(connection->sock,commandPtr,commandLen,MSG_DONTWAIT);
 		if(ret<=0)
 		{
@@ -537,7 +536,7 @@ static void mpd_getNextReturnElement(mpd_Connection * connection) {
 			connection->buflen+=readed;
 			connection->buffer[connection->buflen] = '\0';
 		}
-		else if(err<0 && select_errno_ignore(errno)) continue;
+		else if(err<0 && SELECT_ERRNO_IGNORE) continue;
 		else {
 			strcpy(connection->errorStr,"connection timeout");
 			connection->error = MPD_ERROR_TIMEOUT;
