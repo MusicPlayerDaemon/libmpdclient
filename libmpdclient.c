@@ -166,7 +166,7 @@ static int mpd_connect(mpd_Connection * connection, const char * host, int port,
 
 	return 0;
 }
-#else /* !MPD_HAVE_GAI */
+#else /* !MPD_NO_GAI */
 static int mpd_connect(mpd_Connection * connection, const char * host, int port,
                        float timeout) {
 	struct hostent * he;
@@ -219,7 +219,7 @@ static int mpd_connect(mpd_Connection * connection, const char * host, int port,
 
 	return 0;
 }
-#endif /* !MPD_HAVE_GAI */
+#endif /* !MPD_NO_GAI */
 
 #define COMMAND_LIST	1
 #define COMMAND_LIST_OK	2
