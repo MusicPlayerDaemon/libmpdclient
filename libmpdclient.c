@@ -206,7 +206,7 @@ static int mpd_connect(mpd_Connection * connection, const char * host, int port,
 		destlen = sizeof(struct sockaddr_in);
 		break;
 	default:
-		strcpy(connection->errorStr,"address type is not IPv4\n");
+		strcpy(connection->errorStr,"address type is not IPv4");
 		connection->error = MPD_ERROR_SYSTEM;
 		return -1;
 		break;
