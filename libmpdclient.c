@@ -1618,18 +1618,15 @@ char * mpd_getNextCommand(mpd_Connection * connection) {
 	return mpd_getNextReturnElementNamed(connection,"command");
 }
 
-void mpd_startSearch(mpd_Connection * connection,int exact) {
-	if(connection->request) {
-		/* search/find allready in progress */
-		/* TODO: set error here?  */
+void mpd_startSearch(mpd_Connection * connection, int exact) {
+	if (connection->request) {
+		strcpy(connection->errorStr, "search already in progress");
+		connection->error = 1;
 		return;
 	}
-	if(exact){
-		connection->request = strdup("find");
-	}
-	else{
-		connection->request = strdup("search");
-	}
+
+	if (exact) connection->request = strdup("find");
+	else connection->request = strdup("search");
 }
 
 void mpd_startFieldSearch(mpd_Connection * connection,int field) {
