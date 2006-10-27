@@ -1652,38 +1652,37 @@ void mpd_startFieldSearch(mpd_Connection * connection, int field)
 
 void mpd_addConstraintSearch(mpd_Connection *connection, int field, char *name)
 {
-	char *arg = NULL;
-	if(!connection->request){
+	char *arg;
+
+	if (!connection->request) {
+		strcpy(connection->errorStr, "no search in progress");
+		connection->error = 1;
 		return;
 	}
-	if(name == NULL) {
+
+	if (field < 0 || field >= MPD_TAG_NUM_OF_ITEM_TYPES) {
+		strcpy(connection->errorStr, "invalid field type specified");
+		connection->error = 1;
 		return;
 	}
-	if(field < 0 || field >= MPD_TAG_NUM_OF_ITEM_TYPES) {
+
+	if (name == NULL) {
+		strcpy(connection->errorStr, "no name specified");
+		connection->error = 1;
 		return;
 	}
-	/* clean up the query */
+
 	arg = mpd_sanitizeArg(name);
-	/* create space for the query */
-	connection->request = realloc(connection->request, (
-			 /* length of the old string */
-			 strlen(connection->request)+
-			 /* space between */
-			 1+
-			 /* length of the field name */
-			 strlen(mpdTagItemKeys[field])+
-			 /* space plus starting " */
-			 2+
-			 /* length of search term */
-			 strlen(arg)+
-			 /* closign " +\0 that is added sprintf */
-			 2
-			)*sizeof(char));
-	/* and form the query */
+
+	connection->request = realloc(connection->request,
+	                              strlen(connection->request)+
+	                              strlen(mpdTagItemKeys[field])+
+	                              strlen(arg)+
+	                              5 /* two spaces+two quotes+\0 */);
+
 	sprintf(connection->request, "%s %s \"%s\"",
-			connection->request,
-			mpdTagItemKeys[field],
-			arg);
+	        connection->request, mpdTagItemKeys[field], arg);
+
 	free(arg);
 }
 
