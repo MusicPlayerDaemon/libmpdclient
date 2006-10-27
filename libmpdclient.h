@@ -89,7 +89,7 @@ typedef enum mpd_TagItems
 	MPD_TAG_ITEM_DISC,
 	MPD_TAG_ITEM_FILENAME,
 	MPD_TAG_NUM_OF_ITEM_TYPES
-}mpd_TagItems;
+} mpd_TagItems;
 
 extern char * mpdTagItemKeys[MPD_TAG_NUM_OF_ITEM_TYPES];
 

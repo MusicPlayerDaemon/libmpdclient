@@ -1632,7 +1632,6 @@ void mpd_startSearch(mpd_Connection * connection,int exact) {
 	}
 }
 
-
 void mpd_startFieldSearch(mpd_Connection * connection,int field) {
 	if(connection->request) {
 		/* search/find allready in progress */
@@ -1652,8 +1651,6 @@ void mpd_startFieldSearch(mpd_Connection * connection,int field) {
 				));
 	sprintf(connection->request, "list %s", mpdTagItemKeys[field]);
 }
-
-
 
 void mpd_addConstraintSearch(mpd_Connection *connection,
 		int field,
@@ -1693,7 +1690,6 @@ void mpd_addConstraintSearch(mpd_Connection *connection,
 			arg);
 	free(arg);
 }
-
 
 void mpd_commitSearch(mpd_Connection *connection)
 {
