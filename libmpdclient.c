@@ -82,8 +82,8 @@ static int winsock_dll_error(mpd_Connection *connection)
 	if ((WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0 ||
 			LOBYTE(wsaData.wVersion) != 2 ||
 			HIBYTE(wsaData.wVersion) != 2 ) {
-		snprintf(connection->errorStr,MPD_BUFFER_MAX_LENGTH,
-				"Could not find usable WinSock DLL.");
+		strcpy(connection->errorStr,
+		       "Could not find usable WinSock DLL.");
 		connection->error = MPD_ERROR_SYSTEM;
 		return 1;
 	}
