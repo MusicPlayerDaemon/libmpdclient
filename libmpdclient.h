@@ -586,7 +586,7 @@ void mpd_sendListPlaylistCommand(mpd_Connection *connection, char *path);
  * starts a search, use mpd_addConstraintSearch to add
  * a constraint to the search, and mpd_commitSearch to do the actual search
  */
-void mpd_startSearch(mpd_Connection * connection,int exact);
+void mpd_startSearch(mpd_Connection * connection, int exact);
 
 /**
  * @param connection a #mpd_Connection
@@ -607,8 +607,10 @@ void mpd_commitSearch(mpd_Connection *connection);
  * @param field The field to search
  *
  * starts a search for fields... f.e. get a list of artists would be:
+ * @code
  * mpd_startFieldSearch(connection, MPD_TAG_ITEM_ARTIST);
  * mpd_commitSearch(connection);
+ * @endcode
  *
  * or get a list of artist in genre "jazz" would be:
  * @code

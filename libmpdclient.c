@@ -1618,6 +1618,12 @@ char * mpd_getNextCommand(mpd_Connection * connection) {
 	return mpd_getNextReturnElementNamed(connection,"command");
 }
 
+
+
+
+
+
+
 void mpd_startSearch(mpd_Connection * connection,int exact) {
 	if(connection->request) {
 		/* search/find allready in progress */
