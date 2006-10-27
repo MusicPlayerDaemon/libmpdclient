@@ -1618,7 +1618,8 @@ char * mpd_getNextCommand(mpd_Connection * connection) {
 	return mpd_getNextReturnElementNamed(connection,"command");
 }
 
-void mpd_startSearch(mpd_Connection * connection, int exact) {
+void mpd_startSearch(mpd_Connection * connection, int exact)
+{
 	if (connection->request) {
 		strcpy(connection->errorStr, "search already in progress");
 		connection->error = 1;
@@ -1629,23 +1630,23 @@ void mpd_startSearch(mpd_Connection * connection, int exact) {
 	else connection->request = strdup("search");
 }
 
-void mpd_startFieldSearch(mpd_Connection * connection,int field) {
-	if(connection->request) {
-		/* search/find allready in progress */
-		/* TODO: set error here?  */
-		return;
-	}
-	if(field < 0 || field >= MPD_TAG_NUM_OF_ITEM_TYPES) {
-		/* set error here */
+void mpd_startFieldSearch(mpd_Connection * connection, int field)
+{
+	if (connection->request) {
+		strcpy(connection->errorStr, "search already in progress");
+		connection->error = 1;
 		return;
 	}
 
-	connection->request = malloc(sizeof(char)*(
-				/* length of the field name */
-				strlen(mpdTagItemKeys[field])+
-				/* "list"+space+\0 */
-				6
-				));
+	if (field < 0 || field >= MPD_TAG_NUM_OF_ITEM_TYPES) {
+		strcpy(connection->errorStr, "invalid field type specified");
+		connection->error = 1;
+		return;
+	}
+
+	connection->request = malloc(strlen(mpdTagItemKeys[field])+
+	                             6 /* "list"+space+\0 */);
+
 	sprintf(connection->request, "list %s", mpdTagItemKeys[field]);
 }
 
