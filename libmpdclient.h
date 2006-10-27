@@ -544,6 +544,7 @@ void mpd_freeOutputElement(mpd_OutputEntity * output);
  * Queries mpd for the allowed commands
  */
 void mpd_sendCommandsCommand(mpd_Connection * connection);
+
 /**
  * @param connection a #mpd_Connection
  *
@@ -568,6 +569,7 @@ char *mpd_getNextCommand(mpd_Connection *connection);
  *
  */
 void mpd_sendListPlaylistInfoCommand(mpd_Connection *connection, char *path);
+
 /**
  * @param connection a MpdConnection
  * @param path	the path to the playlist.
@@ -585,6 +587,7 @@ void mpd_sendListPlaylistCommand(mpd_Connection *connection, char *path);
  * a constraint to the search, and mpd_commitSearch to do the actual search
  */
 void mpd_startSearch(mpd_Connection * connection,int exact);
+
 /**
  * @param connection a #mpd_Connection
  * @param field
@@ -592,6 +595,7 @@ void mpd_startSearch(mpd_Connection * connection,int exact);
  *
  */
 void mpd_addConstraintSearch(mpd_Connection *connection, int field, char *name);
+
 /**
  * @param connection a #mpd_Connection
  *
