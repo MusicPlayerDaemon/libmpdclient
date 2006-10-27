@@ -1650,9 +1650,7 @@ void mpd_startFieldSearch(mpd_Connection * connection, int field)
 	sprintf(connection->request, "list %s", mpdTagItemKeys[field]);
 }
 
-void mpd_addConstraintSearch(mpd_Connection *connection,
-		int field,
-		char *name)
+void mpd_addConstraintSearch(mpd_Connection *connection, int field, char *name)
 {
 	char *arg = NULL;
 	if(!connection->request){
@@ -1691,22 +1689,23 @@ void mpd_addConstraintSearch(mpd_Connection *connection,
 
 void mpd_commitSearch(mpd_Connection *connection)
 {
-	if(connection->request)
-	{
-		int length = strlen(connection->request);
-		/* fixing up the string for mpd to like */
-		connection->request = realloc(connection->request,
-				(length+	/* old length */
-				 2		/* closing \n and \0 */
-				)*sizeof(char));
-		connection->request[length] = '\n';
-		connection->request[length+1] = '\0';
-		/* and off we go */
-		mpd_sendInfoCommand(connection, connection->request);
-		/* clean up a bit */
-		free(connection->request);
-		connection->request = NULL;
+	int length;
+
+	if (!connection->request) {
+		strcpy(connection->errorStr, "no search in progress");
+		connection->error = 1;
+		return;
 	}
+
+	length = strlen(connection->request);
+	connection->request = realloc(connection->request,
+	                              length+2 /* old length+\n+\0 */);
+	connection->request[length] = '\n';
+	connection->request[length+1] = '\0';
+	mpd_sendInfoCommand(connection, connection->request);
+
+	free(connection->request);
+	connection->request = NULL;
 }
 
 /**
