@@ -246,7 +246,8 @@ char * mpdTagItemKeys[MPD_TAG_NUM_OF_ITEM_TYPES] =
 	"Performer",
 	"Comment",
 	"Disc",
-	"filename"
+	"Filename",
+	"Any"
 };
 
 static char * mpd_sanitizeArg(const char * arg) {
