@@ -33,6 +33,7 @@
 #include "libmpdclient.h"
 
 #include <errno.h>
+#include <ctype.h>
 #include <sys/types.h>
 #include <stdio.h>
 #include <sys/param.h>
@@ -1635,6 +1636,8 @@ void mpd_startSearch(mpd_Connection *connection, int exact)
 
 void mpd_startFieldSearch(mpd_Connection *connection, int type)
 {
+	char *strtype;
+
 	if (connection->request) {
 		strcpy(connection->errorStr, "search already in progress");
 		connection->error = 1;
@@ -1647,14 +1650,17 @@ void mpd_startFieldSearch(mpd_Connection *connection, int type)
 		return;
 	}
 
-	connection->request = malloc(strlen(mpdTagItemKeys[type])+
-	                             6 /* "list"+space+\0 */);
+	strtype = mpdTagItemKeys[type];
 
-	sprintf(connection->request, "list %s", mpdTagItemKeys[type]);
+	connection->request = malloc(strlen(strtype)+6 /* "list"+space+\0 */);
+
+	sprintf(connection->request, "list %c%s",
+	        tolower(strtype[0]), strtype+1);
 }
 
 void mpd_addConstraintSearch(mpd_Connection *connection, int type, char *name)
 {
+	char *strtype;
 	char *arg;
 
 	if (!connection->request) {
@@ -1675,16 +1681,16 @@ void mpd_addConstraintSearch(mpd_Connection *connection, int type, char *name)
 		return;
 	}
 
+	strtype = mpdTagItemKeys[type];
 	arg = mpd_sanitizeArg(name);
 
 	connection->request = realloc(connection->request,
 	                              strlen(connection->request)+
-	                              strlen(mpdTagItemKeys[type])+
-	                              strlen(arg)+
+	                              strlen(strtype)+strlen(arg)+
 	                              5 /* two spaces+two quotes+\0 */);
 
-	sprintf(connection->request, "%s %s \"%s\"",
-	        connection->request, mpdTagItemKeys[type], arg);
+	sprintf(connection->request, "%s %c%s \"%s\"", connection->request,
+	        tolower(strtype[0]), strtype+1, arg);
 
 	free(arg);
 }
