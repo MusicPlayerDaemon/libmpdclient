@@ -1158,10 +1158,12 @@ static char * mpd_getNextReturnElementNamed(mpd_Connection * connection,
 
 char *mpd_getNextTag(mpd_Connection *connection, int type)
 {
-	if (type >= 0 && type < MPD_TAG_NUM_OF_ITEM_TYPES) {
-		return mpd_getNextReturnElementNamed(connection, mpdTagItemKeys[type]);
-	}
-	return NULL;
+	if (type < 0 || type >= MPD_TAG_NUM_OF_ITEM_TYPES ||
+	    type == MPD_TAG_ITEM_ANY)
+		return NULL;
+	if (type == MPD_TAG_ITEM_FILENAME)
+		return mpd_getNextReturnElementNamed(connection, "file");
+	return mpd_getNextReturnElementNamed(connection, mpdTagItemKeys[type]);
 }
 
 char * mpd_getNextArtist(mpd_Connection * connection) {
