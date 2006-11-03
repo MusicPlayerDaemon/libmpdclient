@@ -1156,10 +1156,10 @@ static char * mpd_getNextReturnElementNamed(mpd_Connection * connection,
 	return NULL;
 }
 
-char * mpd_getNextTag(mpd_Connection * connection,int table) {
-	if(table >= 0 && table < MPD_TAG_NUM_OF_ITEM_TYPES)
-	{
-		return mpd_getNextReturnElementNamed(connection,mpdTagItemKeys[table]);
+char *mpd_getNextTag(mpd_Connection *connection, int type)
+{
+	if (type >= 0 && type < MPD_TAG_NUM_OF_ITEM_TYPES) {
+		return mpd_getNextReturnElementNamed(connection, mpdTagItemKeys[type]);
 	}
 	return NULL;
 }
@@ -1619,7 +1619,7 @@ char * mpd_getNextCommand(mpd_Connection * connection) {
 	return mpd_getNextReturnElementNamed(connection,"command");
 }
 
-void mpd_startSearch(mpd_Connection * connection, int exact)
+void mpd_startSearch(mpd_Connection *connection, int exact)
 {
 	if (connection->request) {
 		strcpy(connection->errorStr, "search already in progress");
@@ -1631,7 +1631,7 @@ void mpd_startSearch(mpd_Connection * connection, int exact)
 	else connection->request = strdup("search");
 }
 
-void mpd_startFieldSearch(mpd_Connection * connection, int field)
+void mpd_startFieldSearch(mpd_Connection *connection, int type)
 {
 	if (connection->request) {
 		strcpy(connection->errorStr, "search already in progress");
@@ -1639,19 +1639,19 @@ void mpd_startFieldSearch(mpd_Connection * connection, int field)
 		return;
 	}
 
-	if (field < 0 || field >= MPD_TAG_NUM_OF_ITEM_TYPES) {
-		strcpy(connection->errorStr, "invalid field type specified");
+	if (type < 0 || type >= MPD_TAG_NUM_OF_ITEM_TYPES) {
+		strcpy(connection->errorStr, "invalid type specified");
 		connection->error = 1;
 		return;
 	}
 
-	connection->request = malloc(strlen(mpdTagItemKeys[field])+
+	connection->request = malloc(strlen(mpdTagItemKeys[type])+
 	                             6 /* "list"+space+\0 */);
 
-	sprintf(connection->request, "list %s", mpdTagItemKeys[field]);
+	sprintf(connection->request, "list %s", mpdTagItemKeys[type]);
 }
 
-void mpd_addConstraintSearch(mpd_Connection *connection, int field, char *name)
+void mpd_addConstraintSearch(mpd_Connection *connection, int type, char *name)
 {
 	char *arg;
 
@@ -1661,8 +1661,8 @@ void mpd_addConstraintSearch(mpd_Connection *connection, int field, char *name)
 		return;
 	}
 
-	if (field < 0 || field >= MPD_TAG_NUM_OF_ITEM_TYPES) {
-		strcpy(connection->errorStr, "invalid field type specified");
+	if (type < 0 || type >= MPD_TAG_NUM_OF_ITEM_TYPES) {
+		strcpy(connection->errorStr, "invalid type specified");
 		connection->error = 1;
 		return;
 	}
@@ -1677,12 +1677,12 @@ void mpd_addConstraintSearch(mpd_Connection *connection, int field, char *name)
 
 	connection->request = realloc(connection->request,
 	                              strlen(connection->request)+
-	                              strlen(mpdTagItemKeys[field])+
+	                              strlen(mpdTagItemKeys[type])+
 	                              strlen(arg)+
 	                              5 /* two spaces+two quotes+\0 */);
 
 	sprintf(connection->request, "%s %s \"%s\"",
-	        connection->request, mpdTagItemKeys[field], arg);
+	        connection->request, mpdTagItemKeys[type], arg);
 
 	free(arg);
 }
