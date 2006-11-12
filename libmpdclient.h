@@ -40,6 +40,7 @@
 #include <sys/time.h>
 #include <stdarg.h>
 #define MPD_BUFFER_MAX_LENGTH	50000
+#define MPD_ERRORSTR_MAX_LENGTH	1000
 #define MPD_WELCOME_MESSAGE	"OK MPD "
 
 #define MPD_ERROR_TIMEOUT	10 /* timeout trying to talk to mpd */
@@ -108,7 +109,7 @@ typedef struct _mpd_Connection {
 	/* use this to check the version of mpd */
 	int version[3];
 	/* IMPORTANT, you want to get the error messages from here */
-	char errorStr[MPD_BUFFER_MAX_LENGTH+1];
+	char errorStr[MPD_ERRORSTR_MAX_LENGTH+1];
 	int errorCode;
 	int errorAt;
 	/* this will be set to MPD_ERROR_* if there is an error, 0 if not */
