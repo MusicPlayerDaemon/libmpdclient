@@ -447,6 +447,8 @@ void mpd_sendListCommand(mpd_Connection * connection, int table,
 
 void mpd_sendAddCommand(mpd_Connection * connection, const char * file);
 
+int mpd_sendAddIdCommand(mpd_Connection *connection, const char *file);
+
 void mpd_sendDeleteCommand(mpd_Connection * connection, int songNum);
 
 void mpd_sendDeleteIdCommand(mpd_Connection * connection, int songNum);

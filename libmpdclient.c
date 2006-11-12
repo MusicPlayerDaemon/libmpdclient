@@ -1312,6 +1312,26 @@ void mpd_sendAddCommand(mpd_Connection * connection, const char * file) {
 	free(sFile);
 }
 
+int mpd_sendAddIdCommand(mpd_Connection *connection, const char *file)
+{
+	int retval = -1;
+	char *sFile = mpd_sanitizeArg(file);
+	char *string = malloc(strlen("addid")+strlen(sFile)+5);
+
+	sprintf(string, "addid \"%s\"\n", sFile);
+	mpd_sendInfoCommand(connection, string);
+	free(string);
+	free(sFile);
+
+	string = mpd_getNextReturnElementNamed(connection, "Id");
+	if (string) {
+		retval = atoi(string);
+		free(string);
+	}
+	
+	return retval;
+}
+
 void mpd_sendDeleteCommand(mpd_Connection * connection, int songPos) {
 	char * string = malloc(strlen("delete")+25);
 	sprintf(string,"delete \"%i\"\n",songPos);
