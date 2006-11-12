@@ -614,7 +614,6 @@ static void mpd_getNextReturnElement(mpd_Connection * connection) {
 	else {
 		snprintf(connection->errorStr,MPD_ERRORSTR_MAX_LENGTH,
 					"error parsing: %s:%s",name,value);
-		connection->errorStr[MPD_ERRORSTR_MAX_LENGTH] = '\0';
 		connection->error = 1;
 	}
 }
