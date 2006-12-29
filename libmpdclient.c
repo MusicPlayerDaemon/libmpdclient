@@ -1236,44 +1236,17 @@ void mpd_sendCurrentSongCommand(mpd_Connection * connection) {
 void mpd_sendSearchCommand(mpd_Connection * connection, int table,
 		const char * str)
 {
-	char st[10];
-	char * string;
-	char * sanitStr = mpd_sanitizeArg(str);
-	if(table == MPD_TABLE_ARTIST) strcpy(st,"artist");
-	else if(table == MPD_TABLE_ALBUM) strcpy(st,"album");
-	else if(table == MPD_TABLE_TITLE) strcpy(st,"title");
-	else if(table == MPD_TABLE_FILENAME) strcpy(st,"filename");
-	else {
-		connection->error = 1;
-		strcpy(connection->errorStr,"unknown table for search");
-		return;
-	}
-	string = malloc(strlen("search")+strlen(sanitStr)+strlen(st)+6);
-	sprintf(string,"search %s \"%s\"\n",st,sanitStr);
-	mpd_sendInfoCommand(connection,string);
-	free(string);
-	free(sanitStr);
+	mpd_startSearch(connection, 0);
+	mpd_addConstraintSearch(connection, table, str);
+	mpd_commitSearch(connection);
 }
 
 void mpd_sendFindCommand(mpd_Connection * connection, int table,
 		const char * str)
 {
-	char st[10];
-	char * string;
-	char * sanitStr = mpd_sanitizeArg(str);
-	if(table == MPD_TABLE_ARTIST) strcpy(st,"artist");
-	else if(table == MPD_TABLE_ALBUM) strcpy(st,"album");
-	else if(table == MPD_TABLE_TITLE) strcpy(st,"title");
-	else {
-		connection->error = 1;
-		strcpy(connection->errorStr,"unknown table for find");
-		return;
-	}
-	string = malloc(strlen("find")+strlen(sanitStr)+strlen(st)+6);
-	sprintf(string,"find %s \"%s\"\n",st,sanitStr);
-	mpd_sendInfoCommand(connection,string);
-	free(string);
-	free(sanitStr);
+	mpd_startSearch(connection, 1);
+	mpd_addConstraintSearch(connection, table, str);
+	mpd_commitSearch(connection);
 }
 
 void mpd_sendListCommand(mpd_Connection * connection, int table,
@@ -1677,7 +1650,7 @@ void mpd_startFieldSearch(mpd_Connection *connection, int type)
 	        tolower(strtype[0]), strtype+1);
 }
 
-void mpd_addConstraintSearch(mpd_Connection *connection, int type, char *name)
+void mpd_addConstraintSearch(mpd_Connection *connection, int type, const char *name)
 {
 	char *strtype;
 	char *arg;

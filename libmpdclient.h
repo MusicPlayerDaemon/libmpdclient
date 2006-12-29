@@ -597,7 +597,7 @@ void mpd_startSearch(mpd_Connection *connection, int exact);
  * @param type
  * @param name
  */
-void mpd_addConstraintSearch(mpd_Connection *connection, int type, char *name);
+void mpd_addConstraintSearch(mpd_Connection *connection, int type, const char *name);
 
 /**
  * @param connection a #mpd_Connection
