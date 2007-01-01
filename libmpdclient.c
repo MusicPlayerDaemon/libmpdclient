@@ -863,6 +863,7 @@ static void mpd_initSong(mpd_Song * song) {
 	/* added by Qball */
 	song->genre = NULL;
 	song->composer = NULL;
+	song->performer = NULL;
 	song->disc = NULL;
 	song->comment = NULL;
 
@@ -1115,6 +1116,10 @@ mpd_InfoEntity * mpd_getNextInfoEntity(mpd_Connection * connection) {
 			else if(!entity->info.song->composer &&
 					strcmp(re->name, "Composer") == 0) {
 				entity->info.song->composer = strdup(re->value);
+			}
+			else if(!entity->info.song->performer &&
+					strcmp(re->name, "Performer") == 0) {
+				entity->info.song->performer = strdup(re->value);
 			}
 			else if(!entity->info.song->disc &&
 					strcmp(re->name, "Disc") == 0) {

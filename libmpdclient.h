@@ -264,6 +264,8 @@ typedef struct _mpd_Song {
 	char *genre;
 	/* Composer */
 	char *composer;
+	/* Performer */
+	char *performer;
 	/* Disc */
 	char *disc;
 	/* Comment */
