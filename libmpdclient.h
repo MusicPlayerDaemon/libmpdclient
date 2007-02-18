@@ -418,10 +418,10 @@ void mpd_sendListallInfoCommand(mpd_Connection * connection, const char * dir);
 /* non-recursive version of ListallInfo */
 void mpd_sendLsInfoCommand(mpd_Connection * connection, const char * dir);
 
-#define MPD_TABLE_ARTIST	0
-#define MPD_TABLE_ALBUM		1
-#define MPD_TABLE_TITLE		2
-#define MPD_TABLE_FILENAME	3
+#define MPD_TABLE_ARTIST	MPD_TAG_ITEM_ARTIST
+#define MPD_TABLE_ALBUM		MPD_TAG_ITEM_ALBUM
+#define MPD_TABLE_TITLE		MPD_TAG_ITEM_TITLE
+#define MPD_TABLE_FILENAME	MPD_TAG_ITEM_FILENAME
 
 void mpd_sendSearchCommand(mpd_Connection * connection, int table,
 		const char * str);
