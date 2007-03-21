@@ -1,3 +1,0 @@
- 01-01-2007 Qball <Qball@sarine.nl>
- 	* libmpdclient.c: Adding Performer support
-	* libmpdclient.h: Adding Performer to the mpd_Song struct
