@@ -1635,18 +1635,6 @@ void mpd_startSearch(mpd_Connection *connection, int exact)
 	else connection->request = strdup("search");
 }
 
-void mpd_startPlaylistSearch(mpd_Connection *connection, int exact)
-{
-	if (connection->request) {
-		strcpy(connection->errorStr, "search already in progress");
-		connection->error = 1;
-		return;
-	}
-
-	if (exact) connection->request = strdup("playlistfind");
-	else connection->request = strdup("playlistsearch");
-}
-
 void mpd_startFieldSearch(mpd_Connection *connection, int type)
 {
 	char *strtype;
