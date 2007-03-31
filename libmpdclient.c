@@ -1604,23 +1604,26 @@ void mpd_freeOutputElement(mpd_OutputEntity * output) {
  * odd naming, but it gets the not allowed commands
  */
 
-void mpd_sendNotCommandsCommand(mpd_Connection * connection) {
-	mpd_executeCommand(connection,"notcommands\n");
+void mpd_sendNotCommandsCommand(mpd_Connection * connection)
+{
+	mpd_executeCommand(connection, "notcommands\n");
 }
 
 /**
  * mpd_sendCommandsCommand
  * odd naming, but it gets the allowed commands
  */
-
-void mpd_sendCommandsCommand(mpd_Connection * connection) {
-	mpd_executeCommand(connection,"commands\n");
+void mpd_sendCommandsCommand(mpd_Connection * connection)
+{
+	mpd_executeCommand(connection, "commands\n");
 }
+
 /**
  * Get the next returned command
  */
-char * mpd_getNextCommand(mpd_Connection * connection) {
-	return mpd_getNextReturnElementNamed(connection,"command");
+char * mpd_getNextCommand(mpd_Connection * connection)
+{
+	return mpd_getNextReturnElementNamed(connection, "command");
 }
 
 void mpd_startSearch(mpd_Connection *connection, int exact)
