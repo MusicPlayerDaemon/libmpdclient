@@ -1636,6 +1636,16 @@ char * mpd_getNextHandler(mpd_Connection * connection)
 	return mpd_getNextReturnElementNamed(connection, "handler");
 }
 
+void mpd_sendTagTypesCommand(mpd_Connection * connection)
+{
+	mpd_executeCommand(connection, "tagtypes");
+}
+
+char * mpd_getNextTagType(mpd_Connection * connection)
+{
+	return mpd_getNextReturnElementNamed(connection, "tagtype");
+}
+
 void mpd_startSearch(mpd_Connection *connection, int exact)
 {
 	if (connection->request) {
