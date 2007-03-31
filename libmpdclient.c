@@ -1626,6 +1626,16 @@ char * mpd_getNextCommand(mpd_Connection * connection)
 	return mpd_getNextReturnElementNamed(connection, "command");
 }
 
+void mpd_sendUrlHandlersCommand(mpd_Connection * connection)
+{
+	mpd_executeCommand(connection, "urlhandlers");
+}
+
+char * mpd_getNextHandler(mpd_Connection * connection)
+{
+	return mpd_getNextReturnElementNamed(connection, "handler");
+}
+
 void mpd_startSearch(mpd_Connection *connection, int exact)
 {
 	if (connection->request) {

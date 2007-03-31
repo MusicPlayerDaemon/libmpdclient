@@ -567,6 +567,10 @@ void mpd_sendNotCommandsCommand(mpd_Connection * connection);
  */
 char *mpd_getNextCommand(mpd_Connection *connection);
 
+void mpd_sendUrlHandlersCommand(mpd_Connection * connection);
+
+char *mpd_getNextHandler(mpd_Connection * connection);
+
 /**
  * @param connection a MpdConnection
  * @param path	the path to the playlist.
