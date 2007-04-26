@@ -227,11 +227,20 @@ typedef struct _mpd_Stats {
 	unsigned long dbPlayTime;
 } mpd_Stats;
 
+typedef struct _mpd_SearchStats {
+	int numberOfSongs;
+	unsigned long playTime;
+} mpd_SearchStats;
+
 void mpd_sendStatsCommand(mpd_Connection * connection);
 
 mpd_Stats * mpd_getStats(mpd_Connection * connection);
 
 void mpd_freeStats(mpd_Stats * stats);
+
+mpd_SearchStats * mpd_getSearchStats(mpd_Connection * connection);
+
+void mpd_freeSearchStats(mpd_SearchStats * stats);
 
 /* SONG STUFF */
 
@@ -638,6 +647,8 @@ void mpd_commitSearch(mpd_Connection *connection);
 void mpd_startFieldSearch(mpd_Connection *connection, int type);
 
 void mpd_startPlaylistSearch(mpd_Connection *connection, int exact);
+
+void mpd_startStatsSearch(mpd_Connection *connection);
 
 void mpd_sendPlaylistClearCommand(mpd_Connection *connection, char* path);
 

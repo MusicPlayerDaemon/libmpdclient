@@ -856,6 +856,54 @@ void mpd_freeStats(mpd_Stats * stats) {
 	free(stats);
 }
 
+mpd_SearchStats * mpd_getSearchStats(mpd_Connection * connection)
+{
+	mpd_SearchStats * stats;
+	mpd_ReturnElement * re;
+
+	if (connection->doneProcessing ||
+	    (connection->listOks && connection->doneListOk)) {
+		return NULL;
+	}
+
+	if (!connection->returnElement) mpd_getNextReturnElement(connection);
+
+	if (connection->error)
+		return NULL;
+
+	stats = malloc(sizeof(mpd_SearchStats));
+	stats->numberOfSongs = 0;
+	stats->playTime = 0;
+
+	while (connection->returnElement) {
+		re = connection->returnElement;
+
+		if (strcmp(re->name, "songs") == 0) {
+			stats->numberOfSongs = atoi(re->value);
+		} else if (strcmp(re->name, "playtime") == 0) {
+			stats->playTime = strtol(re->value, NULL, 10);
+		}
+
+		mpd_getNextReturnElement(connection);
+		if (connection->error) {
+			free(stats);
+			return NULL;
+		}
+	}
+
+	if (connection->error) {
+		free(stats);
+		return NULL;
+	}
+
+	return stats;
+}
+
+void mpd_freeSearchStats(mpd_SearchStats * stats)
+{
+	free(stats);
+}
+
 static void mpd_initSong(mpd_Song * song) {
 	song->file = NULL;
 	song->artist = NULL;
@@ -1656,6 +1704,17 @@ void mpd_startSearch(mpd_Connection *connection, int exact)
 
 	if (exact) connection->request = strdup("find");
 	else connection->request = strdup("search");
+}
+
+void mpd_startStatsSearch(mpd_Connection *connection)
+{
+	if (connection->request) {
+		strcpy(connection->errorStr, "search already in progress");
+		connection->error = 1;
+		return;
+	}
+
+	connection->request = strdup("count");
 }
 
 void mpd_startPlaylistSearch(mpd_Connection *connection, int exact)
