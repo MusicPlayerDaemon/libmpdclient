@@ -52,9 +52,8 @@
 #  include <netdb.h>
 #endif
 
-#ifndef MSG_DONTWAIT
-#  define MSG_DONTWAIT 0
-#endif
+#define COMMAND_LIST    1
+#define COMMAND_LIST_OK 2
 
 #ifndef MPD_NO_GAI
 #  ifdef AI_ADDRCONFIG
@@ -62,8 +61,9 @@
 #  endif
 #endif
 
-#define COMMAND_LIST    1
-#define COMMAND_LIST_OK 2
+#ifndef MSG_DONTWAIT
+#  define MSG_DONTWAIT 0
+#endif
 
 #ifdef WIN32
 #  define SELECT_ERRNO_IGNORE   (errno == WSAEINTR || errno == WSAEINPROGRESS)
