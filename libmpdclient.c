@@ -119,7 +119,7 @@ static int mpd_connect(mpd_Connection * connection, const char * host, int port,
                        float timeout)
 {
 	int error;
-	char service[20];
+	char service[INTLEN+1];
 	struct addrinfo hints;
 	struct addrinfo *res = NULL;
 	struct addrinfo *addrinfo = NULL;
@@ -136,7 +136,7 @@ static int mpd_connect(mpd_Connection * connection, const char * host, int port,
 	hints.ai_canonname = NULL;
 	hints.ai_next      = NULL;
 
-	snprintf(service, sizeof(service), "%d", port);
+	snprintf(service, sizeof(service), "%i", port);
 
 	error = getaddrinfo(host, service, &hints, &addrinfo);
 
