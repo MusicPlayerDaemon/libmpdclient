@@ -1845,7 +1845,7 @@ void mpd_sendListPlaylistCommand(mpd_Connection *connection, char *path)
 	free(query);
 }
 
-void mpd_sendPlaylistClearCommand(mpd_Connection *connection, char* path)
+void mpd_sendPlaylistClearCommand(mpd_Connection *connection, char *path)
 {
 	char *sPath = mpd_sanitizeArg(path);
 	char *string = malloc(strlen("playlistclear")+strlen(sPath)+5);
@@ -1856,7 +1856,7 @@ void mpd_sendPlaylistClearCommand(mpd_Connection *connection, char* path)
 }
 
 void mpd_sendPlaylistAddCommand(mpd_Connection *connection,
-                                char *playlist, char* path)
+                                char *playlist, char *path)
 {
 	char *sPlaylist = mpd_sanitizeArg(playlist);
 	char *sPath = mpd_sanitizeArg(path);
