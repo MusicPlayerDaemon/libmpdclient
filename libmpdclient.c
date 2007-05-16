@@ -1232,37 +1232,42 @@ char * mpd_getNextAlbum(mpd_Connection * connection) {
 }
 
 void mpd_sendPlaylistInfoCommand(mpd_Connection * connection, int songPos) {
-	char * string = malloc(strlen("playlistinfo")+25);
-	sprintf(string,"playlistinfo \"%i\"\n",songPos);
+	int len = strlen("playlistinfo")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "playlistinfo \"%i\"\n", songPos);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendPlaylistIdCommand(mpd_Connection * connection, int id) {
-	char * string = malloc(strlen("playlistid")+25);
-	sprintf(string, "playlistid \"%i\"\n", id);
+	int len = strlen("playlistid")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "playlistid \"%i\"\n", id);
 	mpd_sendInfoCommand(connection, string);
 	free(string);
 }
 
 void mpd_sendPlChangesCommand(mpd_Connection * connection, long long playlist) {
-	char * string = malloc(strlen("plchanges")+25);
-	sprintf(string,"plchanges \"%lld\"\n",playlist);
+	int len = strlen("plchanges")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "plchanges \"%lld\"\n", playlist);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendPlChangesPosIdCommand(mpd_Connection * connection, long long playlist) {
-	char * string = malloc(strlen("plchangesposid")+25);
-	sprintf(string,"plchangesposid \"%lld\"\n",playlist);
+	int len = strlen("plchangesposid")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "plchangesposid \"%lld\"\n", playlist);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendListallCommand(mpd_Connection * connection, const char * dir) {
 	char * sDir = mpd_sanitizeArg(dir);
-	char * string = malloc(strlen("listall")+strlen(sDir)+5);
-	sprintf(string,"listall \"%s\"\n",sDir);
+	int len = strlen("listall")+strlen(sDir)+5;
+	char *string = malloc(len);
+	snprintf(string, len, "listall \"%s\"\n", sDir);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 	free(sDir);
@@ -1270,8 +1275,9 @@ void mpd_sendListallCommand(mpd_Connection * connection, const char * dir) {
 
 void mpd_sendListallInfoCommand(mpd_Connection * connection, const char * dir) {
 	char * sDir = mpd_sanitizeArg(dir);
-	char * string = malloc(strlen("listallinfo")+strlen(sDir)+5);
-	sprintf(string,"listallinfo \"%s\"\n",sDir);
+	int len = strlen("listallinfo")+strlen(sDir)+5;
+	char *string = malloc(len);
+	snprintf(string, len, "listallinfo \"%s\"\n", sDir);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 	free(sDir);
@@ -1279,8 +1285,9 @@ void mpd_sendListallInfoCommand(mpd_Connection * connection, const char * dir) {
 
 void mpd_sendLsInfoCommand(mpd_Connection * connection, const char * dir) {
 	char * sDir = mpd_sanitizeArg(dir);
-	char * string = malloc(strlen("lsinfo")+strlen(sDir)+5);
-	sprintf(string,"lsinfo \"%s\"\n",sDir);
+	int len = strlen("lsinfo")+strlen(sDir)+5;
+	char *string = malloc(len);
+	snprintf(string, len, "lsinfo \"%s\"\n", sDir);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 	free(sDir);
@@ -1310,7 +1317,8 @@ void mpd_sendListCommand(mpd_Connection * connection, int table,
 		const char * arg1)
 {
 	char st[10];
-	char * string;
+	int len;
+	char *string;
 	if(table == MPD_TABLE_ARTIST) strcpy(st,"artist");
 	else if(table == MPD_TABLE_ALBUM) strcpy(st,"album");
 	else {
@@ -1320,13 +1328,15 @@ void mpd_sendListCommand(mpd_Connection * connection, int table,
 	}
 	if(arg1) {
 		char * sanitArg1 = mpd_sanitizeArg(arg1);
-		string = malloc(strlen("list")+strlen(sanitArg1)+strlen(st)+6);
-		sprintf(string,"list %s \"%s\"\n",st,sanitArg1);
+		len = strlen("list")+strlen(sanitArg1)+strlen(st)+6;
+		string = malloc(len);
+		snprintf(string, len, "list %s \"%s\"\n", st, sanitArg1);
 		free(sanitArg1);
 	}
 	else {
-		string = malloc(strlen("list")+strlen(st)+3);
-		sprintf(string,"list %s\n",st);
+		len = strlen("list")+strlen(st)+3;
+		string = malloc(len);
+		snprintf(string, len, "list %s\n", st);
 	}
 	mpd_sendInfoCommand(connection,string);
 	free(string);
@@ -1334,8 +1344,9 @@ void mpd_sendListCommand(mpd_Connection * connection, int table,
 
 void mpd_sendAddCommand(mpd_Connection * connection, const char * file) {
 	char * sFile = mpd_sanitizeArg(file);
-	char * string = malloc(strlen("add")+strlen(sFile)+5);
-	sprintf(string,"add \"%s\"\n",sFile);
+	int len = strlen("add")+strlen(sFile)+5;
+	char *string = malloc(len);
+	snprintf(string, len, "add \"%s\"\n", sFile);
 	mpd_executeCommand(connection,string);
 	free(string);
 	free(sFile);
@@ -1345,9 +1356,10 @@ int mpd_sendAddIdCommand(mpd_Connection *connection, const char *file)
 {
 	int retval = -1;
 	char *sFile = mpd_sanitizeArg(file);
-	char *string = malloc(strlen("addid")+strlen(sFile)+5);
+	int len = strlen("addid")+strlen(sFile)+5;
+	char *string = malloc(len);
 
-	sprintf(string, "addid \"%s\"\n", sFile);
+	snprintf(string, len, "addid \"%s\"\n", sFile);
 	mpd_sendInfoCommand(connection, string);
 	free(string);
 	free(sFile);
@@ -1362,23 +1374,26 @@ int mpd_sendAddIdCommand(mpd_Connection *connection, const char *file)
 }
 
 void mpd_sendDeleteCommand(mpd_Connection * connection, int songPos) {
-	char * string = malloc(strlen("delete")+25);
-	sprintf(string,"delete \"%i\"\n",songPos);
+	int len = strlen("delete")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "delete \"%i\"\n", songPos);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendDeleteIdCommand(mpd_Connection * connection, int id) {
-	char * string = malloc(strlen("deleteid")+25);
-	sprintf(string, "deleteid \"%i\"\n", id);
+	int len = strlen("deleteid")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "deleteid \"%i\"\n", id);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendSaveCommand(mpd_Connection * connection, const char * name) {
 	char * sName = mpd_sanitizeArg(name);
-	char * string = malloc(strlen("save")+strlen(sName)+5);
-	sprintf(string,"save \"%s\"\n",sName);
+	int len = strlen("save")+strlen(sName)+5;
+	char *string = malloc(len);
+	snprintf(string, len, "save \"%s\"\n", sName);
 	mpd_executeCommand(connection,string);
 	free(string);
 	free(sName);
@@ -1386,8 +1401,9 @@ void mpd_sendSaveCommand(mpd_Connection * connection, const char * name) {
 
 void mpd_sendLoadCommand(mpd_Connection * connection, const char * name) {
 	char * sName = mpd_sanitizeArg(name);
-	char * string = malloc(strlen("load")+strlen(sName)+5);
-	sprintf(string,"load \"%s\"\n",sName);
+	int len = strlen("load")+strlen(sName)+5;
+	char *string = malloc(len);
+	snprintf(string, len, "load \"%s\"\n", sName);
 	mpd_executeCommand(connection,string);
 	free(string);
 	free(sName);
@@ -1395,8 +1411,9 @@ void mpd_sendLoadCommand(mpd_Connection * connection, const char * name) {
 
 void mpd_sendRmCommand(mpd_Connection * connection, const char * name) {
 	char * sName = mpd_sanitizeArg(name);
-	char * string = malloc(strlen("rm")+strlen(sName)+5);
-	sprintf(string,"rm \"%s\"\n",sName);
+	int len = strlen("rm")+strlen(sName)+5;
+	char *string = malloc(len);
+	snprintf(string, len, "rm \"%s\"\n", sName);
 	mpd_executeCommand(connection,string);
 	free(string);
 	free(sName);
@@ -1411,15 +1428,17 @@ void mpd_sendClearCommand(mpd_Connection * connection) {
 }
 
 void mpd_sendPlayCommand(mpd_Connection * connection, int songPos) {
-	char * string = malloc(strlen("play")+25);
-	sprintf(string,"play \"%i\"\n",songPos);
+	int len = strlen("play")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "play \"%i\"\n", songPos);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendPlayIdCommand(mpd_Connection * connection, int id) {
-	char * string = malloc(strlen("playid")+25);
-	sprintf(string,"playid \"%i\"\n",id);
+	int len = strlen("playid")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "playid \"%i\"\n", id);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 }
@@ -1429,8 +1448,9 @@ void mpd_sendStopCommand(mpd_Connection * connection) {
 }
 
 void mpd_sendPauseCommand(mpd_Connection * connection, int pauseMode) {
-	char * string = malloc(strlen("pause")+25);
-	sprintf(string,"pause \"%i\"\n",pauseMode);
+	int len = strlen("pause")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "pause \"%i\"\n", pauseMode);
 	mpd_executeCommand(connection,string);
 	free(string);
 }
@@ -1440,51 +1460,58 @@ void mpd_sendNextCommand(mpd_Connection * connection) {
 }
 
 void mpd_sendMoveCommand(mpd_Connection * connection, int from, int to) {
-	char * string = malloc(strlen("move")+25);
-	sprintf(string,"move \"%i\" \"%i\"\n",from,to);
+	int len = strlen("move")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "move \"%i\" \"%i\"\n", from, to);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendMoveIdCommand(mpd_Connection * connection, int id, int to) {
-	char * string = malloc(strlen("moveid")+25);
-	sprintf(string, "moveid \"%i\" \"%i\"\n", id, to);
+	int len = strlen("moveid")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "moveid \"%i\" \"%i\"\n", id, to);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendSwapCommand(mpd_Connection * connection, int song1, int song2) {
-	char * string = malloc(strlen("swap")+25);
-	sprintf(string,"swap \"%i\" \"%i\"\n",song1,song2);
+	int len = strlen("swap")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "swap \"%i\" \"%i\"\n", song1, song2);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendSwapIdCommand(mpd_Connection * connection, int id1, int id2) {
-	char * string = malloc(strlen("swapid")+25);
-	sprintf(string, "swapid \"%i\" \"%i\"\n", id1, id2);
+	int len = strlen("swapid")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "swapid \"%i\" \"%i\"\n", id1, id2);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendSeekCommand(mpd_Connection * connection, int song, int time) {
-	char * string = malloc(strlen("seek")+25);
-	sprintf(string,"seek \"%i\" \"%i\"\n",song,time);
+	int len = strlen("seek")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "seek \"%i\" \"%i\"\n", song, time);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendSeekIdCommand(mpd_Connection * connection, int id, int time) {
-	char * string = malloc(strlen("seekid")+25);
-	sprintf(string,"seekid \"%i\" \"%i\"\n",id,time);
+	int len = strlen("seekid")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "seekid \"%i\" \"%i\"\n", id, time);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendUpdateCommand(mpd_Connection * connection, char * path) {
 	char * sPath = mpd_sanitizeArg(path);
-	char * string = malloc(strlen("update")+strlen(sPath)+5);
-	sprintf(string,"update \"%s\"\n",sPath);
+	int len = strlen("update")+strlen(sPath)+5;
+	char *string = malloc(len);
+	snprintf(string, len, "update \"%s\"\n", sPath);
 	mpd_sendInfoCommand(connection,string);
 	free(string);
 	free(sPath);
@@ -1508,44 +1535,50 @@ void mpd_sendPrevCommand(mpd_Connection * connection) {
 }
 
 void mpd_sendRepeatCommand(mpd_Connection * connection, int repeatMode) {
-	char * string = malloc(strlen("repeat")+25);
-	sprintf(string,"repeat \"%i\"\n",repeatMode);
+	int len = strlen("repeat")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "repeat \"%i\"\n", repeatMode);
 	mpd_executeCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendRandomCommand(mpd_Connection * connection, int randomMode) {
-	char * string = malloc(strlen("random")+25);
-	sprintf(string,"random \"%i\"\n",randomMode);
+	int len = strlen("random")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "random \"%i\"\n", randomMode);
 	mpd_executeCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendSetvolCommand(mpd_Connection * connection, int volumeChange) {
-	char * string = malloc(strlen("setvol")+25);
-	sprintf(string,"setvol \"%i\"\n",volumeChange);
+	int len = strlen("setvol")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "setvol \"%i\"\n", volumeChange);
 	mpd_executeCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendVolumeCommand(mpd_Connection * connection, int volumeChange) {
-	char * string = malloc(strlen("volume")+25);
-	sprintf(string,"volume \"%i\"\n",volumeChange);
+	int len = strlen("volume")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "volume \"%i\"\n", volumeChange);
 	mpd_executeCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendCrossfadeCommand(mpd_Connection * connection, int seconds) {
-	char * string = malloc(strlen("crossfade")+25);
-	sprintf(string,"crossfade \"%i\"\n",seconds);
+	int len = strlen("crossfade")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "crossfade \"%i\"\n", seconds);
 	mpd_executeCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendPasswordCommand(mpd_Connection * connection, const char * pass) {
 	char * sPass = mpd_sanitizeArg(pass);
-	char * string = malloc(strlen("password")+strlen(sPass)+5);
-	sprintf(string,"password \"%s\"\n",sPass);
+	int len = strlen("password")+strlen(sPass)+5;
+	char *string = malloc(len);
+	snprintf(string, len, "password \"%s\"\n", sPass);
 	mpd_executeCommand(connection,string);
 	free(string);
 	free(sPass);
@@ -1629,15 +1662,17 @@ mpd_OutputEntity * mpd_getNextOutput(mpd_Connection * connection) {
 }
 
 void mpd_sendEnableOutputCommand(mpd_Connection * connection, int outputId) {
-	char * string = malloc(strlen("enableoutput")+25);
-	sprintf(string,"enableoutput \"%i\"\n",outputId);
+	int len = strlen("enableoutput")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "enableoutput \"%i\"\n", outputId);
 	mpd_executeCommand(connection,string);
 	free(string);
 }
 
 void mpd_sendDisableOutputCommand(mpd_Connection * connection, int outputId) {
-	char * string = malloc(strlen("disableoutput")+25);
-	sprintf(string,"disableoutput \"%i\"\n",outputId);
+	int len = strlen("disableoutput")+25;
+	char *string = malloc(len);
+	snprintf(string, len, "disableoutput \"%i\"\n", outputId);
 	mpd_executeCommand(connection,string);
 	free(string);
 }
@@ -1732,6 +1767,7 @@ void mpd_startPlaylistSearch(mpd_Connection *connection, int exact)
 void mpd_startFieldSearch(mpd_Connection *connection, int type)
 {
 	char *strtype;
+	int len;
 
 	if (connection->request) {
 		strcpy(connection->errorStr, "search already in progress");
@@ -1747,16 +1783,18 @@ void mpd_startFieldSearch(mpd_Connection *connection, int type)
 
 	strtype = mpdTagItemKeys[type];
 
-	connection->request = malloc(strlen(strtype)+6 /* "list"+space+\0 */);
+	len = strlen(strtype)+6;
+	connection->request = malloc(len);
 
-	sprintf(connection->request, "list %c%s",
-	        tolower(strtype[0]), strtype+1);
+	snprintf(connection->request, len, "list %c%s",
+	         tolower(strtype[0]), strtype+1);
 }
 
 void mpd_addConstraintSearch(mpd_Connection *connection, int type, const char *name)
 {
 	char *strtype;
 	char *arg;
+	int len;
 
 	if (!connection->request) {
 		strcpy(connection->errorStr, "no search in progress");
@@ -1779,13 +1817,11 @@ void mpd_addConstraintSearch(mpd_Connection *connection, int type, const char *n
 	strtype = mpdTagItemKeys[type];
 	arg = mpd_sanitizeArg(name);
 
-	connection->request = realloc(connection->request,
-	                              strlen(connection->request)+
-	                              strlen(strtype)+strlen(arg)+
-	                              5 /* two spaces+two quotes+\0 */);
+	len = strlen(connection->request)+strlen(strtype)+strlen(arg)+5;
+	connection->request = realloc(connection->request, len);
 
-	sprintf(connection->request, "%s %c%s \"%s\"", connection->request,
-	        tolower(strtype[0]), strtype+1, arg);
+	snprintf(connection->request, len, "%s %c%s \"%s\"",
+	         connection->request, tolower(strtype[0]), strtype+1, arg);
 
 	free(arg);
 }
@@ -1821,8 +1857,9 @@ void mpd_commitSearch(mpd_Connection *connection)
 void mpd_sendListPlaylistInfoCommand(mpd_Connection *connection, char *path)
 {
 	char *arg = mpd_sanitizeArg(path);
-	char *query = malloc(strlen("listplaylistinfo")+strlen(arg)+5);
-	sprintf(query, "listplaylistinfo \"%s\"\n",arg);
+	int len = strlen("listplaylistinfo")+strlen(arg)+5;
+	char *query = malloc(len);
+	snprintf(query, len, "listplaylistinfo \"%s\"\n", arg);
 	mpd_sendInfoCommand(connection, query);
 	free(arg);
 	free(query);
@@ -1838,8 +1875,9 @@ void mpd_sendListPlaylistInfoCommand(mpd_Connection *connection, char *path)
 void mpd_sendListPlaylistCommand(mpd_Connection *connection, char *path)
 {
 	char *arg = mpd_sanitizeArg(path);
-	char *query = malloc(strlen("listplaylist")+strlen(arg)+5);
-	sprintf(query, "listplaylist \"%s\"\n",arg);
+	int len = strlen("listplaylist")+strlen(arg)+5;
+	char *query = malloc(len);
+	snprintf(query, len, "listplaylist \"%s\"\n", arg);
 	mpd_sendInfoCommand(connection, query);
 	free(arg);
 	free(query);
@@ -1848,8 +1886,9 @@ void mpd_sendListPlaylistCommand(mpd_Connection *connection, char *path)
 void mpd_sendPlaylistClearCommand(mpd_Connection *connection, char *path)
 {
 	char *sPath = mpd_sanitizeArg(path);
-	char *string = malloc(strlen("playlistclear")+strlen(sPath)+5);
-	sprintf(string, "playlistclear \"%s\"\n", sPath);
+	int len = strlen("playlistclear")+strlen(sPath)+5;
+	char *string = malloc(len);
+	snprintf(string, len, "playlistclear \"%s\"\n", sPath);
 	mpd_executeCommand(connection, string);
 	free(sPath);
 	free(string);
@@ -1860,9 +1899,9 @@ void mpd_sendPlaylistAddCommand(mpd_Connection *connection,
 {
 	char *sPlaylist = mpd_sanitizeArg(playlist);
 	char *sPath = mpd_sanitizeArg(path);
-	char *string = malloc(strlen("playlistadd")+strlen(sPlaylist)+
-	                      strlen(sPath)+8);
-	sprintf(string, "playlistadd \"%s\" \"%s\"\n", sPlaylist, sPath);
+	int len = strlen("playlistadd")+strlen(sPlaylist)+strlen(sPath)+8;
+	char *string = malloc(len);
+	snprintf(string, len, "playlistadd \"%s\" \"%s\"\n", sPlaylist, sPath);
 	mpd_executeCommand(connection, string);
 	free(sPlaylist);
 	free(sPath);
