@@ -650,10 +650,10 @@ void mpd_startPlaylistSearch(mpd_Connection *connection, int exact);
 
 void mpd_startStatsSearch(mpd_Connection *connection);
 
-void mpd_sendPlaylistClearCommand(mpd_Connection *connection, char* path);
+void mpd_sendPlaylistClearCommand(mpd_Connection *connection, char *path);
 
 void mpd_sendPlaylistAddCommand(mpd_Connection *connection,
-                                char *playlist, char* path);
+                                char *playlist, char *path);
 #ifdef __cplusplus
 }
 #endif
