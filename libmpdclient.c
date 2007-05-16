@@ -1912,3 +1912,29 @@ void mpd_sendPlaylistAddCommand(mpd_Connection *connection,
 	free(sPath);
 	free(string);
 }
+
+void mpd_sendPlaylistMoveCommand(mpd_Connection *connection,
+                                 char *playlist, int from, int to)
+{
+	char *sPlaylist = mpd_sanitizeArg(playlist);
+	int len = strlen("playlistmove")+
+	          2+strlen(sPlaylist)+3+INTLEN+3+INTLEN+3;
+	char *string = malloc(len);
+	snprintf(string, len, "playlistmove \"%s\" \"%i\" \"%i\"\n",
+	         sPlaylist, from, to);
+	mpd_executeCommand(connection, string);
+	free(sPlaylist);
+	free(string);
+}
+
+void mpd_sendPlaylistDeleteCommand(mpd_Connection *connection,
+                                   char *playlist, int pos)
+{
+	char *sPlaylist = mpd_sanitizeArg(playlist);
+	int len = strlen("playlistdelete")+2+strlen(sPlaylist)+3+INTLEN+3;
+	char *string = malloc(len);
+	snprintf(string, len, "playlistdelete \"%s\" \"%i\"\n", sPlaylist, pos);
+	mpd_executeCommand(connection, string);
+	free(sPlaylist);
+	free(string);
+}

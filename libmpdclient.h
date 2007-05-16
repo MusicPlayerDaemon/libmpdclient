@@ -654,6 +654,12 @@ void mpd_sendPlaylistClearCommand(mpd_Connection *connection, char *path);
 
 void mpd_sendPlaylistAddCommand(mpd_Connection *connection,
                                 char *playlist, char *path);
+
+void mpd_sendPlaylistMoveCommand(mpd_Connection *connection,
+                                 char *playlist, int from, int to);
+
+void mpd_sendPlaylistDeleteCommand(mpd_Connection *connection,
+                                   char *playlist, int pos);
 #ifdef __cplusplus
 }
 #endif
