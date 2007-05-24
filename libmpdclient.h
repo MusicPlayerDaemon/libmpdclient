@@ -471,6 +471,9 @@ void mpd_sendLoadCommand(mpd_Connection * connection, const char * name);
 
 void mpd_sendRmCommand(mpd_Connection * connection, const char * name);
 
+void mpd_sendRenameCommand(mpd_Connection *connection, const char *from,
+                           const char *to);
+
 void mpd_sendShuffleCommand(mpd_Connection * connection);
 
 void mpd_sendClearCommand(mpd_Connection * connection);

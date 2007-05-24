@@ -1423,6 +1423,20 @@ void mpd_sendRmCommand(mpd_Connection * connection, const char * name) {
 	free(sName);
 }
 
+void mpd_sendRenameCommand(mpd_Connection *connection, const char *from,
+                           const char *to)
+{
+	char *sFrom = mpd_sanitizeArg(from);
+	char *sTo = mpd_sanitizeArg(to);
+	int len = strlen("rename")+2+strlen(sFrom)+3+strlen(sTo)+3;
+	char *string = malloc(len);
+	snprintf(string, len, "rename \"%s\" \"%s\"\n", sFrom, sTo);
+	mpd_executeCommand(connection, string);
+	free(string);
+	free(sFrom);
+	free(sTo);
+}
+
 void mpd_sendShuffleCommand(mpd_Connection * connection) {
 	mpd_executeCommand(connection,"shuffle\n");
 }
