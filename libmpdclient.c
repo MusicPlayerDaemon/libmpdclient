@@ -41,6 +41,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <limits.h>
 
 #ifdef WIN32
 #  include <ws2tcpip.h>
