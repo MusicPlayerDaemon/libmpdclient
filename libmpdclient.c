@@ -129,7 +129,7 @@ static int mpd_connect(mpd_Connection * connection, const char * host, int port,
 	 * Setup hints
 	 */
 	hints.ai_flags     = AI_ADDRCONFIG;
-	hints.ai_family    = PF_UNSPEC;
+	hints.ai_family    = AF_UNSPEC;
 	hints.ai_socktype  = SOCK_STREAM;
 	hints.ai_protocol  = IPPROTO_TCP;
 	hints.ai_addrlen   = 0;
