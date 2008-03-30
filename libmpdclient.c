@@ -151,6 +151,8 @@ static int mpd_connect(mpd_Connection * connection, const char * host, int port,
 
 	for (res = addrinfo; res; res = res->ai_next) {
 		/* create socket */
+		if (connection->sock >= 0)
+			closesocket(connection->sock);
 		connection->sock = socket(res->ai_family, SOCK_STREAM,
 		                          res->ai_protocol);
 		if (connection->sock < 0) {
@@ -222,6 +224,8 @@ static int mpd_connect(mpd_Connection * connection, const char * host, int port,
 		break;
 	}
 
+	if (connection->sock >= 0)
+		closesocket(connection->sock);
 	if((connection->sock = socket(dest->sa_family,SOCK_STREAM,0))<0) {
 		strcpy(connection->errorStr,"problems creating socket");
 		connection->error = MPD_ERROR_SYSTEM;
@@ -347,6 +351,7 @@ mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 	struct timeval tv;
 	fd_set fds;
 	strcpy(connection->buffer,"");
+	connection->sock = -1;
 	connection->buflen = 0;
 	connection->bufstart = 0;
 	strcpy(connection->errorStr,"");
