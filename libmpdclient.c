@@ -100,18 +100,21 @@ static int do_connect_fail(mpd_Connection *connection,
                            const struct sockaddr *serv_addr, int addrlen)
 {
 	int iMode = 1; /* 0 = blocking, else non-blocking */
+	if (connect(connection->sock, serv_addr, addrlen) == SOCKET_ERROR)
+		return 1;
 	ioctlsocket(connection->sock, FIONBIO, (u_long FAR*) &iMode);
-	return (connect(connection->sock,serv_addr,addrlen) == SOCKET_ERROR
-			&& WSAGetLastError() != WSAEWOULDBLOCK);
+	return 0;
 }
 #else /* !WIN32 (sane operating systems) */
 static int do_connect_fail(mpd_Connection *connection,
                            const struct sockaddr *serv_addr, int addrlen)
 {
-	int flags = fcntl(connection->sock, F_GETFL, 0);
+	int flags;
+	if (connect(connection->sock, serv_addr, addrlen) < 0)
+		return 1;
+	flags = fcntl(connection->sock, F_GETFL, 0);
 	fcntl(connection->sock, F_SETFL, flags | O_NONBLOCK);
-	return (connect(connection->sock,serv_addr,addrlen)<0 &&
-				errno!=EINPROGRESS);
+	return 0;
 }
 #endif /* !WIN32 */
 
