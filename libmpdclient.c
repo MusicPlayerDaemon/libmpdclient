@@ -169,11 +169,13 @@ static int mpd_connect(mpd_Connection * connection, const char * host, int port,
 		/* connect stuff */
  		if (do_connect_fail(connection,
 		                    res->ai_addr, res->ai_addrlen)) {
- 			/* try the next address family */
+ 			/* try the next address */
  			closesocket(connection->sock);
  			connection->sock = -1;
  			continue;
 		}
+
+		break;
 	}
 
 	freeaddrinfo(addrinfo);
