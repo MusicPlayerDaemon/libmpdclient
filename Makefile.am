@@ -8,6 +8,9 @@ lib_LTLIBRARIES = src/libmpdclient.la
 src_libmpdclient_la_SOURCES = \
 	src/str_pool.c src/str_pool.h \
 	src/resolver.c src/resolver.h \
+	src/connection.c src/connection.h \
+	src/return_element.c src/return_element.h \
+	src/idle.c src/idle.h \
 	src/song.c src/song.h \
 	src/libmpdclient.c src/libmpdclient.h
 

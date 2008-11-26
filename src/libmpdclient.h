@@ -33,6 +33,7 @@
 #ifndef LIBMPDCLIENT_H
 #define LIBMPDCLIENT_H
 
+#include "connection.h"
 #include "song.h"
 
 #ifdef WIN32
@@ -45,63 +46,6 @@
 #ifdef MPD_GLIB
 #include <glib.h>
 #endif
-
-#define MPD_WELCOME_MESSAGE	"OK MPD "
-
-enum mpd_error {
-	/** no error */
-	MPD_ERROR_SUCCESS = 0,
-
-	/** timeout trying to talk to mpd */
-	MPD_ERROR_TIMEOUT = 10,
-
-	/** system error */
-	MPD_ERROR_SYSTEM,
-
-	/** unknown host */
-	MPD_ERROR_UNKHOST,
-
-	/** problems connecting to port on host */
-	MPD_ERROR_CONNPORT,
-
-	/** mpd not running on port at host */
-	MPD_ERROR_NOTMPD,
-
-	/** no response on attempting to connect */
-	MPD_ERROR_NORESPONSE,
-
-	/** error sending command */
-	MPD_ERROR_SENDING,
-
-	/** connection closed by mpd */
-	MPD_ERROR_CONNCLOSED,
-
-	/** ACK returned! */
-	MPD_ERROR_ACK,
-
-	/** Buffer was overrun! */
-	MPD_ERROR_BUFFEROVERRUN,
-};
-
-#define MPD_ERROR_AT_UNK	-1
-
-enum mpd_ack {
-	MPD_ACK_ERROR_UNK = -1,
-
-	MPD_ACK_ERROR_NOT_LIST = 1,
-	MPD_ACK_ERROR_ARG = 2,
-	MPD_ACK_ERROR_PASSWORD = 3,
-	MPD_ACK_ERROR_PERMISSION = 4,
-	MPD_ACK_ERROR_UNKNOWN_CMD = 5,
-
-	MPD_ACK_ERROR_NO_EXIST = 50,
-	MPD_ACK_ERROR_PLAYLIST_MAX = 51,
-	MPD_ACK_ERROR_SYSTEM = 52,
-	MPD_ACK_ERROR_PLAYLIST_LOAD = 53,
-	MPD_ACK_ERROR_UPDATE_ALREADY = 54,
-	MPD_ACK_ERROR_PLAYER_SYNC = 55,
-	MPD_ACK_ERROR_EXIST = 56,
-};
 
 #ifdef __cplusplus
 extern "C" {
@@ -126,93 +70,6 @@ typedef enum mpd_TagItems
 } mpd_TagItems;
 
 extern const char *const mpdTagItemKeys[MPD_TAG_NUM_OF_ITEM_TYPES];
-
-/* internal stuff don't touch this struct */
-typedef struct _mpd_ReturnElement {
-	char * name;
-	char * value;
-} mpd_ReturnElement;
-
-enum {
-	/** song database has been updated*/
-	IDLE_DATABASE = 0x1,
-
-	/** a stored playlist has been modified, created, deleted or
-	    renamed */
-	IDLE_STORED_PLAYLIST = 0x2,
-
-	/** the current playlist has been modified */
-	IDLE_PLAYLIST = 0x4,
-
-	/** the player state has changed: play, stop, pause, seek, ... */
-	IDLE_PLAYER = 0x8,
-
-	/** the volume has been modified */
-	IDLE_MIXER = 0x10,
-
-	/** an audio output device has been enabled or disabled */
-	IDLE_OUTPUT = 0x20,
-
-	/** options have changed: crossfade, random, repeat, ... */
-	IDLE_OPTIONS = 0x40,
-};
-
-/* mpd_Connection
- * holds info about connection to mpd
- * use error, and errorStr to detect errors
- */
-typedef struct _mpd_Connection {
-	/* use this to check the version of mpd */
-	int version[3];
-	/* IMPORTANT, you want to get the error messages from here */
-	char errorStr[512];
-	enum mpd_ack errorCode;
-	int errorAt;
-	/* this will be set to MPD_ERROR_* if there is an error, 0 if not */
-	enum mpd_error error;
-	/* DON'T TOUCH any of the rest of this stuff */
-	int sock;
-	char buffer[16384];
-	size_t buflen;
-	size_t bufstart;
-	int doneProcessing;
-	int listOks;
-	int doneListOk;
-	int commandList;
-	mpd_ReturnElement * returnElement;
-	struct timeval timeout;
-	char *request;
-	int idle;
-	void (*notify_cb) (struct _mpd_Connection *connection, unsigned flags, void *userdata);
-	void (*startIdle) (struct _mpd_Connection *connection);
-	void (*stopIdle) (struct _mpd_Connection *connection);
-	void *userdata;
-#ifdef MPD_GLIB
-        int source_id;
-#endif
-} mpd_Connection;
-
-typedef void (*mpd_NotificationCb) (mpd_Connection *connection, unsigned flags, void *userdata);
-
-/* mpd_newConnection
- * use this to open a new connection
- * you should use mpd_closeConnection, when your done with the connection,
- * even if an error has occurred
- * _timeout_ is the connection timeout period in seconds
- */
-mpd_Connection * mpd_newConnection(const char * host, int port, float timeout);
-
-void mpd_setConnectionTimeout(mpd_Connection * connection, float timeout);
-
-/* mpd_closeConnection
- * use this to close a connection and free'ing subsequent memory
- */
-void mpd_closeConnection(mpd_Connection * connection);
-
-/* mpd_clearError
- * clears error
- */
-void mpd_clearError(mpd_Connection * connection);
 
 /* STATUS STUFF */
 
@@ -661,14 +518,6 @@ void mpd_sendPlaylistMoveCommand(mpd_Connection *connection,
 
 void mpd_sendPlaylistDeleteCommand(mpd_Connection *connection,
                                    char *playlist, int pos);
-
-void mpd_startIdle(mpd_Connection *connection, mpd_NotificationCb notify_cb, void *userdata);
-
-void mpd_stopIdle(mpd_Connection *connection);
-
-#ifdef MPD_GLIB
-void mpd_glibInit(mpd_Connection *connection);
-#endif
 
 #ifdef __cplusplus
 }
