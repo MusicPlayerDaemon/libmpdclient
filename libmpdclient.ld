@@ -1,0 +1,4 @@
+libmpdclient2 {
+global:
+        *;
+};
