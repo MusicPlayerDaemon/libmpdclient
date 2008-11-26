@@ -6,6 +6,7 @@ doc_DATA = README
 lib_LTLIBRARIES = src/libmpdclient.la
 
 src_libmpdclient_la_SOURCES = \
+	src/str_pool.c src/str_pool.h \
 	src/libmpdclient.c src/libmpdclient.h
 
 src_libmpdclient_la_LDFLAGS = -version-info @LIBMPDCLIENT_LIBTOOL_VERSION@ \
