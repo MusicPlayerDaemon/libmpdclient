@@ -3,15 +3,15 @@ AUTOMAKE_OPTIONS = foreign 1.9 dist-bzip2
 
 doc_DATA = README
 
-lib_LTLIBRARIES = libmpdclient.la
+lib_LTLIBRARIES = src/libmpdclient.la
 
-libmpdclient_la_SOURCES = \
-	libmpdclient.c libmpdclient.h
+src_libmpdclient_la_SOURCES = \
+	src/libmpdclient.c src/libmpdclient.h
 
-libmpdclient_la_LDFLAGS = -version-info @LIBMPDCLIENT_LIBTOOL_VERSION@ \
+src_libmpdclient_la_LDFLAGS = -version-info @LIBMPDCLIENT_LIBTOOL_VERSION@ \
 	-Wl,--version-script=libmpdclient.ld
 
-noinst_PROGRAMS = example
+noinst_PROGRAMS = src/example
 
-example_SOURCES = example.c
-example_LDADD = libmpdclient.la
+src_example_SOURCES = src/example.c
+src_example_LDADD = src/libmpdclient.la
