@@ -36,13 +36,14 @@
 #include <stdlib.h>
 
 /* internal stuff don't touch this struct */
-typedef struct _mpd_ReturnElement {
+struct mpd_return_element {
 	char * name;
 	char * value;
-} mpd_ReturnElement;
+};
 
-mpd_ReturnElement * mpd_newReturnElement(const char * name, const char * value);
+struct mpd_return_element *
+mpd_newReturnElement(const char *name, const char *value);
 
-void mpd_freeReturnElement(mpd_ReturnElement * re);
+void mpd_freeReturnElement(struct mpd_return_element *re);
 
 #endif

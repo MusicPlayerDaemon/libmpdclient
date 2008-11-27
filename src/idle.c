@@ -50,7 +50,7 @@ static void mpd_readChanges(struct mpd_connection *connection)
 {
 	unsigned i;
 	unsigned flags = 0;
-	mpd_ReturnElement *re;
+	struct mpd_return_element *re;
 
 	if (!connection->returnElement) mpd_getNextReturnElement(connection);
 

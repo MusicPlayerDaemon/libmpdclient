@@ -160,7 +160,7 @@ mpd_Status * mpd_getStatus(struct mpd_connection *connection)
 		return NULL;
 	}
 	while(connection->returnElement) {
-		mpd_ReturnElement * re = connection->returnElement;
+		struct mpd_return_element *re = connection->returnElement;
 		if(strcmp(re->name,"volume")==0) {
 			status->volume = atoi(re->value);
 		}
@@ -289,7 +289,7 @@ mpd_Stats * mpd_getStats(struct mpd_connection *connection)
 		return NULL;
 	}
 	while(connection->returnElement) {
-		mpd_ReturnElement * re = connection->returnElement;
+		struct mpd_return_element *re = connection->returnElement;
 		if(strcmp(re->name,"artists")==0) {
 			stats->numberOfArtists = atoi(re->value);
 		}
@@ -334,7 +334,7 @@ void mpd_freeStats(mpd_Stats * stats) {
 mpd_SearchStats * mpd_getSearchStats(struct mpd_connection *connection)
 {
 	mpd_SearchStats * stats;
-	mpd_ReturnElement * re;
+	struct mpd_return_element *re;
 
 	if (connection->doneProcessing ||
 	    (connection->listOks && connection->doneListOk)) {
@@ -530,7 +530,7 @@ mpd_getNextInfoEntity(struct mpd_connection *connection)
 
 	mpd_getNextReturnElement(connection);
 	while(connection->returnElement) {
-		mpd_ReturnElement * re = connection->returnElement;
+		struct mpd_return_element *re = connection->returnElement;
 
 		if(strcmp(re->name,"file")==0) return entity;
 		else if(strcmp(re->name,"directory")==0) return entity;
@@ -619,7 +619,7 @@ mpd_getNextReturnElementNamed(struct mpd_connection *connection,
 
 	mpd_getNextReturnElement(connection);
 	while(connection->returnElement) {
-		mpd_ReturnElement * re = connection->returnElement;
+		struct mpd_return_element *re = connection->returnElement;
 
 		if(strcmp(re->name,name)==0) return strdup(re->value);
 		mpd_getNextReturnElement(connection);
@@ -1136,7 +1136,7 @@ mpd_OutputEntity * mpd_getNextOutput(struct mpd_connection *connection)
 	if(!connection->returnElement) mpd_getNextReturnElement(connection);
 
 	while(connection->returnElement) {
-		mpd_ReturnElement * re = connection->returnElement;
+		struct mpd_return_element *re = connection->returnElement;
 		if(strcmp(re->name,"outputid")==0) {
 			if(output!=NULL && output->id>=0) return output;
 			output->id = atoi(re->value);

@@ -112,7 +112,7 @@ struct mpd_connection {
 	int listOks;
 	int doneListOk;
 	int commandList;
-	mpd_ReturnElement * returnElement;
+	struct mpd_return_element *returnElement;
 	struct timeval timeout;
 	char *request;
 	int idle;
