@@ -379,38 +379,6 @@ void mpd_freeSearchStats(mpd_SearchStats * stats)
 	free(stats);
 }
 
-static void mpd_initDirectory(mpd_Directory * directory) {
-	directory->path = NULL;
-}
-
-static void mpd_finishDirectory(mpd_Directory * directory) {
-	if (directory->path)
-		str_pool_put(directory->path);
-}
-
-mpd_Directory * mpd_newDirectory(void) {
-	mpd_Directory * directory = malloc(sizeof(mpd_Directory));;
-
-	mpd_initDirectory(directory);
-
-	return directory;
-}
-
-void mpd_freeDirectory(mpd_Directory * directory) {
-	mpd_finishDirectory(directory);
-
-	free(directory);
-}
-
-mpd_Directory * mpd_directoryDup(const mpd_Directory * directory) {
-	mpd_Directory * ret = mpd_newDirectory();
-
-	if (directory->path)
-		ret->path = str_pool_dup(directory->path);
-
-	return ret;
-}
-
 static void mpd_initPlaylistFile(mpd_PlaylistFile * playlist) {
 	playlist->path = NULL;
 }

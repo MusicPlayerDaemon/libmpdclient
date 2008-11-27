@@ -35,6 +35,7 @@
 
 #include <mpd/connection.h>
 #include <mpd/song.h>
+#include <mpd/directory.h>
 
 #ifdef WIN32
 #  define __W32API_USE_DLLIMPORT__ 1
@@ -164,32 +165,6 @@ void mpd_freeStats(mpd_Stats * stats);
 mpd_SearchStats * mpd_getSearchStats(struct mpd_connection *connection);
 
 void mpd_freeSearchStats(mpd_SearchStats * stats);
-
-/* DIRECTORY STUFF */
-
-/* mpd_Directory
- * used to store info fro directory (right now that just the path)
- */
-typedef struct _mpd_Directory {
-	char * path;
-} mpd_Directory;
-
-/* mpd_newDirectory
- * allocates memory for a new directory
- * use mpd_freeDirectory to free this memory
- */
-mpd_Directory * mpd_newDirectory(void);
-
-/* mpd_freeDirectory
- * used to free memory allocated with mpd_newDirectory, and it frees
- * path of mpd_Directory, so be careful
- */
-void mpd_freeDirectory(mpd_Directory * directory);
-
-/* mpd_directoryDup
- * works like strdup, but for mpd_Directory
- */
-mpd_Directory * mpd_directoryDup(const mpd_Directory * directory);
 
 /* PLAYLISTFILE STUFF */
 
