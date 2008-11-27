@@ -31,6 +31,7 @@
 */
 
 #include "libmpdclient.h"
+#include "status.h"
 
 #include <stdio.h>
 #include <string.h>

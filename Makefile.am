@@ -12,6 +12,7 @@ src_libmpdclient_la_SOURCES = \
 	src/return_element.c src/return_element.h \
 	src/idle.c src/idle.h \
 	src/song.c src/song.h \
+	src/status.c src/status.h \
 	src/libmpdclient.c src/libmpdclient.h
 
 src_libmpdclient_la_LDFLAGS = -version-info @LIBMPDCLIENT_LIBTOOL_VERSION@ \
