@@ -395,22 +395,6 @@ void mpd_sendCommandListEnd(struct mpd_connection *connection);
  * returns -1 if it advanced to an OK or ACK */
 int mpd_nextListOkCommand(struct mpd_connection *connection);
 
-typedef struct _mpd_OutputEntity {
-	int id;
-	char * name;
-	int enabled;
-} mpd_OutputEntity;
-
-void mpd_sendOutputsCommand(struct mpd_connection *connection);
-
-mpd_OutputEntity * mpd_getNextOutput(struct mpd_connection *connection);
-
-void mpd_sendEnableOutputCommand(struct mpd_connection *connection, int outputId);
-
-void mpd_sendDisableOutputCommand(struct mpd_connection *connection, int outputId);
-
-void mpd_freeOutputElement(mpd_OutputEntity * output);
-
 /**
  * @param connection a #mpd_Connection
  *
