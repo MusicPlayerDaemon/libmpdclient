@@ -127,13 +127,13 @@ typedef struct mpd_Status {
 	char * error;
 } mpd_Status;
 
-void mpd_sendStatusCommand(mpd_Connection * connection);
+void mpd_sendStatusCommand(struct mpd_connection *connection);
 
 /* mpd_getStatus
  * returns status info, be sure to free it with mpd_freeStatus()
  * call this after mpd_sendStatusCommand()
  */
-mpd_Status * mpd_getStatus(mpd_Connection * connection);
+mpd_Status * mpd_getStatus(struct mpd_connection *connection);
 
 /* mpd_freeStatus
  * free's status info malloc'd and returned by mpd_getStatus
@@ -155,13 +155,13 @@ typedef struct _mpd_SearchStats {
 	unsigned long playTime;
 } mpd_SearchStats;
 
-void mpd_sendStatsCommand(mpd_Connection * connection);
+void mpd_sendStatsCommand(struct mpd_connection *connection);
 
-mpd_Stats * mpd_getStats(mpd_Connection * connection);
+mpd_Stats * mpd_getStats(struct mpd_connection *connection);
 
 void mpd_freeStats(mpd_Stats * stats);
 
-mpd_SearchStats * mpd_getSearchStats(mpd_Connection * connection);
+mpd_SearchStats * mpd_getSearchStats(struct mpd_connection *connection);
 
 void mpd_freeSearchStats(mpd_SearchStats * stats);
 
@@ -249,20 +249,20 @@ void mpd_freeInfoEntity(mpd_InfoEntity * entity);
 /* INFO COMMANDS AND STUFF */
 
 /* use this function to loop over after calling Info/Listall functions */
-mpd_InfoEntity * mpd_getNextInfoEntity(mpd_Connection * connection);
+mpd_InfoEntity * mpd_getNextInfoEntity(struct mpd_connection *connection);
 
 /* fetches the currently seeletect song (the song referenced by status->song
  * and status->songid*/
-void mpd_sendCurrentSongCommand(mpd_Connection * connection);
+void mpd_sendCurrentSongCommand(struct mpd_connection *connection);
 
 /* songNum of -1, means to display the whole list */
-void mpd_sendPlaylistInfoCommand(mpd_Connection * connection, int songNum);
+void mpd_sendPlaylistInfoCommand(struct mpd_connection *connection, int songNum);
 
 /* songId of -1, means to display the whole list */
-void mpd_sendPlaylistIdCommand(mpd_Connection * connection, int songId);
+void mpd_sendPlaylistIdCommand(struct mpd_connection *connection, int songId);
 
 /* use this to get the changes in the playlist since version _playlist_ */
-void mpd_sendPlChangesCommand(mpd_Connection * connection, long long playlist);
+void mpd_sendPlChangesCommand(struct mpd_connection *connection, long long playlist);
 
 /**
  * @param connection: A valid and connected mpd_Connection.
@@ -270,27 +270,27 @@ void mpd_sendPlChangesCommand(mpd_Connection * connection, long long playlist);
  * A more bandwidth efficient version of the mpd_sendPlChangesCommand.
  * It only returns the pos+id of the changes song.
  */
-void mpd_sendPlChangesPosIdCommand(mpd_Connection * connection, long long playlist);
+void mpd_sendPlChangesPosIdCommand(struct mpd_connection *connection, long long playlist);
 
 /* recursivel fetches all songs/dir/playlists in "dir* (no metadata is
  * returned) */
-void mpd_sendListallCommand(mpd_Connection * connection, const char * dir);
+void mpd_sendListallCommand(struct mpd_connection *connection, const char * dir);
 
 /* same as sendListallCommand, but also metadata is returned */
-void mpd_sendListallInfoCommand(mpd_Connection * connection, const char * dir);
+void mpd_sendListallInfoCommand(struct mpd_connection *connection, const char * dir);
 
 /* non-recursive version of ListallInfo */
-void mpd_sendLsInfoCommand(mpd_Connection * connection, const char * dir);
+void mpd_sendLsInfoCommand(struct mpd_connection *connection, const char * dir);
 
 #define MPD_TABLE_ARTIST	MPD_TAG_ITEM_ARTIST
 #define MPD_TABLE_ALBUM		MPD_TAG_ITEM_ALBUM
 #define MPD_TABLE_TITLE		MPD_TAG_ITEM_TITLE
 #define MPD_TABLE_FILENAME	MPD_TAG_ITEM_FILENAME
 
-void mpd_sendSearchCommand(mpd_Connection * connection, int table,
+void mpd_sendSearchCommand(struct mpd_connection *connection, int table,
 		const char * str);
 
-void mpd_sendFindCommand(mpd_Connection * connection, int table,
+void mpd_sendFindCommand(struct mpd_connection *connection, int table,
 		const char * str);
 
 /* LIST TAG COMMANDS */
@@ -298,102 +298,102 @@ void mpd_sendFindCommand(mpd_Connection * connection, int table,
 /* use this function fetch next artist entry, be sure to free the returned
  * string.  NULL means there are no more.  Best used with sendListArtists
  */
-char * mpd_getNextArtist(mpd_Connection * connection);
+char * mpd_getNextArtist(struct mpd_connection *connection);
 
-char * mpd_getNextAlbum(mpd_Connection * connection);
+char * mpd_getNextAlbum(struct mpd_connection *connection);
 
-char * mpd_getNextTag(mpd_Connection *connection, int type);
+char * mpd_getNextTag(struct mpd_connection *connection, int type);
 
 /* list artist or albums by artist, arg1 should be set to the artist if
  * listing albums by a artist, otherwise NULL for listing all artists or albums
  */
-void mpd_sendListCommand(mpd_Connection * connection, int table,
+void mpd_sendListCommand(struct mpd_connection *connection, int table,
 		const char * arg1);
 
 /* SIMPLE COMMANDS */
 
-void mpd_sendAddCommand(mpd_Connection * connection, const char * file);
+void mpd_sendAddCommand(struct mpd_connection *connection, const char * file);
 
-int mpd_sendAddIdCommand(mpd_Connection *connection, const char *file);
+int mpd_sendAddIdCommand(struct mpd_connection *connection, const char *file);
 
-void mpd_sendDeleteCommand(mpd_Connection * connection, int songNum);
+void mpd_sendDeleteCommand(struct mpd_connection *connection, int songNum);
 
-void mpd_sendDeleteIdCommand(mpd_Connection * connection, int songNum);
+void mpd_sendDeleteIdCommand(struct mpd_connection *connection, int songNum);
 
-void mpd_sendSaveCommand(mpd_Connection * connection, const char * name);
+void mpd_sendSaveCommand(struct mpd_connection *connection, const char * name);
 
-void mpd_sendLoadCommand(mpd_Connection * connection, const char * name);
+void mpd_sendLoadCommand(struct mpd_connection *connection, const char * name);
 
-void mpd_sendRmCommand(mpd_Connection * connection, const char * name);
+void mpd_sendRmCommand(struct mpd_connection *connection, const char * name);
 
-void mpd_sendRenameCommand(mpd_Connection *connection, const char *from,
+void mpd_sendRenameCommand(struct mpd_connection *connection, const char *from,
                            const char *to);
 
-void mpd_sendShuffleCommand(mpd_Connection * connection);
+void mpd_sendShuffleCommand(struct mpd_connection *connection);
 
-void mpd_sendClearCommand(mpd_Connection * connection);
+void mpd_sendClearCommand(struct mpd_connection *connection);
 
 /* use this to start playing at the beginning, useful when in random mode */
 #define MPD_PLAY_AT_BEGINNING	-1
 
-void mpd_sendPlayCommand(mpd_Connection * connection, int songNum);
+void mpd_sendPlayCommand(struct mpd_connection *connection, int songNum);
 
-void mpd_sendPlayIdCommand(mpd_Connection * connection, int songNum);
+void mpd_sendPlayIdCommand(struct mpd_connection *connection, int songNum);
 
-void mpd_sendStopCommand(mpd_Connection * connection);
+void mpd_sendStopCommand(struct mpd_connection *connection);
 
-void mpd_sendPauseCommand(mpd_Connection * connection, int pauseMode);
+void mpd_sendPauseCommand(struct mpd_connection *connection, int pauseMode);
 
-void mpd_sendNextCommand(mpd_Connection * connection);
+void mpd_sendNextCommand(struct mpd_connection *connection);
 
-void mpd_sendPrevCommand(mpd_Connection * connection);
+void mpd_sendPrevCommand(struct mpd_connection *connection);
 
-void mpd_sendMoveCommand(mpd_Connection * connection, int from, int to);
+void mpd_sendMoveCommand(struct mpd_connection *connection, int from, int to);
 
-void mpd_sendMoveIdCommand(mpd_Connection * connection, int from, int to);
+void mpd_sendMoveIdCommand(struct mpd_connection *connection, int from, int to);
 
-void mpd_sendSwapCommand(mpd_Connection * connection, int song1, int song2);
+void mpd_sendSwapCommand(struct mpd_connection *connection, int song1, int song2);
 
-void mpd_sendSwapIdCommand(mpd_Connection * connection, int song1, int song2);
+void mpd_sendSwapIdCommand(struct mpd_connection *connection, int song1, int song2);
 
-void mpd_sendSeekCommand(mpd_Connection * connection, int song, int time);
+void mpd_sendSeekCommand(struct mpd_connection *connection, int song, int time);
 
-void mpd_sendSeekIdCommand(mpd_Connection * connection, int song, int time);
+void mpd_sendSeekIdCommand(struct mpd_connection *connection, int song, int time);
 
-void mpd_sendRepeatCommand(mpd_Connection * connection, int repeatMode);
+void mpd_sendRepeatCommand(struct mpd_connection *connection, int repeatMode);
 
-void mpd_sendRandomCommand(mpd_Connection * connection, int randomMode);
+void mpd_sendRandomCommand(struct mpd_connection *connection, int randomMode);
 
-void mpd_sendSetvolCommand(mpd_Connection * connection, int volumeChange);
+void mpd_sendSetvolCommand(struct mpd_connection *connection, int volumeChange);
 
 /* WARNING: don't use volume command, its depreacted */
-void mpd_sendVolumeCommand(mpd_Connection * connection, int volumeChange);
+void mpd_sendVolumeCommand(struct mpd_connection *connection, int volumeChange);
 
-void mpd_sendCrossfadeCommand(mpd_Connection * connection, int seconds);
+void mpd_sendCrossfadeCommand(struct mpd_connection *connection, int seconds);
 
-void mpd_sendUpdateCommand(mpd_Connection * connection, const char *path);
+void mpd_sendUpdateCommand(struct mpd_connection *connection, const char *path);
 
 /* returns the update job id, call this after a update command*/
-int mpd_getUpdateId(mpd_Connection * connection);
+int mpd_getUpdateId(struct mpd_connection *connection);
 
-void mpd_sendPasswordCommand(mpd_Connection * connection, const char * pass);
+void mpd_sendPasswordCommand(struct mpd_connection *connection, const char * pass);
 
 /* after executing a command, when your done with it to get its status
  * (you want to check connection->error for an error)
  */
-void mpd_finishCommand(mpd_Connection * connection);
+void mpd_finishCommand(struct mpd_connection *connection);
 
 /* command list stuff, use this to do things like add files very quickly */
-void mpd_sendCommandListBegin(mpd_Connection * connection);
+void mpd_sendCommandListBegin(struct mpd_connection *connection);
 
-void mpd_sendCommandListOkBegin(mpd_Connection * connection);
+void mpd_sendCommandListOkBegin(struct mpd_connection *connection);
 
-void mpd_sendCommandListEnd(mpd_Connection * connection);
+void mpd_sendCommandListEnd(struct mpd_connection *connection);
 
 /* advance to the next listOk
  * returns 0 if advanced to the next list_OK,
  * returns -1 if it advanced to an OK or ACK */
-int mpd_nextListOkCommand(mpd_Connection * connection);
+int mpd_nextListOkCommand(struct mpd_connection *connection);
 
 typedef struct _mpd_OutputEntity {
 	int id;
@@ -401,13 +401,13 @@ typedef struct _mpd_OutputEntity {
 	int enabled;
 } mpd_OutputEntity;
 
-void mpd_sendOutputsCommand(mpd_Connection * connection);
+void mpd_sendOutputsCommand(struct mpd_connection *connection);
 
-mpd_OutputEntity * mpd_getNextOutput(mpd_Connection * connection);
+mpd_OutputEntity * mpd_getNextOutput(struct mpd_connection *connection);
 
-void mpd_sendEnableOutputCommand(mpd_Connection * connection, int outputId);
+void mpd_sendEnableOutputCommand(struct mpd_connection *connection, int outputId);
 
-void mpd_sendDisableOutputCommand(mpd_Connection * connection, int outputId);
+void mpd_sendDisableOutputCommand(struct mpd_connection *connection, int outputId);
 
 void mpd_freeOutputElement(mpd_OutputEntity * output);
 
@@ -416,14 +416,14 @@ void mpd_freeOutputElement(mpd_OutputEntity * output);
  *
  * Queries mpd for the allowed commands
  */
-void mpd_sendCommandsCommand(mpd_Connection * connection);
+void mpd_sendCommandsCommand(struct mpd_connection *connection);
 
 /**
  * @param connection a #mpd_Connection
  *
  * Queries mpd for the not allowed commands
  */
-void mpd_sendNotCommandsCommand(mpd_Connection * connection);
+void mpd_sendNotCommandsCommand(struct mpd_connection *connection);
 
 /**
  * @param connection a #mpd_Connection
@@ -432,15 +432,15 @@ void mpd_sendNotCommandsCommand(mpd_Connection * connection);
  *
  * @returns a string, needs to be free'ed
  */
-char *mpd_getNextCommand(mpd_Connection *connection);
+char *mpd_getNextCommand(struct mpd_connection *connection);
 
-void mpd_sendUrlHandlersCommand(mpd_Connection * connection);
+void mpd_sendUrlHandlersCommand(struct mpd_connection *connection);
 
-char *mpd_getNextHandler(mpd_Connection * connection);
+char *mpd_getNextHandler(struct mpd_connection *connection);
 
-void mpd_sendTagTypesCommand(mpd_Connection * connection);
+void mpd_sendTagTypesCommand(struct mpd_connection *connection);
 
-char *mpd_getNextTagType(mpd_Connection * connection);
+char *mpd_getNextTagType(struct mpd_connection *connection);
 
 /**
  * @param connection a MpdConnection
@@ -449,7 +449,7 @@ char *mpd_getNextTagType(mpd_Connection * connection);
  * List the content, with full metadata, of a stored playlist.
  *
  */
-void mpd_sendListPlaylistInfoCommand(mpd_Connection *connection, char *path);
+void mpd_sendListPlaylistInfoCommand(struct mpd_connection *connection, char *path);
 
 /**
  * @param connection a MpdConnection
@@ -458,7 +458,7 @@ void mpd_sendListPlaylistInfoCommand(mpd_Connection *connection, char *path);
  * List the content of a stored playlist.
  *
  */
-void mpd_sendListPlaylistCommand(mpd_Connection *connection, char *path);
+void mpd_sendListPlaylistCommand(struct mpd_connection *connection, char *path);
 
 /**
  * @param connection a #mpd_Connection
@@ -467,19 +467,19 @@ void mpd_sendListPlaylistCommand(mpd_Connection *connection, char *path);
  * starts a search, use mpd_addConstraintSearch to add
  * a constraint to the search, and mpd_commitSearch to do the actual search
  */
-void mpd_startSearch(mpd_Connection *connection, int exact);
+void mpd_startSearch(struct mpd_connection *connection, int exact);
 
 /**
  * @param connection a #mpd_Connection
  * @param type
  * @param name
  */
-void mpd_addConstraintSearch(mpd_Connection *connection, int type, const char *name);
+void mpd_addConstraintSearch(struct mpd_connection *connection, int type, const char *name);
 
 /**
  * @param connection a #mpd_Connection
  */
-void mpd_commitSearch(mpd_Connection *connection);
+void mpd_commitSearch(struct mpd_connection *connection);
 
 /**
  * @param connection a #mpd_Connection
@@ -502,21 +502,21 @@ void mpd_commitSearch(mpd_Connection *connection);
  * this one will return a list of only one field (the one specified with type) and you need
  * mpd_getNextTag to get the results
  */
-void mpd_startFieldSearch(mpd_Connection *connection, int type);
+void mpd_startFieldSearch(struct mpd_connection *connection, int type);
 
-void mpd_startPlaylistSearch(mpd_Connection *connection, int exact);
+void mpd_startPlaylistSearch(struct mpd_connection *connection, int exact);
 
-void mpd_startStatsSearch(mpd_Connection *connection);
+void mpd_startStatsSearch(struct mpd_connection *connection);
 
-void mpd_sendPlaylistClearCommand(mpd_Connection *connection, char *path);
+void mpd_sendPlaylistClearCommand(struct mpd_connection *connection, char *path);
 
-void mpd_sendPlaylistAddCommand(mpd_Connection *connection,
+void mpd_sendPlaylistAddCommand(struct mpd_connection *connection,
                                 char *playlist, char *path);
 
-void mpd_sendPlaylistMoveCommand(mpd_Connection *connection,
+void mpd_sendPlaylistMoveCommand(struct mpd_connection *connection,
                                  char *playlist, int from, int to);
 
-void mpd_sendPlaylistDeleteCommand(mpd_Connection *connection,
+void mpd_sendPlaylistDeleteCommand(struct mpd_connection *connection,
                                    char *playlist, int pos);
 
 #ifdef __cplusplus

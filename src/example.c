@@ -38,7 +38,7 @@
 #include <stdlib.h>
 
 int main(int argc, char ** argv) {
-	mpd_Connection * conn;
+	struct mpd_connection *conn;
 	const char *hostname = getenv("MPD_HOST");
 	const char *port = getenv("MPD_PORT");
 

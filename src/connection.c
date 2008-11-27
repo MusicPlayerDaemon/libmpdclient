@@ -72,7 +72,7 @@
 #define MPD_ERROR_AT_UNK	-1
 
 #ifdef WIN32
-static int winsock_dll_error(mpd_Connection *connection)
+static int winsock_dll_error(struct mpd_connection *connection)
 {
 	WSADATA wsaData;
 	if ((WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0 ||
@@ -86,7 +86,7 @@ static int winsock_dll_error(mpd_Connection *connection)
 	return 0;
 }
 
-static int do_connect_fail(mpd_Connection *connection,
+static int do_connect_fail(struct mpd_connection *connection,
                            const struct sockaddr *serv_addr, int addrlen)
 {
 	int iMode = 1; /* 0 = blocking, else non-blocking */
@@ -96,7 +96,7 @@ static int do_connect_fail(mpd_Connection *connection,
 	return 0;
 }
 #else /* !WIN32 (sane operating systems) */
-static int do_connect_fail(mpd_Connection *connection,
+static int do_connect_fail(struct mpd_connection *connection,
                            const struct sockaddr *serv_addr, int addrlen)
 {
 	int flags;
@@ -111,7 +111,7 @@ static int do_connect_fail(mpd_Connection *connection,
 /**
  * Wait for the socket to become readable.
  */
-static int mpd_wait(mpd_Connection *connection)
+static int mpd_wait(struct mpd_connection *connection)
 {
 	struct timeval tv;
 	fd_set fds;
@@ -137,7 +137,7 @@ static int mpd_wait(mpd_Connection *connection)
  * Wait until the socket is connected and check its result.  Returns 1
  * on success, 0 on timeout, -errno on error.
  */
-static int mpd_wait_connected(mpd_Connection *connection)
+static int mpd_wait_connected(struct mpd_connection *connection)
 {
 	int ret;
 	int s_err = 0;
@@ -159,7 +159,7 @@ static int mpd_wait_connected(mpd_Connection *connection)
 }
 
 static int
-mpd_connect(mpd_Connection *connection, const char * host, int port)
+mpd_connect(struct mpd_connection *connection, const char * host, int port)
 {
 	struct resolver *resolver;
 	const struct resolver_address *address;
@@ -228,8 +228,11 @@ mpd_connect(mpd_Connection *connection, const char * host, int port)
 	return -1;
 }
 
-static int mpd_parseWelcome(mpd_Connection * connection, const char * host, int port,
-                            char * output) {
+static int
+mpd_parseWelcome(struct mpd_connection *connection,
+		 const char *host, int port,
+		 char *output)
+{
 	char * tmp;
 	char * test;
 	int i;
@@ -261,10 +264,12 @@ static int mpd_parseWelcome(mpd_Connection * connection, const char * host, int 
 	return 0;
 }
 
-mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
+struct mpd_connection *
+mpd_newConnection(const char *host, int port, float timeout)
+{
 	int err;
 	char * rt;
-	mpd_Connection * connection = malloc(sizeof(mpd_Connection));
+	struct mpd_connection *connection = malloc(sizeof(*connection));
 
 	connection->sock = -1;
 	connection->buflen = 0;
@@ -309,12 +314,14 @@ mpd_Connection * mpd_newConnection(const char * host, int port, float timeout) {
 	return connection;
 }
 
-void mpd_clearError(mpd_Connection * connection) {
+void mpd_clearError(struct mpd_connection *connection)
+{
 	connection->error = 0;
 	connection->errorStr[0] = '\0';
 }
 
-void mpd_closeConnection(mpd_Connection * connection) {
+void mpd_closeConnection(struct mpd_connection *connection)
+{
 	closesocket(connection->sock);
 	if(connection->returnElement) free(connection->returnElement);
 	if(connection->request) free(connection->request);
@@ -322,7 +329,9 @@ void mpd_closeConnection(mpd_Connection * connection) {
 	WSACleanup();
 }
 
-void mpd_setConnectionTimeout(mpd_Connection * connection, float timeout) {
+void
+mpd_setConnectionTimeout(struct mpd_connection *connection, float timeout)
+{
 	connection->timeout.tv_sec = (int)timeout;
 	connection->timeout.tv_usec = (int)(timeout*1e6 -
 	                                    connection->timeout.tv_sec*1000000 +
@@ -333,7 +342,7 @@ void mpd_setConnectionTimeout(mpd_Connection * connection, float timeout) {
  * Attempt to read data from the socket into the input buffer.
  * Returns 0 on success, -1 on error.
  */
-int mpd_recv(mpd_Connection *connection)
+int mpd_recv(struct mpd_connection *connection)
 {
 	int ret;
 	ssize_t nbytes;
@@ -395,8 +404,9 @@ int mpd_recv(mpd_Connection *connection)
 	}
 }
 
-void mpd_executeCommand(mpd_Connection *connection,
-			       const char *command) {
+void
+mpd_executeCommand(struct mpd_connection *connection, const char *command)
+{
 	int ret;
 	struct timeval tv;
 	fd_set fds;
@@ -459,7 +469,8 @@ void mpd_executeCommand(mpd_Connection *connection,
 	}
 }
 
-void mpd_getNextReturnElement(mpd_Connection * connection) {
+void mpd_getNextReturnElement(struct mpd_connection *connection)
+{
 	char * output = NULL;
 	char * rt = NULL;
 	char * name = NULL;
