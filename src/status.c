@@ -38,8 +38,8 @@ void mpd_sendStatusCommand(struct mpd_connection * connection) {
 	mpd_executeCommand(connection,"status\n");
 }
 
-mpd_Status * mpd_getStatus(struct mpd_connection * connection) {
-	mpd_Status * status;
+struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
+	struct mpd_status * status;
 
 	/*mpd_executeCommand(connection,"status\n");
 
@@ -55,7 +55,7 @@ mpd_Status * mpd_getStatus(struct mpd_connection * connection) {
 	if(connection->error)
 		return NULL;
 
-	status = malloc(sizeof(mpd_Status));
+	status = malloc(sizeof(struct mpd_status));
 	status->volume = -1;
 	status->repeat = 0;
 	status->random = 0;
@@ -164,7 +164,7 @@ mpd_Status * mpd_getStatus(struct mpd_connection * connection) {
 	return status;
 }
 
-void mpd_freeStatus(mpd_Status * status) {
+void mpd_freeStatus(struct mpd_status * status) {
 	if(status->error) free(status->error);
 	free(status);
 }

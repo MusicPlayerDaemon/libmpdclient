@@ -64,7 +64,7 @@ int main(int argc, char ** argv) {
 	}
 
 	if(argc==1) {
-		mpd_Status * status;
+		struct mpd_status * status;
 		mpd_InfoEntity * entity;
 
 		mpd_sendCommandListOkBegin(conn);

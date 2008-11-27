@@ -44,10 +44,10 @@
 /* us this with status.volume to determine if mpd has volume support */
 #define MPD_STATUS_NO_VOLUME		-1
 
-/* mpd_Status
+/* struct mpd_status
  * holds info return from status command
  */
-typedef struct mpd_Status {
+struct mpd_status {
 	/* 0-100, or MPD_STATUS_NO_VOLUME when there is no volume support */
 	int volume;
 	/* 1 if repeat is on, 0 otherwise */
@@ -87,7 +87,7 @@ typedef struct mpd_Status {
 	int updatingDb;
 	/* error */
 	char * error;
-} mpd_Status;
+};
 
 void mpd_sendStatusCommand(struct mpd_connection * connection);
 
@@ -95,11 +95,11 @@ void mpd_sendStatusCommand(struct mpd_connection * connection);
  * returns status info, be sure to free it with mpd_freeStatus()
  * call this after mpd_sendStatusCommand()
  */
-mpd_Status * mpd_getStatus(struct mpd_connection * connection);
+struct mpd_status * mpd_getStatus(struct mpd_connection * connection);
 
 /* mpd_freeStatus
  * free's status info malloc'd and returned by mpd_getStatus
  */
-void mpd_freeStatus(mpd_Status * status);
+void mpd_freeStatus(struct mpd_status * status);
 
 #endif
