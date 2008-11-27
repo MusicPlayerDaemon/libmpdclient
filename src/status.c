@@ -34,11 +34,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-void mpd_sendStatusCommand(mpd_Connection * connection) {
+void mpd_sendStatusCommand(struct mpd_connection * connection) {
 	mpd_executeCommand(connection,"status\n");
 }
 
-mpd_Status * mpd_getStatus(mpd_Connection * connection) {
+mpd_Status * mpd_getStatus(struct mpd_connection * connection) {
 	mpd_Status * status;
 
 	/*mpd_executeCommand(connection,"status\n");
@@ -77,7 +77,7 @@ mpd_Status * mpd_getStatus(mpd_Connection * connection) {
 		return NULL;
 	}
 	while(connection->returnElement) {
-		mpd_ReturnElement * re = connection->returnElement;
+		struct mpd_return_element * re = connection->returnElement;
 		if(strcmp(re->name,"volume")==0) {
 			status->volume = atoi(re->value);
 		}

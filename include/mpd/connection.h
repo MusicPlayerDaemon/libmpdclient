@@ -94,7 +94,7 @@ enum mpd_error {
  * holds info about connection to mpd
  * use error, and errorStr to detect errors
  */
-typedef struct _mpd_Connection {
+struct mpd_connection {
 	/* use this to check the version of mpd */
 	int version[3];
 	/* IMPORTANT, you want to get the error messages from here */
@@ -112,18 +112,19 @@ typedef struct _mpd_Connection {
 	int listOks;
 	int doneListOk;
 	int commandList;
-	mpd_ReturnElement * returnElement;
+	struct mpd_return_element *returnElement;
 	struct timeval timeout;
 	char *request;
 	int idle;
-	void (*notify_cb) (struct _mpd_Connection *connection, unsigned flags, void *userdata);
-	void (*startIdle) (struct _mpd_Connection *connection);
-	void (*stopIdle) (struct _mpd_Connection *connection);
+	void (*notify_cb)(struct mpd_connection *connection,
+			  unsigned flags, void *userdata);
+	void (*startIdle)(struct mpd_connection *connection);
+	void (*stopIdle)(struct mpd_connection *connection);
 	void *userdata;
 #ifdef MPD_GLIB
         int source_id;
 #endif
-} mpd_Connection;
+};
 
 /* mpd_newConnection
  * use this to open a new connection
@@ -131,19 +132,21 @@ typedef struct _mpd_Connection {
  * even if an error has occurred
  * _timeout_ is the connection timeout period in seconds
  */
-mpd_Connection * mpd_newConnection(const char * host, int port, float timeout);
+struct mpd_connection *
+mpd_newConnection(const char *host, int port, float timeout);
 
-void mpd_setConnectionTimeout(mpd_Connection * connection, float timeout);
+void mpd_setConnectionTimeout(struct mpd_connection *connection,
+			      float timeout);
 
 /* mpd_closeConnection
  * use this to close a connection and free'ing subsequent memory
  */
-void mpd_closeConnection(mpd_Connection * connection);
+void mpd_closeConnection(struct mpd_connection *connection);
 
 /* mpd_clearError
  * clears error
  */
-void mpd_clearError(mpd_Connection * connection);
+void mpd_clearError(struct mpd_connection *connection);
 
 /*
  * TODO: Following methods should be internal
@@ -151,11 +154,11 @@ void mpd_clearError(mpd_Connection * connection);
 #define COMMAND_LIST    1
 #define COMMAND_LIST_OK 2
 
-void mpd_getNextReturnElement(mpd_Connection * connection);
+void mpd_getNextReturnElement(struct mpd_connection *connection);
 
-int mpd_recv(mpd_Connection *connection);
+int mpd_recv(struct mpd_connection *connection);
 
-void mpd_executeCommand(mpd_Connection *connection,
-			       const char *command);
+void
+mpd_executeCommand(struct mpd_connection *connection, const char *command);
 
 #endif

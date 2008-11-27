@@ -30,34 +30,30 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef STATS_H
-#define STATS_H
+#ifndef MPD_OUTPUT_H
+#define MPD_OUTPUT_H
 
-#include "connection.h"
+struct mpd_connection;
 
-typedef struct _mpd_Stats {
-	int numberOfArtists;
-	int numberOfAlbums;
-	int numberOfSongs;
-	unsigned long uptime;
-	unsigned long dbUpdateTime;
-	unsigned long playTime;
-	unsigned long dbPlayTime;
-} mpd_Stats;
+struct mpd_output_entity {
+	int id;
+	char *name;
+	int enabled;
+};
 
-typedef struct _mpd_SearchStats {
-	int numberOfSongs;
-	unsigned long playTime;
-} mpd_SearchStats;
+void
+mpd_sendOutputsCommand(struct mpd_connection *connection);
 
-void mpd_sendStatsCommand(struct mpd_connection * connection);
+struct mpd_output_entity *
+mpd_getNextOutput(struct mpd_connection *connection);
 
-mpd_Stats * mpd_getStats(struct mpd_connection * connection);
+void
+mpd_freeOutputElement(struct mpd_output_entity *output);
 
-void mpd_freeStats(mpd_Stats * stats);
+void
+mpd_sendEnableOutputCommand(struct mpd_connection *connection, int outputId);
 
-mpd_SearchStats * mpd_getSearchStats(struct mpd_connection * connection);
-
-void mpd_freeSearchStats(mpd_SearchStats * stats);
+void
+mpd_sendDisableOutputCommand(struct mpd_connection *connection, int outputId);
 
 #endif

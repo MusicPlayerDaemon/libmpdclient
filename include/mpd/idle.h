@@ -60,14 +60,14 @@ enum {
 	IDLE_OPTIONS = 0x40,
 };
 
-typedef void (*mpd_NotificationCb) (mpd_Connection *connection, unsigned flags, void *userdata);
+typedef void (*mpd_NotificationCb) (struct mpd_connection *connection, unsigned flags, void *userdata);
 
-void mpd_startIdle(mpd_Connection *connection, mpd_NotificationCb notify_cb, void *userdata);
+void mpd_startIdle(struct mpd_connection *connection, mpd_NotificationCb notify_cb, void *userdata);
 
-void mpd_stopIdle(mpd_Connection *connection);
+void mpd_stopIdle(struct mpd_connection *connection);
 
 #ifdef MPD_GLIB
-void mpd_glibInit(mpd_Connection *connection);
+void mpd_glibInit(struct mpd_connection *connection);
 #endif
 
 #endif

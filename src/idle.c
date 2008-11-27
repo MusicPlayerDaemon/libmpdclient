@@ -46,11 +46,11 @@ static const char *const idle_names[] = {
 	NULL
 };
 
-static void mpd_readChanges(mpd_Connection *connection)
+static void mpd_readChanges(struct mpd_connection *connection)
 {
 	unsigned i;
 	unsigned flags = 0;
-	mpd_ReturnElement *re;
+	struct mpd_return_element *re;
 
 	if (!connection->returnElement) mpd_getNextReturnElement(connection);
 
@@ -71,7 +71,7 @@ static void mpd_readChanges(mpd_Connection *connection)
 		connection->notify_cb (connection, flags, connection->userdata);
 }
 
-void mpd_startIdle(mpd_Connection *connection, mpd_NotificationCb notify_cb, void *userdata)
+void mpd_startIdle(struct mpd_connection *connection, mpd_NotificationCb notify_cb, void *userdata)
 {
 	if (connection->idle)
 		return;
@@ -85,7 +85,7 @@ void mpd_startIdle(mpd_Connection *connection, mpd_NotificationCb notify_cb, voi
 	connection->userdata = userdata;
 }
 
-void mpd_stopIdle(mpd_Connection *connection)
+void mpd_stopIdle(struct mpd_connection *connection)
 {
 	if (connection->stopIdle)
 		connection->stopIdle(connection);
@@ -100,7 +100,7 @@ void mpd_stopIdle(mpd_Connection *connection)
 #ifdef MPD_GLIB
 static gboolean mpd_glibReadCb (GIOChannel *iochan, GIOCondition cond, gpointer data)
 {
-	mpd_Connection *connection = data;
+	struct mpd_connection *connection = data;
 
 	if (!connection->idle) {
 		connection->source_id = 0;
@@ -119,7 +119,7 @@ static gboolean mpd_glibReadCb (GIOChannel *iochan, GIOCondition cond, gpointer 
 	return TRUE;
 }
 
-static void mpd_glibStartIdle(mpd_Connection *connection)
+static void mpd_glibStartIdle(struct mpd_connection *connection)
 {
 	static GIOChannel* iochan = NULL;
 
@@ -132,7 +132,7 @@ static void mpd_glibStartIdle(mpd_Connection *connection)
 						connection);
 }
 
-static void mpd_glibStopIdle(mpd_Connection *connection)
+static void mpd_glibStopIdle(struct mpd_connection *connection)
 {
 	if (connection->source_id) {
 		g_source_remove (connection->source_id);
@@ -140,7 +140,7 @@ static void mpd_glibStopIdle(mpd_Connection *connection)
 	}
 }
 
-void mpd_glibInit(mpd_Connection *connection)
+void mpd_glibInit(struct mpd_connection *connection)
 {
 	connection->startIdle = mpd_glibStartIdle;
 	connection->stopIdle = mpd_glibStopIdle;

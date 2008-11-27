@@ -34,11 +34,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-void mpd_sendStatsCommand(mpd_Connection * connection) {
+void mpd_sendStatsCommand(struct mpd_connection * connection) {
 	mpd_executeCommand(connection,"stats\n");
 }
 
-mpd_Stats * mpd_getStats(mpd_Connection * connection) {
+mpd_Stats * mpd_getStats(struct mpd_connection * connection) {
 	mpd_Stats * stats;
 
 	/*mpd_executeCommand(connection,"stats\n");
@@ -67,7 +67,7 @@ mpd_Stats * mpd_getStats(mpd_Connection * connection) {
 		return NULL;
 	}
 	while(connection->returnElement) {
-		mpd_ReturnElement * re = connection->returnElement;
+		struct mpd_return_element * re = connection->returnElement;
 		if(strcmp(re->name,"artists")==0) {
 			stats->numberOfArtists = atoi(re->value);
 		}
@@ -109,10 +109,10 @@ void mpd_freeStats(mpd_Stats * stats) {
 	free(stats);
 }
 
-mpd_SearchStats * mpd_getSearchStats(mpd_Connection * connection)
+mpd_SearchStats * mpd_getSearchStats(struct mpd_connection * connection)
 {
 	mpd_SearchStats * stats;
-	mpd_ReturnElement * re;
+	struct mpd_return_element * re;
 
 	if (connection->doneProcessing ||
 	    (connection->listOks && connection->doneListOk)) {

@@ -89,13 +89,13 @@ typedef struct mpd_Status {
 	char * error;
 } mpd_Status;
 
-void mpd_sendStatusCommand(mpd_Connection * connection);
+void mpd_sendStatusCommand(struct mpd_connection * connection);
 
 /* mpd_getStatus
  * returns status info, be sure to free it with mpd_freeStatus()
  * call this after mpd_sendStatusCommand()
  */
-mpd_Status * mpd_getStatus(mpd_Connection * connection);
+mpd_Status * mpd_getStatus(struct mpd_connection * connection);
 
 /* mpd_freeStatus
  * free's status info malloc'd and returned by mpd_getStatus

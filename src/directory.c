@@ -30,34 +30,48 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef STATS_H
-#define STATS_H
+#include <mpd/directory.h>
+#include "str_pool.h"
 
-#include "connection.h"
+#include <stdlib.h>
 
-typedef struct _mpd_Stats {
-	int numberOfArtists;
-	int numberOfAlbums;
-	int numberOfSongs;
-	unsigned long uptime;
-	unsigned long dbUpdateTime;
-	unsigned long playTime;
-	unsigned long dbPlayTime;
-} mpd_Stats;
+static void
+mpd_initDirectory(struct mpd_directory *directory)
+{
+	directory->path = NULL;
+}
 
-typedef struct _mpd_SearchStats {
-	int numberOfSongs;
-	unsigned long playTime;
-} mpd_SearchStats;
+static void
+mpd_finishDirectory(struct mpd_directory *directory)
+{
+	if (directory->path)
+		str_pool_put(directory->path);
+}
 
-void mpd_sendStatsCommand(struct mpd_connection * connection);
+struct mpd_directory *
+mpd_newDirectory(void)
+{
+	struct mpd_directory *directory = malloc(sizeof(*directory));
 
-mpd_Stats * mpd_getStats(struct mpd_connection * connection);
+	mpd_initDirectory(directory);
 
-void mpd_freeStats(mpd_Stats * stats);
+	return directory;
+}
 
-mpd_SearchStats * mpd_getSearchStats(struct mpd_connection * connection);
+void mpd_freeDirectory(struct mpd_directory *directory)
+{
+	mpd_finishDirectory(directory);
 
-void mpd_freeSearchStats(mpd_SearchStats * stats);
+	free(directory);
+}
 
-#endif
+struct mpd_directory *
+mpd_directoryDup(const struct mpd_directory *directory)
+{
+	struct mpd_directory *ret = mpd_newDirectory();
+
+	if (directory->path)
+		ret->path = str_pool_dup(directory->path);
+
+	return ret;
+}

@@ -39,7 +39,7 @@
 #include <stdlib.h>
 
 int main(int argc, char ** argv) {
-	mpd_Connection * conn;
+	struct mpd_connection *conn;
 	const char *hostname = getenv("MPD_HOST");
 	const char *port = getenv("MPD_PORT");
 
@@ -184,7 +184,8 @@ int main(int argc, char ** argv) {
 				}
 			}
 			else if(entity->type==MPD_INFO_ENTITY_TYPE_DIRECTORY) {
-				mpd_Directory * dir = entity->info.directory;
+				struct mpd_directory *dir =
+					entity->info.directory;
 				printf("directory: %s\n",dir->path);
 			}
 			else if(entity->type==

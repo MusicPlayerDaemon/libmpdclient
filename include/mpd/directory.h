@@ -30,34 +30,33 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef STATS_H
-#define STATS_H
+#ifndef MPD_DIRECTORY_H
+#define MPD_DIRECTORY_H
 
-#include "connection.h"
+/* mpd_Directory
+ * used to store info fro directory (right now that just the path)
+ */
+struct mpd_directory {
+	char * path;
+};
 
-typedef struct _mpd_Stats {
-	int numberOfArtists;
-	int numberOfAlbums;
-	int numberOfSongs;
-	unsigned long uptime;
-	unsigned long dbUpdateTime;
-	unsigned long playTime;
-	unsigned long dbPlayTime;
-} mpd_Stats;
+/* mpd_newDirectory
+ * allocates memory for a new directory
+ * use mpd_freeDirectory to free this memory
+ */
+struct mpd_directory *
+mpd_newDirectory(void);
 
-typedef struct _mpd_SearchStats {
-	int numberOfSongs;
-	unsigned long playTime;
-} mpd_SearchStats;
+/* mpd_directoryDup
+ * works like strdup, but for mpd_Directory
+ */
+struct mpd_directory *
+mpd_directoryDup(const struct mpd_directory *directory);
 
-void mpd_sendStatsCommand(struct mpd_connection * connection);
-
-mpd_Stats * mpd_getStats(struct mpd_connection * connection);
-
-void mpd_freeStats(mpd_Stats * stats);
-
-mpd_SearchStats * mpd_getSearchStats(struct mpd_connection * connection);
-
-void mpd_freeSearchStats(mpd_SearchStats * stats);
+/* mpd_freeDirectory
+ * used to free memory allocated with mpd_newDirectory, and it frees
+ * path of mpd_Directory, so be careful
+ */
+void mpd_freeDirectory(struct mpd_directory *directory);
 
 #endif

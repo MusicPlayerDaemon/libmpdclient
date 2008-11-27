@@ -33,9 +33,10 @@
 #include <mpd/return_element.h>
 #include "str_pool.h"
 
-mpd_ReturnElement * mpd_newReturnElement(const char * name, const char * value)
+struct mpd_return_element *
+mpd_newReturnElement(const char *name, const char *value)
 {
-	mpd_ReturnElement * ret = malloc(sizeof(mpd_ReturnElement));
+	struct mpd_return_element *ret = malloc(sizeof(*ret));
 
 	ret->name = str_pool_get(name);
 	ret->value = str_pool_get(value);
@@ -43,7 +44,7 @@ mpd_ReturnElement * mpd_newReturnElement(const char * name, const char * value)
 	return ret;
 }
 
-void mpd_freeReturnElement(mpd_ReturnElement * re) {
+void mpd_freeReturnElement(struct mpd_return_element *re) {
 	str_pool_put(re->name);
 	str_pool_put(re->value);
 	free(re);
