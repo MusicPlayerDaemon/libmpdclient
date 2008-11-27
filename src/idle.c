@@ -30,9 +30,9 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include "idle.h"
 #include <stdio.h>
 #include <string.h>
-#include "idle.h"
 
 static const char *const idle_names[] = {
 	"database",
