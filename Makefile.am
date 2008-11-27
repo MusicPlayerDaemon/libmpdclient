@@ -13,6 +13,7 @@ src_libmpdclient_la_SOURCES = \
 	src/idle.c src/idle.h \
 	src/song.c src/song.h \
 	src/status.c src/status.h \
+	src/stats.c src/stats.h \
 	src/libmpdclient.c src/libmpdclient.h
 
 src_libmpdclient_la_LDFLAGS = -version-info @LIBMPDCLIENT_LIBTOOL_VERSION@ \

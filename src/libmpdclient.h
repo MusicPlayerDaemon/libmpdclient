@@ -70,30 +70,6 @@ typedef enum mpd_TagItems
 } mpd_TagItems;
 
 extern const char *const mpdTagItemKeys[MPD_TAG_NUM_OF_ITEM_TYPES];
-typedef struct _mpd_Stats {
-	int numberOfArtists;
-	int numberOfAlbums;
-	int numberOfSongs;
-	unsigned long uptime;
-	unsigned long dbUpdateTime;
-	unsigned long playTime;
-	unsigned long dbPlayTime;
-} mpd_Stats;
-
-typedef struct _mpd_SearchStats {
-	int numberOfSongs;
-	unsigned long playTime;
-} mpd_SearchStats;
-
-void mpd_sendStatsCommand(mpd_Connection * connection);
-
-mpd_Stats * mpd_getStats(mpd_Connection * connection);
-
-void mpd_freeStats(mpd_Stats * stats);
-
-mpd_SearchStats * mpd_getSearchStats(mpd_Connection * connection);
-
-void mpd_freeSearchStats(mpd_SearchStats * stats);
 
 /* DIRECTORY STUFF */
 
