@@ -30,9 +30,9 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "connection.h"
+#include <mpd/connection.h>
+#include <mpd/idle.h>
 #include "resolver.h"
-#include "idle.h"
 
 #include <assert.h>
 #include <stdlib.h>

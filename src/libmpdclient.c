@@ -30,10 +30,10 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "libmpdclient.h"
+#include <mpd/client.h>
+#include <mpd/return_element.h>
 #include "resolver.h"
 #include "str_pool.h"
-#include "return_element.h"
 
 #include <assert.h>
 #include <errno.h>

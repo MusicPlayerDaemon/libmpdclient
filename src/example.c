@@ -30,7 +30,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "libmpdclient.h"
+#include <mpd/client.h>
 
 #include <stdio.h>
 #include <string.h>

@@ -33,8 +33,9 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
+#include <mpd/return_element.h>
+
 #include <stdlib.h>
-#include "return_element.h"
 
 enum mpd_ack {
 	MPD_ACK_ERROR_UNK = -1,
