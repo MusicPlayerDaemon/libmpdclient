@@ -36,39 +36,39 @@
 #include <stdlib.h>
 
 static void
-mpd_initDirectory(mpd_Directory *directory)
+mpd_initDirectory(struct mpd_directory *directory)
 {
 	directory->path = NULL;
 }
 
 static void
-mpd_finishDirectory(mpd_Directory *directory)
+mpd_finishDirectory(struct mpd_directory *directory)
 {
 	if (directory->path)
 		str_pool_put(directory->path);
 }
 
-mpd_Directory *
+struct mpd_directory *
 mpd_newDirectory(void)
 {
-	mpd_Directory * directory = malloc(sizeof(mpd_Directory));;
+	struct mpd_directory *directory = malloc(sizeof(*directory));
 
 	mpd_initDirectory(directory);
 
 	return directory;
 }
 
-void mpd_freeDirectory(mpd_Directory *directory)
+void mpd_freeDirectory(struct mpd_directory *directory)
 {
 	mpd_finishDirectory(directory);
 
 	free(directory);
 }
 
-mpd_Directory *
-mpd_directoryDup(const mpd_Directory *directory)
+struct mpd_directory *
+mpd_directoryDup(const struct mpd_directory *directory)
 {
-	mpd_Directory * ret = mpd_newDirectory();
+	struct mpd_directory *ret = mpd_newDirectory();
 
 	if (directory->path)
 		ret->path = str_pool_dup(directory->path);

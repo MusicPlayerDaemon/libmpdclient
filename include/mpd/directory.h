@@ -36,27 +36,27 @@
 /* mpd_Directory
  * used to store info fro directory (right now that just the path)
  */
-typedef struct _mpd_Directory {
+struct mpd_directory {
 	char * path;
-} mpd_Directory;
+};
 
 /* mpd_newDirectory
  * allocates memory for a new directory
  * use mpd_freeDirectory to free this memory
  */
-mpd_Directory *
+struct mpd_directory *
 mpd_newDirectory(void);
 
 /* mpd_directoryDup
  * works like strdup, but for mpd_Directory
  */
-mpd_Directory *
-mpd_directoryDup(const mpd_Directory *directory);
+struct mpd_directory *
+mpd_directoryDup(const struct mpd_directory *directory);
 
 /* mpd_freeDirectory
  * used to free memory allocated with mpd_newDirectory, and it frees
  * path of mpd_Directory, so be careful
  */
-void mpd_freeDirectory(mpd_Directory *directory);
+void mpd_freeDirectory(struct mpd_directory *directory);
 
 #endif

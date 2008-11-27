@@ -211,7 +211,7 @@ typedef struct mpd_InfoEntity {
 	int type;
 	/* the actual data you want, mpd_Song, mpd_Directory, etc */
 	union {
-		mpd_Directory * directory;
+		struct mpd_directory *directory;
 		struct mpd_song *song;
 		mpd_PlaylistFile * playlistFile;
 	} info;
