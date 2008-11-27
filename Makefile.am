@@ -3,18 +3,30 @@ AUTOMAKE_OPTIONS = foreign 1.9 dist-bzip2
 
 doc_DATA = README
 
+mpdincludedir = $(includedir)/mpd
+mpdinclude_HEADERS = \
+	include/mpd/client.h \
+	include/mpd/connection.h \
+	include/mpd/idle.h \
+	include/mpd/status.h \
+	include/mpd/stats.h \
+	include/mpd/return_element.h \
+	include/mpd/song.h
+
+AM_CFLAGS += -Iinclude
+
 lib_LTLIBRARIES = src/libmpdclient.la
 
 src_libmpdclient_la_SOURCES = \
 	src/str_pool.c src/str_pool.h \
 	src/resolver.c src/resolver.h \
-	src/connection.c src/connection.h \
-	src/return_element.c src/return_element.h \
-	src/idle.c src/idle.h \
-	src/song.c src/song.h \
-	src/status.c src/status.h \
-	src/stats.c src/stats.h \
-	src/libmpdclient.c src/libmpdclient.h
+	src/connection.c \
+	src/return_element.c \
+	src/idle.c \
+	src/song.c \
+	src/status.c \
+	src/stats.c \
+	src/libmpdclient.c
 
 src_libmpdclient_la_LDFLAGS = -version-info @LIBMPDCLIENT_LIBTOOL_VERSION@ \
 	-Wl,--version-script=libmpdclient.ld

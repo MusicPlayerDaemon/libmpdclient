@@ -30,7 +30,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "stats.h"
+#include <mpd/stats.h>
 #include <stdlib.h>
 #include <string.h>
 

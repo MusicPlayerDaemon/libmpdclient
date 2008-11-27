@@ -33,8 +33,8 @@
 #ifndef LIBMPDCLIENT_H
 #define LIBMPDCLIENT_H
 
-#include "connection.h"
-#include "song.h"
+#include <mpd/connection.h>
+#include <mpd/song.h>
 
 #ifdef WIN32
 #  define __W32API_USE_DLLIMPORT__ 1

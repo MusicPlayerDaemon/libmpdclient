@@ -30,8 +30,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "libmpdclient.h"
-#include "status.h"
+#include <mpd/client.h>
+#include <mpd/status.h>
 
 #include <stdio.h>
 #include <string.h>

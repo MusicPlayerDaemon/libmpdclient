@@ -30,7 +30,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "return_element.h"
+#include <mpd/return_element.h>
 #include "str_pool.h"
 
 mpd_ReturnElement * mpd_newReturnElement(const char * name, const char * value)

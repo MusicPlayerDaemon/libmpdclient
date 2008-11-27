@@ -30,7 +30,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "idle.h"
+#include <mpd/idle.h>
+
 #include <stdio.h>
 #include <string.h>
 

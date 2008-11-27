@@ -30,7 +30,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "song.h"
+#include <mpd/song.h>
 #include "str_pool.h"
 
 #include <stdlib.h>
