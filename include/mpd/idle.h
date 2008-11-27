@@ -58,6 +58,9 @@ enum {
 
 	/** options have changed: crossfade, random, repeat, ... */
 	IDLE_OPTIONS = 0x40,
+
+	/** MPD closed the connection or the connection was lost */
+	IDLE_DISCONNECT = 0x80,
 };
 
 typedef void (*mpd_NotificationCb) (struct mpd_connection *connection, unsigned flags, void *userdata);
