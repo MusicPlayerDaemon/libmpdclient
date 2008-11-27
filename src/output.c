@@ -47,10 +47,10 @@ mpd_sendOutputsCommand(struct mpd_connection *connection)
 	mpd_executeCommand(connection,"outputs\n");
 }
 
-mpd_OutputEntity *
+struct mpd_output_entity *
 mpd_getNextOutput(struct mpd_connection *connection)
 {
-	mpd_OutputEntity * output = NULL;
+	struct mpd_output_entity *output = NULL;
 
 	if(connection->doneProcessing || (connection->listOks &&
 				connection->doneListOk))
@@ -60,7 +60,7 @@ mpd_getNextOutput(struct mpd_connection *connection)
 
 	if(connection->error) return NULL;
 
-	output = malloc(sizeof(mpd_OutputEntity));
+	output = malloc(sizeof(*output));
 	output->id = -10;
 	output->name = NULL;
 	output->enabled = 0;
@@ -92,7 +92,7 @@ mpd_getNextOutput(struct mpd_connection *connection)
 }
 
 void
-mpd_freeOutputElement(mpd_OutputEntity * output)
+mpd_freeOutputElement(struct mpd_output_entity *output)
 {
 	free(output->name);
 	free(output);

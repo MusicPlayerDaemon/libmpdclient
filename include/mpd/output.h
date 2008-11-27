@@ -35,20 +35,20 @@
 
 struct mpd_connection;
 
-typedef struct _mpd_OutputEntity {
+struct mpd_output_entity {
 	int id;
 	char *name;
 	int enabled;
-} mpd_OutputEntity;
+};
 
 void
 mpd_sendOutputsCommand(struct mpd_connection *connection);
 
-mpd_OutputEntity *
+struct mpd_output_entity *
 mpd_getNextOutput(struct mpd_connection *connection);
 
 void
-mpd_freeOutputElement(mpd_OutputEntity * output);
+mpd_freeOutputElement(struct mpd_output_entity *output);
 
 void
 mpd_sendEnableOutputCommand(struct mpd_connection *connection, int outputId);
