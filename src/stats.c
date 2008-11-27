@@ -52,6 +52,8 @@ mpd_Stats * mpd_getStats(struct mpd_connection * connection) {
 	}
 
 	if(!connection->returnElement) mpd_getNextReturnElement(connection);
+	if(connection->error)
+		return NULL;
 
 	stats = malloc(sizeof(mpd_Stats));
 	stats->numberOfArtists = 0;
@@ -62,10 +64,6 @@ mpd_Stats * mpd_getStats(struct mpd_connection * connection) {
 	stats->playTime = 0;
 	stats->dbPlayTime = 0;
 
-	if(connection->error) {
-		free(stats);
-		return NULL;
-	}
 	while(connection->returnElement) {
 		struct mpd_return_element * re = connection->returnElement;
 		if(strcmp(re->name,"artists")==0) {

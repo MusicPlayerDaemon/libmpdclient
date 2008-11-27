@@ -52,6 +52,8 @@ mpd_Status * mpd_getStatus(struct mpd_connection * connection) {
 	}
 
 	if(!connection->returnElement) mpd_getNextReturnElement(connection);
+	if(connection->error)
+		return NULL;
 
 	status = malloc(sizeof(mpd_Status));
 	status->volume = -1;
@@ -72,10 +74,6 @@ mpd_Status * mpd_getStatus(struct mpd_connection * connection) {
 	status->error = NULL;
 	status->updatingDb = 0;
 
-	if(connection->error) {
-		free(status);
-		return NULL;
-	}
 	while(connection->returnElement) {
 		struct mpd_return_element * re = connection->returnElement;
 		if(strcmp(re->name,"volume")==0) {
