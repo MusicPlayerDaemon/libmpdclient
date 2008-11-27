@@ -72,8 +72,8 @@ static void mpd_readChanges(mpd_Connection *connection)
 
 void mpd_startIdle(mpd_Connection *connection, mpd_NotificationCb notify_cb, void *userdata)
 {
-        if (connection->idle)
-                return;
+	if (connection->idle)
+		return;
 
 	if (connection->startIdle)
 		connection->startIdle(connection);
@@ -107,12 +107,12 @@ static gboolean mpd_glibReadCb (GIOChannel *iochan, GIOCondition cond, gpointer 
 	}
 
 	if ((cond & G_IO_IN)) {
-	     connection->idle = 0;
-	     if (connection->source_id) {
-		     g_source_remove (connection->source_id);
-		     connection->source_id = 0;
-	     }
-	     mpd_readChanges(connection);
+		connection->idle = 0;
+		if (connection->source_id) {
+			g_source_remove (connection->source_id);
+			connection->source_id = 0;
+		}
+		mpd_readChanges(connection);
 	}
 
 	return TRUE;
@@ -122,13 +122,13 @@ static void mpd_glibStartIdle(mpd_Connection *connection)
 {
 	static GIOChannel* iochan = NULL;
 
-        if (!iochan)
-	        iochan = g_io_channel_unix_new (connection->sock);
+	if (!iochan)
+		iochan = g_io_channel_unix_new (connection->sock);
 
-        connection->source_id = g_io_add_watch (iochan,
-					        G_IO_IN | G_IO_ERR | G_IO_HUP,
-					        mpd_glibReadCb,
-					        connection);
+	connection->source_id = g_io_add_watch (iochan,
+						G_IO_IN | G_IO_ERR | G_IO_HUP,
+						mpd_glibReadCb,
+						connection);
 }
 
 static void mpd_glibStopIdle(mpd_Connection *connection)
