@@ -38,8 +38,8 @@ void mpd_sendStatsCommand(struct mpd_connection * connection) {
 	mpd_executeCommand(connection,"stats\n");
 }
 
-mpd_Stats * mpd_getStats(struct mpd_connection * connection) {
-	mpd_Stats * stats;
+struct mpd_stats * mpd_getStats(struct mpd_connection * connection) {
+	struct mpd_stats * stats;
 
 	/*mpd_executeCommand(connection,"stats\n");
 
@@ -55,7 +55,7 @@ mpd_Stats * mpd_getStats(struct mpd_connection * connection) {
 	if(connection->error)
 		return NULL;
 
-	stats = malloc(sizeof(mpd_Stats));
+	stats = malloc(sizeof(struct mpd_stats));
 	stats->numberOfArtists = 0;
 	stats->numberOfAlbums = 0;
 	stats->numberOfSongs = 0;
@@ -103,13 +103,13 @@ mpd_Stats * mpd_getStats(struct mpd_connection * connection) {
 	return stats;
 }
 
-void mpd_freeStats(mpd_Stats * stats) {
+void mpd_freeStats(struct mpd_stats * stats) {
 	free(stats);
 }
 
-mpd_SearchStats * mpd_getSearchStats(struct mpd_connection * connection)
+struct mpd_search_stats * mpd_getSearchStats(struct mpd_connection * connection)
 {
-	mpd_SearchStats * stats;
+	struct mpd_search_stats * stats;
 	struct mpd_return_element * re;
 
 	if (connection->doneProcessing ||
@@ -122,7 +122,7 @@ mpd_SearchStats * mpd_getSearchStats(struct mpd_connection * connection)
 	if (connection->error)
 		return NULL;
 
-	stats = malloc(sizeof(mpd_SearchStats));
+	stats = malloc(sizeof(struct mpd_search_stats));
 	stats->numberOfSongs = 0;
 	stats->playTime = 0;
 
@@ -150,7 +150,7 @@ mpd_SearchStats * mpd_getSearchStats(struct mpd_connection * connection)
 	return stats;
 }
 
-void mpd_freeSearchStats(mpd_SearchStats * stats)
+void mpd_freeSearchStats(struct mpd_search_stats * stats)
 {
 	free(stats);
 }

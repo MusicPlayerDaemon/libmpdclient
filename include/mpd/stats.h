@@ -35,7 +35,7 @@
 
 #include "connection.h"
 
-typedef struct _mpd_Stats {
+struct mpd_stats {
 	int numberOfArtists;
 	int numberOfAlbums;
 	int numberOfSongs;
@@ -43,21 +43,21 @@ typedef struct _mpd_Stats {
 	unsigned long dbUpdateTime;
 	unsigned long playTime;
 	unsigned long dbPlayTime;
-} mpd_Stats;
+};
 
-typedef struct _mpd_SearchStats {
+struct mpd_search_stats {
 	int numberOfSongs;
 	unsigned long playTime;
-} mpd_SearchStats;
+};
 
 void mpd_sendStatsCommand(struct mpd_connection * connection);
 
-mpd_Stats * mpd_getStats(struct mpd_connection * connection);
+struct mpd_stats * mpd_getStats(struct mpd_connection * connection);
 
-void mpd_freeStats(mpd_Stats * stats);
+void mpd_freeStats(struct mpd_stats * stats);
 
-mpd_SearchStats * mpd_getSearchStats(struct mpd_connection * connection);
+struct mpd_search_stats * mpd_getSearchStats(struct mpd_connection * connection);
 
-void mpd_freeSearchStats(mpd_SearchStats * stats);
+void mpd_freeSearchStats(struct mpd_search_stats * stats);
 
 #endif
