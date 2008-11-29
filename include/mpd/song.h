@@ -30,8 +30,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef SONG_H
-#define SONG_H
+#ifndef MPD_SONG_H
+#define MPD_SONG_H
 
 #define MPD_SONG_NO_TIME	-1
 #define MPD_SONG_NO_NUM		-1

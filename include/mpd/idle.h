@@ -30,8 +30,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef IDLE_H
-#define IDLE_H
+#ifndef MPD_IDLE_H
+#define MPD_IDLE_H
 
 #include <stdlib.h>
 #include "connection.h"

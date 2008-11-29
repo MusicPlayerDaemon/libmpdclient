@@ -30,8 +30,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef CONNECTION_H
-#define CONNECTION_H
+#ifndef MPD_CONNECTION_H
+#define MPD_CONNECTION_H
 
 #include <mpd/return_element.h>
 

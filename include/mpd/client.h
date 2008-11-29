@@ -30,8 +30,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef LIBMPDCLIENT_H
-#define LIBMPDCLIENT_H
+#ifndef MPD_CLIENT_H
+#define MPD_CLIENT_H
 
 #include <mpd/connection.h>
 #include <mpd/song.h>
@@ -40,10 +40,6 @@
 #ifdef WIN32
 #  define __W32API_USE_DLLIMPORT__ 1
 #endif
-
-#include <stddef.h>
-#include <sys/time.h>
-#include <stdarg.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -30,8 +30,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef STATS_H
-#define STATS_H
+#ifndef MPD_STATS_H
+#define MPD_STATS_H
 
 #include "connection.h"
 
