@@ -81,8 +81,8 @@ static char * mpd_sanitizeArg(const char * arg) {
 
 	c = arg;
 	rc = ret;
-	for(i = strlen(arg)+1; i != 0; --i) {
-		if(*c=='"' || *c=='\\')
+	for (i = strlen(arg)+1; i != 0; --i) {
+		if (*c=='"' || *c=='\\')
 			*rc++ = '\\';
 		*(rc++) = *(c++);
 	}
@@ -92,15 +92,15 @@ static char * mpd_sanitizeArg(const char * arg) {
 
 void mpd_finishCommand(struct mpd_connection *connection)
 {
-	while(!connection->doneProcessing) {
-		if(connection->doneListOk) connection->doneListOk = 0;
+	while (!connection->doneProcessing) {
+		if (connection->doneListOk) connection->doneListOk = 0;
 		mpd_getNextReturnElement(connection);
 	}
 }
 
 static void mpd_finishListOkCommand(struct mpd_connection *connection)
 {
-	while(!connection->doneProcessing && connection->listOks &&
+	while (!connection->doneProcessing && connection->listOks &&
 			!connection->doneListOk)
 	{
 		mpd_getNextReturnElement(connection);
@@ -110,8 +110,8 @@ static void mpd_finishListOkCommand(struct mpd_connection *connection)
 int mpd_nextListOkCommand(struct mpd_connection *connection)
 {
 	mpd_finishListOkCommand(connection);
-	if(!connection->doneProcessing) connection->doneListOk = 0;
-	if(connection->listOks == 0 || connection->doneProcessing) return -1;
+	if (!connection->doneProcessing) connection->doneListOk = 0;
+	if (connection->listOks == 0 || connection->doneProcessing) return -1;
 	return 0;
 }
 
@@ -151,14 +151,14 @@ static void mpd_initInfoEntity(mpd_InfoEntity * entity) {
 }
 
 static void mpd_finishInfoEntity(mpd_InfoEntity * entity) {
-	if(entity->info.directory) {
-		if(entity->type == MPD_INFO_ENTITY_TYPE_DIRECTORY) {
+	if (entity->info.directory) {
+		if (entity->type == MPD_INFO_ENTITY_TYPE_DIRECTORY) {
 			mpd_freeDirectory(entity->info.directory);
 		}
-		else if(entity->type == MPD_INFO_ENTITY_TYPE_SONG) {
+		else if (entity->type == MPD_INFO_ENTITY_TYPE_SONG) {
 			mpd_freeSong(entity->info.song);
 		}
-		else if(entity->type == MPD_INFO_ENTITY_TYPE_PLAYLISTFILE) {
+		else if (entity->type == MPD_INFO_ENTITY_TYPE_PLAYLISTFILE) {
 			mpd_freePlaylistFile(entity->info.playlistFile);
 		}
 	}
@@ -188,22 +188,22 @@ mpd_getNextInfoEntity(struct mpd_connection *connection)
 {
 	mpd_InfoEntity * entity = NULL;
 
-	if(connection->doneProcessing || (connection->listOks &&
+	if (connection->doneProcessing || (connection->listOks &&
 	   connection->doneListOk)) {
 		return NULL;
 	}
 
-	if(!connection->returnElement) mpd_getNextReturnElement(connection);
+	if (!connection->returnElement) mpd_getNextReturnElement(connection);
 
-	if(connection->returnElement) {
-		if(strcmp(connection->returnElement->name,"file")==0) {
+	if (connection->returnElement) {
+		if (strcmp(connection->returnElement->name,"file")==0) {
 			entity = mpd_newInfoEntity();
 			entity->type = MPD_INFO_ENTITY_TYPE_SONG;
 			entity->info.song = mpd_newSong();
 			entity->info.song->file =
 				str_pool_dup(connection->returnElement->value);
 		}
-		else if(strcmp(connection->returnElement->name,
+		else if (strcmp(connection->returnElement->name,
 					"directory")==0) {
 			entity = mpd_newInfoEntity();
 			entity->type = MPD_INFO_ENTITY_TYPE_DIRECTORY;
@@ -211,14 +211,14 @@ mpd_getNextInfoEntity(struct mpd_connection *connection)
 			entity->info.directory->path =
 				str_pool_dup(connection->returnElement->value);
 		}
-		else if(strcmp(connection->returnElement->name,"playlist")==0) {
+		else if (strcmp(connection->returnElement->name,"playlist")==0) {
 			entity = mpd_newInfoEntity();
 			entity->type = MPD_INFO_ENTITY_TYPE_PLAYLISTFILE;
 			entity->info.playlistFile = mpd_newPlaylistFile();
 			entity->info.playlistFile->path =
 				str_pool_dup(connection->returnElement->value);
 		}
-		else if(strcmp(connection->returnElement->name, "cpos") == 0){
+		else if (strcmp(connection->returnElement->name, "cpos") == 0){
 			entity = mpd_newInfoEntity();
 			entity->type = MPD_INFO_ENTITY_TYPE_SONG;
 			entity->info.song = mpd_newSong();
@@ -233,76 +233,76 @@ mpd_getNextInfoEntity(struct mpd_connection *connection)
 	else return NULL;
 
 	mpd_getNextReturnElement(connection);
-	while(connection->returnElement) {
+	while (connection->returnElement) {
 		struct mpd_return_element *re = connection->returnElement;
 
-		if(strcmp(re->name,"file")==0) return entity;
-		else if(strcmp(re->name,"directory")==0) return entity;
-		else if(strcmp(re->name,"playlist")==0) return entity;
-		else if(strcmp(re->name,"cpos")==0) return entity;
+		if (strcmp(re->name,"file")==0) return entity;
+		else if (strcmp(re->name,"directory")==0) return entity;
+		else if (strcmp(re->name,"playlist")==0) return entity;
+		else if (strcmp(re->name,"cpos")==0) return entity;
 
-		if(entity->type == MPD_INFO_ENTITY_TYPE_SONG &&
+		if (entity->type == MPD_INFO_ENTITY_TYPE_SONG &&
 				strlen(re->value)) {
-			if(!entity->info.song->artist &&
+			if (!entity->info.song->artist &&
 					strcmp(re->name,"Artist")==0) {
 				entity->info.song->artist = str_pool_dup(re->value);
 			}
-			else if(!entity->info.song->album &&
+			else if (!entity->info.song->album &&
 					strcmp(re->name,"Album")==0) {
 				entity->info.song->album = str_pool_dup(re->value);
 			}
-			else if(!entity->info.song->title &&
+			else if (!entity->info.song->title &&
 					strcmp(re->name,"Title")==0) {
 				entity->info.song->title = str_pool_dup(re->value);
 			}
-			else if(!entity->info.song->track &&
+			else if (!entity->info.song->track &&
 					strcmp(re->name,"Track")==0) {
 				entity->info.song->track = str_pool_dup(re->value);
 			}
-			else if(!entity->info.song->name &&
+			else if (!entity->info.song->name &&
 					strcmp(re->name,"Name")==0) {
 				entity->info.song->name = str_pool_dup(re->value);
 			}
-			else if(entity->info.song->time==MPD_SONG_NO_TIME &&
+			else if (entity->info.song->time==MPD_SONG_NO_TIME &&
 					strcmp(re->name,"Time")==0) {
 				entity->info.song->time = atoi(re->value);
 			}
-			else if(entity->info.song->pos==MPD_SONG_NO_NUM &&
+			else if (entity->info.song->pos==MPD_SONG_NO_NUM &&
 					strcmp(re->name,"Pos")==0) {
 				entity->info.song->pos = atoi(re->value);
 			}
-			else if(entity->info.song->id==MPD_SONG_NO_ID &&
+			else if (entity->info.song->id==MPD_SONG_NO_ID &&
 					strcmp(re->name,"Id")==0) {
 				entity->info.song->id = atoi(re->value);
 			}
-			else if(!entity->info.song->date &&
+			else if (!entity->info.song->date &&
 					strcmp(re->name, "Date") == 0) {
 				entity->info.song->date = str_pool_dup(re->value);
 			}
-			else if(!entity->info.song->genre &&
+			else if (!entity->info.song->genre &&
 					strcmp(re->name, "Genre") == 0) {
 				entity->info.song->genre = str_pool_dup(re->value);
 			}
-			else if(!entity->info.song->composer &&
+			else if (!entity->info.song->composer &&
 					strcmp(re->name, "Composer") == 0) {
 				entity->info.song->composer = str_pool_dup(re->value);
 			}
-			else if(!entity->info.song->performer &&
+			else if (!entity->info.song->performer &&
 					strcmp(re->name, "Performer") == 0) {
 				entity->info.song->performer = strdup(re->value);
 			}
-			else if(!entity->info.song->disc &&
+			else if (!entity->info.song->disc &&
 					strcmp(re->name, "Disc") == 0) {
 				entity->info.song->disc = str_pool_dup(re->value);
 			}
-			else if(!entity->info.song->comment &&
+			else if (!entity->info.song->comment &&
 					strcmp(re->name, "Comment") == 0) {
 				entity->info.song->comment = str_pool_dup(re->value);
 			}
 		}
-		else if(entity->type == MPD_INFO_ENTITY_TYPE_DIRECTORY) {
+		else if (entity->type == MPD_INFO_ENTITY_TYPE_DIRECTORY) {
 		}
-		else if(entity->type == MPD_INFO_ENTITY_TYPE_PLAYLISTFILE) {
+		else if (entity->type == MPD_INFO_ENTITY_TYPE_PLAYLISTFILE) {
 		}
 
 		mpd_getNextReturnElement(connection);
@@ -315,17 +315,17 @@ static char *
 mpd_getNextReturnElementNamed(struct mpd_connection *connection,
 			      const char *name)
 {
-	if(connection->doneProcessing || (connection->listOks &&
+	if (connection->doneProcessing || (connection->listOks &&
 				connection->doneListOk))
 	{
 		return NULL;
 	}
 
 	mpd_getNextReturnElement(connection);
-	while(connection->returnElement) {
+	while (connection->returnElement) {
 		struct mpd_return_element *re = connection->returnElement;
 
-		if(strcmp(re->name,name)==0) return strdup(re->value);
+		if (strcmp(re->name,name)==0) return strdup(re->value);
 		mpd_getNextReturnElement(connection);
 	}
 
@@ -460,14 +460,14 @@ mpd_sendListCommand(struct mpd_connection *connection, int table,
 	char st[10];
 	int len;
 	char *string;
-	if(table == MPD_TABLE_ARTIST) strcpy(st,"artist");
-	else if(table == MPD_TABLE_ALBUM) strcpy(st,"album");
+	if (table == MPD_TABLE_ARTIST) strcpy(st,"artist");
+	else if (table == MPD_TABLE_ALBUM) strcpy(st,"album");
 	else {
 		connection->error = 1;
 		strcpy(connection->errorStr,"unknown table for list");
 		return;
 	}
-	if(arg1) {
+	if (arg1) {
 		char * sanitArg1 = mpd_sanitizeArg(arg1);
 		len = strlen("list")+1+strlen(sanitArg1)+2+strlen(st)+3;
 		string = malloc(len);
@@ -711,7 +711,7 @@ int mpd_getUpdateId(struct mpd_connection *connection)
 	int ret = 0;
 
 	jobid = mpd_getNextReturnElementNamed(connection,"updating_db");
-	if(jobid) {
+	if (jobid) {
 		ret = atoi(jobid);
 		free(jobid);
 	}
@@ -783,7 +783,7 @@ mpd_sendPasswordCommand(struct mpd_connection *connection, const char *pass)
 
 void mpd_sendCommandListBegin(struct mpd_connection *connection)
 {
-	if(connection->commandList) {
+	if (connection->commandList) {
 		strcpy(connection->errorStr,"already in command list mode");
 		connection->error = 1;
 		return;
@@ -794,7 +794,7 @@ void mpd_sendCommandListBegin(struct mpd_connection *connection)
 
 void mpd_sendCommandListOkBegin(struct mpd_connection *connection)
 {
-	if(connection->commandList) {
+	if (connection->commandList) {
 		strcpy(connection->errorStr,"already in command list mode");
 		connection->error = 1;
 		return;
@@ -806,7 +806,7 @@ void mpd_sendCommandListOkBegin(struct mpd_connection *connection)
 
 void mpd_sendCommandListEnd(struct mpd_connection *connection)
 {
-	if(!connection->commandList) {
+	if (!connection->commandList) {
 		strcpy(connection->errorStr,"not in command list mode");
 		connection->error = 1;
 		return;

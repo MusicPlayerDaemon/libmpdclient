@@ -43,16 +43,16 @@ struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
 
 	/*mpd_executeCommand(connection,"status\n");
 
-	if(connection->error) return NULL;*/
+	if (connection->error) return NULL;*/
 
-	if(connection->doneProcessing || (connection->listOks &&
+	if (connection->doneProcessing || (connection->listOks &&
 	   connection->doneListOk))
 	{
 		return NULL;
 	}
 
-	if(!connection->returnElement) mpd_getNextReturnElement(connection);
-	if(connection->error)
+	if (!connection->returnElement) mpd_getNextReturnElement(connection);
+	if (connection->error)
 		return NULL;
 
 	status = malloc(sizeof(struct mpd_status));
@@ -74,47 +74,47 @@ struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
 	status->error = NULL;
 	status->updatingDb = 0;
 
-	while(connection->returnElement) {
+	while (connection->returnElement) {
 		struct mpd_return_element * re = connection->returnElement;
-		if(strcmp(re->name,"volume")==0) {
+		if (strcmp(re->name,"volume")==0) {
 			status->volume = atoi(re->value);
 		}
-		else if(strcmp(re->name,"repeat")==0) {
+		else if (strcmp(re->name,"repeat")==0) {
 			status->repeat = atoi(re->value);
 		}
-		else if(strcmp(re->name,"random")==0) {
+		else if (strcmp(re->name,"random")==0) {
 			status->random = atoi(re->value);
 		}
-		else if(strcmp(re->name,"playlist")==0) {
+		else if (strcmp(re->name,"playlist")==0) {
 			status->playlist = strtol(re->value,NULL,10);
 		}
-		else if(strcmp(re->name,"playlistlength")==0) {
+		else if (strcmp(re->name,"playlistlength")==0) {
 			status->playlistLength = atoi(re->value);
 		}
-		else if(strcmp(re->name,"bitrate")==0) {
+		else if (strcmp(re->name,"bitrate")==0) {
 			status->bitRate = atoi(re->value);
 		}
-		else if(strcmp(re->name,"state")==0) {
-			if(strcmp(re->value,"play")==0) {
+		else if (strcmp(re->name,"state")==0) {
+			if (strcmp(re->value,"play")==0) {
 				status->state = MPD_STATUS_STATE_PLAY;
 			}
-			else if(strcmp(re->value,"stop")==0) {
+			else if (strcmp(re->value,"stop")==0) {
 				status->state = MPD_STATUS_STATE_STOP;
 			}
-			else if(strcmp(re->value,"pause")==0) {
+			else if (strcmp(re->value,"pause")==0) {
 				status->state = MPD_STATUS_STATE_PAUSE;
 			}
 			else {
 				status->state = MPD_STATUS_STATE_UNKNOWN;
 			}
 		}
-		else if(strcmp(re->name,"song")==0) {
+		else if (strcmp(re->name,"song")==0) {
 			status->song = atoi(re->value);
 		}
-		else if(strcmp(re->name,"songid")==0) {
+		else if (strcmp(re->name,"songid")==0) {
 			status->songid = atoi(re->value);
 		}
-		else if(strcmp(re->name,"time")==0) {
+		else if (strcmp(re->name,"time")==0) {
 			char * tok = strchr(re->value,':');
 			/* the second strchr below is a safety check */
 			if (tok && (strchr(tok,0) > (tok+1))) {
@@ -123,16 +123,16 @@ struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
 				status->totalTime = atoi(tok+1);
 			}
 		}
-		else if(strcmp(re->name,"error")==0) {
+		else if (strcmp(re->name,"error")==0) {
 			status->error = strdup(re->value);
 		}
-		else if(strcmp(re->name,"xfade")==0) {
+		else if (strcmp(re->name,"xfade")==0) {
 			status->crossfade = atoi(re->value);
 		}
-		else if(strcmp(re->name,"updating_db")==0) {
+		else if (strcmp(re->name,"updating_db")==0) {
 			status->updatingDb = atoi(re->value);
 		}
-		else if(strcmp(re->name,"audio")==0) {
+		else if (strcmp(re->name,"audio")==0) {
 			char * tok = strchr(re->value,':');
 			if (tok && (strchr(tok,0) > (tok+1))) {
 				status->sampleRate = atoi(re->value);
@@ -144,17 +144,17 @@ struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
 		}
 
 		mpd_getNextReturnElement(connection);
-		if(connection->error) {
+		if (connection->error) {
 			free(status);
 			return NULL;
 		}
 	}
 
-	if(connection->error) {
+	if (connection->error) {
 		free(status);
 		return NULL;
 	}
-	else if(status->state<0) {
+	else if (status->state<0) {
 		strcpy(connection->errorStr,"state not found");
 		connection->error = 1;
 		free(status);
@@ -165,7 +165,7 @@ struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
 }
 
 void mpd_freeStatus(struct mpd_status * status) {
-	if(status->error) free(status->error);
+	if (status->error) free(status->error);
 	free(status);
 }
 

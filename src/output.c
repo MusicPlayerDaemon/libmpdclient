@@ -52,36 +52,36 @@ mpd_getNextOutput(struct mpd_connection *connection)
 {
 	struct mpd_output_entity *output = NULL;
 
-	if(connection->doneProcessing || (connection->listOks &&
+	if (connection->doneProcessing || (connection->listOks &&
 				connection->doneListOk))
 	{
 		return NULL;
 	}
 
-	if(connection->error) return NULL;
+	if (connection->error) return NULL;
 
 	output = malloc(sizeof(*output));
 	output->id = -10;
 	output->name = NULL;
 	output->enabled = 0;
 
-	if(!connection->returnElement) mpd_getNextReturnElement(connection);
+	if (!connection->returnElement) mpd_getNextReturnElement(connection);
 
-	while(connection->returnElement) {
+	while (connection->returnElement) {
 		struct mpd_return_element *re = connection->returnElement;
-		if(strcmp(re->name,"outputid")==0) {
-			if(output!=NULL && output->id>=0) return output;
+		if (strcmp(re->name,"outputid")==0) {
+			if (output!=NULL && output->id>=0) return output;
 			output->id = atoi(re->value);
 		}
-		else if(strcmp(re->name,"outputname")==0) {
+		else if (strcmp(re->name,"outputname")==0) {
 			output->name = strdup(re->value);
 		}
-		else if(strcmp(re->name,"outputenabled")==0) {
+		else if (strcmp(re->name,"outputenabled")==0) {
 			output->enabled = atoi(re->value);
 		}
 
 		mpd_getNextReturnElement(connection);
-		if(connection->error) {
+		if (connection->error) {
 			free(output);
 			return NULL;
 		}

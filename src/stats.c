@@ -43,16 +43,16 @@ struct mpd_stats * mpd_getStats(struct mpd_connection * connection) {
 
 	/*mpd_executeCommand(connection,"stats\n");
 
-	if(connection->error) return NULL;*/
+	if (connection->error) return NULL;*/
 
-	if(connection->doneProcessing || (connection->listOks &&
+	if (connection->doneProcessing || (connection->listOks &&
 	   connection->doneListOk))
 	{
 		return NULL;
 	}
 
-	if(!connection->returnElement) mpd_getNextReturnElement(connection);
-	if(connection->error)
+	if (!connection->returnElement) mpd_getNextReturnElement(connection);
+	if (connection->error)
 		return NULL;
 
 	stats = malloc(sizeof(struct mpd_stats));
@@ -64,38 +64,38 @@ struct mpd_stats * mpd_getStats(struct mpd_connection * connection) {
 	stats->playTime = 0;
 	stats->dbPlayTime = 0;
 
-	while(connection->returnElement) {
+	while (connection->returnElement) {
 		struct mpd_return_element * re = connection->returnElement;
-		if(strcmp(re->name,"artists")==0) {
+		if (strcmp(re->name,"artists")==0) {
 			stats->numberOfArtists = atoi(re->value);
 		}
-		else if(strcmp(re->name,"albums")==0) {
+		else if (strcmp(re->name,"albums")==0) {
 			stats->numberOfAlbums = atoi(re->value);
 		}
-		else if(strcmp(re->name,"songs")==0) {
+		else if (strcmp(re->name,"songs")==0) {
 			stats->numberOfSongs = atoi(re->value);
 		}
-		else if(strcmp(re->name,"uptime")==0) {
+		else if (strcmp(re->name,"uptime")==0) {
 			stats->uptime = strtol(re->value,NULL,10);
 		}
-		else if(strcmp(re->name,"db_update")==0) {
+		else if (strcmp(re->name,"db_update")==0) {
 			stats->dbUpdateTime = strtol(re->value,NULL,10);
 		}
-		else if(strcmp(re->name,"playtime")==0) {
+		else if (strcmp(re->name,"playtime")==0) {
 			stats->playTime = strtol(re->value,NULL,10);
 		}
-		else if(strcmp(re->name,"db_playtime")==0) {
+		else if (strcmp(re->name,"db_playtime")==0) {
 			stats->dbPlayTime = strtol(re->value,NULL,10);
 		}
 
 		mpd_getNextReturnElement(connection);
-		if(connection->error) {
+		if (connection->error) {
 			free(stats);
 			return NULL;
 		}
 	}
 
-	if(connection->error) {
+	if (connection->error) {
 		free(stats);
 		return NULL;
 	}
