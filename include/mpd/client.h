@@ -44,9 +44,6 @@
 #include <stddef.h>
 #include <sys/time.h>
 #include <stdarg.h>
-#ifdef MPD_GLIB
-#include <glib.h>
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -115,7 +112,7 @@ typedef struct mpd_InfoEntity {
 	 * what this entity is (song, directory, etc...)
 	 */
 	int type;
-	/* the actual data you want, mpd_Song, mpd_Directory, etc */
+	/* the actual data you want, mpd_song, mpd_directory, etc */
 	union {
 		struct mpd_directory *directory;
 		struct mpd_song *song;

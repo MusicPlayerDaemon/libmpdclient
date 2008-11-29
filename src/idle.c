@@ -34,6 +34,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#ifdef MPD_GLIB
+#include <glib.h>
+#endif
 
 static const char *const idle_names[] = {
 	"database",
