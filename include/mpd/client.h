@@ -96,9 +96,11 @@ mpd_PlaylistFile * mpd_playlistFileDup(const mpd_PlaylistFile * playlist);
 /* the type of entity returned from one of the commands that generates info
  * use in conjunction with mpd_InfoEntity.type
  */
-#define MPD_INFO_ENTITY_TYPE_DIRECTORY		0
-#define MPD_INFO_ENTITY_TYPE_SONG		1
-#define MPD_INFO_ENTITY_TYPE_PLAYLISTFILE	2
+enum mpd_entity_type {
+	MPD_INFO_ENTITY_TYPE_DIRECTORY,
+	MPD_INFO_ENTITY_TYPE_SONG,
+	MPD_INFO_ENTITY_TYPE_PLAYLISTFILE
+};
 
 /* mpd_InfoEntity
  * stores info on stuff returned info commands
@@ -107,7 +109,7 @@ typedef struct mpd_InfoEntity {
 	/* the type of entity, use with MPD_INFO_ENTITY_TYPE_* to determine
 	 * what this entity is (song, directory, etc...)
 	 */
-	int type;
+	enum mpd_entity_type type;
 	/* the actual data you want, mpd_song, mpd_directory, etc */
 	union {
 		struct mpd_directory *directory;
