@@ -457,11 +457,14 @@ void
 mpd_sendListCommand(struct mpd_connection *connection, int table,
 		    const char *arg1)
 {
-	char st[10];
+	const char *st;
 	int len;
 	char *string;
-	if (table == MPD_TABLE_ARTIST) strcpy(st,"artist");
-	else if (table == MPD_TABLE_ALBUM) strcpy(st,"album");
+
+	if (table == MPD_TABLE_ARTIST)
+		st = "artist";
+	else if (table == MPD_TABLE_ALBUM)
+		st = "album";
 	else {
 		connection->error = 1;
 		strcpy(connection->errorStr,"unknown table for list");

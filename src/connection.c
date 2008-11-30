@@ -499,7 +499,7 @@ void mpd_getNextReturnElement(struct mpd_connection *connection)
 	output = connection->buffer+connection->bufstart;
 	connection->bufstart = rt - connection->buffer + 1;
 
-	if (strcmp(output,"OK")==0) {
+	if (strcmp(output, "OK")==0) {
 		if (connection->listOks > 0) {
 			strcpy(connection->errorStr, "expected more list_OK's");
 			connection->error = 1;
@@ -508,9 +508,7 @@ void mpd_getNextReturnElement(struct mpd_connection *connection)
 		connection->doneProcessing = 1;
 		connection->doneListOk = 0;
 		return;
-	}
-
-	if (strcmp(output, "list_OK") == 0) {
+	} else if (strcmp(output, "list_OK") == 0) {
 		if (!connection->listOks) {
 			strcpy(connection->errorStr,
 					"got an unexpected list_OK");
@@ -521,9 +519,7 @@ void mpd_getNextReturnElement(struct mpd_connection *connection)
 			connection->listOks--;
 		}
 		return;
-	}
-
-	if (strncmp(output,"ACK",strlen("ACK"))==0) {
+	} else if (strncmp(output, "ACK", strlen("ACK"))==0) {
 		size_t length = strlen(output);
 		char * test;
 		char * needle;
