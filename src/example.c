@@ -32,6 +32,7 @@
 
 #include <mpd/client.h>
 #include <mpd/status.h>
+#include <mpd/entity.h>
 
 #include <stdio.h>
 #include <string.h>

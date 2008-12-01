@@ -91,41 +91,7 @@ void mpd_freePlaylistFile(mpd_PlaylistFile * playlist);
  */
 mpd_PlaylistFile * mpd_playlistFileDup(const mpd_PlaylistFile * playlist);
 
-/* INFO ENTITY STUFF */
-
-/* the type of entity returned from one of the commands that generates info
- * use in conjunction with mpd_InfoEntity.type
- */
-enum mpd_entity_type {
-	MPD_INFO_ENTITY_TYPE_DIRECTORY,
-	MPD_INFO_ENTITY_TYPE_SONG,
-	MPD_INFO_ENTITY_TYPE_PLAYLISTFILE
-};
-
-/* mpd_InfoEntity
- * stores info on stuff returned info commands
- */
-typedef struct mpd_InfoEntity {
-	/* the type of entity, use with MPD_INFO_ENTITY_TYPE_* to determine
-	 * what this entity is (song, directory, etc...)
-	 */
-	enum mpd_entity_type type;
-	/* the actual data you want, mpd_song, mpd_directory, etc */
-	union {
-		struct mpd_directory *directory;
-		struct mpd_song *song;
-		mpd_PlaylistFile * playlistFile;
-	} info;
-} mpd_InfoEntity;
-
-mpd_InfoEntity * mpd_newInfoEntity(void);
-
-void mpd_freeInfoEntity(mpd_InfoEntity * entity);
-
 /* INFO COMMANDS AND STUFF */
-
-/* use this function to loop over after calling Info/Listall functions */
-mpd_InfoEntity * mpd_getNextInfoEntity(struct mpd_connection *connection);
 
 /* fetches the currently seeletect song (the song referenced by status->song
  * and status->songid*/

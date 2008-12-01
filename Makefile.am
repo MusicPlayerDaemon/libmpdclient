@@ -8,6 +8,7 @@ mpdinclude_HEADERS = \
 	include/mpd/client.h \
 	include/mpd/connection.h \
 	include/mpd/directory.h \
+	include/mpd/entity.h \
 	include/mpd/idle.h \
 	include/mpd/status.h \
 	include/mpd/stats.h \
@@ -26,6 +27,7 @@ src_libmpdclient_la_SOURCES = \
 	src/directory.c \
 	src/output.c \
 	src/return_element.c \
+	src/entity.c \
 	src/idle.c \
 	src/song.c \
 	src/status.c \
