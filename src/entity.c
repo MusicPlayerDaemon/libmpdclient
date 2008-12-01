@@ -174,7 +174,7 @@ mpd_getNextInfoEntity(struct mpd_connection *connection)
 			}
 			else if (!entity->info.song->performer &&
 					strcmp(re->name, "Performer") == 0) {
-				entity->info.song->performer = strdup(re->value);
+				entity->info.song->performer = str_pool_dup(re->value);
 			}
 			else if (!entity->info.song->disc &&
 					strcmp(re->name, "Disc") == 0) {
