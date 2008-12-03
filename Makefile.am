@@ -9,6 +9,7 @@ mpdinclude_HEADERS = \
 	include/mpd/connection.h \
 	include/mpd/directory.h \
 	include/mpd/entity.h \
+	include/mpd/error.h \
 	include/mpd/idle.h \
 	include/mpd/protocol.h \
 	include/mpd/status.h \

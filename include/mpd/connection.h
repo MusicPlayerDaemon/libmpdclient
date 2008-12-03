@@ -34,44 +34,10 @@
 #define MPD_CONNECTION_H
 
 #include <mpd/protocol.h>
+#include <mpd/error.h>
 #include <mpd/return_element.h>
 
 #include <stdlib.h>
-
-enum mpd_error {
-	/** no error */
-	MPD_ERROR_SUCCESS = 0,
-
-	/** timeout trying to talk to mpd */
-	MPD_ERROR_TIMEOUT = 10,
-
-	/** system error */
-	MPD_ERROR_SYSTEM,
-
-	/** unknown host */
-	MPD_ERROR_UNKHOST,
-
-	/** problems connecting to port on host */
-	MPD_ERROR_CONNPORT,
-
-	/** mpd not running on port at host */
-	MPD_ERROR_NOTMPD,
-
-	/** no response on attempting to connect */
-	MPD_ERROR_NORESPONSE,
-
-	/** error sending command */
-	MPD_ERROR_SENDING,
-
-	/** connection closed by mpd */
-	MPD_ERROR_CONNCLOSED,
-
-	/** ACK returned! */
-	MPD_ERROR_ACK,
-
-	/** Buffer was overrun! */
-	MPD_ERROR_BUFFEROVERRUN,
-};
 
 /* mpd_Connection
  * holds info about connection to mpd
