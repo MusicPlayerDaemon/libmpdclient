@@ -314,6 +314,29 @@ mpd_newConnection(const char *host, int port, float timeout)
 	return connection;
 }
 
+enum mpd_error
+mpd_get_error(const struct mpd_connection *connection)
+{
+	return connection->error;
+}
+
+const char *
+mpd_get_error_string(const struct mpd_connection *connection)
+{
+	assert(connection->error != MPD_ERROR_SUCCESS);
+	assert(connection->errorStr[0] != 0);
+
+	return connection->errorStr;
+}
+
+enum mpd_ack
+mpd_get_server_error(const struct mpd_connection *connection)
+{
+	assert(connection->error == MPD_ERROR_ACK);
+
+	return connection->errorCode;
+}
+
 void mpd_clearError(struct mpd_connection *connection)
 {
 	connection->error = 0;

@@ -51,8 +51,8 @@ int main(int argc, char ** argv) {
 
 	conn = mpd_newConnection(hostname,atoi(port),10);
 
-	if(conn->error) {
-		fprintf(stderr,"%s\n",conn->errorStr);
+	if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
+		fprintf(stderr,"%s\n", mpd_get_error_string(conn));
 		mpd_closeConnection(conn);
 		return -1;
 	}
@@ -74,7 +74,7 @@ int main(int argc, char ** argv) {
 		mpd_sendCommandListEnd(conn);
 
 		if((status = mpd_getStatus(conn))==NULL) {
-			fprintf(stderr,"%s\n",conn->errorStr);
+			fprintf(stderr,"%s\n", mpd_get_error_string(conn));
 			mpd_closeConnection(conn);
 			return -1;
 		}
@@ -96,8 +96,8 @@ int main(int argc, char ** argv) {
 			printf("channels: %i\n",status->channels);
 		}
 
-		if(conn->error) {
-			fprintf(stderr,"%s\n",conn->errorStr);
+		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
+			fprintf(stderr,"%s\n", mpd_get_error_string(conn));
 			mpd_closeConnection(conn);
 			return -1;
 		}
@@ -141,15 +141,15 @@ int main(int argc, char ** argv) {
 			mpd_freeInfoEntity(entity);
 		}
 
-		if(conn->error) {
-			fprintf(stderr,"%s\n",conn->errorStr);
+		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
+			fprintf(stderr,"%s\n", mpd_get_error_string(conn));
 			mpd_closeConnection(conn);
 			return -1;
 		}
 
 		mpd_finishCommand(conn);
-		if(conn->error) {
-			fprintf(stderr,"%s\n",conn->errorStr);
+		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
+			fprintf(stderr,"%s\n", mpd_get_error_string(conn));
 			mpd_closeConnection(conn);
 			return -1;
 		}
@@ -160,8 +160,8 @@ int main(int argc, char ** argv) {
 		mpd_InfoEntity * entity;
 
 		mpd_sendLsInfoCommand(conn,argv[2]);
-		if(conn->error) {
-			fprintf(stderr,"%s\n",conn->errorStr);
+		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
+			fprintf(stderr,"%s\n", mpd_get_error_string(conn));
 			mpd_closeConnection(conn);
 			return -1;
 		}
@@ -199,15 +199,15 @@ int main(int argc, char ** argv) {
 			mpd_freeInfoEntity(entity);
 		}
 
-		if(conn->error) {
-			fprintf(stderr,"%s\n",conn->errorStr);
+		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
+			fprintf(stderr,"%s\n", mpd_get_error_string(conn));
 			mpd_closeConnection(conn);
 			return -1;
 		}
 
 		mpd_finishCommand(conn);
-		if(conn->error) {
-			fprintf(stderr,"%s\n",conn->errorStr);
+		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
+			fprintf(stderr,"%s\n", mpd_get_error_string(conn));
 			mpd_closeConnection(conn);
 			return -1;
 		}
@@ -216,8 +216,8 @@ int main(int argc, char ** argv) {
 		char * artist;
 	
 		mpd_sendListCommand(conn,MPD_TABLE_ARTIST,NULL);
-		if(conn->error) {
-			fprintf(stderr,"%s\n",conn->errorStr);
+		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
+			fprintf(stderr,"%s\n", mpd_get_error_string(conn));
 			mpd_closeConnection(conn);
 			return -1;
 		}
@@ -227,15 +227,15 @@ int main(int argc, char ** argv) {
 			free(artist);
 		}
 
-		if(conn->error) {
-			fprintf(stderr,"%s\n",conn->errorStr);
+		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
+			fprintf(stderr,"%s\n", mpd_get_error_string(conn));
 			mpd_closeConnection(conn);
 			return -1;
 		}
 
 		mpd_finishCommand(conn);
-		if(conn->error) {
-			fprintf(stderr,"%s\n",conn->errorStr);
+		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
+			fprintf(stderr,"%s\n", mpd_get_error_string(conn));
 			mpd_closeConnection(conn);
 			return -1;
 		}

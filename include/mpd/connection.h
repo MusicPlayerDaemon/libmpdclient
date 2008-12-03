@@ -143,6 +143,28 @@ void mpd_setConnectionTimeout(struct mpd_connection *connection,
  */
 void mpd_closeConnection(struct mpd_connection *connection);
 
+/**
+ * Returns the libmpdclient error code.  MPD_ERROR_SUCCESS means no
+ * error occured.
+ */
+enum mpd_error
+mpd_get_error(const struct mpd_connection *connection);
+
+/**
+ * Returns the human-readable (English) libmpdclient error string.
+ * Calling this function is only valid if an error really occured.
+ * Check with mpd_get_error().
+ */
+const char *
+mpd_get_error_string(const struct mpd_connection *connection);
+
+/**
+ * Returns the error code returned from the server.  Calling this
+ * function is only valid if mpd_get_error() returned MPD_ERROR_ACK.
+ */
+enum mpd_ack
+mpd_get_server_error(const struct mpd_connection *connection);
+
 /* mpd_clearError
  * clears error
  */
