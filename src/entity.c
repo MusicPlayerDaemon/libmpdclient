@@ -31,8 +31,9 @@
 */
 
 #include <mpd/entity.h>
-
+#include "internal.h"
 #include "str_pool.h"
+
 #include <stdlib.h>
 #include <string.h>
 

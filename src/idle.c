@@ -31,6 +31,7 @@
 */
 
 #include <mpd/idle.h>
+#include "internal.h"
 
 #include <stdio.h>
 #include <string.h>

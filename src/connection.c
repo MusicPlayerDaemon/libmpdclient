@@ -30,6 +30,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include "internal.h"
 #include <mpd/connection.h>
 #include <mpd/idle.h>
 #include "resolver.h"

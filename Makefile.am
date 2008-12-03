@@ -21,6 +21,7 @@ AM_CFLAGS += -Iinclude
 lib_LTLIBRARIES = src/libmpdclient.la
 
 src_libmpdclient_la_SOURCES = \
+	src/internal.h \
 	src/str_pool.c src/str_pool.h \
 	src/resolver.c src/resolver.h \
 	src/connection.c \

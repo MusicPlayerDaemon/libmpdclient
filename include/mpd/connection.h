@@ -94,37 +94,7 @@ enum mpd_error {
  * holds info about connection to mpd
  * use error, and errorStr to detect errors
  */
-struct mpd_connection {
-	/* use this to check the version of mpd */
-	int version[3];
-	/* IMPORTANT, you want to get the error messages from here */
-	char errorStr[512];
-	enum mpd_ack errorCode;
-	int errorAt;
-	/* this will be set to MPD_ERROR_* if there is an error, 0 if not */
-	enum mpd_error error;
-	/* DON'T TOUCH any of the rest of this stuff */
-	int sock;
-	char buffer[16384];
-	size_t buflen;
-	size_t bufstart;
-	int doneProcessing;
-	int listOks;
-	int doneListOk;
-	int commandList;
-	struct mpd_return_element *returnElement;
-	struct timeval timeout;
-	char *request;
-	int idle;
-	void (*notify_cb)(struct mpd_connection *connection,
-			  unsigned flags, void *userdata);
-	void (*startIdle)(struct mpd_connection *connection);
-	void (*stopIdle)(struct mpd_connection *connection);
-	void *userdata;
-#ifdef MPD_GLIB
-        int source_id;
-#endif
-};
+struct mpd_connection;
 
 /* mpd_newConnection
  * use this to open a new connection
