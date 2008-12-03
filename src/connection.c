@@ -361,6 +361,12 @@ mpd_setConnectionTimeout(struct mpd_connection *connection, float timeout)
 					    0.5);
 }
 
+const int *
+mpd_get_server_version(const struct mpd_connection *connection)
+{
+	return connection->version;
+}
+
 /**
  * Attempt to read data from the socket into the input buffer.
  * Returns 0 on success, -1 on error.

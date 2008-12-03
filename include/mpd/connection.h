@@ -170,6 +170,13 @@ mpd_get_server_error(const struct mpd_connection *connection);
  */
 void mpd_clearError(struct mpd_connection *connection);
 
+/**
+ * Returns a three-tuple containing the major, minor and patch version
+ * of the MPD server.
+ */
+const int *
+mpd_get_server_version(const struct mpd_connection *connection);
+
 /*
  * TODO: Following methods should be internal
  */

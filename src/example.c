@@ -60,7 +60,8 @@ int main(int argc, char ** argv) {
 	{
 		int i;
 		for(i=0;i<3;i++) {
-			printf("version[%i]: %i\n",i,conn->version[i]);
+			printf("version[%i]: %i\n",i,
+			       mpd_get_server_version(conn)[i]);
 		}
 	}
 
