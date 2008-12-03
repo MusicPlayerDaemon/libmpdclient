@@ -10,6 +10,7 @@ mpdinclude_HEADERS = \
 	include/mpd/directory.h \
 	include/mpd/entity.h \
 	include/mpd/idle.h \
+	include/mpd/protocol.h \
 	include/mpd/status.h \
 	include/mpd/stats.h \
 	include/mpd/output.h \

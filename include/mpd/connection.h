@@ -33,27 +33,10 @@
 #ifndef MPD_CONNECTION_H
 #define MPD_CONNECTION_H
 
+#include <mpd/protocol.h>
 #include <mpd/return_element.h>
 
 #include <stdlib.h>
-
-enum mpd_ack {
-	MPD_ACK_ERROR_UNK = -1,
-
-	MPD_ACK_ERROR_NOT_LIST = 1,
-	MPD_ACK_ERROR_ARG = 2,
-	MPD_ACK_ERROR_PASSWORD = 3,
-	MPD_ACK_ERROR_PERMISSION = 4,
-	MPD_ACK_ERROR_UNKNOWN_CMD = 5,
-
-	MPD_ACK_ERROR_NO_EXIST = 50,
-	MPD_ACK_ERROR_PLAYLIST_MAX = 51,
-	MPD_ACK_ERROR_SYSTEM = 52,
-	MPD_ACK_ERROR_PLAYLIST_LOAD = 53,
-	MPD_ACK_ERROR_UPDATE_ALREADY = 54,
-	MPD_ACK_ERROR_PLAYER_SYNC = 55,
-	MPD_ACK_ERROR_EXIST = 56,
-};
 
 enum mpd_error {
 	/** no error */
