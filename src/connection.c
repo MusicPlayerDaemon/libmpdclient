@@ -233,9 +233,9 @@ mpd_connect(struct mpd_connection *connection, const char * host, int port)
 static int
 mpd_parseWelcome(struct mpd_connection *connection,
 		 const char *host, int port,
-		 char *output)
+		 const char *output)
 {
-	char * tmp;
+	const char *tmp;
 	char * test;
 	int i;
 
