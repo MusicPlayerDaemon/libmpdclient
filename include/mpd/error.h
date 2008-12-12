@@ -57,6 +57,9 @@ enum mpd_error {
 	/** error sending command */
 	MPD_ERROR_SENDING,
 
+	/** malformed response received from MPD */
+	MPD_ERROR_MALFORMED,
+
 	/** connection closed by mpd */
 	MPD_ERROR_CONNCLOSED,
 

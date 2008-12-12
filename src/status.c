@@ -158,7 +158,7 @@ struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
 	}
 	else if (status->state<0) {
 		strcpy(connection->errorStr,"state not found");
-		connection->error = 1;
+		connection->error = MPD_ERROR_MALFORMED;
 		free(status);
 		return NULL;
 	}

@@ -532,7 +532,7 @@ void mpd_getNextReturnElement(struct mpd_connection *connection)
 	if (strcmp(output, "OK")==0) {
 		if (connection->listOks > 0) {
 			strcpy(connection->errorStr, "expected more list_OK's");
-			connection->error = 1;
+			connection->error = MPD_ERROR_MALFORMED;
 		}
 		connection->listOks = 0;
 		connection->doneProcessing = 1;
@@ -542,7 +542,7 @@ void mpd_getNextReturnElement(struct mpd_connection *connection)
 		if (!connection->listOks) {
 			strcpy(connection->errorStr,
 					"got an unexpected list_OK");
-			connection->error = 1;
+			connection->error = MPD_ERROR_MALFORMED;
 		}
 		else {
 			connection->doneListOk = 1;
@@ -590,7 +590,7 @@ void mpd_getNextReturnElement(struct mpd_connection *connection)
 	else {
 		snprintf(connection->errorStr, sizeof(connection->errorStr),
 			 "error parsing: %s:%s", name, value);
-		connection->error = 1;
+		connection->error = MPD_ERROR_MALFORMED;
 	}
 }
 
