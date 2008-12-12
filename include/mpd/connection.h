@@ -104,8 +104,6 @@ mpd_get_server_version(const struct mpd_connection *connection);
 
 void mpd_getNextReturnElement(struct mpd_connection *connection);
 
-int mpd_recv(struct mpd_connection *connection);
-
 void
 mpd_executeCommand(struct mpd_connection *connection, const char *command);
 

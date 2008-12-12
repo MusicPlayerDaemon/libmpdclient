@@ -33,6 +33,7 @@ src_libmpdclient_la_SOURCES = \
 	src/return_element.c \
 	src/entity.c \
 	src/idle.c \
+	src/socket.c src/socket.h \
 	src/song.c \
 	src/status.c \
 	src/stats.c \

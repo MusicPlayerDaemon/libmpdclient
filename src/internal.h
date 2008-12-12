@@ -31,6 +31,7 @@
 
 #include "ierror.h"
 #include <mpd/connection.h>
+#include "socket.h"
 
 /* mpd_Connection
  * holds info about connection to mpd
@@ -43,16 +44,14 @@ struct mpd_connection {
 	struct mpd_error_info error;
 
 	/* DON'T TOUCH any of the rest of this stuff */
-	int sock;
-	char buffer[16384];
-	size_t buflen;
-	size_t bufstart;
+
+	struct mpd_socket socket;
+
 	int doneProcessing;
 	int listOks;
 	int doneListOk;
 	int commandList;
 	struct mpd_return_element *returnElement;
-	struct timeval timeout;
 	char *request;
 	int idle;
 	void (*notify_cb)(struct mpd_connection *connection,
