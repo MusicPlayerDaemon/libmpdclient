@@ -308,7 +308,7 @@ mpd_sendListCommand(struct mpd_connection *connection, int table,
 	else if (table == MPD_TABLE_ALBUM)
 		st = "album";
 	else {
-		connection->error = 1;
+		connection->error = MPD_ERROR_ARG;
 		strcpy(connection->errorStr,"unknown table for list");
 		return;
 	}
@@ -755,7 +755,7 @@ void mpd_startFieldSearch(struct mpd_connection *connection, int type)
 
 	if (type < 0 || type >= MPD_TAG_NUM_OF_ITEM_TYPES) {
 		strcpy(connection->errorStr, "invalid type specified");
-		connection->error = 1;
+		connection->error = MPD_ERROR_ARG;
 		return;
 	}
 
@@ -785,13 +785,13 @@ mpd_addConstraintSearch(struct mpd_connection *connection,
 
 	if (type < 0 || type >= MPD_TAG_NUM_OF_ITEM_TYPES) {
 		strcpy(connection->errorStr, "invalid type specified");
-		connection->error = 1;
+		connection->error = MPD_ERROR_ARG;
 		return;
 	}
 
 	if (name == NULL) {
 		strcpy(connection->errorStr, "no name specified");
-		connection->error = 1;
+		connection->error = MPD_ERROR_ARG;
 		return;
 	}
 

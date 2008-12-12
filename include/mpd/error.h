@@ -36,6 +36,10 @@ enum mpd_error {
 	/** out of memory */
 	MPD_ERROR_OOM,
 
+	/** a function was called with an unrecognized or invalid
+	    argument */
+	MPD_ERROR_ARG,
+
 	/** a function was called which is not available in the
 	    current state of libmpdclient */
 	MPD_ERROR_STATE,
