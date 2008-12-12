@@ -455,7 +455,7 @@ mpd_executeCommand(struct mpd_connection *connection, const char *command)
 	if (!connection->doneProcessing && !connection->commandList) {
 		strcpy(connection->errorStr,
 		       "not done processing current command");
-		connection->error = 1;
+		connection->error = MPD_ERROR_STATE;
 		return;
 	}
 
@@ -514,7 +514,7 @@ void mpd_getNextReturnElement(struct mpd_connection *connection)
 	if (connection->doneProcessing ||
 	    (connection->listOks && connection->doneListOk)) {
 		strcpy(connection->errorStr,"already done processing current command");
-		connection->error = 1;
+		connection->error = MPD_ERROR_STATE;
 		return;
 	}
 

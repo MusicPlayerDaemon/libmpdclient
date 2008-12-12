@@ -630,7 +630,7 @@ void mpd_sendCommandListBegin(struct mpd_connection *connection)
 {
 	if (connection->commandList) {
 		strcpy(connection->errorStr,"already in command list mode");
-		connection->error = 1;
+		connection->error = MPD_ERROR_STATE;
 		return;
 	}
 	connection->commandList = COMMAND_LIST;
@@ -641,7 +641,7 @@ void mpd_sendCommandListOkBegin(struct mpd_connection *connection)
 {
 	if (connection->commandList) {
 		strcpy(connection->errorStr,"already in command list mode");
-		connection->error = 1;
+		connection->error = MPD_ERROR_STATE;
 		return;
 	}
 	connection->commandList = COMMAND_LIST_OK;
@@ -653,7 +653,7 @@ void mpd_sendCommandListEnd(struct mpd_connection *connection)
 {
 	if (!connection->commandList) {
 		strcpy(connection->errorStr,"not in command list mode");
-		connection->error = 1;
+		connection->error = MPD_ERROR_STATE;
 		return;
 	}
 	connection->commandList = 0;
@@ -711,7 +711,7 @@ void mpd_startSearch(struct mpd_connection *connection, int exact)
 {
 	if (connection->request) {
 		strcpy(connection->errorStr, "search already in progress");
-		connection->error = 1;
+		connection->error = MPD_ERROR_STATE;
 		return;
 	}
 
@@ -723,7 +723,7 @@ void mpd_startStatsSearch(struct mpd_connection *connection)
 {
 	if (connection->request) {
 		strcpy(connection->errorStr, "search already in progress");
-		connection->error = 1;
+		connection->error = MPD_ERROR_STATE;
 		return;
 	}
 
@@ -734,7 +734,7 @@ void mpd_startPlaylistSearch(struct mpd_connection *connection, int exact)
 {
 	if (connection->request) {
 		strcpy(connection->errorStr, "search already in progress");
-		connection->error = 1;
+		connection->error = MPD_ERROR_STATE;
 		return;
 	}
 
@@ -749,7 +749,7 @@ void mpd_startFieldSearch(struct mpd_connection *connection, int type)
 
 	if (connection->request) {
 		strcpy(connection->errorStr, "search already in progress");
-		connection->error = 1;
+		connection->error = MPD_ERROR_STATE;
 		return;
 	}
 
@@ -779,7 +779,7 @@ mpd_addConstraintSearch(struct mpd_connection *connection,
 
 	if (!connection->request) {
 		strcpy(connection->errorStr, "no search in progress");
-		connection->error = 1;
+		connection->error = MPD_ERROR_STATE;
 		return;
 	}
 
@@ -814,7 +814,7 @@ void mpd_commitSearch(struct mpd_connection *connection)
 
 	if (!connection->request) {
 		strcpy(connection->errorStr, "no search in progress");
-		connection->error = 1;
+		connection->error = MPD_ERROR_STATE;
 		return;
 	}
 
