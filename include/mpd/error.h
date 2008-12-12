@@ -33,6 +33,9 @@ enum mpd_error {
 	/** no error */
 	MPD_ERROR_SUCCESS = 0,
 
+	/** out of memory */
+	MPD_ERROR_OOM,
+
 	/** timeout trying to talk to mpd */
 	MPD_ERROR_TIMEOUT = 10,
 
