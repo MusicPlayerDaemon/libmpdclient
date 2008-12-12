@@ -29,6 +29,7 @@
 #ifndef MPD_INTERNAL_H
 #define MPD_INTERNAL_H
 
+#include "ierror.h"
 #include <mpd/connection.h>
 
 /* mpd_Connection
@@ -38,12 +39,9 @@
 struct mpd_connection {
 	/* use this to check the version of mpd */
 	int version[3];
-	/* IMPORTANT, you want to get the error messages from here */
-	char errorStr[512];
-	enum mpd_ack errorCode;
-	int errorAt;
-	/* this will be set to MPD_ERROR_* if there is an error, 0 if not */
-	enum mpd_error error;
+
+	struct mpd_error_info error;
+
 	/* DON'T TOUCH any of the rest of this stuff */
 	int sock;
 	char buffer[16384];

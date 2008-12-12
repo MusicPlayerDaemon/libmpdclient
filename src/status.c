@@ -54,7 +54,7 @@ struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
 	}
 
 	if (!connection->returnElement) mpd_getNextReturnElement(connection);
-	if (connection->error)
+	if (mpd_error_is_defined(&connection->error))
 		return NULL;
 
 	status = malloc(sizeof(struct mpd_status));
@@ -146,19 +146,19 @@ struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
 		}
 
 		mpd_getNextReturnElement(connection);
-		if (connection->error) {
+		if (mpd_error_is_defined(&connection->error)) {
 			free(status);
 			return NULL;
 		}
 	}
 
-	if (connection->error) {
+	if (mpd_error_is_defined(&connection->error)) {
 		free(status);
 		return NULL;
 	}
 	else if (status->state<0) {
-		strcpy(connection->errorStr,"state not found");
-		connection->error = MPD_ERROR_MALFORMED;
+		mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);
+		mpd_error_message(&connection->error, "state not found");
 		free(status);
 		return NULL;
 	}

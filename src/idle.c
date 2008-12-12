@@ -58,7 +58,7 @@ static void mpd_readChanges(struct mpd_connection *connection)
 
 	if (!connection->returnElement) mpd_getNextReturnElement(connection);
 
-	if (connection->error == MPD_ERROR_CONNCLOSED) {
+	if (connection->error.code == MPD_ERROR_CONNCLOSED) {
 		connection->notify_cb (connection, IDLE_DISCONNECT, connection->userdata);
 		return;
 	}

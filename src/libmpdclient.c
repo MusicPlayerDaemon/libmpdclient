@@ -308,8 +308,9 @@ mpd_sendListCommand(struct mpd_connection *connection, int table,
 	else if (table == MPD_TABLE_ALBUM)
 		st = "album";
 	else {
-		connection->error = MPD_ERROR_ARG;
-		strcpy(connection->errorStr,"unknown table for list");
+		mpd_error_code(&connection->error, MPD_ERROR_ARG);
+		mpd_error_message(&connection->error,
+				  "unknown table for list");
 		return;
 	}
 	if (arg1) {
@@ -629,8 +630,9 @@ mpd_sendPasswordCommand(struct mpd_connection *connection, const char *pass)
 void mpd_sendCommandListBegin(struct mpd_connection *connection)
 {
 	if (connection->commandList) {
-		strcpy(connection->errorStr,"already in command list mode");
-		connection->error = MPD_ERROR_STATE;
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "already in command list mode");
 		return;
 	}
 	connection->commandList = COMMAND_LIST;
@@ -640,8 +642,9 @@ void mpd_sendCommandListBegin(struct mpd_connection *connection)
 void mpd_sendCommandListOkBegin(struct mpd_connection *connection)
 {
 	if (connection->commandList) {
-		strcpy(connection->errorStr,"already in command list mode");
-		connection->error = MPD_ERROR_STATE;
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "already in command list mode");
 		return;
 	}
 	connection->commandList = COMMAND_LIST_OK;
@@ -652,8 +655,9 @@ void mpd_sendCommandListOkBegin(struct mpd_connection *connection)
 void mpd_sendCommandListEnd(struct mpd_connection *connection)
 {
 	if (!connection->commandList) {
-		strcpy(connection->errorStr,"not in command list mode");
-		connection->error = MPD_ERROR_STATE;
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "not in command list mode");
 		return;
 	}
 	connection->commandList = 0;
@@ -710,8 +714,9 @@ char * mpd_getNextTagType(struct mpd_connection *connection)
 void mpd_startSearch(struct mpd_connection *connection, int exact)
 {
 	if (connection->request) {
-		strcpy(connection->errorStr, "search already in progress");
-		connection->error = MPD_ERROR_STATE;
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "search already in progress");
 		return;
 	}
 
@@ -722,8 +727,9 @@ void mpd_startSearch(struct mpd_connection *connection, int exact)
 void mpd_startStatsSearch(struct mpd_connection *connection)
 {
 	if (connection->request) {
-		strcpy(connection->errorStr, "search already in progress");
-		connection->error = MPD_ERROR_STATE;
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "search already in progress");
 		return;
 	}
 
@@ -733,8 +739,9 @@ void mpd_startStatsSearch(struct mpd_connection *connection)
 void mpd_startPlaylistSearch(struct mpd_connection *connection, int exact)
 {
 	if (connection->request) {
-		strcpy(connection->errorStr, "search already in progress");
-		connection->error = MPD_ERROR_STATE;
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "search already in progress");
 		return;
 	}
 
@@ -748,14 +755,16 @@ void mpd_startFieldSearch(struct mpd_connection *connection, int type)
 	int len;
 
 	if (connection->request) {
-		strcpy(connection->errorStr, "search already in progress");
-		connection->error = MPD_ERROR_STATE;
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "search already in progress");
 		return;
 	}
 
 	if (type < 0 || type >= MPD_TAG_NUM_OF_ITEM_TYPES) {
-		strcpy(connection->errorStr, "invalid type specified");
-		connection->error = MPD_ERROR_ARG;
+		mpd_error_code(&connection->error, MPD_ERROR_ARG);
+		mpd_error_message(&connection->error,
+				  "invalid type specified");
 		return;
 	}
 
@@ -778,20 +787,22 @@ mpd_addConstraintSearch(struct mpd_connection *connection,
 	char *string;
 
 	if (!connection->request) {
-		strcpy(connection->errorStr, "no search in progress");
-		connection->error = MPD_ERROR_STATE;
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "no search in progress");
 		return;
 	}
 
 	if (type < 0 || type >= MPD_TAG_NUM_OF_ITEM_TYPES) {
-		strcpy(connection->errorStr, "invalid type specified");
-		connection->error = MPD_ERROR_ARG;
+		mpd_error_code(&connection->error, MPD_ERROR_ARG);
+		mpd_error_message(&connection->error,
+				  "invalid type specified");
 		return;
 	}
 
 	if (name == NULL) {
-		strcpy(connection->errorStr, "no name specified");
-		connection->error = MPD_ERROR_ARG;
+		mpd_error_code(&connection->error, MPD_ERROR_ARG);
+		mpd_error_message(&connection->error, "no name specified");
 		return;
 	}
 
@@ -813,8 +824,9 @@ void mpd_commitSearch(struct mpd_connection *connection)
 	int len;
 
 	if (!connection->request) {
-		strcpy(connection->errorStr, "no search in progress");
-		connection->error = MPD_ERROR_STATE;
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "no search in progress");
 		return;
 	}
 

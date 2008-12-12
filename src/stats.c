@@ -54,7 +54,7 @@ struct mpd_stats * mpd_getStats(struct mpd_connection * connection) {
 	}
 
 	if (!connection->returnElement) mpd_getNextReturnElement(connection);
-	if (connection->error)
+	if (mpd_error_is_defined(&connection->error))
 		return NULL;
 
 	stats = malloc(sizeof(struct mpd_stats));
@@ -91,13 +91,13 @@ struct mpd_stats * mpd_getStats(struct mpd_connection * connection) {
 		}
 
 		mpd_getNextReturnElement(connection);
-		if (connection->error) {
+		if (mpd_error_is_defined(&connection->error)) {
 			free(stats);
 			return NULL;
 		}
 	}
 
-	if (connection->error) {
+	if (mpd_error_is_defined(&connection->error)) {
 		free(stats);
 		return NULL;
 	}
@@ -121,7 +121,7 @@ struct mpd_search_stats * mpd_getSearchStats(struct mpd_connection * connection)
 
 	if (!connection->returnElement) mpd_getNextReturnElement(connection);
 
-	if (connection->error)
+	if (mpd_error_is_defined(&connection->error))
 		return NULL;
 
 	stats = malloc(sizeof(struct mpd_search_stats));
@@ -138,13 +138,13 @@ struct mpd_search_stats * mpd_getSearchStats(struct mpd_connection * connection)
 		}
 
 		mpd_getNextReturnElement(connection);
-		if (connection->error) {
+		if (mpd_error_is_defined(&connection->error)) {
 			free(stats);
 			return NULL;
 		}
 	}
 
-	if (connection->error) {
+	if (mpd_error_is_defined(&connection->error)) {
 		free(stats);
 		return NULL;
 	}

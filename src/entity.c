@@ -111,8 +111,9 @@ mpd_getNextInfoEntity(struct mpd_connection *connection)
 			entity->info.song->pos = atoi(connection->returnElement->value);
 		}
 		else {
-			connection->error = MPD_ERROR_MALFORMED;
-			strcpy(connection->errorStr,"problem parsing song info");
+			mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);
+			mpd_error_message(&connection->error,
+					  "problem parsing song info");
 			return NULL;
 		}
 	}

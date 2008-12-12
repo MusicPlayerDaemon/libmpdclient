@@ -59,7 +59,8 @@ mpd_getNextOutput(struct mpd_connection *connection)
 		return NULL;
 	}
 
-	if (connection->error) return NULL;
+	if (mpd_error_is_defined(&connection->error))
+		return NULL;
 
 	output = malloc(sizeof(*output));
 	output->id = -10;
@@ -82,7 +83,7 @@ mpd_getNextOutput(struct mpd_connection *connection)
 		}
 
 		mpd_getNextReturnElement(connection);
-		if (connection->error) {
+		if (mpd_error_is_defined(&connection->error)) {
 			free(output);
 			return NULL;
 		}
