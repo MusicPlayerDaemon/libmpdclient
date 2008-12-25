@@ -19,7 +19,7 @@ mpdinclude_HEADERS = \
 	include/mpd/return_element.h \
 	include/mpd/song.h
 
-AM_CFLAGS += -Iinclude
+AM_CPPFLAGS += -Iinclude
 
 lib_LTLIBRARIES = src/libmpdclient.la
 
