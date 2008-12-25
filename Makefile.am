@@ -47,3 +47,19 @@ noinst_PROGRAMS = src/example
 
 src_example_SOURCES = src/example.c
 src_example_LDADD = src/libmpdclient.la
+
+
+#
+# sparse
+#
+
+SPARSE = sparse
+SPARSE_FLAGS =
+SPARSE_CPPFLAGS = $(DEFAULT_INCLUDES) \
+	-I$(shell $(CC) -print-file-name=include) \
+	-I$(shell $(CC) -print-file-name=include-fixed)
+sparse-check:
+	for i in $(src_libmpdclient_la_SOURCES); \
+	do \
+		$(SPARSE) -I. $(CFLAGS) $(AM_CPPFLAGS) $(SPARSE_FLAGS) $(SPARSE_CPPFLAGS) $(srcdir)/$$i || exit; \
+	done
