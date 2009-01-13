@@ -34,6 +34,7 @@
 #define MPD_CLIENT_H
 
 #include <mpd/connection.h>
+#include <mpd/send.h>
 #include <mpd/song.h>
 #include <mpd/directory.h>
 
