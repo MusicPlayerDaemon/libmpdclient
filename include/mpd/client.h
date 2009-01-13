@@ -35,6 +35,7 @@
 
 #include <mpd/connection.h>
 #include <mpd/send.h>
+#include <mpd/command.h>
 #include <mpd/song.h>
 #include <mpd/directory.h>
 

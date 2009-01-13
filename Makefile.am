@@ -7,6 +7,7 @@ EXTRA_DIST = libmpdclient.ld
 mpdincludedir = $(includedir)/mpd
 mpdinclude_HEADERS = \
 	include/mpd/client.h \
+	include/mpd/command.h \
 	include/mpd/connection.h \
 	include/mpd/directory.h \
 	include/mpd/entity.h \
@@ -29,6 +30,7 @@ src_libmpdclient_la_SOURCES = \
 	src/str_pool.c src/str_pool.h \
 	src/ierror.c src/ierror.h \
 	src/resolver.c src/resolver.h \
+	src/command.c \
 	src/connection.c \
 	src/directory.c \
 	src/output.c \
