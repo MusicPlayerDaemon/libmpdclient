@@ -71,7 +71,7 @@ int main(int argc, char ** argv) {
 
 		mpd_sendCommandListOkBegin(conn);
 		mpd_sendStatusCommand(conn);
-		mpd_sendCurrentSongCommand(conn);
+		mpd_send_currentsong(conn);
 		mpd_sendCommandListEnd(conn);
 
 		if((status = mpd_getStatus(conn))==NULL) {
@@ -160,7 +160,7 @@ int main(int argc, char ** argv) {
 	else if(argc==3 && strcmp(argv[1],"lsinfo")==0) {
 		mpd_InfoEntity * entity;
 
-		mpd_sendLsInfoCommand(conn,argv[2]);
+		mpd_send_lsinfo(conn,argv[2]);
 		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
 			fprintf(stderr,"%s\n", mpd_get_error_string(conn));
 			mpd_closeConnection(conn);
@@ -216,7 +216,7 @@ int main(int argc, char ** argv) {
 	else if(argc==2 && strcmp(argv[1],"artists")==0) {
 		char * artist;
 	
-		mpd_sendListCommand(conn,MPD_TABLE_ARTIST,NULL);
+		mpd_send_list_artist(conn);
 		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
 			fprintf(stderr,"%s\n", mpd_get_error_string(conn));
 			mpd_closeConnection(conn);
