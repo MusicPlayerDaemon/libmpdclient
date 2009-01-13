@@ -148,79 +148,12 @@ char * mpd_getNextAlbum(struct mpd_connection *connection);
 
 char * mpd_getNextTag(struct mpd_connection *connection, int type);
 
-/* list artist or albums by artist, arg1 should be set to the artist if
- * listing albums by a artist, otherwise NULL for listing all artists or albums
- */
-void mpd_sendListCommand(struct mpd_connection *connection, int table,
-		const char * arg1);
-
 /* SIMPLE COMMANDS */
-
-void mpd_sendAddCommand(struct mpd_connection *connection, const char * file);
 
 int mpd_sendAddIdCommand(struct mpd_connection *connection, const char *file);
 
-void mpd_sendDeleteCommand(struct mpd_connection *connection, int songNum);
-
-void mpd_sendDeleteIdCommand(struct mpd_connection *connection, int songNum);
-
-void mpd_sendSaveCommand(struct mpd_connection *connection, const char * name);
-
-void mpd_sendLoadCommand(struct mpd_connection *connection, const char * name);
-
-void mpd_sendRmCommand(struct mpd_connection *connection, const char * name);
-
-void mpd_sendRenameCommand(struct mpd_connection *connection, const char *from,
-                           const char *to);
-
-void mpd_sendShuffleCommand(struct mpd_connection *connection);
-
-void mpd_sendClearCommand(struct mpd_connection *connection);
-
-/* use this to start playing at the beginning, useful when in random mode */
-#define MPD_PLAY_AT_BEGINNING	-1
-
-void mpd_sendPlayCommand(struct mpd_connection *connection, int songNum);
-
-void mpd_sendPlayIdCommand(struct mpd_connection *connection, int songNum);
-
-void mpd_sendStopCommand(struct mpd_connection *connection);
-
-void mpd_sendPauseCommand(struct mpd_connection *connection, int pauseMode);
-
-void mpd_sendNextCommand(struct mpd_connection *connection);
-
-void mpd_sendPrevCommand(struct mpd_connection *connection);
-
-void mpd_sendMoveCommand(struct mpd_connection *connection, int from, int to);
-
-void mpd_sendMoveIdCommand(struct mpd_connection *connection, int from, int to);
-
-void mpd_sendSwapCommand(struct mpd_connection *connection, int song1, int song2);
-
-void mpd_sendSwapIdCommand(struct mpd_connection *connection, int song1, int song2);
-
-void mpd_sendSeekCommand(struct mpd_connection *connection, int song, int time);
-
-void mpd_sendSeekIdCommand(struct mpd_connection *connection, int song, int time);
-
-void mpd_sendRepeatCommand(struct mpd_connection *connection, int repeatMode);
-
-void mpd_sendRandomCommand(struct mpd_connection *connection, int randomMode);
-
-void mpd_sendSetvolCommand(struct mpd_connection *connection, int volumeChange);
-
-/* WARNING: don't use volume command, its depreacted */
-void mpd_sendVolumeCommand(struct mpd_connection *connection, int volumeChange);
-
-void mpd_sendCrossfadeCommand(struct mpd_connection *connection, int seconds);
-
-void mpd_sendUpdateCommand(struct mpd_connection *connection, const char *path);
-
 /* returns the update job id, call this after a update command*/
 int mpd_getUpdateId(struct mpd_connection *connection);
-
-void mpd_sendPasswordCommand(struct mpd_connection *connection, const char * pass);
 
 /* after executing a command, when your done with it to get its status
  * (you want to check connection->error for an error)
@@ -242,31 +175,13 @@ int mpd_nextListOkCommand(struct mpd_connection *connection);
 /**
  * @param connection a #mpd_Connection
  *
- * Queries mpd for the allowed commands
- */
-void mpd_sendCommandsCommand(struct mpd_connection *connection);
-
-/**
- * @param connection a #mpd_Connection
- *
- * Queries mpd for the not allowed commands
- */
-void mpd_sendNotCommandsCommand(struct mpd_connection *connection);
-
-/**
- * @param connection a #mpd_Connection
- *
  * returns the next supported command.
  *
  * @returns a string, needs to be free'ed
  */
 char *mpd_getNextCommand(struct mpd_connection *connection);
 
-void mpd_sendUrlHandlersCommand(struct mpd_connection *connection);
-
 char *mpd_getNextHandler(struct mpd_connection *connection);
-
-void mpd_sendTagTypesCommand(struct mpd_connection *connection);
 
 char *mpd_getNextTagType(struct mpd_connection *connection);
 
