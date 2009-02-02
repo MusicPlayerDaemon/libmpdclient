@@ -39,6 +39,7 @@
 #include <mpd/song.h>
 #include <mpd/directory.h>
 #include <mpd/tag.h>
+#include <mpd/pair.h>
 
 #ifdef WIN32
 #  define __W32API_USE_DLLIMPORT__ 1

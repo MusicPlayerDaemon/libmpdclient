@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2008 The Music Player Daemon Project
+   (c) 2003-2009 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -30,22 +30,18 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <mpd/return_element.h>
-#include "str_pool.h"
+#ifndef LIBMPDCLIENT_PAIR_H
+#define LIBMPDCLIENT_PAIR_H
+
+/* internal stuff don't touch this struct */
+struct mpd_return_element {
+	char * name;
+	char * value;
+};
 
 struct mpd_return_element *
-mpd_newReturnElement(const char *name, const char *value)
-{
-	struct mpd_return_element *ret = malloc(sizeof(*ret));
+mpd_newReturnElement(const char *name, const char *value);
 
-	ret->name = str_pool_get(name);
-	ret->value = str_pool_get(value);
+void mpd_freeReturnElement(struct mpd_return_element *re);
 
-	return ret;
-}
-
-void mpd_freeReturnElement(struct mpd_return_element *re) {
-	str_pool_put(re->name);
-	str_pool_put(re->value);
-	free(re);
-}
+#endif

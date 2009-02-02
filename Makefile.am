@@ -19,7 +19,7 @@ mpdinclude_HEADERS = \
 	include/mpd/stats.h \
 	include/mpd/tag.h \
 	include/mpd/output.h \
-	include/mpd/return_element.h \
+	include/mpd/pair.h \
 	include/mpd/song.h
 
 AM_CPPFLAGS += -I$(srcdir)/include
@@ -35,7 +35,7 @@ src_libmpdclient_la_SOURCES = \
 	src/connection.c \
 	src/directory.c \
 	src/output.c \
-	src/return_element.c \
+	src/pair.c \
 	src/entity.c \
 	src/idle.c \
 	src/send.c \

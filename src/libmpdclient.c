@@ -31,7 +31,6 @@
 */
 
 #include <mpd/client.h>
-#include <mpd/return_element.h>
 #include "internal.h"
 #include "resolver.h"
 #include "str_pool.h"

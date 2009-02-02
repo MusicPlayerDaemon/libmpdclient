@@ -32,6 +32,7 @@
 
 #include <mpd/output.h>
 #include <mpd/connection.h>
+#include <mpd/pair.h>
 #include "internal.h"
 
 #include <limits.h>

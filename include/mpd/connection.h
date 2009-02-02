@@ -35,7 +35,6 @@
 
 #include <mpd/protocol.h>
 #include <mpd/error.h>
-#include <mpd/return_element.h>
 
 #include <stdlib.h>
 

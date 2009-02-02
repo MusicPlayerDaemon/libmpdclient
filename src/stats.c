@@ -31,6 +31,7 @@
 */
 
 #include <mpd/stats.h>
+#include <mpd/pair.h>
 #include "internal.h"
 
 #include <stdlib.h>

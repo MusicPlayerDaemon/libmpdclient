@@ -33,6 +33,7 @@
 #include "internal.h"
 #include <mpd/connection.h>
 #include <mpd/idle.h>
+#include <mpd/pair.h>
 #include "resolver.h"
 
 #include <assert.h>
