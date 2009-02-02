@@ -68,19 +68,21 @@ mpd_getNextOutput(struct mpd_connection *connection)
 	output->name = NULL;
 	output->enabled = 0;
 
-	if (!connection->returnElement) mpd_getNextReturnElement(connection);
+	if (connection->pair == NULL)
+		mpd_getNextReturnElement(connection);
 
-	while (connection->returnElement) {
-		struct mpd_return_element *re = connection->returnElement;
-		if (strcmp(re->name,"outputid")==0) {
+	while (connection->pair != NULL) {
+		const struct mpd_pair *pair = connection->pair;
+
+		if (strcmp(pair->name, "outputid") == 0) {
 			if (output!=NULL && output->id>=0) return output;
-			output->id = atoi(re->value);
+			output->id = atoi(pair->value);
 		}
-		else if (strcmp(re->name,"outputname")==0) {
-			output->name = strdup(re->value);
+		else if (strcmp(pair->name, "outputname") == 0) {
+			output->name = strdup(pair->value);
 		}
-		else if (strcmp(re->name,"outputenabled")==0) {
-			output->enabled = atoi(re->value);
+		else if (strcmp(pair->name, "outputenabled") == 0) {
+			output->enabled = atoi(pair->value);
 		}
 
 		mpd_getNextReturnElement(connection);

@@ -54,7 +54,9 @@ struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
 		return NULL;
 	}
 
-	if (!connection->returnElement) mpd_getNextReturnElement(connection);
+	if (connection->pair == NULL)
+		mpd_getNextReturnElement(connection);
+
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
 
@@ -77,68 +79,69 @@ struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
 	status->error = NULL;
 	status->updatingDb = 0;
 
-	while (connection->returnElement) {
-		struct mpd_return_element * re = connection->returnElement;
-		if (strcmp(re->name,"volume")==0) {
-			status->volume = atoi(re->value);
+	while (connection->pair != NULL) {
+		const struct mpd_pair *pair = connection->pair;
+
+		if (strcmp(pair->name, "volume") == 0) {
+			status->volume = atoi(pair->value);
 		}
-		else if (strcmp(re->name,"repeat")==0) {
-			status->repeat = atoi(re->value);
+		else if (strcmp(pair->name, "repeat") == 0) {
+			status->repeat = atoi(pair->value);
 		}
-		else if (strcmp(re->name,"random")==0) {
-			status->random = atoi(re->value);
+		else if (strcmp(pair->name, "random") == 0) {
+			status->random = atoi(pair->value);
 		}
-		else if (strcmp(re->name,"playlist")==0) {
-			status->playlist = strtol(re->value,NULL,10);
+		else if (strcmp(pair->name, "playlist") == 0) {
+			status->playlist = strtol(pair->value,NULL,10);
 		}
-		else if (strcmp(re->name,"playlistlength")==0) {
-			status->playlistLength = atoi(re->value);
+		else if (strcmp(pair->name, "playlistlength") == 0) {
+			status->playlistLength = atoi(pair->value);
 		}
-		else if (strcmp(re->name,"bitrate")==0) {
-			status->bitRate = atoi(re->value);
+		else if (strcmp(pair->name, "bitrate") == 0) {
+			status->bitRate = atoi(pair->value);
 		}
-		else if (strcmp(re->name,"state")==0) {
-			if (strcmp(re->value,"play")==0) {
+		else if (strcmp(pair->name, "state") == 0) {
+			if (strcmp(pair->value,"play") == 0) {
 				status->state = MPD_STATUS_STATE_PLAY;
 			}
-			else if (strcmp(re->value,"stop")==0) {
+			else if (strcmp(pair->value,"stop") == 0) {
 				status->state = MPD_STATUS_STATE_STOP;
 			}
-			else if (strcmp(re->value,"pause")==0) {
+			else if (strcmp(pair->value,"pause") == 0) {
 				status->state = MPD_STATUS_STATE_PAUSE;
 			}
 			else {
 				status->state = MPD_STATUS_STATE_UNKNOWN;
 			}
 		}
-		else if (strcmp(re->name,"song")==0) {
-			status->song = atoi(re->value);
+		else if (strcmp(pair->name, "song") == 0) {
+			status->song = atoi(pair->value);
 		}
-		else if (strcmp(re->name,"songid")==0) {
-			status->songid = atoi(re->value);
+		else if (strcmp(pair->name, "songid") == 0) {
+			status->songid = atoi(pair->value);
 		}
-		else if (strcmp(re->name,"time")==0) {
-			char * tok = strchr(re->value,':');
+		else if (strcmp(pair->name, "time") == 0) {
+			char * tok = strchr(pair->value,':');
 			/* the second strchr below is a safety check */
 			if (tok && (strchr(tok,0) > (tok+1))) {
 				/* atoi stops at the first non-[0-9] char: */
-				status->elapsedTime = atoi(re->value);
+				status->elapsedTime = atoi(pair->value);
 				status->totalTime = atoi(tok+1);
 			}
 		}
-		else if (strcmp(re->name,"error")==0) {
-			status->error = strdup(re->value);
+		else if (strcmp(pair->name, "error") == 0) {
+			status->error = strdup(pair->value);
 		}
-		else if (strcmp(re->name,"xfade")==0) {
-			status->crossfade = atoi(re->value);
+		else if (strcmp(pair->name, "xfade") == 0) {
+			status->crossfade = atoi(pair->value);
 		}
-		else if (strcmp(re->name,"updating_db")==0) {
-			status->updatingDb = atoi(re->value);
+		else if (strcmp(pair->name, "updating_db") == 0) {
+			status->updatingDb = atoi(pair->value);
 		}
-		else if (strcmp(re->name,"audio")==0) {
-			char * tok = strchr(re->value,':');
+		else if (strcmp(pair->name, "audio") == 0) {
+			char * tok = strchr(pair->value,':');
 			if (tok && (strchr(tok,0) > (tok+1))) {
-				status->sampleRate = atoi(re->value);
+				status->sampleRate = atoi(pair->value);
 				status->bits = atoi(++tok);
 				tok = strchr(tok,':');
 				if (tok && (strchr(tok,0) > (tok+1)))

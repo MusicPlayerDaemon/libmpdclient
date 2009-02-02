@@ -146,10 +146,12 @@ mpd_getNextReturnElementNamed(struct mpd_connection *connection,
 	}
 
 	mpd_getNextReturnElement(connection);
-	while (connection->returnElement) {
-		struct mpd_return_element *re = connection->returnElement;
+	while (connection->pair != NULL) {
+		const struct mpd_pair *pair = connection->pair;
 
-		if (strcmp(re->name,name)==0) return strdup(re->value);
+		if (strcmp(pair->name, name) == 0)
+			return strdup(pair->value);
+
 		mpd_getNextReturnElement(connection);
 	}
 

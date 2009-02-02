@@ -35,10 +35,10 @@
 
 #include <stdlib.h>
 
-struct mpd_return_element *
-mpd_newReturnElement(const char *name, const char *value)
+struct mpd_pair *
+mpd_pair_new(const char *name, const char *value)
 {
-	struct mpd_return_element *ret = malloc(sizeof(*ret));
+	struct mpd_pair *ret = malloc(sizeof(*ret));
 
 	ret->name = str_pool_get(name);
 	ret->value = str_pool_get(value);
@@ -46,7 +46,8 @@ mpd_newReturnElement(const char *name, const char *value)
 	return ret;
 }
 
-void mpd_freeReturnElement(struct mpd_return_element *re) {
+void
+mpd_pair_free(struct mpd_pair *re) {
 	str_pool_put(re->name);
 	str_pool_put(re->value);
 	free(re);

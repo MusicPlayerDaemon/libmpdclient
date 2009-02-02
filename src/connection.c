@@ -154,7 +154,7 @@ mpd_newConnection(const char *host, int port, float timeout)
 	connection->commandList = 0;
 	connection->listOks = 0;
 	connection->doneListOk = 0;
-	connection->returnElement = NULL;
+	connection->pair = NULL;
 	connection->request = NULL;
 #ifdef MPD_GLIB
 	connection->source_id = 0;
@@ -219,7 +219,9 @@ void mpd_closeConnection(struct mpd_connection *connection)
 {
 	mpd_socket_deinit(&connection->socket);
 
-	if (connection->returnElement) free(connection->returnElement);
+	if (connection->pair != NULL)
+		free(connection->pair);
+
 	if (connection->request) free(connection->request);
 
 	mpd_error_deinit(&connection->error);
@@ -287,8 +289,10 @@ void mpd_getNextReturnElement(struct mpd_connection *connection)
 	char * tok = NULL;
 	int pos;
 
-	if (connection->returnElement) mpd_freeReturnElement(connection->returnElement);
-	connection->returnElement = NULL;
+	if (connection->pair != NULL) {
+		mpd_pair_free(connection->pair);
+		connection->pair = NULL;
+	}
 
 	if (connection->doneProcessing ||
 	    (connection->listOks && connection->doneListOk)) {
@@ -356,7 +360,7 @@ void mpd_getNextReturnElement(struct mpd_connection *connection)
 	name[pos] = '\0';
 
 	if (value[0]==' ') {
-		connection->returnElement = mpd_newReturnElement(name,&(value[1]));
+		connection->pair = mpd_pair_new(name, value + 1);
 	}
 	else {
 		mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);

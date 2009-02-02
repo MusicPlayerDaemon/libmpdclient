@@ -79,36 +79,36 @@ mpd_getNextInfoEntity(struct mpd_connection *connection)
 		return NULL;
 	}
 
-	if (!connection->returnElement) mpd_getNextReturnElement(connection);
+	if (connection->pair == NULL)
+		mpd_getNextReturnElement(connection);
 
-	if (connection->returnElement) {
-		if (strcmp(connection->returnElement->name,"file")==0) {
+	if (connection->pair != NULL) {
+		if (strcmp(connection->pair->name, "file") == 0) {
 			entity = mpd_newInfoEntity();
 			entity->type = MPD_INFO_ENTITY_TYPE_SONG;
 			entity->info.song = mpd_newSong();
 			entity->info.song->file =
-				str_pool_dup(connection->returnElement->value);
+				str_pool_dup(connection->pair->value);
 		}
-		else if (strcmp(connection->returnElement->name,
-					"directory")==0) {
+		else if (strcmp(connection->pair->name, "directory") == 0) {
 			entity = mpd_newInfoEntity();
 			entity->type = MPD_INFO_ENTITY_TYPE_DIRECTORY;
 			entity->info.directory = mpd_newDirectory();
 			entity->info.directory->path =
-				str_pool_dup(connection->returnElement->value);
+				str_pool_dup(connection->pair->value);
 		}
-		else if (strcmp(connection->returnElement->name,"playlist")==0) {
+		else if (strcmp(connection->pair->name, "playlist") == 0) {
 			entity = mpd_newInfoEntity();
 			entity->type = MPD_INFO_ENTITY_TYPE_PLAYLISTFILE;
 			entity->info.playlistFile = mpd_newPlaylistFile();
 			entity->info.playlistFile->path =
-				str_pool_dup(connection->returnElement->value);
+				str_pool_dup(connection->pair->value);
 		}
-		else if (strcmp(connection->returnElement->name, "cpos") == 0){
+		else if (strcmp(connection->pair->name, "cpos") == 0){
 			entity = mpd_newInfoEntity();
 			entity->type = MPD_INFO_ENTITY_TYPE_SONG;
 			entity->info.song = mpd_newSong();
-			entity->info.song->pos = atoi(connection->returnElement->value);
+			entity->info.song->pos = atoi(connection->pair->value);
 		}
 		else {
 			mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);
@@ -120,71 +120,72 @@ mpd_getNextInfoEntity(struct mpd_connection *connection)
 	else return NULL;
 
 	mpd_getNextReturnElement(connection);
-	while (connection->returnElement) {
-		struct mpd_return_element *re = connection->returnElement;
+	while (connection->pair != NULL) {
+		const struct mpd_pair *pair = connection->pair;
 
-		if (strcmp(re->name,"file")==0) return entity;
-		else if (strcmp(re->name,"directory")==0) return entity;
-		else if (strcmp(re->name,"playlist")==0) return entity;
-		else if (strcmp(re->name,"cpos")==0) return entity;
+		if (strcmp(pair->name, "file") == 0 ||
+		    strcmp(pair->name, "directory") == 0 ||
+		    strcmp(pair->name, "playlist") == 0 ||
+		    strcmp(pair->name, "cpos") == 0)
+			return entity;
 
 		if (entity->type == MPD_INFO_ENTITY_TYPE_SONG &&
-				strlen(re->value)) {
+		    pair->value[0] != 0) {
 			if (!entity->info.song->artist &&
-					strcmp(re->name,"Artist")==0) {
-				entity->info.song->artist = str_pool_dup(re->value);
+			    strcmp(pair->name,"Artist") == 0) {
+				entity->info.song->artist = str_pool_dup(pair->value);
 			}
 			else if (!entity->info.song->album &&
-					strcmp(re->name,"Album")==0) {
-				entity->info.song->album = str_pool_dup(re->value);
+				 strcmp(pair->name,"Album") == 0) {
+				entity->info.song->album = str_pool_dup(pair->value);
 			}
 			else if (!entity->info.song->title &&
-					strcmp(re->name,"Title")==0) {
-				entity->info.song->title = str_pool_dup(re->value);
+				 strcmp(pair->name,"Title") == 0) {
+				entity->info.song->title = str_pool_dup(pair->value);
 			}
 			else if (!entity->info.song->track &&
-					strcmp(re->name,"Track")==0) {
-				entity->info.song->track = str_pool_dup(re->value);
+				 strcmp(pair->name,"Track") == 0) {
+				entity->info.song->track = str_pool_dup(pair->value);
 			}
 			else if (!entity->info.song->name &&
-					strcmp(re->name,"Name")==0) {
-				entity->info.song->name = str_pool_dup(re->value);
+				 strcmp(pair->name,"Name") == 0) {
+				entity->info.song->name = str_pool_dup(pair->value);
 			}
 			else if (entity->info.song->time==MPD_SONG_NO_TIME &&
-					strcmp(re->name,"Time")==0) {
-				entity->info.song->time = atoi(re->value);
+				 strcmp(pair->name,"Time") == 0) {
+				entity->info.song->time = atoi(pair->value);
 			}
 			else if (entity->info.song->pos==MPD_SONG_NO_NUM &&
-					strcmp(re->name,"Pos")==0) {
-				entity->info.song->pos = atoi(re->value);
+				 strcmp(pair->name,"Pos") == 0) {
+				entity->info.song->pos = atoi(pair->value);
 			}
 			else if (entity->info.song->id==MPD_SONG_NO_ID &&
-					strcmp(re->name,"Id")==0) {
-				entity->info.song->id = atoi(re->value);
+				 strcmp(pair->name,"Id") == 0) {
+				entity->info.song->id = atoi(pair->value);
 			}
 			else if (!entity->info.song->date &&
-					strcmp(re->name, "Date") == 0) {
-				entity->info.song->date = str_pool_dup(re->value);
+				 strcmp(pair->name, "Date") == 0) {
+				entity->info.song->date = str_pool_dup(pair->value);
 			}
 			else if (!entity->info.song->genre &&
-					strcmp(re->name, "Genre") == 0) {
-				entity->info.song->genre = str_pool_dup(re->value);
+				 strcmp(pair->name, "Genre") == 0) {
+				entity->info.song->genre = str_pool_dup(pair->value);
 			}
 			else if (!entity->info.song->composer &&
-					strcmp(re->name, "Composer") == 0) {
-				entity->info.song->composer = str_pool_dup(re->value);
+				 strcmp(pair->name, "Composer") == 0) {
+				entity->info.song->composer = str_pool_dup(pair->value);
 			}
 			else if (!entity->info.song->performer &&
-					strcmp(re->name, "Performer") == 0) {
-				entity->info.song->performer = str_pool_dup(re->value);
+				 strcmp(pair->name, "Performer") == 0) {
+				entity->info.song->performer = str_pool_dup(pair->value);
 			}
 			else if (!entity->info.song->disc &&
-					strcmp(re->name, "Disc") == 0) {
-				entity->info.song->disc = str_pool_dup(re->value);
+				 strcmp(pair->name, "Disc") == 0) {
+				entity->info.song->disc = str_pool_dup(pair->value);
 			}
 			else if (!entity->info.song->comment &&
-					strcmp(re->name, "Comment") == 0) {
-				entity->info.song->comment = str_pool_dup(re->value);
+				 strcmp(pair->name, "Comment") == 0) {
+				entity->info.song->comment = str_pool_dup(pair->value);
 			}
 		}
 		else if (entity->type == MPD_INFO_ENTITY_TYPE_DIRECTORY) {

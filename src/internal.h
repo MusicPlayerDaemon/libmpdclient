@@ -51,7 +51,7 @@ struct mpd_connection {
 	int listOks;
 	int doneListOk;
 	int commandList;
-	struct mpd_return_element *returnElement;
+	struct mpd_pair *pair;
 	char *request;
 	int idle;
 	void (*notify_cb)(struct mpd_connection *connection,

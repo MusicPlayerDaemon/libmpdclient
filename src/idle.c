@@ -55,20 +55,22 @@ static void mpd_readChanges(struct mpd_connection *connection)
 {
 	unsigned i;
 	unsigned flags = 0;
-	struct mpd_return_element *re;
 
-	if (!connection->returnElement) mpd_getNextReturnElement(connection);
+	if (connection->pair == NULL)
+		mpd_getNextReturnElement(connection);
 
 	if (connection->error.code == MPD_ERROR_CONNCLOSED) {
 		connection->notify_cb (connection, IDLE_DISCONNECT, connection->userdata);
 		return;
 	}
 
-	while (connection->returnElement) {
-		re = connection->returnElement;
-		if (re->name &&!strncmp (re->name, "changed", strlen ("changed"))) {
+	while (connection->pair != NULL) {
+		const struct mpd_pair *pair = connection->pair;
+
+		if (pair->name != NULL &&
+		    strncmp(pair->name, "changed", strlen("changed")) == 0) {
 			for (i = 0; idle_names[i]; ++i) {
-				if (!strcmp (re->value, idle_names[i])) {
+				if (strcmp(pair->value, idle_names[i]) == 0) {
 					flags |= (1 << i);
 				}
 			}

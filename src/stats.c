@@ -54,7 +54,9 @@ struct mpd_stats * mpd_getStats(struct mpd_connection * connection) {
 		return NULL;
 	}
 
-	if (!connection->returnElement) mpd_getNextReturnElement(connection);
+	if (connection->pair == NULL)
+		mpd_getNextReturnElement(connection);
+
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
 
@@ -67,28 +69,29 @@ struct mpd_stats * mpd_getStats(struct mpd_connection * connection) {
 	stats->playTime = 0;
 	stats->dbPlayTime = 0;
 
-	while (connection->returnElement) {
-		struct mpd_return_element * re = connection->returnElement;
-		if (strcmp(re->name,"artists")==0) {
-			stats->numberOfArtists = atoi(re->value);
+	while (connection->pair != NULL) {
+		const struct mpd_pair *pair = connection->pair;
+
+		if (strcmp(pair->name, "artists") == 0) {
+			stats->numberOfArtists = atoi(pair->value);
 		}
-		else if (strcmp(re->name,"albums")==0) {
-			stats->numberOfAlbums = atoi(re->value);
+		else if (strcmp(pair->name, "albums") == 0) {
+			stats->numberOfAlbums = atoi(pair->value);
 		}
-		else if (strcmp(re->name,"songs")==0) {
-			stats->numberOfSongs = atoi(re->value);
+		else if (strcmp(pair->name, "songs") == 0) {
+			stats->numberOfSongs = atoi(pair->value);
 		}
-		else if (strcmp(re->name,"uptime")==0) {
-			stats->uptime = strtol(re->value,NULL,10);
+		else if (strcmp(pair->name, "uptime") == 0) {
+			stats->uptime = strtol(pair->value,NULL,10);
 		}
-		else if (strcmp(re->name,"db_update")==0) {
-			stats->dbUpdateTime = strtol(re->value,NULL,10);
+		else if (strcmp(pair->name, "db_update") == 0) {
+			stats->dbUpdateTime = strtol(pair->value,NULL,10);
 		}
-		else if (strcmp(re->name,"playtime")==0) {
-			stats->playTime = strtol(re->value,NULL,10);
+		else if (strcmp(pair->name, "playtime") == 0) {
+			stats->playTime = strtol(pair->value,NULL,10);
 		}
-		else if (strcmp(re->name,"db_playtime")==0) {
-			stats->dbPlayTime = strtol(re->value,NULL,10);
+		else if (strcmp(pair->name, "db_playtime") == 0) {
+			stats->dbPlayTime = strtol(pair->value,NULL,10);
 		}
 
 		mpd_getNextReturnElement(connection);
@@ -113,14 +116,14 @@ void mpd_freeStats(struct mpd_stats * stats) {
 struct mpd_search_stats * mpd_getSearchStats(struct mpd_connection * connection)
 {
 	struct mpd_search_stats * stats;
-	struct mpd_return_element * re;
 
 	if (connection->doneProcessing ||
 	    (connection->listOks && connection->doneListOk)) {
 		return NULL;
 	}
 
-	if (!connection->returnElement) mpd_getNextReturnElement(connection);
+	if (connection->pair == NULL)
+		mpd_getNextReturnElement(connection);
 
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
@@ -129,13 +132,13 @@ struct mpd_search_stats * mpd_getSearchStats(struct mpd_connection * connection)
 	stats->numberOfSongs = 0;
 	stats->playTime = 0;
 
-	while (connection->returnElement) {
-		re = connection->returnElement;
+	while (connection->pair != NULL) {
+		const struct mpd_pair *pair = connection->pair;
 
-		if (strcmp(re->name, "songs") == 0) {
-			stats->numberOfSongs = atoi(re->value);
-		} else if (strcmp(re->name, "playtime") == 0) {
-			stats->playTime = strtol(re->value, NULL, 10);
+		if (strcmp(pair->name, "songs") == 0) {
+			stats->numberOfSongs = atoi(pair->value);
+		} else if (strcmp(pair->name, "playtime") == 0) {
+			stats->playTime = strtol(pair->value, NULL, 10);
 		}
 
 		mpd_getNextReturnElement(connection);

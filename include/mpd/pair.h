@@ -34,14 +34,15 @@
 #define LIBMPDCLIENT_PAIR_H
 
 /* internal stuff don't touch this struct */
-struct mpd_return_element {
+struct mpd_pair {
 	char * name;
 	char * value;
 };
 
-struct mpd_return_element *
-mpd_newReturnElement(const char *name, const char *value);
+struct mpd_pair *
+mpd_pair_new(const char *name, const char *value);
 
-void mpd_freeReturnElement(struct mpd_return_element *re);
+void
+mpd_pair_free(struct mpd_pair *re);
 
 #endif
