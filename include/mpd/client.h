@@ -40,6 +40,7 @@
 #include <mpd/directory.h>
 #include <mpd/tag.h>
 #include <mpd/pair.h>
+#include <mpd/stored_playlist.h>
 
 #ifdef WIN32
 #  define __W32API_USE_DLLIMPORT__ 1
@@ -48,32 +49,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/* PLAYLISTFILE STUFF */
-
-/* mpd_PlaylistFile
- * stores info about playlist file returned by lsinfo
- */
-typedef struct _mpd_PlaylistFile {
-	char * path;
-} mpd_PlaylistFile;
-
-/* mpd_newPlaylistFile
- * allocates memory for new mpd_PlaylistFile, path is set to NULL
- * free this memory with mpd_freePlaylistFile
- */
-mpd_PlaylistFile * mpd_newPlaylistFile(void);
-
-/* mpd_freePlaylist
- * free memory allocated for freePlaylistFile, will also free
- * path, so be careful
- */
-void mpd_freePlaylistFile(mpd_PlaylistFile * playlist);
-
-/* mpd_playlistFileDup
- * works like strdup, but for mpd_PlaylistFile
- */
-mpd_PlaylistFile * mpd_playlistFileDup(const mpd_PlaylistFile * playlist);
 
 /* INFO COMMANDS AND STUFF */
 

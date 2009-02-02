@@ -98,37 +98,6 @@ int mpd_nextListOkCommand(struct mpd_connection *connection)
 	return 0;
 }
 
-static void mpd_initPlaylistFile(mpd_PlaylistFile * playlist) {
-	playlist->path = NULL;
-}
-
-static void mpd_finishPlaylistFile(mpd_PlaylistFile * playlist) {
-	if (playlist->path)
-		str_pool_put(playlist->path);
-}
-
-mpd_PlaylistFile * mpd_newPlaylistFile(void) {
-	mpd_PlaylistFile * playlist = malloc(sizeof(mpd_PlaylistFile));
-
-	mpd_initPlaylistFile(playlist);
-
-	return playlist;
-}
-
-void mpd_freePlaylistFile(mpd_PlaylistFile * playlist) {
-	mpd_finishPlaylistFile(playlist);
-	free(playlist);
-}
-
-mpd_PlaylistFile * mpd_playlistFileDup(const mpd_PlaylistFile * playlist) {
-	mpd_PlaylistFile * ret = mpd_newPlaylistFile();
-
-	if (playlist->path)
-		ret->path = str_pool_dup(playlist->path);
-
-	return ret;
-}
-
 static void
 mpd_sendInfoCommand(struct mpd_connection *connection, char *command)
 {

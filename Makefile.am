@@ -20,7 +20,8 @@ mpdinclude_HEADERS = \
 	include/mpd/tag.h \
 	include/mpd/output.h \
 	include/mpd/pair.h \
-	include/mpd/song.h
+	include/mpd/song.h \
+	include/mpd/stored_playlist.h
 
 AM_CPPFLAGS += -I$(srcdir)/include
 
@@ -43,6 +44,7 @@ src_libmpdclient_la_SOURCES = \
 	src/song.c \
 	src/status.c \
 	src/stats.c \
+	src/stored_playlist.c \
 	src/tag.c \
 	src/libmpdclient.c
 
