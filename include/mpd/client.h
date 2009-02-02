@@ -38,6 +38,7 @@
 #include <mpd/command.h>
 #include <mpd/song.h>
 #include <mpd/directory.h>
+#include <mpd/tag.h>
 
 #ifdef WIN32
 #  define __W32API_USE_DLLIMPORT__ 1
@@ -46,24 +47,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-typedef enum mpd_TagItems
-{
-	MPD_TAG_ITEM_ARTIST,
-	MPD_TAG_ITEM_ALBUM,
-	MPD_TAG_ITEM_TITLE,
-	MPD_TAG_ITEM_TRACK,
-	MPD_TAG_ITEM_NAME,
-	MPD_TAG_ITEM_GENRE,
-	MPD_TAG_ITEM_DATE,
-	MPD_TAG_ITEM_COMPOSER,
-	MPD_TAG_ITEM_PERFORMER,
-	MPD_TAG_ITEM_COMMENT,
-	MPD_TAG_ITEM_DISC,
-	MPD_TAG_ITEM_FILENAME,
-	MPD_TAG_ITEM_ANY,
-	MPD_TAG_NUM_OF_ITEM_TYPES
-} mpd_TagItems;
 
 extern const char *const mpdTagItemKeys[MPD_TAG_NUM_OF_ITEM_TYPES];
 

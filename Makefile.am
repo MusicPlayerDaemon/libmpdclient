@@ -17,6 +17,7 @@ mpdinclude_HEADERS = \
 	include/mpd/send.h \
 	include/mpd/status.h \
 	include/mpd/stats.h \
+	include/mpd/tag.h \
 	include/mpd/output.h \
 	include/mpd/return_element.h \
 	include/mpd/song.h
