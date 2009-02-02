@@ -33,15 +33,27 @@
 #ifndef LIBMPDCLIENT_PAIR_H
 #define LIBMPDCLIENT_PAIR_H
 
-/* internal stuff don't touch this struct */
+/**
+ * A name-value pair received from the MPD server.
+ */
 struct mpd_pair {
-	char * name;
-	char * value;
+	/** the name of the element */
+	char *name;
+
+	/** the value of the element */
+	char *value;
 };
 
+/**
+ * Allocates a new mpd_pair object.  Returns NULL on error *if there
+ * is not enough memory).
+ */
 struct mpd_pair *
 mpd_pair_new(const char *name, const char *value);
 
+/**
+ * Frees a mpd_pair object.
+ */
 void
 mpd_pair_free(struct mpd_pair *pair);
 
