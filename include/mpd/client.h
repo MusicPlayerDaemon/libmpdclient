@@ -95,42 +95,6 @@ mpd_PlaylistFile * mpd_playlistFileDup(const mpd_PlaylistFile * playlist);
 
 /* INFO COMMANDS AND STUFF */
 
-/* fetches the currently seeletect song (the song referenced by status->song
- * and status->songid*/
-void mpd_sendCurrentSongCommand(struct mpd_connection *connection);
-
-/* songNum of -1, means to display the whole list */
-void mpd_sendPlaylistInfoCommand(struct mpd_connection *connection, int songNum);
-
-/* songId of -1, means to display the whole list */
-void mpd_sendPlaylistIdCommand(struct mpd_connection *connection, int songId);
-
-/* use this to get the changes in the playlist since version _playlist_ */
-void mpd_sendPlChangesCommand(struct mpd_connection *connection, long long playlist);
-
-/**
- * @param connection: A valid and connected mpd_Connection.
- * @param playlist: The playlist version you want the diff with.
- * A more bandwidth efficient version of the mpd_sendPlChangesCommand.
- * It only returns the pos+id of the changes song.
- */
-void mpd_sendPlChangesPosIdCommand(struct mpd_connection *connection, long long playlist);
-
-/* recursivel fetches all songs/dir/playlists in "dir* (no metadata is
- * returned) */
-void mpd_sendListallCommand(struct mpd_connection *connection, const char * dir);
-
-/* same as sendListallCommand, but also metadata is returned */
-void mpd_sendListallInfoCommand(struct mpd_connection *connection, const char * dir);
-
-/* non-recursive version of ListallInfo */
-void mpd_sendLsInfoCommand(struct mpd_connection *connection, const char * dir);
-
-#define MPD_TABLE_ARTIST	MPD_TAG_ITEM_ARTIST
-#define MPD_TABLE_ALBUM		MPD_TAG_ITEM_ALBUM
-#define MPD_TABLE_TITLE		MPD_TAG_ITEM_TITLE
-#define MPD_TABLE_FILENAME	MPD_TAG_ITEM_FILENAME
-
 void mpd_sendSearchCommand(struct mpd_connection *connection, int table,
 		const char * str);
 
@@ -184,24 +148,6 @@ char *mpd_getNextCommand(struct mpd_connection *connection);
 char *mpd_getNextHandler(struct mpd_connection *connection);
 
 char *mpd_getNextTagType(struct mpd_connection *connection);
-
-/**
- * @param connection a MpdConnection
- * @param path	the path to the playlist.
- *
- * List the content, with full metadata, of a stored playlist.
- *
- */
-void mpd_sendListPlaylistInfoCommand(struct mpd_connection *connection, char *path);
-
-/**
- * @param connection a MpdConnection
- * @param path	the path to the playlist.
- *
- * List the content of a stored playlist.
- *
- */
-void mpd_sendListPlaylistCommand(struct mpd_connection *connection, char *path);
 
 /**
  * @param connection a #mpd_Connection
