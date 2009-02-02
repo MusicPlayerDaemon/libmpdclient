@@ -52,7 +52,7 @@
 #define INTLEN      ((sizeof(int)       * CHAR_BIT + 1) / 3 + 1)
 #define LONGLONGLEN ((sizeof(long long) * CHAR_BIT + 1) / 3 + 1)
 
-const char *const mpdTagItemKeys[MPD_TAG_NUM_OF_ITEM_TYPES] =
+const char *const mpdTagItemKeys[MPD_TAG_TYPE_COUNT] =
 {
 	"Artist",
 	"Album",
@@ -176,10 +176,10 @@ mpd_getNextReturnElementNamed(struct mpd_connection *connection,
 
 char *mpd_getNextTag(struct mpd_connection *connection, int type)
 {
-	if (type < 0 || type >= MPD_TAG_NUM_OF_ITEM_TYPES ||
-	    type == MPD_TAG_ITEM_ANY)
+	if (type < 0 || type >= MPD_TAG_TYPE_COUNT ||
+	    type == MPD_TAG_TYPE_ANY)
 		return NULL;
-	if (type == MPD_TAG_ITEM_FILENAME)
+	if (type == MPD_TAG_TYPE_FILENAME)
 		return mpd_getNextReturnElementNamed(connection, "file");
 	return mpd_getNextReturnElementNamed(connection, mpdTagItemKeys[type]);
 }
@@ -350,7 +350,7 @@ void mpd_startFieldSearch(struct mpd_connection *connection, int type)
 		return;
 	}
 
-	if (type < 0 || type >= MPD_TAG_NUM_OF_ITEM_TYPES) {
+	if (type < 0 || type >= MPD_TAG_TYPE_COUNT) {
 		mpd_error_code(&connection->error, MPD_ERROR_ARG);
 		mpd_error_message(&connection->error,
 				  "invalid type specified");
@@ -382,7 +382,7 @@ mpd_addConstraintSearch(struct mpd_connection *connection,
 		return;
 	}
 
-	if (type < 0 || type >= MPD_TAG_NUM_OF_ITEM_TYPES) {
+	if (type < 0 || type >= MPD_TAG_TYPE_COUNT) {
 		mpd_error_code(&connection->error, MPD_ERROR_ARG);
 		mpd_error_message(&connection->error,
 				  "invalid type specified");

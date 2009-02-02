@@ -48,7 +48,7 @@
 extern "C" {
 #endif
 
-extern const char *const mpdTagItemKeys[MPD_TAG_NUM_OF_ITEM_TYPES];
+extern const char *const mpdTagItemKeys[MPD_TAG_TYPE_COUNT];
 
 /* PLAYLISTFILE STUFF */
 
