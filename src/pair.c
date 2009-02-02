@@ -33,22 +33,43 @@
 #include <mpd/pair.h>
 #include "str_pool.h"
 
+#include <assert.h>
 #include <stdlib.h>
 
 struct mpd_pair *
 mpd_pair_new(const char *name, const char *value)
 {
-	struct mpd_pair *ret = malloc(sizeof(*ret));
+	struct mpd_pair *pair = malloc(sizeof(*pair));
 
-	ret->name = str_pool_get(name);
-	ret->value = str_pool_get(value);
+	assert(name != NULL);
+	assert(value != NULL);
 
-	return ret;
+	if (pair == NULL)
+		return NULL;
+
+	pair->name = str_pool_get(name);
+	if (pair->name == NULL) {
+		free(pair);
+		return NULL;
+	}
+
+	pair->value = str_pool_get(value);
+	if (pair->value == NULL) {
+		str_pool_put(pair->name);
+		free(pair);
+		return NULL;
+	}
+
+	return pair;
 }
 
 void
-mpd_pair_free(struct mpd_pair *re) {
-	str_pool_put(re->name);
-	str_pool_put(re->value);
-	free(re);
+mpd_pair_free(struct mpd_pair *pair) {
+	assert(pair != NULL);
+	assert(pair->name != NULL);
+	assert(pair->value != NULL);
+
+	str_pool_put(pair->name);
+	str_pool_put(pair->value);
+	free(pair);
 }

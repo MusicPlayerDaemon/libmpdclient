@@ -43,6 +43,6 @@ struct mpd_pair *
 mpd_pair_new(const char *name, const char *value);
 
 void
-mpd_pair_free(struct mpd_pair *re);
+mpd_pair_free(struct mpd_pair *pair);
 
 #endif
