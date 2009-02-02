@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2008 The Music Player Daemon Project
+   (c) 2003-2009 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -12,6 +12,10 @@
    - Redistributions in binary form must reproduce the above copyright
    notice, this list of conditions and the following disclaimer in the
    documentation and/or other materials provided with the distribution.
+
+   - Neither the name of the Music Player Daemon nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
 
    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
    ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -26,44 +30,22 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MPD_INTERNAL_H
-#define MPD_INTERNAL_H
+#include <mpd/tag.h>
+#include "internal.h"
 
-#include "ierror.h"
-#include <mpd/connection.h>
-#include "socket.h"
-
-/* mpd_Connection
- * holds info about connection to mpd
- * use error, and errorStr to detect errors
- */
-struct mpd_connection {
-	/* use this to check the version of mpd */
-	int version[3];
-
-	struct mpd_error_info error;
-
-	/* DON'T TOUCH any of the rest of this stuff */
-
-	struct mpd_socket socket;
-
-	int doneProcessing;
-	int listOks;
-	int doneListOk;
-	int commandList;
-	struct mpd_return_element *returnElement;
-	char *request;
-	int idle;
-	void (*notify_cb)(struct mpd_connection *connection,
-			  unsigned flags, void *userdata);
-	void (*startIdle)(struct mpd_connection *connection);
-	void (*stopIdle)(struct mpd_connection *connection);
-	void *userdata;
-#ifdef MPD_GLIB
-        int source_id;
-#endif
+const char *const mpdTagItemKeys[MPD_TAG_TYPE_COUNT] =
+{
+	"Artist",
+	"Album",
+	"Title",
+	"Track",
+	"Name",
+	"Genre",
+	"Date",
+	"Composer",
+	"Performer",
+	"Comment",
+	"Disc",
+	"Filename",
+	"Any"
 };
-
-extern const char *const mpdTagItemKeys[];
-
-#endif

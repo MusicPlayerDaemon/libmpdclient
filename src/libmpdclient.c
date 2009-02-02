@@ -52,23 +52,6 @@
 #define INTLEN      ((sizeof(int)       * CHAR_BIT + 1) / 3 + 1)
 #define LONGLONGLEN ((sizeof(long long) * CHAR_BIT + 1) / 3 + 1)
 
-const char *const mpdTagItemKeys[MPD_TAG_TYPE_COUNT] =
-{
-	"Artist",
-	"Album",
-	"Title",
-	"Track",
-	"Name",
-	"Genre",
-	"Date",
-	"Composer",
-	"Performer",
-	"Comment",
-	"Disc",
-	"Filename",
-	"Any"
-};
-
 static char * mpd_sanitizeArg(const char * arg) {
 	size_t i;
 	char * ret;

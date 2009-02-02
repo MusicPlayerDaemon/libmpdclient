@@ -43,6 +43,7 @@ src_libmpdclient_la_SOURCES = \
 	src/song.c \
 	src/status.c \
 	src/stats.c \
+	src/tag.c \
 	src/libmpdclient.c
 
 src_libmpdclient_la_LDFLAGS = -version-info @LIBMPDCLIENT_LIBTOOL_VERSION@ \
