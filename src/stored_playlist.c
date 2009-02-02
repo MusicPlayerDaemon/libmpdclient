@@ -36,30 +36,40 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-static void mpd_initPlaylistFile(mpd_PlaylistFile * playlist) {
+static void
+mpd_stored_playlist_init(struct mpd_stored_playlist *playlist)
+{
 	playlist->path = NULL;
 }
 
-static void mpd_finishPlaylistFile(mpd_PlaylistFile * playlist) {
+static void
+mpd_stored_playlist_finish(struct mpd_stored_playlist *playlist)
+{
 	if (playlist->path)
 		str_pool_put(playlist->path);
 }
 
-mpd_PlaylistFile * mpd_newPlaylistFile(void) {
-	mpd_PlaylistFile * playlist = malloc(sizeof(mpd_PlaylistFile));
+struct mpd_stored_playlist *
+mpd_stored_playlist_new(void)
+{
+	struct mpd_stored_playlist *playlist = malloc(sizeof(*playlist));
 
-	mpd_initPlaylistFile(playlist);
+	mpd_stored_playlist_init(playlist);
 
 	return playlist;
 }
 
-void mpd_freePlaylistFile(mpd_PlaylistFile * playlist) {
-	mpd_finishPlaylistFile(playlist);
+void
+mpd_stored_playlist_free(struct mpd_stored_playlist *playlist)
+{
+	mpd_stored_playlist_finish(playlist);
 	free(playlist);
 }
 
-mpd_PlaylistFile * mpd_playlistFileDup(const mpd_PlaylistFile * playlist) {
-	mpd_PlaylistFile * ret = mpd_newPlaylistFile();
+struct mpd_stored_playlist *
+mpd_stored_playlist_dup(const struct mpd_stored_playlist *playlist)
+{
+	struct mpd_stored_playlist *ret = mpd_stored_playlist_new();
 
 	if (playlist->path)
 		ret->path = str_pool_dup(playlist->path);

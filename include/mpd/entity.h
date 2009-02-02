@@ -58,7 +58,7 @@ typedef struct mpd_InfoEntity {
 	union {
 		struct mpd_directory *directory;
 		struct mpd_song *song;
-		mpd_PlaylistFile * playlistFile;
+		struct mpd_stored_playlist *playlistFile;
 	} info;
 } mpd_InfoEntity;
 

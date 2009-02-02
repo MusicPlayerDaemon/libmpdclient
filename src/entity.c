@@ -51,7 +51,7 @@ mpd_finishInfoEntity(mpd_InfoEntity * entity) {
 		else if (entity->type == MPD_INFO_ENTITY_TYPE_SONG)
 			mpd_freeSong(entity->info.song);
 		else if (entity->type == MPD_INFO_ENTITY_TYPE_PLAYLISTFILE)
-			mpd_freePlaylistFile(entity->info.playlistFile);
+			mpd_stored_playlist_free(entity->info.playlistFile);
 	}
 }
 
@@ -101,7 +101,7 @@ mpd_getNextInfoEntity(struct mpd_connection *connection)
 		else if (strcmp(connection->pair->name, "playlist") == 0) {
 			entity = mpd_newInfoEntity();
 			entity->type = MPD_INFO_ENTITY_TYPE_PLAYLISTFILE;
-			entity->info.playlistFile = mpd_newPlaylistFile();
+			entity->info.playlistFile = mpd_stored_playlist_new();
 			entity->info.playlistFile->path =
 				str_pool_dup(connection->pair->value);
 		}

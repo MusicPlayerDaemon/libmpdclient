@@ -192,7 +192,7 @@ int main(int argc, char ** argv) {
 			}
 			else if(entity->type==
 					MPD_INFO_ENTITY_TYPE_PLAYLISTFILE) {
-				mpd_PlaylistFile * pl = 
+				struct mpd_stored_playlist *pl =
 					entity->info.playlistFile;
 				printf("playlist: %s\n",pl->path);
 			}

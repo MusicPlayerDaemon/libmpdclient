@@ -36,30 +36,33 @@
 /* mpd_PlaylistFile
  * stores info about playlist file returned by lsinfo
  */
-typedef struct _mpd_PlaylistFile {
+struct mpd_stored_playlist {
 	char *path;
-} mpd_PlaylistFile;
+};
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* mpd_newPlaylistFile
+/* mpd_stored_playlist_new
  * allocates memory for new mpd_PlaylistFile, path is set to NULL
- * free this memory with mpd_freePlaylistFile
+ * free this memory with mpd_stored_playlist_free
  */
-mpd_PlaylistFile * mpd_newPlaylistFile(void);
+struct mpd_stored_playlist *
+mpd_stored_playlist_new(void);
 
 /* mpd_freePlaylist
  * free memory allocated for freePlaylistFile, will also free
  * path, so be careful
  */
-void mpd_freePlaylistFile(mpd_PlaylistFile * playlist);
+void
+mpd_stored_playlist_free(struct mpd_stored_playlist *playlist);
 
-/* mpd_playlistFileDup
+/* mpd_stored_playlist_dup
  * works like strdup, but for mpd_PlaylistFile
  */
-mpd_PlaylistFile * mpd_playlistFileDup(const mpd_PlaylistFile * playlist);
+struct mpd_stored_playlist *
+mpd_stored_playlist_dup(const struct mpd_stored_playlist *playlist);
 
 #ifdef __cplusplus
 }
