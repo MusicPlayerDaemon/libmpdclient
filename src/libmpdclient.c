@@ -156,7 +156,7 @@ mpd_sendSearchCommand(struct mpd_connection *connection, int table,
 	mpd_commitSearch(connection);
 }
 
-void mpd_sendFindCommand(struct mpd_connection *connection, int table,
+void mpd_send_find(struct mpd_connection *connection, int table,
 			 const char * str)
 {
 	mpd_startSearch(connection, 1);

@@ -46,7 +46,7 @@ extern "C" {
 #endif
 
 void
-mpd_sendOutputsCommand(struct mpd_connection *connection);
+mpd_send_outputs(struct mpd_connection *connection);
 
 struct mpd_output_entity *
 mpd_getNextOutput(struct mpd_connection *connection);
@@ -55,10 +55,10 @@ void
 mpd_freeOutputElement(struct mpd_output_entity *output);
 
 void
-mpd_sendEnableOutputCommand(struct mpd_connection *connection, int outputId);
+mpd_send_enable_output(struct mpd_connection *connection, int outputId);
 
 void
-mpd_sendDisableOutputCommand(struct mpd_connection *connection, int outputId);
+mpd_send_disable_output(struct mpd_connection *connection, int outputId);
 
 #ifdef __cplusplus
 }

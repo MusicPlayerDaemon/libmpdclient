@@ -93,11 +93,11 @@ struct mpd_status {
 extern "C" {
 #endif
 
-void mpd_sendStatusCommand(struct mpd_connection * connection);
+void mpd_send_status(struct mpd_connection * connection);
 
 /* mpd_getStatus
  * returns status info, be sure to free it with mpd_freeStatus()
- * call this after mpd_sendStatusCommand()
+ * call this after mpd_send_status()
  */
 struct mpd_status * mpd_getStatus(struct mpd_connection * connection);
 

@@ -70,7 +70,7 @@ int main(int argc, char ** argv) {
 		mpd_InfoEntity * entity;
 
 		mpd_sendCommandListOkBegin(conn);
-		mpd_sendStatusCommand(conn);
+		mpd_send_status(conn);
 		mpd_send_currentsong(conn);
 		mpd_sendCommandListEnd(conn);
 

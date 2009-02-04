@@ -44,7 +44,7 @@ enum {
 };
 
 void
-mpd_sendOutputsCommand(struct mpd_connection *connection)
+mpd_send_outputs(struct mpd_connection *connection)
 {
 	mpd_executeCommand(connection,"outputs\n");
 }
@@ -104,7 +104,7 @@ mpd_freeOutputElement(struct mpd_output_entity *output)
 }
 
 void
-mpd_sendEnableOutputCommand(struct mpd_connection *connection, int outputId)
+mpd_send_enable_output(struct mpd_connection *connection, int outputId)
 {
 	int len = strlen("enableoutput")+2+INTLEN+3;
 	char *string = malloc(len);
@@ -114,7 +114,7 @@ mpd_sendEnableOutputCommand(struct mpd_connection *connection, int outputId)
 }
 
 void
-mpd_sendDisableOutputCommand(struct mpd_connection *connection, int outputId)
+mpd_send_disable_output(struct mpd_connection *connection, int outputId)
 {
 	int len = strlen("disableoutput")+2+INTLEN+3;
 	char *string = malloc(len);

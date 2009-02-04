@@ -54,7 +54,7 @@ struct mpd_search_stats {
 extern "C" {
 #endif
 
-void mpd_sendStatsCommand(struct mpd_connection * connection);
+void mpd_send_stats(struct mpd_connection * connection);
 
 struct mpd_stats * mpd_getStats(struct mpd_connection * connection);
 

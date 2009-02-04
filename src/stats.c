@@ -37,7 +37,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void mpd_sendStatsCommand(struct mpd_connection * connection) {
+void mpd_send_stats(struct mpd_connection * connection) {
 	mpd_executeCommand(connection,"stats\n");
 }
 
