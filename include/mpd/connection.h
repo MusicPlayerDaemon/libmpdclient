@@ -44,6 +44,10 @@
  */
 struct mpd_connection;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* mpd_newConnection
  * use this to open a new connection
  * you should use mpd_closeConnection, when your done with the connection,
@@ -105,5 +109,9 @@ void mpd_getNextReturnElement(struct mpd_connection *connection);
 
 void
 mpd_executeCommand(struct mpd_connection *connection, const char *command);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -41,6 +41,10 @@ struct mpd_output_entity {
 	int enabled;
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void
 mpd_sendOutputsCommand(struct mpd_connection *connection);
 
@@ -55,5 +59,9 @@ mpd_sendEnableOutputCommand(struct mpd_connection *connection, int outputId);
 
 void
 mpd_sendDisableOutputCommand(struct mpd_connection *connection, int outputId);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

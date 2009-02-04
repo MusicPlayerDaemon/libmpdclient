@@ -33,8 +33,9 @@
 #ifndef MPD_IDLE_H
 #define MPD_IDLE_H
 
+#include <mpd/connection.h>
+
 #include <stdlib.h>
-#include "connection.h"
 
 enum {
 	/** song database has been updated*/
@@ -63,6 +64,10 @@ enum {
 	IDLE_DISCONNECT = 0x80,
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef void (*mpd_NotificationCb) (struct mpd_connection *connection, unsigned flags, void *userdata);
 
 void mpd_startIdle(struct mpd_connection *connection, mpd_NotificationCb notify_cb, void *userdata);
@@ -71,6 +76,10 @@ void mpd_stopIdle(struct mpd_connection *connection);
 
 #ifdef MPD_GLIB
 void mpd_glibInit(struct mpd_connection *connection);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif

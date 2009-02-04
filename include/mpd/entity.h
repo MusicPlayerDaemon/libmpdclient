@@ -62,11 +62,19 @@ typedef struct mpd_InfoEntity {
 	} info;
 } mpd_InfoEntity;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 mpd_InfoEntity * mpd_newInfoEntity(void);
 
 void mpd_freeInfoEntity(mpd_InfoEntity * entity);
 
 /* use this function to loop over after calling Info/Listall functions */
 mpd_InfoEntity * mpd_getNextInfoEntity(struct mpd_connection *connection);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -78,6 +78,10 @@ struct mpd_song {
 	int id;
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* mpd_newSong
  * use to allocate memory for a new mpd_Song
  * file, artist, etc all initialized to NULL
@@ -99,5 +103,9 @@ void mpd_freeSong(struct mpd_song *song);
  */
 struct mpd_song *
 mpd_songDup(const struct mpd_song *song);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

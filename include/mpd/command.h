@@ -41,6 +41,9 @@ enum {
 
 struct mpd_connection;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  * Player commands
@@ -291,5 +294,9 @@ mpd_send_urlhandlers(struct mpd_connection *connection);
 
 bool
 mpd_send_tagtypes(struct mpd_connection *connection);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

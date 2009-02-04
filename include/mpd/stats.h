@@ -33,7 +33,7 @@
 #ifndef MPD_STATS_H
 #define MPD_STATS_H
 
-#include "connection.h"
+#include <mpd/connection.h>
 
 struct mpd_stats {
 	int numberOfArtists;
@@ -50,6 +50,10 @@ struct mpd_search_stats {
 	unsigned long playTime;
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void mpd_sendStatsCommand(struct mpd_connection * connection);
 
 struct mpd_stats * mpd_getStats(struct mpd_connection * connection);
@@ -59,5 +63,9 @@ void mpd_freeStats(struct mpd_stats * stats);
 struct mpd_search_stats * mpd_getSearchStats(struct mpd_connection * connection);
 
 void mpd_freeSearchStats(struct mpd_search_stats * stats);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

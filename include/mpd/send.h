@@ -34,6 +34,10 @@
 
 struct mpd_connection;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * Sends a buffer to the MPD server.
  *
@@ -55,5 +59,9 @@ mpd_send(struct mpd_connection *connection, const void *p, size_t length);
  */
 bool
 mpd_send_command(struct mpd_connection *connection, const char *command, ...);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

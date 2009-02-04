@@ -33,7 +33,7 @@
 #ifndef MPD_STATUS_H
 #define MPD_STATUS_H
 
-#include "connection.h"
+#include <mpd/connection.h>
 
 /* use these with status.state to determine what state the player is in */
 #define MPD_STATUS_STATE_UNKNOWN	0
@@ -89,6 +89,10 @@ struct mpd_status {
 	char * error;
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void mpd_sendStatusCommand(struct mpd_connection * connection);
 
 /* mpd_getStatus
@@ -101,5 +105,9 @@ struct mpd_status * mpd_getStatus(struct mpd_connection * connection);
  * free's status info malloc'd and returned by mpd_getStatus
  */
 void mpd_freeStatus(struct mpd_status * status);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

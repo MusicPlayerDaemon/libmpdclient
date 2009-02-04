@@ -40,6 +40,10 @@ struct mpd_directory {
 	char * path;
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* mpd_newDirectory
  * allocates memory for a new directory
  * use mpd_freeDirectory to free this memory
@@ -58,5 +62,9 @@ mpd_directoryDup(const struct mpd_directory *directory);
  * path of mpd_Directory, so be careful
  */
 void mpd_freeDirectory(struct mpd_directory *directory);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
