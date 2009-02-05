@@ -39,16 +39,6 @@
 #include <string.h>
 #include <stdio.h>
 
-enum {
-	INTLEN =  ((sizeof(int) * CHAR_BIT + 1) / 3 + 1),
-};
-
-void
-mpd_send_outputs(struct mpd_connection *connection)
-{
-	mpd_executeCommand(connection,"outputs\n");
-}
-
 struct mpd_output_entity *
 mpd_getNextOutput(struct mpd_connection *connection)
 {
@@ -101,24 +91,4 @@ mpd_freeOutputElement(struct mpd_output_entity *output)
 {
 	free(output->name);
 	free(output);
-}
-
-void
-mpd_send_enable_output(struct mpd_connection *connection, int outputId)
-{
-	int len = strlen("enableoutput")+2+INTLEN+3;
-	char *string = malloc(len);
-	snprintf(string, len, "enableoutput \"%i\"\n", outputId);
-	mpd_executeCommand(connection,string);
-	free(string);
-}
-
-void
-mpd_send_disable_output(struct mpd_connection *connection, int outputId)
-{
-	int len = strlen("disableoutput")+2+INTLEN+3;
-	char *string = malloc(len);
-	snprintf(string, len, "disableoutput \"%i\"\n", outputId);
-	mpd_executeCommand(connection,string);
-	free(string);
 }

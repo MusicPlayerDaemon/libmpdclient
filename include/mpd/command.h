@@ -295,6 +295,15 @@ mpd_send_urlhandlers(struct mpd_connection *connection);
 bool
 mpd_send_tagtypes(struct mpd_connection *connection);
 
+bool
+mpd_send_outputs(struct mpd_connection *connection);
+
+bool
+mpd_send_enable_output(struct mpd_connection *connection, int outputId);
+
+bool
+mpd_send_disable_output(struct mpd_connection *connection, int outputId);
+
 #ifdef __cplusplus
 }
 #endif

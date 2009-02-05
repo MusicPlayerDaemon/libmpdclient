@@ -420,3 +420,27 @@ mpd_send_tagtypes(struct mpd_connection *connection)
 {
 	return mpd_send_command(connection, "tagtypes", NULL);
 }
+
+
+/*
+ * Output commands
+ *
+ */
+
+bool
+mpd_send_outputs(struct mpd_connection *connection)
+{
+	return mpd_send_command(connection, "outputs", NULL);
+}
+
+bool
+mpd_send_enable_output(struct mpd_connection *connection, int outputId)
+{
+	return mpd_send_int_command(connection, "enableoutput", outputId);
+}
+
+bool
+mpd_send_disable_output(struct mpd_connection *connection, int outputId)
+{
+	return mpd_send_int_command(connection, "disableoutput", outputId);
+}
