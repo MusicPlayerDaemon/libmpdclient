@@ -115,10 +115,10 @@ bool
 mpd_send_plchanges(struct mpd_connection *connection, long long playlist);
 
 /**
- * A more bandwidth efficient version of the mpd_sendPlChangesCommand.
+ * A more bandwidth efficient version of the mpd_send_plchanges.
  * It only returns the pos+id of the changes song.
  *
- * @param connection A valid and connected mpd_Connection.
+ * @param connection A valid and connected mpd_connection.
  * @param playlist The playlist version you want the diff with.
  */
 bool
@@ -161,7 +161,7 @@ mpd_send_swapid(struct mpd_connection *connection, int id1, int id2);
  */
 
 /**
- * @param connection a MpdConnection
+ * @param connection a #mpd_connection
  * @param path	the path to the playlist.
  *
  * List the content of a stored playlist.
@@ -171,7 +171,7 @@ bool
 mpd_send_listplaylist(struct mpd_connection *connection, char *name);
 
 /**
- * @param connection a MpdConnection
+ * @param connection a #mpd_connection
  * @param path	the path to the playlist.
  *
  * List the content, with full metadata, of a stored playlist.
@@ -274,7 +274,7 @@ bool
 mpd_send_password(struct mpd_connection *connection, const char *password);
 
 /**
- * @param connection a #mpd_Connection
+ * @param connection a #mpd_connection
  *
  * Queries mpd for the allowed commands
  */
@@ -282,7 +282,7 @@ bool
 mpd_send_commands(struct mpd_connection *connection);
 
 /**
- * @param connection a #mpd_Connection
+ * @param connection a #mpd_connection
  *
  * Queries mpd for the not allowed commands
  */
@@ -294,6 +294,12 @@ mpd_send_urlhandlers(struct mpd_connection *connection);
 
 bool
 mpd_send_tagtypes(struct mpd_connection *connection);
+
+
+/*
+ * Output commands
+ *
+ */
 
 bool
 mpd_send_outputs(struct mpd_connection *connection);

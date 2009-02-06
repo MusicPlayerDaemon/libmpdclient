@@ -94,7 +94,7 @@ void mpd_sendCommandListEnd(struct mpd_connection *connection);
 int mpd_nextListOkCommand(struct mpd_connection *connection);
 
 /**
- * @param connection a #mpd_Connection
+ * @param connection a #mpd_connection
  *
  * returns the next supported command.
  *
@@ -107,7 +107,7 @@ char *mpd_getNextHandler(struct mpd_connection *connection);
 char *mpd_getNextTagType(struct mpd_connection *connection);
 
 /**
- * @param connection a #mpd_Connection
+ * @param connection a #mpd_connection
  * @param exact if to match exact
  *
  * starts a search, use mpd_addConstraintSearch to add
@@ -116,19 +116,19 @@ char *mpd_getNextTagType(struct mpd_connection *connection);
 void mpd_startSearch(struct mpd_connection *connection, int exact);
 
 /**
- * @param connection a #mpd_Connection
+ * @param connection a #mpd_connection
  * @param type
  * @param name
  */
 void mpd_addConstraintSearch(struct mpd_connection *connection, int type, const char *name);
 
 /**
- * @param connection a #mpd_Connection
+ * @param connection a #mpd_connection
  */
 void mpd_commitSearch(struct mpd_connection *connection);
 
 /**
- * @param connection a #mpd_Connection
+ * @param connection a #mpd_connection
  * @param type The type to search for
  *
  * starts a search for fields... f.e. get a list of artists would be:

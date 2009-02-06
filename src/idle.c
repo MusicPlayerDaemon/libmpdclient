@@ -32,6 +32,7 @@
 
 #include <mpd/idle.h>
 #include <mpd/pair.h>
+#include <mpd/send.h>
 #include "internal.h"
 
 #include <stdio.h>
@@ -91,7 +92,7 @@ void mpd_startIdle(struct mpd_connection *connection, mpd_NotificationCb notify_
 	if (connection->startIdle)
 		connection->startIdle(connection);
 
-	mpd_executeCommand(connection, "idle\n");
+	mpd_send_command(connection, "idle", NULL);
 	connection->idle = 1;
 	connection->notify_cb = notify_cb;
 	connection->userdata = userdata;
@@ -105,7 +106,7 @@ void mpd_stopIdle(struct mpd_connection *connection)
 	connection->idle = 0;
 	connection->notify_cb = NULL;
 	connection->doneProcessing = 1;
-	mpd_executeCommand(connection, "noidle\n");
+	mpd_send_command(connection, "noidle", NULL);
 	mpd_readChanges(connection);
 }
 

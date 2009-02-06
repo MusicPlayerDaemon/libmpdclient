@@ -101,7 +101,7 @@ int mpd_nextListOkCommand(struct mpd_connection *connection)
 static void
 mpd_sendInfoCommand(struct mpd_connection *connection, char *command)
 {
-	mpd_executeCommand(connection,command);
+	mpd_send_command(connection, command, NULL);
 }
 
 static char *
@@ -207,7 +207,7 @@ void mpd_sendCommandListBegin(struct mpd_connection *connection)
 		return;
 	}
 	connection->commandList = COMMAND_LIST;
-	mpd_executeCommand(connection,"command_list_begin\n");
+	mpd_send_command(connection, "command_list_begin", NULL);
 }
 
 void mpd_sendCommandListOkBegin(struct mpd_connection *connection)
@@ -219,7 +219,7 @@ void mpd_sendCommandListOkBegin(struct mpd_connection *connection)
 		return;
 	}
 	connection->commandList = COMMAND_LIST_OK;
-	mpd_executeCommand(connection,"command_list_ok_begin\n");
+	mpd_send_command(connection, "command_list_ok_begin", NULL);
 	connection->listOks = 0;
 }
 
@@ -232,7 +232,7 @@ void mpd_sendCommandListEnd(struct mpd_connection *connection)
 		return;
 	}
 	connection->commandList = 0;
-	mpd_executeCommand(connection,"command_list_end\n");
+	mpd_send_command(connection, "command_list_end", NULL);
 }
 
 /**
@@ -363,8 +363,6 @@ mpd_addConstraintSearch(struct mpd_connection *connection,
 
 void mpd_commitSearch(struct mpd_connection *connection)
 {
-	int len;
-
 	if (!connection->request) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
@@ -372,12 +370,7 @@ void mpd_commitSearch(struct mpd_connection *connection)
 		return;
 	}
 
-	len = strlen(connection->request)+2;
-	connection->request = realloc(connection->request, len);
-	connection->request[len-2] = '\n';
-	connection->request[len-1] = '\0';
 	mpd_sendInfoCommand(connection, connection->request);
 
-	free(connection->request);
 	connection->request = NULL;
 }

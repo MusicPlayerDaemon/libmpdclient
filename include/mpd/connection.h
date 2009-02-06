@@ -38,7 +38,7 @@
 
 #include <stdlib.h>
 
-/* mpd_Connection
+/* mpd_connection
  * holds info about connection to mpd
  * use error, and errorStr to detect errors
  */
@@ -106,9 +106,6 @@ mpd_get_server_version(const struct mpd_connection *connection);
 #define COMMAND_LIST_OK 2
 
 void mpd_getNextReturnElement(struct mpd_connection *connection);
-
-void
-mpd_executeCommand(struct mpd_connection *connection, const char *command);
 
 #ifdef __cplusplus
 }

@@ -32,19 +32,20 @@
 
 #include <mpd/stats.h>
 #include <mpd/pair.h>
+#include <mpd/send.h>
 #include "internal.h"
 
 #include <stdlib.h>
 #include <string.h>
 
 void mpd_send_stats(struct mpd_connection * connection) {
-	mpd_executeCommand(connection,"stats\n");
+	mpd_send_command(connection, "stats", NULL);
 }
 
 struct mpd_stats * mpd_get_stats(struct mpd_connection * connection) {
 	struct mpd_stats * stats;
 
-	/*mpd_executeCommand(connection,"stats\n");
+	/*mpd_send_command(connection, "stats", NULL);
 
 	if (connection->error) return NULL;*/
 

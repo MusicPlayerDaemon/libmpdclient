@@ -247,40 +247,6 @@ mpd_get_server_version(const struct mpd_connection *connection)
 	return connection->version;
 }
 
-void
-mpd_executeCommand(struct mpd_connection *connection, const char *command)
-{
-	bool ret;
-
-	if (!mpd_socket_defined(&connection->socket)) {
-		mpd_error_code(&connection->error, MPD_ERROR_CONNCLOSED);
-		mpd_error_message(&connection->error, "connection closed");
-		return;
-	}
-
-	if (connection->idle)
-		mpd_stopIdle(connection);
-
-	if (!connection->doneProcessing && !connection->commandList) {
-		mpd_error_code(&connection->error, MPD_ERROR_STATE);
-		mpd_error_message(&connection->error,
-				  "not done processing current command");
-		return;
-	}
-
-	mpd_clearError(connection);
-
-	ret = mpd_socket_send(&connection->socket, command, strlen(command),
-			      &connection->error);
-	if (!ret)
-		return;
-
-	if (!connection->commandList)
-		connection->doneProcessing = 0;
-	else if (connection->commandList == COMMAND_LIST_OK)
-		connection->listOks++;
-}
-
 void mpd_getNextReturnElement(struct mpd_connection *connection)
 {
 	char * output = NULL;
