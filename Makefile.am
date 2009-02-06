@@ -51,10 +51,13 @@ src_libmpdclient_la_SOURCES = \
 src_libmpdclient_la_LDFLAGS = -version-info @LIBMPDCLIENT_LIBTOOL_VERSION@ \
 	-Wl,--version-script=$(srcdir)/libmpdclient.ld
 
-noinst_PROGRAMS = src/example
+noinst_PROGRAMS = src/example test/test
 
 src_example_SOURCES = src/example.c
 src_example_LDADD = src/libmpdclient.la
+
+test_test_SOURCES = test/main.c
+test_test_LDADD = src/libmpdclient.la
 
 
 #
