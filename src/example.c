@@ -74,27 +74,29 @@ int main(int argc, char ** argv) {
 		mpd_send_currentsong(conn);
 		mpd_sendCommandListEnd(conn);
 
-		if((status = mpd_getStatus(conn))==NULL) {
+		status = mpd_get_status(conn);
+		if (status == NULL) {
 			fprintf(stderr,"%s\n", mpd_get_error_string(conn));
 			mpd_closeConnection(conn);
 			return -1;
 		}
 
-		printf("volume: %i\n",status->volume);
-		printf("repeat: %i\n",status->repeat);
-		printf("playlist: %lli\n",status->playlist);
-		printf("playlistLength: %i\n",status->playlistLength);
-		if(status->error) printf("error: %s\n",status->error);
+		printf("volume: %i\n", mpd_status_get_volume(status));
+		printf("repeat: %i\n", mpd_status_get_repeat(status));
+		printf("playlist: %lli\n", mpd_status_get_playlist(status));
+		printf("playlistLength: %i\n", mpd_status_get_playlist_length(status));
+		if (mpd_status_get_error(status) != NULL)
+			printf("error: %s\n", mpd_status_get_error(status));
 
-		if(status->state == MPD_STATUS_STATE_PLAY || 
-				status->state == MPD_STATUS_STATE_PAUSE) {
-			printf("song: %i\n",status->song);
-			printf("elaspedTime: %i\n",status->elapsedTime);
-			printf("totalTime: %i\n",status->totalTime);
-			printf("bitRate: %i\n",status->bitRate);
-			printf("sampleRate: %i\n",status->sampleRate);
-			printf("bits: %i\n",status->bits);
-			printf("channels: %i\n",status->channels);
+		if (mpd_status_get_state(status) == MPD_STATUS_STATE_PLAY ||
+		    mpd_status_get_state(status) == MPD_STATUS_STATE_PAUSE) {
+			printf("song: %i\n", mpd_status_get_song(status));
+			printf("elaspedTime: %i\n",mpd_status_get_elapsed_time(status));
+			printf("totalTime: %i\n", mpd_status_get_total_time(status));
+			printf("bitRate: %i\n", mpd_status_get_bit_rate(status));
+			printf("sampleRate: %i\n", mpd_status_get_sample_rate(status));
+			printf("bits: %i\n", mpd_status_get_bits(status));
+			printf("channels: %i\n", mpd_status_get_channels(status));
 		}
 
 		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
@@ -155,7 +157,7 @@ int main(int argc, char ** argv) {
 			return -1;
 		}
 	
-		mpd_freeStatus(status);
+		mpd_free_status(status);
 	}
 	else if(argc==3 && strcmp(argv[1],"lsinfo")==0) {
 		mpd_InfoEntity * entity;

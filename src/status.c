@@ -41,7 +41,7 @@ void mpd_send_status(struct mpd_connection * connection) {
 	mpd_executeCommand(connection,"status\n");
 }
 
-struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
+struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 	struct mpd_status * status;
 
 	/*mpd_executeCommand(connection,"status\n");
@@ -65,19 +65,19 @@ struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
 	status->repeat = 0;
 	status->random = 0;
 	status->playlist = -1;
-	status->playlistLength = -1;
+	status->playlist_length = -1;
 	status->state = -1;
 	status->song = 0;
 	status->songid = 0;
-	status->elapsedTime = 0;
-	status->totalTime = 0;
-	status->bitRate = 0;
-	status->sampleRate = 0;
+	status->elapsed_time = 0;
+	status->total_time = 0;
+	status->bit_rate = 0;
+	status->sample_rate = 0;
 	status->bits = 0;
 	status->channels = 0;
 	status->crossfade = -1;
 	status->error = NULL;
-	status->updatingDb = 0;
+	status->updatingdb = 0;
 
 	while (connection->pair != NULL) {
 		const struct mpd_pair *pair = connection->pair;
@@ -95,10 +95,10 @@ struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
 			status->playlist = strtol(pair->value,NULL,10);
 		}
 		else if (strcmp(pair->name, "playlistlength") == 0) {
-			status->playlistLength = atoi(pair->value);
+			status->playlist_length = atoi(pair->value);
 		}
 		else if (strcmp(pair->name, "bitrate") == 0) {
-			status->bitRate = atoi(pair->value);
+			status->bit_rate = atoi(pair->value);
 		}
 		else if (strcmp(pair->name, "state") == 0) {
 			if (strcmp(pair->value,"play") == 0) {
@@ -125,8 +125,8 @@ struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
 			/* the second strchr below is a safety check */
 			if (tok && (strchr(tok,0) > (tok+1))) {
 				/* atoi stops at the first non-[0-9] char: */
-				status->elapsedTime = atoi(pair->value);
-				status->totalTime = atoi(tok+1);
+				status->elapsed_time = atoi(pair->value);
+				status->total_time = atoi(tok+1);
 			}
 		}
 		else if (strcmp(pair->name, "error") == 0) {
@@ -136,12 +136,12 @@ struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
 			status->crossfade = atoi(pair->value);
 		}
 		else if (strcmp(pair->name, "updating_db") == 0) {
-			status->updatingDb = atoi(pair->value);
+			status->updatingdb = atoi(pair->value);
 		}
 		else if (strcmp(pair->name, "audio") == 0) {
 			char * tok = strchr(pair->value,':');
 			if (tok && (strchr(tok,0) > (tok+1))) {
-				status->sampleRate = atoi(pair->value);
+				status->sample_rate = atoi(pair->value);
 				status->bits = atoi(++tok);
 				tok = strchr(tok,':');
 				if (tok && (strchr(tok,0) > (tok+1)))
@@ -170,8 +170,94 @@ struct mpd_status * mpd_getStatus(struct mpd_connection * connection) {
 	return status;
 }
 
-void mpd_freeStatus(struct mpd_status * status) {
+void mpd_free_status(struct mpd_status * status) {
 	if (status->error) free(status->error);
 	free(status);
 }
+
+int mpd_status_get_volume(struct mpd_status * status)
+{
+	return status->volume;
+}
+
+int mpd_status_get_repeat(struct mpd_status * status)
+{
+        return status->repeat;
+}
+
+int mpd_status_get_random(struct mpd_status * status)
+{
+        return status->random;
+}
+
+int mpd_status_get_playlist_length(struct mpd_status * status)
+{
+        return status->playlist_length;
+}
+
+long long mpd_status_get_playlist(struct mpd_status * status)
+{
+        return status->playlist;
+}
+
+int mpd_status_get_state(struct mpd_status * status)
+{
+        return status->state;
+}
+
+int mpd_status_get_crossfade(struct mpd_status * status)
+{
+        return status->crossfade;
+}
+
+int mpd_status_get_song(struct mpd_status * status)
+{
+        return status->song;
+}
+
+int mpd_status_get_songid(struct mpd_status * status)
+{
+        return status->songid;
+}
+
+int mpd_status_get_elapsed_time(struct mpd_status * status)
+{
+        return status->elapsed_time;
+}
+
+int mpd_status_get_total_time(struct mpd_status * status)
+{
+        return status->total_time;
+}
+
+int mpd_status_get_bit_rate(struct mpd_status * status)
+{
+        return status->bit_rate;
+}
+
+unsigned int mpd_status_get_sample_rate(struct mpd_status * status)
+{
+        return status->sample_rate;
+}
+
+int mpd_status_get_bits(struct mpd_status * status)
+{
+        return status->bits;
+}
+
+int mpd_status_get_channels(struct mpd_status * status)
+{
+        return status->channels;
+}
+
+int mpd_status_get_updatingdb(struct mpd_status * status)
+{
+        return status->updatingdb;
+}
+
+char * mpd_status_get_error(struct mpd_status * status)
+{
+        return status->error;
+}
+
 

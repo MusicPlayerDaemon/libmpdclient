@@ -113,20 +113,21 @@ test_version(struct mpd_connection *conn)
 static void
 print_status(struct mpd_status *status)
 {
-	LOG_INFO("volume: %i", status->volume);
-	LOG_INFO("repeat: %i", status->repeat);
-	LOG_INFO("playlist: %lli", status->playlist);
-	LOG_INFO("playlistLength: %i", status->playlistLength);
+	LOG_INFO("volume: %i", mpd_status_get_volume(status));
+	LOG_INFO("repeat: %i", mpd_status_get_repeat(status));
+	LOG_INFO("random: %i", mpd_status_get_random(status));
+	LOG_INFO("playlist: %lli", mpd_status_get_playlist(status));
+	LOG_INFO("playlistLength: %i", mpd_status_get_playlist_length(status));
 
-	if (status->state == MPD_STATUS_STATE_PLAY ||
-	   status->state == MPD_STATUS_STATE_PAUSE) {
-		LOG_INFO("song: %i", status->song);
-		LOG_INFO("elaspedTime: %i", status->elapsedTime);
-		LOG_INFO("totalTime: %i", status->totalTime);
-		LOG_INFO("bitRate: %i", status->bitRate);
-		LOG_INFO("sampleRate: %i", status->sampleRate);
-		LOG_INFO("bits: %i", status->bits);
-		LOG_INFO("channels: %i", status->channels);
+	if (mpd_status_get_state(status) == MPD_STATUS_STATE_PLAY ||
+	    mpd_status_get_state(status) == MPD_STATUS_STATE_PAUSE) {
+		LOG_INFO("song: %i", mpd_status_get_song(status));
+		LOG_INFO("elaspedTime: %i", mpd_status_get_elapsed_time(status));
+		LOG_INFO("totalTime: %i", mpd_status_get_total_time(status));
+		LOG_INFO("bitRate: %i", mpd_status_get_bit_rate(status));
+		LOG_INFO("sampleRate: %i", mpd_status_get_sample_rate(status));
+		LOG_INFO("bits: %i", mpd_status_get_bits(status));
+		LOG_INFO("channels: %i", mpd_status_get_channels(status));
 	}
 }
 
@@ -161,17 +162,17 @@ test_status(struct mpd_connection *conn)
 
 	CHECK_CONNECTION(conn);
 
-	status = mpd_getStatus(conn);
+	status = mpd_get_status(conn);
 	if (!status) {
 		LOG_ERROR("%s", mpd_get_error_string(conn));
 		return -1;
 	}
-	if (status->error) {
-		LOG_WARNING("status error: %s", status->error);
+	if (mpd_status_get_error(status)) {
+		LOG_WARNING("status error: %s", mpd_status_get_error(status));
 	}
 
 	print_status(status);
-	mpd_freeStatus(status);
+	mpd_free_status(status);
 
 	mpd_finishCommand(conn);
 	CHECK_CONNECTION(conn);
@@ -228,17 +229,17 @@ test_list_status_currentsong(struct mpd_connection *conn)
 
 	CHECK_CONNECTION(conn);
 
-	status = mpd_getStatus(conn);
+	status = mpd_get_status(conn);
 	if (!status) {
 		LOG_ERROR("%s", mpd_get_error_string(conn));
 		return -1;
 	}
-	if (status->error) {
-		LOG_WARNING("status error: %s", status->error);
+	if (mpd_status_get_error(status)) {
+		LOG_WARNING("status error: %s", mpd_status_get_error(status));
 	}
 
 	print_status(status);
-	mpd_freeStatus(status);
+	mpd_free_status(status);
 
 	CHECK_CONNECTION(conn);
 

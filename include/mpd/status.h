@@ -45,49 +45,9 @@
 #define MPD_STATUS_NO_VOLUME		-1
 
 /* struct mpd_status
- * holds info return from status command
+ * holds info about MPD status
  */
-struct mpd_status {
-	/* 0-100, or MPD_STATUS_NO_VOLUME when there is no volume support */
-	int volume;
-	/* 1 if repeat is on, 0 otherwise */
-	int repeat;
-	/* 1 if random is on, 0 otherwise */
-	int random;
-	/* playlist length */
-	int playlistLength;
-	/* playlist, use this to determine when the playlist has changed */
-	long long playlist;
-	/* use with MPD_STATUS_STATE_* to determine state of player */
-	int state;
-	/* crossfade setting in seconds */
-	int crossfade;
-	/* if a song is currently selected (always the case when state is
-	 * PLAY or PAUSE), this is the position of the currently
-	 * playing song in the playlist, beginning with 0
-	 */
-	int song;
-	/* Song ID of the currently selected song */
-	int songid;
-	/* time in seconds that have elapsed in the currently playing/paused
-	 * song
-	 */
-	int elapsedTime;
-	/* length in seconds of the currently playing/paused song */
-	int totalTime;
-	/* current bit rate in kbs */
-	int bitRate;
-	/* audio sample rate */
-	unsigned int sampleRate;
-	/* audio bits */
-	int bits;
-	/* audio channels */
-	int channels;
-	/* 1 if mpd is updating, 0 otherwise */
-	int updatingDb;
-	/* error */
-	char * error;
-};
+struct mpd_status;
 
 #ifdef __cplusplus
 extern "C" {
@@ -95,16 +55,105 @@ extern "C" {
 
 void mpd_send_status(struct mpd_connection * connection);
 
-/* mpd_getStatus
- * returns status info, be sure to free it with mpd_freeStatus()
+/* mpd_get_status
+ * returns status info, be sure to free it with mpd_free_status()
  * call this after mpd_send_status()
  */
-struct mpd_status * mpd_getStatus(struct mpd_connection * connection);
+struct mpd_status * mpd_get_status(struct mpd_connection * connection);
 
-/* mpd_freeStatus
- * free's status info malloc'd and returned by mpd_getStatus
+/* mpd_free_status
+ * free's status info malloc'd and returned by mpd_get_status
  */
-void mpd_freeStatus(struct mpd_status * status);
+void mpd_free_status(struct mpd_status * status);
+
+/**
+ * Returns the current volume: 0-100, or MPD_STATUS_NO_VOLUME when there is no
+ * volume support
+ */
+int mpd_status_get_volume(struct mpd_status * status);
+
+/**
+ * Returns 1 if repeat is on, 0 otherwise
+ */
+int mpd_status_get_repeat(struct mpd_status * status);
+
+/**
+ * Returns 1 if random is on, 0 otherwise
+ */
+int mpd_status_get_random(struct mpd_status * status);
+
+/**
+ * Returns playlist length
+ */
+int mpd_status_get_playlist_length(struct mpd_status * status);
+
+/**
+ * Returns playlist number, use this to determine when the playlist has changed
+ */
+long long mpd_status_get_playlist(struct mpd_status * status);
+
+/**
+ * Returns the state of the player (use with MPD_STATUS_STATE_*)
+ */
+int mpd_status_get_state(struct mpd_status * status);
+
+/**
+ * Returns crossfade setting in seconds
+ */
+int mpd_status_get_crossfade(struct mpd_status * status);
+
+/**
+ * Returns the position of the currently playing song in the playlist
+ * (beginning with 0) if a song is currently selected (always the case when
+ * state is PLAY or PAUSE)
+ */
+int mpd_status_get_song(struct mpd_status * status);
+
+/**
+ * Returns Song ID of the currently selected song
+ */
+int mpd_status_get_songid(struct mpd_status * status);
+
+/**
+ * Returns time in seconds that have elapsed in the currently playing/paused
+ * song
+ */
+int mpd_status_get_elapsed_time(struct mpd_status * status);
+
+/**
+ * Returns the length in seconds of the currently playing/paused song
+ */
+int mpd_status_get_total_time(struct mpd_status * status);
+
+/**
+ * Returns current bit rate in kbs
+ */
+int mpd_status_get_bit_rate(struct mpd_status * status);
+
+/**
+ * Returns audio sample rate
+ */
+unsigned int mpd_status_get_sample_rate(struct mpd_status * status);
+
+/**
+ * Returns audio bits
+ */
+int mpd_status_get_bits(struct mpd_status * status);
+
+/**
+ * Returns audio channels
+ */
+int mpd_status_get_channels(struct mpd_status * status);
+
+/**
+ * Returns 1 if mpd is updating, 0 otherwise
+ */
+int mpd_status_get_updatingdb(struct mpd_status * status);
+
+/**
+ * Returns the error message
+ */
+char * mpd_status_get_error(struct mpd_status * status);
 
 #ifdef __cplusplus
 }

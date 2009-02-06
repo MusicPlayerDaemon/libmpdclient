@@ -31,6 +31,7 @@
 
 #include "ierror.h"
 #include <mpd/connection.h>
+#include <mpd/status.h>
 #include "socket.h"
 
 /* mpd_Connection
@@ -65,5 +66,50 @@ struct mpd_connection {
 };
 
 extern const char *const mpdTagItemKeys[];
+
+/* struct mpd_status
+ * holds info about MPD status
+ */
+struct mpd_status {
+	/* 0-100, or MPD_STATUS_NO_VOLUME when there is no volume support */
+	int volume;
+	/* 1 if repeat is on, 0 otherwise */
+	int repeat;
+	/* 1 if random is on, 0 otherwise */
+	int random;
+	/* playlist length */
+	int playlist_length;
+	/* playlist, use this to determine when the playlist has changed */
+	long long playlist;
+	/* use with MPD_STATUS_STATE_* to determine state of player */
+	int state;
+	/* crossfade setting in seconds */
+	int crossfade;
+	/* if a song is currently selected (always the case when state is
+	 * PLAY or PAUSE), this is the position of the currently
+	 * playing song in the playlist, beginning with 0
+	 */
+	int song;
+	/* Song ID of the currently selected song */
+	int songid;
+	/* time in seconds that have elapsed in the currently playing/paused
+	 * song
+	 */
+	int elapsed_time;
+	/* length in seconds of the currently playing/paused song */
+	int total_time;
+	/* current bit rate in kbs */
+	int bit_rate;
+	/* audio sample rate */
+	unsigned int sample_rate;
+	/* audio bits */
+	int bits;
+	/* audio channels */
+	int channels;
+	/* 1 if mpd is updating, 0 otherwise */
+	int updatingdb;
+	/* error */
+	char * error;
+};
 
 #endif
