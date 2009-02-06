@@ -35,20 +35,9 @@
 
 #include <mpd/connection.h>
 
-struct mpd_stats {
-	int numberOfArtists;
-	int numberOfAlbums;
-	int numberOfSongs;
-	unsigned long uptime;
-	unsigned long dbUpdateTime;
-	unsigned long playTime;
-	unsigned long dbPlayTime;
-};
+struct mpd_stats;
 
-struct mpd_search_stats {
-	int numberOfSongs;
-	unsigned long playTime;
-};
+struct mpd_search_stats;
 
 #ifdef __cplusplus
 extern "C" {
@@ -56,13 +45,31 @@ extern "C" {
 
 void mpd_send_stats(struct mpd_connection * connection);
 
-struct mpd_stats * mpd_getStats(struct mpd_connection * connection);
+struct mpd_stats * mpd_get_stats(struct mpd_connection * connection);
 
-void mpd_freeStats(struct mpd_stats * stats);
+void mpd_free_stats(struct mpd_stats * stats);
 
-struct mpd_search_stats * mpd_getSearchStats(struct mpd_connection * connection);
+struct mpd_search_stats * mpd_get_search_stats(struct mpd_connection * connection);
 
-void mpd_freeSearchStats(struct mpd_search_stats * stats);
+void mpd_free_search_stats(struct mpd_search_stats * stats);
+
+int mpd_stats_get_number_of_artists(struct mpd_stats * stats);
+
+int mpd_stats_get_number_of_albums(struct mpd_stats * stats);
+
+int mpd_stats_get_number_of_songs(struct mpd_stats * stats);
+
+unsigned long mpd_stats_get_updtime(struct mpd_stats * stats);
+
+unsigned long mpd_stats_get_db_update_time(struct mpd_stats * stats);
+
+unsigned long mpd_stats_get_play_time(struct mpd_stats * stats);
+
+unsigned long mpd_stats_get_db_play_time(struct mpd_stats * stats);
+
+int mpd_search_stats_get_number_of_songs(struct mpd_search_stats * stats);
+
+unsigned long mpd_search_stats_get_play_time(struct mpd_search_stats * stats);
 
 #ifdef __cplusplus
 }
