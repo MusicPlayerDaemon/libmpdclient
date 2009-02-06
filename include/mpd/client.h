@@ -154,17 +154,6 @@ void mpd_startPlaylistSearch(struct mpd_connection *connection, int exact);
 
 void mpd_startStatsSearch(struct mpd_connection *connection);
 
-void mpd_sendPlaylistClearCommand(struct mpd_connection *connection, char *path);
-
-void mpd_sendPlaylistAddCommand(struct mpd_connection *connection,
-                                char *playlist, char *path);
-
-void mpd_sendPlaylistMoveCommand(struct mpd_connection *connection,
-                                 char *playlist, int from, int to);
-
-void mpd_sendPlaylistDeleteCommand(struct mpd_connection *connection,
-                                   char *playlist, int pos);
-
 #ifdef __cplusplus
 }
 #endif
