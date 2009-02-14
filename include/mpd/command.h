@@ -140,6 +140,9 @@ bool
 mpd_send_shuffle(struct mpd_connection *connection);
 
 bool
+mpd_send_shuffle_range(struct mpd_connection *connection, unsigned start, unsigned end);
+
+bool
 mpd_send_clear(struct mpd_connection *connection);
 
 bool

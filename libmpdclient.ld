@@ -26,6 +26,7 @@ global:
 	mpd_send_delete;
 	mpd_send_deleteid;
 	mpd_send_shuffle;
+	mpd_send_shuffle_range;
 	mpd_send_clear;
 	mpd_send_move;
 	mpd_send_moveid;
