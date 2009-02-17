@@ -57,7 +57,7 @@ mpd_send(struct mpd_connection *connection, const void *p, size_t length)
 	if (!mpd_can_send(connection))
 		return false;
 
-	mpd_clearError(connection);
+	mpd_clear_error(connection);
 
 	return mpd_socket_send(&connection->socket, p, length,
 			       &connection->error);

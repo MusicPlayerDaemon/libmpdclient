@@ -47,9 +47,9 @@ static void
 mpd_finishInfoEntity(mpd_InfoEntity * entity) {
 	if (entity->info.directory) {
 		if (entity->type == MPD_INFO_ENTITY_TYPE_DIRECTORY)
-			mpd_freeDirectory(entity->info.directory);
+			mpd_directory_free(entity->info.directory);
 		else if (entity->type == MPD_INFO_ENTITY_TYPE_SONG)
-			mpd_freeSong(entity->info.song);
+			mpd_song_free(entity->info.song);
 		else if (entity->type == MPD_INFO_ENTITY_TYPE_PLAYLISTFILE)
 			mpd_stored_playlist_free(entity->info.playlistFile);
 	}
@@ -81,20 +81,20 @@ mpd_getNextInfoEntity(struct mpd_connection *connection)
 	}
 
 	if (connection->pair == NULL)
-		mpd_getNextReturnElement(connection);
+		mpd_get_next_return_element(connection);
 
 	if (connection->pair != NULL) {
 		if (strcmp(connection->pair->name, "file") == 0) {
 			entity = mpd_newInfoEntity();
 			entity->type = MPD_INFO_ENTITY_TYPE_SONG;
-			entity->info.song = mpd_newSong();
+			entity->info.song = mpd_song_new();
 			entity->info.song->file =
 				str_pool_dup(connection->pair->value);
 		}
 		else if (strcmp(connection->pair->name, "directory") == 0) {
 			entity = mpd_newInfoEntity();
 			entity->type = MPD_INFO_ENTITY_TYPE_DIRECTORY;
-			entity->info.directory = mpd_newDirectory();
+			entity->info.directory = mpd_directory_new();
 			entity->info.directory->path =
 				str_pool_dup(connection->pair->value);
 		}
@@ -108,7 +108,7 @@ mpd_getNextInfoEntity(struct mpd_connection *connection)
 		else if (strcmp(connection->pair->name, "cpos") == 0){
 			entity = mpd_newInfoEntity();
 			entity->type = MPD_INFO_ENTITY_TYPE_SONG;
-			entity->info.song = mpd_newSong();
+			entity->info.song = mpd_song_new();
 			entity->info.song->pos = atoi(connection->pair->value);
 		}
 		else {
@@ -120,7 +120,7 @@ mpd_getNextInfoEntity(struct mpd_connection *connection)
 	}
 	else return NULL;
 
-	mpd_getNextReturnElement(connection);
+	mpd_get_next_return_element(connection);
 	while (connection->pair != NULL) {
 		const struct mpd_pair *pair = connection->pair;
 
@@ -194,7 +194,7 @@ mpd_getNextInfoEntity(struct mpd_connection *connection)
 		else if (entity->type == MPD_INFO_ENTITY_TYPE_PLAYLISTFILE) {
 		}
 
-		mpd_getNextReturnElement(connection);
+		mpd_get_next_return_element(connection);
 	}
 
 	return entity;

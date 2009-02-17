@@ -82,7 +82,7 @@ static void mpd_finishSong(struct mpd_song *song) {
 		str_pool_put(song->comment);
 }
 
-struct mpd_song *mpd_newSong(void) {
+struct mpd_song *mpd_song_new(void) {
 	struct mpd_song *ret = malloc(sizeof(*ret));
 
 	mpd_initSong(ret);
@@ -90,15 +90,15 @@ struct mpd_song *mpd_newSong(void) {
 	return ret;
 }
 
-void mpd_freeSong(struct mpd_song *song) {
+void mpd_song_free(struct mpd_song *song) {
 	mpd_finishSong(song);
 	free(song);
 }
 
 struct mpd_song *
-mpd_songDup(const struct mpd_song *song)
+mpd_song_dup(const struct mpd_song *song)
 {
-	struct mpd_song *ret = mpd_newSong();
+	struct mpd_song *ret = mpd_song_new();
 
 	if (song->file)
 		ret->file = str_pool_dup(song->file);

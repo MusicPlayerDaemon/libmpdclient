@@ -44,24 +44,24 @@ struct mpd_directory {
 extern "C" {
 #endif
 
-/* mpd_newDirectory
+/* mpd_directory_new
  * allocates memory for a new directory
- * use mpd_freeDirectory to free this memory
+ * use mpd_directory_free to free this memory
  */
 struct mpd_directory *
-mpd_newDirectory(void);
+mpd_directory_new(void);
 
-/* mpd_directoryDup
+/* mpd_directory_dup
  * works like strdup, but for mpd_Directory
  */
 struct mpd_directory *
-mpd_directoryDup(const struct mpd_directory *directory);
+mpd_directory_dup(const struct mpd_directory *directory);
 
-/* mpd_freeDirectory
- * used to free memory allocated with mpd_newDirectory, and it frees
+/* mpd_directory_free
+ * used to free memory allocated with mpd_directory_new, and it frees
  * path of mpd_Directory, so be careful
  */
-void mpd_freeDirectory(struct mpd_directory *directory);
+void mpd_directory_free(struct mpd_directory *directory);
 
 #ifdef __cplusplus
 }

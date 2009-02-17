@@ -82,27 +82,27 @@ struct mpd_song {
 extern "C" {
 #endif
 
-/* mpd_newSong
+/* mpd_song_new
  * use to allocate memory for a new mpd_Song
  * file, artist, etc all initialized to NULL
  * if your going to assign values to file, artist, etc
  * be sure to malloc or strdup the memory
- * use mpd_freeSong to free the memory for the mpd_Song, it will also
+ * use mpd_song_free to free the memory for the mpd_Song, it will also
  * free memory for file, artist, etc, so don't do it yourself
  */
-struct mpd_song *mpd_newSong(void);
+struct mpd_song *mpd_song_new(void);
 
-/* mpd_freeSong
- * use to free memory allocated by mpd_newSong
+/* mpd_song_free
+ * use to free memory allocated by mpd_song_new
  * also it will free memory pointed to by file, artist, etc, so be careful
  */
-void mpd_freeSong(struct mpd_song *song);
+void mpd_song_free(struct mpd_song *song);
 
-/* mpd_songDup
+/* mpd_song_dup
  * works like strDup, but for a mpd_Song
  */
 struct mpd_song *
-mpd_songDup(const struct mpd_song *song);
+mpd_song_dup(const struct mpd_song *song);
 
 #ifdef __cplusplus
 }

@@ -48,22 +48,22 @@ struct mpd_connection;
 extern "C" {
 #endif
 
-/* mpd_newConnection
+/* mpd_connection_new
  * use this to open a new connection
- * you should use mpd_closeConnection, when your done with the connection,
+ * you should use mpd_connection_close, when your done with the connection,
  * even if an error has occurred
  * _timeout_ is the connection timeout period in seconds
  */
 struct mpd_connection *
-mpd_newConnection(const char *host, int port, float timeout);
+mpd_connection_new(const char *host, int port, float timeout);
 
-void mpd_setConnectionTimeout(struct mpd_connection *connection,
+void mpd_connection_set_timeout(struct mpd_connection *connection,
 			      float timeout);
 
-/* mpd_closeConnection
+/* mpd_connection_close
  * use this to close a connection and free'ing subsequent memory
  */
-void mpd_closeConnection(struct mpd_connection *connection);
+void mpd_connection_close(struct mpd_connection *connection);
 
 /**
  * Returns the libmpdclient error code.  MPD_ERROR_SUCCESS means no
@@ -87,10 +87,10 @@ mpd_get_error_string(const struct mpd_connection *connection);
 enum mpd_ack
 mpd_get_server_error(const struct mpd_connection *connection);
 
-/* mpd_clearError
+/* mpd_clear_error
  * clears error
  */
-void mpd_clearError(struct mpd_connection *connection);
+void mpd_clear_error(struct mpd_connection *connection);
 
 /**
  * Returns a three-tuple containing the major, minor and patch version
@@ -105,7 +105,7 @@ mpd_get_server_version(const struct mpd_connection *connection);
 #define COMMAND_LIST    1
 #define COMMAND_LIST_OK 2
 
-void mpd_getNextReturnElement(struct mpd_connection *connection);
+void mpd_get_next_return_element(struct mpd_connection *connection);
 
 #ifdef __cplusplus
 }

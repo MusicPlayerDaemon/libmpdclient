@@ -87,11 +87,11 @@ test_new_connection(struct mpd_connection **conn)
 	if (port == NULL)
 		port = "6600";
 
-	*conn = mpd_newConnection(hostname, atoi(port), 10);
+	*conn = mpd_connection_new(hostname, atoi(port), 10);
 
 	if (!*conn || mpd_get_error(*conn) != MPD_ERROR_SUCCESS) {
 		LOG_ERROR("%s", mpd_get_error_string(*conn));
-		mpd_closeConnection(*conn);
+		mpd_connection_close(*conn);
 		*conn = NULL;
 		return -1;
 	}
@@ -172,7 +172,7 @@ test_status(struct mpd_connection *conn)
 	}
 
 	print_status(status);
-	mpd_free_status(status);
+	mpd_status_free(status);
 
 	mpd_finishCommand(conn);
 	CHECK_CONNECTION(conn);
@@ -239,7 +239,7 @@ test_list_status_currentsong(struct mpd_connection *conn)
 	}
 
 	print_status(status);
-	mpd_free_status(status);
+	mpd_status_free(status);
 
 	CHECK_CONNECTION(conn);
 
@@ -328,7 +328,7 @@ test_list_artists(struct mpd_connection *conn)
 static int
 test_close_connection(struct mpd_connection *conn)
 {
-	mpd_closeConnection(conn);
+	mpd_connection_close(conn);
 	return 0;
 }
 

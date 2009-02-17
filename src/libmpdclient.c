@@ -77,7 +77,7 @@ void mpd_finishCommand(struct mpd_connection *connection)
 {
 	while (!connection->doneProcessing) {
 		if (connection->doneListOk) connection->doneListOk = 0;
-		mpd_getNextReturnElement(connection);
+		mpd_get_next_return_element(connection);
 	}
 }
 
@@ -86,7 +86,7 @@ static void mpd_finishListOkCommand(struct mpd_connection *connection)
 	while (!connection->doneProcessing && connection->listOks &&
 			!connection->doneListOk)
 	{
-		mpd_getNextReturnElement(connection);
+		mpd_get_next_return_element(connection);
 	}
 }
 
@@ -105,7 +105,7 @@ mpd_sendInfoCommand(struct mpd_connection *connection, char *command)
 }
 
 static char *
-mpd_getNextReturnElementNamed(struct mpd_connection *connection,
+mpd_get_next_return_elementNamed(struct mpd_connection *connection,
 			      const char *name)
 {
 	if (connection->doneProcessing || (connection->listOks &&
@@ -114,14 +114,14 @@ mpd_getNextReturnElementNamed(struct mpd_connection *connection,
 		return NULL;
 	}
 
-	mpd_getNextReturnElement(connection);
+	mpd_get_next_return_element(connection);
 	while (connection->pair != NULL) {
 		const struct mpd_pair *pair = connection->pair;
 
 		if (strcmp(pair->name, name) == 0)
 			return strdup(pair->value);
 
-		mpd_getNextReturnElement(connection);
+		mpd_get_next_return_element(connection);
 	}
 
 	return NULL;
@@ -133,18 +133,18 @@ char *mpd_getNextTag(struct mpd_connection *connection, int type)
 	    type == MPD_TAG_TYPE_ANY)
 		return NULL;
 	if (type == MPD_TAG_TYPE_FILENAME)
-		return mpd_getNextReturnElementNamed(connection, "file");
-	return mpd_getNextReturnElementNamed(connection, mpdTagItemKeys[type]);
+		return mpd_get_next_return_elementNamed(connection, "file");
+	return mpd_get_next_return_elementNamed(connection, mpdTagItemKeys[type]);
 }
 
 char * mpd_getNextArtist(struct mpd_connection *connection)
 {
-	return mpd_getNextReturnElementNamed(connection,"Artist");
+	return mpd_get_next_return_elementNamed(connection,"Artist");
 }
 
 char * mpd_getNextAlbum(struct mpd_connection *connection)
 {
-	return mpd_getNextReturnElementNamed(connection,"Album");
+	return mpd_get_next_return_elementNamed(connection,"Album");
 }
 
 void
@@ -175,7 +175,7 @@ mpd_sendAddIdCommand(struct mpd_connection *connection, const char *file)
 	if (!ret)
 		return -1;
 
-	string = mpd_getNextReturnElementNamed(connection, "Id");
+	string = mpd_get_next_return_elementNamed(connection, "Id");
 	if (string) {
 		retval = atoi(string);
 		free(string);
@@ -189,7 +189,7 @@ int mpd_getUpdateId(struct mpd_connection *connection)
 	char * jobid;
 	int ret = 0;
 
-	jobid = mpd_getNextReturnElementNamed(connection,"updating_db");
+	jobid = mpd_get_next_return_elementNamed(connection,"updating_db");
 	if (jobid) {
 		ret = atoi(jobid);
 		free(jobid);
@@ -240,17 +240,17 @@ void mpd_sendCommandListEnd(struct mpd_connection *connection)
  */
 char * mpd_getNextCommand(struct mpd_connection *connection)
 {
-	return mpd_getNextReturnElementNamed(connection, "command");
+	return mpd_get_next_return_elementNamed(connection, "command");
 }
 
 char * mpd_getNextHandler(struct mpd_connection *connection)
 {
-	return mpd_getNextReturnElementNamed(connection, "handler");
+	return mpd_get_next_return_elementNamed(connection, "handler");
 }
 
 char * mpd_getNextTagType(struct mpd_connection *connection)
 {
-	return mpd_getNextReturnElementNamed(connection, "tagtype");
+	return mpd_get_next_return_elementNamed(connection, "tagtype");
 }
 
 void mpd_startSearch(struct mpd_connection *connection, int exact)

@@ -56,7 +56,7 @@ struct mpd_stats * mpd_get_stats(struct mpd_connection * connection) {
 	}
 
 	if (connection->pair == NULL)
-		mpd_getNextReturnElement(connection);
+		mpd_get_next_return_element(connection);
 
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
@@ -95,7 +95,7 @@ struct mpd_stats * mpd_get_stats(struct mpd_connection * connection) {
 			stats->db_play_time = strtol(pair->value,NULL,10);
 		}
 
-		mpd_getNextReturnElement(connection);
+		mpd_get_next_return_element(connection);
 		if (mpd_error_is_defined(&connection->error)) {
 			free(stats);
 			return NULL;
@@ -110,7 +110,7 @@ struct mpd_stats * mpd_get_stats(struct mpd_connection * connection) {
 	return stats;
 }
 
-void mpd_free_stats(struct mpd_stats * stats) {
+void mpd_stats_free(struct mpd_stats * stats) {
 	free(stats);
 }
 
@@ -124,7 +124,7 @@ struct mpd_search_stats * mpd_get_search_stats(struct mpd_connection * connectio
 	}
 
 	if (connection->pair == NULL)
-		mpd_getNextReturnElement(connection);
+		mpd_get_next_return_element(connection);
 
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
@@ -142,7 +142,7 @@ struct mpd_search_stats * mpd_get_search_stats(struct mpd_connection * connectio
 			stats->play_time = strtol(pair->value, NULL, 10);
 		}
 
-		mpd_getNextReturnElement(connection);
+		mpd_get_next_return_element(connection);
 		if (mpd_error_is_defined(&connection->error)) {
 			free(stats);
 			return NULL;
@@ -157,7 +157,7 @@ struct mpd_search_stats * mpd_get_search_stats(struct mpd_connection * connectio
 	return stats;
 }
 
-void mpd_free_search_stats(struct mpd_search_stats * stats)
+void mpd_stats_search_free(struct mpd_search_stats * stats)
 {
 	free(stats);
 }

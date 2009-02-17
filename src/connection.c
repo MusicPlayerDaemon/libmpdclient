@@ -138,7 +138,7 @@ mpd_parseWelcome(struct mpd_connection *connection,
 }
 
 struct mpd_connection *
-mpd_newConnection(const char *host, int port, float timeout)
+mpd_connection_new(const char *host, int port, float timeout)
 {
 	int err;
 	const char *line;
@@ -167,7 +167,7 @@ mpd_newConnection(const char *host, int port, float timeout)
 	if (winsock_dll_error(connection))
 		return connection;
 
-	mpd_setConnectionTimeout(connection,timeout);
+	mpd_connection_set_timeout(connection,timeout);
 
 	err = mpd_connect(connection, host, port);
 	if (err < 0)
@@ -210,12 +210,12 @@ mpd_get_server_error(const struct mpd_connection *connection)
 	return connection->error.ack;
 }
 
-void mpd_clearError(struct mpd_connection *connection)
+void mpd_clear_error(struct mpd_connection *connection)
 {
 	mpd_error_clear(&connection->error);
 }
 
-void mpd_closeConnection(struct mpd_connection *connection)
+void mpd_connection_close(struct mpd_connection *connection)
 {
 	mpd_socket_deinit(&connection->socket);
 
@@ -231,7 +231,7 @@ void mpd_closeConnection(struct mpd_connection *connection)
 }
 
 void
-mpd_setConnectionTimeout(struct mpd_connection *connection, float timeout)
+mpd_connection_set_timeout(struct mpd_connection *connection, float timeout)
 {
 	const struct timeval tv = {
 		.tv_sec = (long)timeout,
@@ -247,7 +247,7 @@ mpd_get_server_version(const struct mpd_connection *connection)
 	return connection->version;
 }
 
-void mpd_getNextReturnElement(struct mpd_connection *connection)
+void mpd_get_next_return_element(struct mpd_connection *connection)
 {
 	char * output = NULL;
 	char * name = NULL;

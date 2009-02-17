@@ -40,7 +40,7 @@
 #include <stdio.h>
 
 struct mpd_output_entity *
-mpd_getNextOutput(struct mpd_connection *connection)
+mpd_output_get_next(struct mpd_connection *connection)
 {
 	struct mpd_output_entity *output = NULL;
 
@@ -59,7 +59,7 @@ mpd_getNextOutput(struct mpd_connection *connection)
 	output->enabled = 0;
 
 	if (connection->pair == NULL)
-		mpd_getNextReturnElement(connection);
+		mpd_get_next_return_element(connection);
 
 	while (connection->pair != NULL) {
 		const struct mpd_pair *pair = connection->pair;
@@ -75,7 +75,7 @@ mpd_getNextOutput(struct mpd_connection *connection)
 			output->enabled = atoi(pair->value);
 		}
 
-		mpd_getNextReturnElement(connection);
+		mpd_get_next_return_element(connection);
 		if (mpd_error_is_defined(&connection->error)) {
 			free(output);
 			return NULL;
@@ -87,7 +87,7 @@ mpd_getNextOutput(struct mpd_connection *connection)
 }
 
 void
-mpd_freeOutputElement(struct mpd_output_entity *output)
+mpd_output_free(struct mpd_output_entity *output)
 {
 	free(output->name);
 	free(output);

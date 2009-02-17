@@ -46,10 +46,10 @@ extern "C" {
 #endif
 
 struct mpd_output_entity *
-mpd_getNextOutput(struct mpd_connection *connection);
+mpd_output_get_next(struct mpd_connection *connection);
 
 void
-mpd_freeOutputElement(struct mpd_output_entity *output);
+mpd_output_free(struct mpd_output_entity *output);
 
 #ifdef __cplusplus
 }

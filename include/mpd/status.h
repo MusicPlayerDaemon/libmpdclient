@@ -56,15 +56,15 @@ extern "C" {
 void mpd_send_status(struct mpd_connection * connection);
 
 /* mpd_get_status
- * returns status info, be sure to free it with mpd_free_status()
+ * returns status info, be sure to free it with mpd_status_free()
  * call this after mpd_send_status()
  */
 struct mpd_status * mpd_get_status(struct mpd_connection * connection);
 
-/* mpd_free_status
+/* mpd_status_free
  * free's status info malloc'd and returned by mpd_get_status
  */
-void mpd_free_status(struct mpd_status * status);
+void mpd_status_free(struct mpd_status * status);
 
 /**
  * Returns the current volume: 0-100, or MPD_STATUS_NO_VOLUME when there is no

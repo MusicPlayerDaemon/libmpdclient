@@ -49,7 +49,7 @@ mpd_finishDirectory(struct mpd_directory *directory)
 }
 
 struct mpd_directory *
-mpd_newDirectory(void)
+mpd_directory_new(void)
 {
 	struct mpd_directory *directory = malloc(sizeof(*directory));
 
@@ -58,7 +58,7 @@ mpd_newDirectory(void)
 	return directory;
 }
 
-void mpd_freeDirectory(struct mpd_directory *directory)
+void mpd_directory_free(struct mpd_directory *directory)
 {
 	mpd_finishDirectory(directory);
 
@@ -66,9 +66,9 @@ void mpd_freeDirectory(struct mpd_directory *directory)
 }
 
 struct mpd_directory *
-mpd_directoryDup(const struct mpd_directory *directory)
+mpd_directory_dup(const struct mpd_directory *directory)
 {
-	struct mpd_directory *ret = mpd_newDirectory();
+	struct mpd_directory *ret = mpd_directory_new();
 
 	if (directory->path)
 		ret->path = str_pool_dup(directory->path);
