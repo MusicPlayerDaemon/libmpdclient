@@ -52,10 +52,10 @@ extern "C" {
 
 /* INFO COMMANDS AND STUFF */
 
-void mpd_sendSearchCommand(struct mpd_connection *connection, int table,
+void mpd_sendSearchCommand(struct mpd_connection *connection, enum mpd_tag_type table,
 		const char * str);
 
-void mpd_send_find(struct mpd_connection *connection, int table,
+void mpd_send_find(struct mpd_connection *connection, enum mpd_tag_type table,
 		const char * str);
 
 /* LIST TAG COMMANDS */
@@ -67,7 +67,7 @@ char * mpd_getNextArtist(struct mpd_connection *connection);
 
 char * mpd_getNextAlbum(struct mpd_connection *connection);
 
-char * mpd_getNextTag(struct mpd_connection *connection, int type);
+char * mpd_getNextTag(struct mpd_connection *connection, enum mpd_tag_type type);
 
 /* SIMPLE COMMANDS */
 
@@ -120,7 +120,7 @@ void mpd_startSearch(struct mpd_connection *connection, int exact);
  * @param type
  * @param name
  */
-void mpd_addConstraintSearch(struct mpd_connection *connection, int type, const char *name);
+void mpd_addConstraintSearch(struct mpd_connection *connection, enum mpd_tag_type type, const char *name);
 
 /**
  * @param connection a #mpd_connection
@@ -148,7 +148,7 @@ void mpd_commitSearch(struct mpd_connection *connection);
  * this one will return a list of only one field (the one specified with type) and you need
  * mpd_getNextTag to get the results
  */
-void mpd_startFieldSearch(struct mpd_connection *connection, int type);
+void mpd_startFieldSearch(struct mpd_connection *connection, enum mpd_tag_type type);
 
 void mpd_startPlaylistSearch(struct mpd_connection *connection, int exact);
 

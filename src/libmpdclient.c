@@ -127,9 +127,9 @@ mpd_get_next_return_elementNamed(struct mpd_connection *connection,
 	return NULL;
 }
 
-char *mpd_getNextTag(struct mpd_connection *connection, int type)
+char *mpd_getNextTag(struct mpd_connection *connection, enum mpd_tag_type type)
 {
-	if (type < 0 || type >= MPD_TAG_TYPE_COUNT ||
+	if (type >= MPD_TAG_TYPE_COUNT ||
 	    type == MPD_TAG_TYPE_ANY)
 		return NULL;
 	if (type == MPD_TAG_TYPE_FILENAME)
@@ -148,7 +148,7 @@ char * mpd_getNextAlbum(struct mpd_connection *connection)
 }
 
 void
-mpd_sendSearchCommand(struct mpd_connection *connection, int table,
+mpd_sendSearchCommand(struct mpd_connection *connection, enum mpd_tag_type table,
 		      const char *str)
 {
 	mpd_startSearch(connection, 0);
@@ -156,7 +156,7 @@ mpd_sendSearchCommand(struct mpd_connection *connection, int table,
 	mpd_commitSearch(connection);
 }
 
-void mpd_send_find(struct mpd_connection *connection, int table,
+void mpd_send_find(struct mpd_connection *connection, enum mpd_tag_type table,
 			 const char * str)
 {
 	mpd_startSearch(connection, 1);
@@ -291,7 +291,7 @@ void mpd_startPlaylistSearch(struct mpd_connection *connection, int exact)
 	else connection->request = strdup("playlistsearch");
 }
 
-void mpd_startFieldSearch(struct mpd_connection *connection, int type)
+void mpd_startFieldSearch(struct mpd_connection *connection, enum mpd_tag_type type)
 {
 	const char *strtype;
 	int len;
@@ -303,7 +303,7 @@ void mpd_startFieldSearch(struct mpd_connection *connection, int type)
 		return;
 	}
 
-	if (type < 0 || type >= MPD_TAG_TYPE_COUNT) {
+	if (type >= MPD_TAG_TYPE_COUNT) {
 		mpd_error_code(&connection->error, MPD_ERROR_ARG);
 		mpd_error_message(&connection->error,
 				  "invalid type specified");
@@ -321,7 +321,7 @@ void mpd_startFieldSearch(struct mpd_connection *connection, int type)
 
 void
 mpd_addConstraintSearch(struct mpd_connection *connection,
-			int type, const char *name)
+			enum mpd_tag_type type, const char *name)
 {
 	const char *strtype;
 	char *arg;
@@ -335,7 +335,7 @@ mpd_addConstraintSearch(struct mpd_connection *connection,
 		return;
 	}
 
-	if (type < 0 || type >= MPD_TAG_TYPE_COUNT) {
+	if (type >= MPD_TAG_TYPE_COUNT) {
 		mpd_error_code(&connection->error, MPD_ERROR_ARG);
 		mpd_error_message(&connection->error,
 				  "invalid type specified");
