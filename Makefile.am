@@ -20,6 +20,7 @@ mpdinclude_HEADERS = \
 	include/mpd/tag.h \
 	include/mpd/output.h \
 	include/mpd/pair.h \
+	include/mpd/search.h \
 	include/mpd/song.h \
 	include/mpd/stored_playlist.h
 
@@ -39,6 +40,7 @@ src_libmpdclient_la_SOURCES = \
 	src/pair.c \
 	src/entity.c \
 	src/idle.c \
+	src/search.c \
 	src/send.c \
 	src/socket.c src/socket.h \
 	src/song.c \

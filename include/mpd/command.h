@@ -237,18 +237,6 @@ mpd_send_listallinfo(struct mpd_connection *connection, const char *dir);
 bool
 mpd_send_lsinfo(struct mpd_connection *connection, const char *dir);
 
-/**
- * Request a list of all artists.
- */
-bool
-mpd_send_list_artist(struct mpd_connection *connection);
-
-/**
- * Request a list of all albums of an artist.
- */
-bool
-mpd_send_list_album(struct mpd_connection *connection, const char *artist);
-
 bool
 mpd_send_update(struct mpd_connection *connection, const char *path);
 

@@ -33,6 +33,8 @@
 #include <mpd/client.h>
 #include <mpd/status.h>
 #include <mpd/entity.h>
+#include <mpd/search.h>
+#include <mpd/tag.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -218,14 +220,15 @@ int main(int argc, char ** argv) {
 	else if(argc==2 && strcmp(argv[1],"artists")==0) {
 		char * artist;
 	
-		mpd_send_list_artist(conn);
+		mpd_search_db_tags(conn, MPD_TAG_TYPE_ARTIST);
+		mpd_search_commit(conn);
 		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
 			fprintf(stderr,"%s\n", mpd_get_error_string(conn));
 			mpd_connection_close(conn);
 			return -1;
 		}
 
-		while((artist = mpd_getNextArtist(conn))) {
+		while((artist = mpd_get_next_tag(conn, MPD_TAG_TYPE_ARTIST))) {
 			printf("%s\n",artist);
 			free(artist);
 		}

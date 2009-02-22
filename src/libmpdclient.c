@@ -51,28 +51,6 @@
 #define INTLEN      ((sizeof(int)       * CHAR_BIT + 1) / 3 + 1)
 #define LONGLONGLEN ((sizeof(long long) * CHAR_BIT + 1) / 3 + 1)
 
-static char * mpd_sanitizeArg(const char * arg) {
-	size_t i;
-	char * ret;
-	register const char *c;
-	register char *rc;
-
-	/* instead of counting in that loop above, just
-	 * use a bit more memory and half running time
-	 */
-	ret = malloc(strlen(arg) * 2 + 1);
-
-	c = arg;
-	rc = ret;
-	for (i = strlen(arg)+1; i != 0; --i) {
-		if (*c=='"' || *c=='\\')
-			*rc++ = '\\';
-		*(rc++) = *(c++);
-	}
-
-	return ret;
-}
-
 void mpd_finishCommand(struct mpd_connection *connection)
 {
 	while (!connection->doneProcessing) {
@@ -98,72 +76,6 @@ int mpd_nextListOkCommand(struct mpd_connection *connection)
 	return 0;
 }
 
-static void
-mpd_sendInfoCommand(struct mpd_connection *connection, char *command)
-{
-	mpd_send_command(connection, command, NULL);
-}
-
-static char *
-mpd_get_next_return_elementNamed(struct mpd_connection *connection,
-			      const char *name)
-{
-	if (connection->doneProcessing || (connection->listOks &&
-				connection->doneListOk))
-	{
-		return NULL;
-	}
-
-	mpd_get_next_return_element(connection);
-	while (connection->pair != NULL) {
-		const struct mpd_pair *pair = connection->pair;
-
-		if (strcmp(pair->name, name) == 0)
-			return strdup(pair->value);
-
-		mpd_get_next_return_element(connection);
-	}
-
-	return NULL;
-}
-
-char *mpd_getNextTag(struct mpd_connection *connection, enum mpd_tag_type type)
-{
-	if (type >= MPD_TAG_TYPE_COUNT ||
-	    type == MPD_TAG_TYPE_ANY)
-		return NULL;
-	if (type == MPD_TAG_TYPE_FILENAME)
-		return mpd_get_next_return_elementNamed(connection, "file");
-	return mpd_get_next_return_elementNamed(connection, mpdTagItemKeys[type]);
-}
-
-char * mpd_getNextArtist(struct mpd_connection *connection)
-{
-	return mpd_get_next_return_elementNamed(connection,"Artist");
-}
-
-char * mpd_getNextAlbum(struct mpd_connection *connection)
-{
-	return mpd_get_next_return_elementNamed(connection,"Album");
-}
-
-void
-mpd_sendSearchCommand(struct mpd_connection *connection, enum mpd_tag_type table,
-		      const char *str)
-{
-	mpd_startSearch(connection, 0);
-	mpd_addConstraintSearch(connection, table, str);
-	mpd_commitSearch(connection);
-}
-
-void mpd_send_find(struct mpd_connection *connection, enum mpd_tag_type table,
-			 const char * str)
-{
-	mpd_startSearch(connection, 1);
-	mpd_addConstraintSearch(connection, table, str);
-	mpd_commitSearch(connection);
-}
-
 int
 mpd_sendAddIdCommand(struct mpd_connection *connection, const char *file)
 {
@@ -175,7 +87,7 @@ mpd_sendAddIdCommand(struct mpd_connection *connection, const char *file)
 	if (!ret)
 		return -1;
 
-	string = mpd_get_next_return_elementNamed(connection, "Id");
+	string = mpd_get_next_return_element_named(connection, "Id");
 	if (string) {
 		retval = atoi(string);
 		free(string);
@@ -189,7 +101,7 @@ int mpd_getUpdateId(struct mpd_connection *connection)
 	char * jobid;
 	int ret = 0;
 
-	jobid = mpd_get_next_return_elementNamed(connection,"updating_db");
+	jobid = mpd_get_next_return_element_named(connection,"updating_db");
 	if (jobid) {
 		ret = atoi(jobid);
 		free(jobid);
@@ -240,137 +152,16 @@ void mpd_sendCommandListEnd(struct mpd_connection *connection)
  */
 char * mpd_getNextCommand(struct mpd_connection *connection)
 {
-	return mpd_get_next_return_elementNamed(connection, "command");
+	return mpd_get_next_return_element_named(connection, "command");
 }
 
 char * mpd_getNextHandler(struct mpd_connection *connection)
 {
-	return mpd_get_next_return_elementNamed(connection, "handler");
+	return mpd_get_next_return_element_named(connection, "handler");
 }
 
-char * mpd_getNextTagType(struct mpd_connection *connection)
+char * mpd_get_next_tag_type(struct mpd_connection *connection)
 {
-	return mpd_get_next_return_elementNamed(connection, "tagtype");
+	return mpd_get_next_return_element_named(connection, "tagtype");
 }
 
-void mpd_startSearch(struct mpd_connection *connection, int exact)
-{
-	if (connection->request) {
-		mpd_error_code(&connection->error, MPD_ERROR_STATE);
-		mpd_error_message(&connection->error,
-				  "search already in progress");
-		return;
-	}
-
-	if (exact) connection->request = strdup("find");
-	else connection->request = strdup("search");
-}
-
-void mpd_startStatsSearch(struct mpd_connection *connection)
-{
-	if (connection->request) {
-		mpd_error_code(&connection->error, MPD_ERROR_STATE);
-		mpd_error_message(&connection->error,
-				  "search already in progress");
-		return;
-	}
-
-	connection->request = strdup("count");
-}
-
-void mpd_startPlaylistSearch(struct mpd_connection *connection, int exact)
-{
-	if (connection->request) {
-		mpd_error_code(&connection->error, MPD_ERROR_STATE);
-		mpd_error_message(&connection->error,
-				  "search already in progress");
-		return;
-	}
-
-	if (exact) connection->request = strdup("playlistfind");
-	else connection->request = strdup("playlistsearch");
-}
-
-void mpd_startFieldSearch(struct mpd_connection *connection, enum mpd_tag_type type)
-{
-	const char *strtype;
-	int len;
-
-	if (connection->request) {
-		mpd_error_code(&connection->error, MPD_ERROR_STATE);
-		mpd_error_message(&connection->error,
-				  "search already in progress");
-		return;
-	}
-
-	if (type >= MPD_TAG_TYPE_COUNT) {
-		mpd_error_code(&connection->error, MPD_ERROR_ARG);
-		mpd_error_message(&connection->error,
-				  "invalid type specified");
-		return;
-	}
-
-	strtype = mpdTagItemKeys[type];
-
-	len = 5+strlen(strtype)+1;
-	connection->request = malloc(len);
-
-	snprintf(connection->request, len, "list %c%s",
-	         tolower(strtype[0]), strtype+1);
-}
-
-void
-mpd_addConstraintSearch(struct mpd_connection *connection,
-			enum mpd_tag_type type, const char *name)
-{
-	const char *strtype;
-	char *arg;
-	int len;
-	char *string;
-
-	if (!connection->request) {
-		mpd_error_code(&connection->error, MPD_ERROR_STATE);
-		mpd_error_message(&connection->error,
-				  "no search in progress");
-		return;
-	}
-
-	if (type >= MPD_TAG_TYPE_COUNT) {
-		mpd_error_code(&connection->error, MPD_ERROR_ARG);
-		mpd_error_message(&connection->error,
-				  "invalid type specified");
-		return;
-	}
-
-	if (name == NULL) {
-		mpd_error_code(&connection->error, MPD_ERROR_ARG);
-		mpd_error_message(&connection->error, "no name specified");
-		return;
-	}
-
-	string = strdup(connection->request);
-	strtype = mpdTagItemKeys[type];
-	arg = mpd_sanitizeArg(name);
-
-	len = strlen(string)+1+strlen(strtype)+2+strlen(arg)+2;
-	connection->request = realloc(connection->request, len);
-	snprintf(connection->request, len, "%s %c%s \"%s\"",
-	         string, tolower(strtype[0]), strtype+1, arg);
-
-	free(string);
-	free(arg);
-}
-
-void mpd_commitSearch(struct mpd_connection *connection)
-{
-	if (!connection->request) {
-		mpd_error_code(&connection->error, MPD_ERROR_STATE);
-		mpd_error_message(&connection->error,
-				  "no search in progress");
-		return;
-	}
-
-	mpd_sendInfoCommand(connection, connection->request);
-
-	connection->request = NULL;
-}

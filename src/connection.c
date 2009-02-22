@@ -335,3 +335,26 @@ void mpd_get_next_return_element(struct mpd_connection *connection)
 	}
 }
 
+char *
+mpd_get_next_return_element_named(struct mpd_connection *connection,
+				 const char *name)
+{
+	if (connection->doneProcessing || (connection->listOks &&
+				connection->doneListOk))
+	{
+		return NULL;
+	}
+
+	mpd_get_next_return_element(connection);
+	while (connection->pair != NULL) {
+		const struct mpd_pair *pair = connection->pair;
+
+		if (strcmp(pair->name, name) == 0)
+			return strdup(pair->value);
+
+		mpd_get_next_return_element(connection);
+	}
+
+	return NULL;
+}
+

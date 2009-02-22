@@ -358,25 +358,6 @@ mpd_send_lsinfo(struct mpd_connection *connection, const char *dir)
 	return mpd_send_command(connection, "lsinfo", dir, NULL);
 }
 
-static bool
-mpd_send_list(struct mpd_connection *connection,
-	      const char *table, const char *arg)
-{
-	return mpd_send_command(connection, "list", table, arg, NULL);
-}
-
-bool
-mpd_send_list_artist(struct mpd_connection *connection)
-{
-	return mpd_send_list(connection, "artist", NULL);
-}
-
-bool
-mpd_send_list_album(struct mpd_connection *connection, const char *artist)
-{
-	return mpd_send_list(connection, "album", artist);
-}
-
 bool
 mpd_send_update(struct mpd_connection *connection, const char *path)
 {

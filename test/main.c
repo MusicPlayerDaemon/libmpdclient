@@ -34,6 +34,8 @@
 #include <mpd/status.h>
 #include <mpd/song.h>
 #include <mpd/entity.h>
+#include <mpd/search.h>
+#include <mpd/tag.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -304,11 +306,12 @@ test_list_artists(struct mpd_connection *conn)
 	char *artist;
 	int first = 1;
 
-        mpd_send_list_artist(conn);
+        mpd_search_db_tags(conn, MPD_TAG_TYPE_ARTIST);
+	mpd_search_commit(conn);
 	CHECK_CONNECTION(conn);
 
 	LOG_INFO("%s: ", "Artists list");
-	while ((artist = mpd_getNextArtist(conn))) {
+	while ((artist = mpd_get_next_tag(conn, MPD_TAG_TYPE_ARTIST))) {
 		if (first) {
 			printf("    %s", artist);
 			first = 0;

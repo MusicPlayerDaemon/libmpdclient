@@ -38,7 +38,6 @@
 #include <mpd/command.h>
 #include <mpd/song.h>
 #include <mpd/directory.h>
-#include <mpd/tag.h>
 #include <mpd/pair.h>
 #include <mpd/stored_playlist.h>
 
@@ -51,23 +50,6 @@ extern "C" {
 #endif
 
 /* INFO COMMANDS AND STUFF */
-
-void mpd_sendSearchCommand(struct mpd_connection *connection, enum mpd_tag_type table,
-		const char * str);
-
-void mpd_send_find(struct mpd_connection *connection, enum mpd_tag_type table,
-		const char * str);
-
-/* LIST TAG COMMANDS */
-
-/* use this function fetch next artist entry, be sure to free the returned
- * string.  NULL means there are no more.  Best used with sendListArtists
- */
-char * mpd_getNextArtist(struct mpd_connection *connection);
-
-char * mpd_getNextAlbum(struct mpd_connection *connection);
-
-char * mpd_getNextTag(struct mpd_connection *connection, enum mpd_tag_type type);
 
 /* SIMPLE COMMANDS */
 
@@ -104,55 +86,7 @@ char *mpd_getNextCommand(struct mpd_connection *connection);
 
 char *mpd_getNextHandler(struct mpd_connection *connection);
 
-char *mpd_getNextTagType(struct mpd_connection *connection);
-
-/**
- * @param connection a #mpd_connection
- * @param exact if to match exact
- *
- * starts a search, use mpd_addConstraintSearch to add
- * a constraint to the search, and mpd_commitSearch to do the actual search
- */
-void mpd_startSearch(struct mpd_connection *connection, int exact);
-
-/**
- * @param connection a #mpd_connection
- * @param type
- * @param name
- */
-void mpd_addConstraintSearch(struct mpd_connection *connection, enum mpd_tag_type type, const char *name);
-
-/**
- * @param connection a #mpd_connection
- */
-void mpd_commitSearch(struct mpd_connection *connection);
-
-/**
- * @param connection a #mpd_connection
- * @param type The type to search for
- *
- * starts a search for fields... f.e. get a list of artists would be:
- * @code
- * mpd_startFieldSearch(connection, MPD_TAG_ITEM_ARTIST);
- * mpd_commitSearch(connection);
- * @endcode
- *
- * or get a list of artist in genre "jazz" would be:
- * @code
- * mpd_startFieldSearch(connection, MPD_TAG_ITEM_ARTIST);
- * mpd_addConstraintSearch(connection, MPD_TAG_ITEM_GENRE, "jazz")
- * mpd_commitSearch(connection);
- * @endcode
- *
- * mpd_startSearch will return  a list of songs (and you need mpd_getNextInfoEntity)
- * this one will return a list of only one field (the one specified with type) and you need
- * mpd_getNextTag to get the results
- */
-void mpd_startFieldSearch(struct mpd_connection *connection, enum mpd_tag_type type);
-
-void mpd_startPlaylistSearch(struct mpd_connection *connection, int exact);
-
-void mpd_startStatsSearch(struct mpd_connection *connection);
+char *mpd_get_next_tag_type(struct mpd_connection *connection);
 
 #ifdef __cplusplus
 }
