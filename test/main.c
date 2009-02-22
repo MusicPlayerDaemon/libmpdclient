@@ -186,7 +186,7 @@ static int
 test_currentsong(struct mpd_connection *conn)
 {
 	struct mpd_song *song;
-	mpd_InfoEntity *entity;
+	mpd_entity *entity;
 
 	mpd_send_currentsong(conn);
 
@@ -194,18 +194,18 @@ test_currentsong(struct mpd_connection *conn)
 
 	mpd_nextListOkCommand(conn);
 
-	entity = mpd_getNextInfoEntity(conn);
+	entity = mpd_get_next_entity(conn);
 	if (entity) {
 		song = entity->info.song;
 		if (entity->type != MPD_INFO_ENTITY_TYPE_SONG || !song) {
 			LOG_ERROR("entity doesn't have the expected type (song)i :%d", entity->type);
-			mpd_freeInfoEntity(entity);
+			mpd_entity_free(entity);
 			return -1;
 		}
 
 		print_song(song);
 
-		mpd_freeInfoEntity(entity);
+		mpd_entity_free(entity);
 	}
 
 	mpd_finishCommand(conn);
@@ -220,7 +220,7 @@ test_list_status_currentsong(struct mpd_connection *conn)
 {
 	struct mpd_status *status;
 	struct mpd_song *song;
-	mpd_InfoEntity *entity;
+	mpd_entity *entity;
 
 	CHECK_CONNECTION(conn);
 
@@ -247,18 +247,18 @@ test_list_status_currentsong(struct mpd_connection *conn)
 
 	mpd_nextListOkCommand(conn);
 
-	entity = mpd_getNextInfoEntity(conn);
+	entity = mpd_get_next_entity(conn);
 	if (entity) {
 		song = entity->info.song;
 		if (entity->type != MPD_INFO_ENTITY_TYPE_SONG || !song) {
 			LOG_ERROR("entity doesn't have the expected type (song)i :%d", entity->type);
-			mpd_freeInfoEntity(entity);
+			mpd_entity_free(entity);
 			return -1;
 		}
 
 		print_song(song);
 
-		mpd_freeInfoEntity(entity);
+		mpd_entity_free(entity);
 	}
 
 	mpd_finishCommand(conn);
@@ -270,12 +270,12 @@ test_list_status_currentsong(struct mpd_connection *conn)
 static int
 test_lsinfo(struct mpd_connection *conn, const char *path)
 {
-	mpd_InfoEntity *entity;
+	mpd_entity *entity;
 
 	mpd_send_lsinfo(conn, path);
 	CHECK_CONNECTION(conn);
 
-	while ((entity = mpd_getNextInfoEntity(conn))) {
+	while ((entity = mpd_get_next_entity(conn))) {
 		if (entity->type == MPD_INFO_ENTITY_TYPE_SONG) {
 			struct mpd_song *song = entity->info.song;
 			print_song (song);
@@ -287,11 +287,11 @@ test_lsinfo(struct mpd_connection *conn, const char *path)
 			LOG_INFO("playlist: %s", pl->path);
 		} else {
 			LOG_ERROR("Unknown type: %d", entity->type);
-			mpd_freeInfoEntity(entity);
+			mpd_entity_free(entity);
 			return -1;
 		}
 
-		mpd_freeInfoEntity(entity);
+		mpd_entity_free(entity);
 	}
 
 	mpd_finishCommand(conn);

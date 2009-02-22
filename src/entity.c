@@ -39,12 +39,12 @@
 #include <string.h>
 
 static void
-mpd_initInfoEntity(mpd_InfoEntity * entity) {
+mpd_initInfoEntity(mpd_entity * entity) {
 	entity->info.directory = NULL;
 }
 
 static void
-mpd_finishInfoEntity(mpd_InfoEntity * entity) {
+mpd_finishInfoEntity(mpd_entity * entity) {
 	if (entity->info.directory) {
 		if (entity->type == MPD_INFO_ENTITY_TYPE_DIRECTORY)
 			mpd_directory_free(entity->info.directory);
@@ -55,9 +55,9 @@ mpd_finishInfoEntity(mpd_InfoEntity * entity) {
 	}
 }
 
-mpd_InfoEntity *
-mpd_newInfoEntity(void) {
-	mpd_InfoEntity * entity = malloc(sizeof(mpd_InfoEntity));
+mpd_entity *
+mpd_entity_new(void) {
+	mpd_entity * entity = malloc(sizeof(mpd_entity));
 
 	mpd_initInfoEntity(entity);
 
@@ -65,15 +65,15 @@ mpd_newInfoEntity(void) {
 }
 
 void
-mpd_freeInfoEntity(mpd_InfoEntity * entity) {
+mpd_entity_free(mpd_entity * entity) {
 	mpd_finishInfoEntity(entity);
 	free(entity);
 }
 
-mpd_InfoEntity *
-mpd_getNextInfoEntity(struct mpd_connection *connection)
+mpd_entity *
+mpd_get_next_entity(struct mpd_connection *connection)
 {
-	mpd_InfoEntity * entity = NULL;
+	mpd_entity * entity = NULL;
 
 	if (connection->doneProcessing || (connection->listOks &&
 	   connection->doneListOk)) {
@@ -85,28 +85,28 @@ mpd_getNextInfoEntity(struct mpd_connection *connection)
 
 	if (connection->pair != NULL) {
 		if (strcmp(connection->pair->name, "file") == 0) {
-			entity = mpd_newInfoEntity();
+			entity = mpd_entity_new();
 			entity->type = MPD_INFO_ENTITY_TYPE_SONG;
 			entity->info.song = mpd_song_new();
 			entity->info.song->file =
 				str_pool_dup(connection->pair->value);
 		}
 		else if (strcmp(connection->pair->name, "directory") == 0) {
-			entity = mpd_newInfoEntity();
+			entity = mpd_entity_new();
 			entity->type = MPD_INFO_ENTITY_TYPE_DIRECTORY;
 			entity->info.directory = mpd_directory_new();
 			entity->info.directory->path =
 				str_pool_dup(connection->pair->value);
 		}
 		else if (strcmp(connection->pair->name, "playlist") == 0) {
-			entity = mpd_newInfoEntity();
+			entity = mpd_entity_new();
 			entity->type = MPD_INFO_ENTITY_TYPE_PLAYLISTFILE;
 			entity->info.playlistFile = mpd_stored_playlist_new();
 			entity->info.playlistFile->path =
 				str_pool_dup(connection->pair->value);
 		}
 		else if (strcmp(connection->pair->name, "cpos") == 0){
-			entity = mpd_newInfoEntity();
+			entity = mpd_entity_new();
 			entity->type = MPD_INFO_ENTITY_TYPE_SONG;
 			entity->info.song = mpd_song_new();
 			entity->info.song->pos = atoi(connection->pair->value);

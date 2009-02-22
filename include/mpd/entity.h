@@ -38,7 +38,7 @@
 #include <mpd/client.h>
 
 /* the type of entity returned from one of the commands that generates info
- * use in conjunction with mpd_InfoEntity.type
+ * use in conjunction with mpd_entity.type
  */
 enum mpd_entity_type {
 	MPD_INFO_ENTITY_TYPE_DIRECTORY,
@@ -46,10 +46,10 @@ enum mpd_entity_type {
 	MPD_INFO_ENTITY_TYPE_PLAYLISTFILE
 };
 
-/* mpd_InfoEntity
+/* mpd_entity
  * stores info on stuff returned info commands
  */
-typedef struct mpd_InfoEntity {
+typedef struct mpd_entity {
 	/* the type of entity, use with MPD_INFO_ENTITY_TYPE_* to determine
 	 * what this entity is (song, directory, etc...)
 	 */
@@ -60,18 +60,18 @@ typedef struct mpd_InfoEntity {
 		struct mpd_song *song;
 		struct mpd_stored_playlist *playlistFile;
 	} info;
-} mpd_InfoEntity;
+} mpd_entity;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-mpd_InfoEntity * mpd_newInfoEntity(void);
+mpd_entity * mpd_entity_new(void);
 
-void mpd_freeInfoEntity(mpd_InfoEntity * entity);
+void mpd_entity_free(mpd_entity * entity);
 
 /* use this function to loop over after calling Info/Listall functions */
-mpd_InfoEntity * mpd_getNextInfoEntity(struct mpd_connection *connection);
+mpd_entity * mpd_get_next_entity(struct mpd_connection *connection);
 
 #ifdef __cplusplus
 }

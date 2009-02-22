@@ -69,7 +69,7 @@ int main(int argc, char ** argv) {
 
 	if(argc==1) {
 		struct mpd_status * status;
-		mpd_InfoEntity * entity;
+		mpd_entity * entity;
 
 		mpd_sendCommandListOkBegin(conn);
 		mpd_send_status(conn);
@@ -109,11 +109,11 @@ int main(int argc, char ** argv) {
 
 		mpd_nextListOkCommand(conn);
 
-		while((entity = mpd_getNextInfoEntity(conn))) {
+		while((entity = mpd_get_next_entity(conn))) {
 			struct mpd_song * song = entity->info.song;
 
 			if(entity->type!=MPD_INFO_ENTITY_TYPE_SONG) {
-				mpd_freeInfoEntity(entity);
+				mpd_entity_free(entity);
 				continue;
 			}
 
@@ -143,7 +143,7 @@ int main(int argc, char ** argv) {
 				printf("pos: %i\n",song->pos);
 			}
 
-			mpd_freeInfoEntity(entity);
+			mpd_entity_free(entity);
 		}
 
 		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
@@ -162,7 +162,7 @@ int main(int argc, char ** argv) {
 		mpd_status_free(status);
 	}
 	else if(argc==3 && strcmp(argv[1],"lsinfo")==0) {
-		mpd_InfoEntity * entity;
+		mpd_entity * entity;
 
 		mpd_send_lsinfo(conn,argv[2]);
 		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
@@ -171,7 +171,7 @@ int main(int argc, char ** argv) {
 			return -1;
 		}
 
-		while((entity = mpd_getNextInfoEntity(conn))) {
+		while((entity = mpd_get_next_entity(conn))) {
 			if(entity->type==MPD_INFO_ENTITY_TYPE_SONG) {
 				struct mpd_song * song = entity->info.song;
 
@@ -201,7 +201,7 @@ int main(int argc, char ** argv) {
 				printf("playlist: %s\n",pl->path);
 			}
 
-			mpd_freeInfoEntity(entity);
+			mpd_entity_free(entity);
 		}
 
 		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
