@@ -47,10 +47,6 @@
 #include <fcntl.h>
 #include <limits.h>
 
-/* (bits+1)/3 (plus the sign character) */
-#define INTLEN      ((sizeof(int)       * CHAR_BIT + 1) / 3 + 1)
-#define LONGLONGLEN ((sizeof(long long) * CHAR_BIT + 1) / 3 + 1)
-
 void mpd_finishCommand(struct mpd_connection *connection)
 {
 	while (!connection->doneProcessing) {
