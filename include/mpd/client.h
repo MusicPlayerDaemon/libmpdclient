@@ -82,9 +82,9 @@ int mpd_nextListOkCommand(struct mpd_connection *connection);
  *
  * @returns a string, needs to be free'ed
  */
-char *mpd_getNextCommand(struct mpd_connection *connection);
+char *mpd_get_next_command(struct mpd_connection *connection);
 
-char *mpd_getNextHandler(struct mpd_connection *connection);
+char *mpd_get_next_handler(struct mpd_connection *connection);
 
 char *mpd_get_next_tag_type(struct mpd_connection *connection);
 

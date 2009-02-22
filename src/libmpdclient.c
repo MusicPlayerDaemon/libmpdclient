@@ -150,12 +150,12 @@ void mpd_sendCommandListEnd(struct mpd_connection *connection)
 /**
  * Get the next returned command
  */
-char * mpd_getNextCommand(struct mpd_connection *connection)
+char * mpd_get_next_command(struct mpd_connection *connection)
 {
 	return mpd_get_next_return_element_named(connection, "command");
 }
 
-char * mpd_getNextHandler(struct mpd_connection *connection)
+char * mpd_get_next_handler(struct mpd_connection *connection)
 {
 	return mpd_get_next_return_element_named(connection, "handler");
 }
