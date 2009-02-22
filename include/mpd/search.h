@@ -36,6 +36,8 @@
 #include <mpd/connection.h>
 #include <mpd/tag.h>
 
+#include <stdbool.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -79,7 +81,7 @@ void mpd_search_commit(struct mpd_connection *connection);
  * Use mpd_getNextInfoEntity to get results of this method
  */
 void mpd_search_db_songs(struct mpd_connection *connection,
-			 int exact);
+			 bool exact);
 
 /**
  * @param connection a #mpd_connection
@@ -90,7 +92,7 @@ void mpd_search_db_songs(struct mpd_connection *connection,
  * Use mpd_getNextInfoEntity to get results of this method
  */
 void mpd_search_playlist_songs(struct mpd_connection *connection,
-			       int exact);
+			       bool exact);
 
 /**
  * @param connection a #mpd_connection

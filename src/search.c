@@ -134,7 +134,7 @@ mpd_search_commit(struct mpd_connection *connection)
 
 void
 mpd_search_db_songs(struct mpd_connection *connection,
-		    int exact)
+		    bool exact)
 {
 	if (connection->request) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
@@ -164,7 +164,7 @@ mpd_count_db_songs(struct mpd_connection *connection)
 
 void
 mpd_search_playlist_songs(struct mpd_connection *connection,
-			  int exact)
+			  bool exact)
 {
 	if (connection->request) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
