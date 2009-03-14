@@ -119,4 +119,4 @@ dnl
 dnl Done
 dnl
 
-AC_OUTPUT([Makefile])
+AC_OUTPUT([Makefile libmpdclient.pc])
