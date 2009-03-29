@@ -153,6 +153,12 @@ mpd_send_random(struct mpd_connection *connection, int mode)
 }
 
 bool
+mpd_send_single(struct mpd_connection *connection, int mode)
+{
+	return mpd_send_int_command(connection, "single", mode);
+}
+
+bool
 mpd_send_crossfade(struct mpd_connection *connection, int seconds)
 {
 	return mpd_send_int_command(connection, "crossfade", seconds);

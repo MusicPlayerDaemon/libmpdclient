@@ -83,6 +83,11 @@ int mpd_status_get_repeat(struct mpd_status * status);
 int mpd_status_get_random(struct mpd_status * status);
 
 /**
+ * Returns 1 if single is on, 0 otherwise
+ */
+int mpd_status_get_single(struct mpd_status * status);
+
+/**
  * Returns playlist length
  */
 int mpd_status_get_playlist_length(struct mpd_status * status);

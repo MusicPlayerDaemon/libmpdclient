@@ -117,6 +117,7 @@ print_status(struct mpd_status *status)
 {
 	LOG_INFO("volume: %i", mpd_status_get_volume(status));
 	LOG_INFO("repeat: %i", mpd_status_get_repeat(status));
+	LOG_INFO("single: %i", mpd_status_get_single(status));
 	LOG_INFO("random: %i", mpd_status_get_random(status));
 	LOG_INFO("playlist: %lli", mpd_status_get_playlist(status));
 	LOG_INFO("playlistLength: %i", mpd_status_get_playlist_length(status));

@@ -16,6 +16,7 @@ global:
 	mpd_send_seekid;
 	mpd_send_repeat;
 	mpd_send_random;
+	mpd_send_single;
 	mpd_send_crossfade;
 	mpd_send_playlistinfo;
 	mpd_send_playlistid;
