@@ -79,6 +79,8 @@ struct mpd_status {
 	int random;
 	/* 1 if single is on, 0 otherwise */
 	int single;
+	/* 1 if consume is on, 0 otherwise */
+	int consume;
 	/* playlist length */
 	int playlist_length;
 	/* playlist, use this to determine when the playlist has changed */

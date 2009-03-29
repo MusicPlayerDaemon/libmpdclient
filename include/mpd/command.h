@@ -91,6 +91,9 @@ bool
 mpd_send_single(struct mpd_connection *connection, int mode);
 
 bool
+mpd_send_consume(struct mpd_connection *connection, int mode);
+
+bool
 mpd_send_crossfade(struct mpd_connection *connection, int seconds);
 
 
