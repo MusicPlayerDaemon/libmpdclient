@@ -73,14 +73,19 @@ extern const char *const mpdTagItemKeys[];
 struct mpd_status {
 	/* 0-100, or MPD_STATUS_NO_VOLUME when there is no volume support */
 	int volume;
-	/* 1 if repeat is on, 0 otherwise */
-	int repeat;
-	/* 1 if random is on, 0 otherwise */
-	int random;
-	/* 1 if single is on, 0 otherwise */
-	int single;
-	/* 1 if consume is on, 0 otherwise */
-	int consume;
+
+	/** Playlist repeat mode enabled? */
+	bool repeat;
+
+	/** Random mode enabled? */
+	bool random;
+
+	/** Single song mode enabled? */
+	bool single;
+
+	/** Song consume mode enabled? */
+	bool consume;
+
 	/* playlist length */
 	int playlist_length;
 	/* playlist, use this to determine when the playlist has changed */

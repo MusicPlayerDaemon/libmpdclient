@@ -63,10 +63,10 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 
 	status = malloc(sizeof(struct mpd_status));
 	status->volume = -1;
-	status->repeat = 0;
-	status->random = 0;
-	status->single = 0;
-	status->consume = 0;
+	status->repeat = false;
+	status->random = false;
+	status->single = false;
+	status->consume = false;
 	status->playlist = -1;
 	status->playlist_length = -1;
 	status->state = -1;
@@ -89,16 +89,16 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 			status->volume = atoi(pair->value);
 		}
 		else if (strcmp(pair->name, "repeat") == 0) {
-			status->repeat = atoi(pair->value);
+			status->repeat = !!atoi(pair->value);
 		}
 		else if (strcmp(pair->name, "random") == 0) {
-			status->random = atoi(pair->value);
+			status->random = !!atoi(pair->value);
 		}
 		else if (strcmp(pair->name, "single") == 0) {
-			status->single = atoi(pair->value);
+			status->single = !!atoi(pair->value);
 		}
 		else if (strcmp(pair->name, "consume") == 0) {
-			status->consume = atoi(pair->value);
+			status->consume = !!atoi(pair->value);
 		}
 		else if (strcmp(pair->name, "playlist") == 0) {
 			status->playlist = strtol(pair->value,NULL,10);
