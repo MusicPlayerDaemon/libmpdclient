@@ -44,12 +44,6 @@ mpd_output_get_next(struct mpd_connection *connection)
 {
 	struct mpd_output_entity *output = NULL;
 
-	if (connection->doneProcessing || (connection->listOks &&
-				connection->doneListOk))
-	{
-		return NULL;
-	}
-
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
 

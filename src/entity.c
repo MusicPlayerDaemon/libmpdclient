@@ -75,11 +75,6 @@ mpd_get_next_entity(struct mpd_connection *connection)
 {
 	mpd_entity * entity = NULL;
 
-	if (connection->doneProcessing || (connection->listOks &&
-	   connection->doneListOk)) {
-		return NULL;
-	}
-
 	if (connection->pair == NULL)
 		mpd_get_next_return_element(connection);
 

@@ -49,12 +49,6 @@ struct mpd_stats * mpd_get_stats(struct mpd_connection * connection) {
 
 	if (connection->error) return NULL;*/
 
-	if (connection->doneProcessing || (connection->listOks &&
-	   connection->doneListOk))
-	{
-		return NULL;
-	}
-
 	if (connection->pair == NULL)
 		mpd_get_next_return_element(connection);
 
@@ -117,11 +111,6 @@ void mpd_stats_free(struct mpd_stats * stats) {
 struct mpd_search_stats * mpd_get_search_stats(struct mpd_connection * connection)
 {
 	struct mpd_search_stats * stats;
-
-	if (connection->doneProcessing ||
-	    (connection->listOks && connection->doneListOk)) {
-		return NULL;
-	}
 
 	if (connection->pair == NULL)
 		mpd_get_next_return_element(connection);

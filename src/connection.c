@@ -350,12 +350,6 @@ char *
 mpd_get_next_return_element_named(struct mpd_connection *connection,
 				 const char *name)
 {
-	if (connection->doneProcessing || (connection->listOks &&
-				connection->doneListOk))
-	{
-		return NULL;
-	}
-
 	mpd_get_next_return_element(connection);
 	while (connection->pair != NULL) {
 		const struct mpd_pair *pair = connection->pair;

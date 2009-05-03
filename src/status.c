@@ -49,12 +49,6 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 
 	if (connection->error) return NULL;*/
 
-	if (connection->doneProcessing || (connection->listOks &&
-	   connection->doneListOk))
-	{
-		return NULL;
-	}
-
 	if (connection->pair == NULL)
 		mpd_get_next_return_element(connection);
 
