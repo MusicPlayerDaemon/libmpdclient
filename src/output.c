@@ -77,6 +77,8 @@ mpd_output_get_next(struct mpd_connection *connection)
 
 		mpd_get_next_return_element(connection);
 		if (mpd_error_is_defined(&connection->error)) {
+			if (output->name != NULL)
+				free(output->name);
 			free(output);
 			return NULL;
 		}
