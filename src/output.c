@@ -53,15 +53,16 @@ mpd_output_get_next(struct mpd_connection *connection)
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
 
+	if (connection->pair == NULL &&
+	    mpd_get_next_return_element(connection) == NULL)
+		return NULL;
+
 	output = malloc(sizeof(*output));
 	output->id = -10;
 	output->name = NULL;
 	output->enabled = 0;
 
-	if (connection->pair == NULL)
-		mpd_get_next_return_element(connection);
-
-	while (connection->pair != NULL) {
+	do {
 		const struct mpd_pair *pair = connection->pair;
 
 		if (strcmp(pair->name, "outputid") == 0) {
@@ -82,8 +83,7 @@ mpd_output_get_next(struct mpd_connection *connection)
 			free(output);
 			return NULL;
 		}
-
-	}
+	} while (connection->pair != NULL);
 
 	return output;
 }
