@@ -151,7 +151,7 @@ mpd_connection_new(const char *host, int port, float timeout)
 
 	mpd_socket_init(&connection->socket, &tv);
 	mpd_error_init(&connection->error);
-	connection->doneProcessing = 0;
+	connection->receiving = false;
 	connection->commandList = 0;
 	connection->listOks = 0;
 	connection->doneListOk = 0;
@@ -178,8 +178,7 @@ mpd_connection_new(const char *host, int port, float timeout)
 	if (line == NULL)
 		return connection;
 
-	if (!mpd_parse_welcome(connection, host, port, line))
-		connection->doneProcessing = 1;
+	mpd_parse_welcome(connection, host, port, line);
 
 	return connection;
 }
@@ -262,7 +261,7 @@ mpd_get_next_return_element(struct mpd_connection *connection)
 		connection->pair = NULL;
 	}
 
-	if (connection->doneProcessing ||
+	if (!connection->receiving ||
 	    (connection->listOks && connection->doneListOk)) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
@@ -282,7 +281,7 @@ mpd_get_next_return_element(struct mpd_connection *connection)
 					  "expected more list_OK's");
 		}
 		connection->listOks = 0;
-		connection->doneProcessing = 1;
+		connection->receiving = false;
 		connection->doneListOk = 0;
 		return NULL;
 	} else if (strcmp(output, "list_OK") == 0) {
@@ -306,7 +305,7 @@ mpd_get_next_return_element(struct mpd_connection *connection)
 		mpd_error_ack(&connection->error,
 			      MPD_ACK_ERROR_UNK, MPD_ERROR_AT_UNK);
 		mpd_error_message_n(&connection->error, output, length);
-		connection->doneProcessing = 1;
+		connection->receiving = false;
 		connection->doneListOk = 0;
 
 		needle = strchr(output, '[');

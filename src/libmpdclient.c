@@ -49,7 +49,7 @@
 
 void mpd_finishCommand(struct mpd_connection *connection)
 {
-	while (!connection->doneProcessing) {
+	while (connection->receiving) {
 		if (connection->doneListOk) connection->doneListOk = 0;
 		mpd_get_next_return_element(connection);
 	}
@@ -57,7 +57,7 @@ void mpd_finishCommand(struct mpd_connection *connection)
 
 static void mpd_finishListOkCommand(struct mpd_connection *connection)
 {
-	while (!connection->doneProcessing && connection->listOks &&
+	while (connection->receiving && connection->listOks &&
 			!connection->doneListOk)
 	{
 		mpd_get_next_return_element(connection);
@@ -67,8 +67,10 @@ static void mpd_finishListOkCommand(struct mpd_connection *connection)
 int mpd_nextListOkCommand(struct mpd_connection *connection)
 {
 	mpd_finishListOkCommand(connection);
-	if (!connection->doneProcessing) connection->doneListOk = 0;
-	if (connection->listOks == 0 || connection->doneProcessing) return -1;
+	if (connection->receiving)
+		connection->doneListOk = 0;
+	if (connection->listOks == 0 || !connection->receiving)
+		return -1;
 	return 0;
 }
 

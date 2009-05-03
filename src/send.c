@@ -41,7 +41,7 @@ mpd_can_send(struct mpd_connection *connection)
 		return false;
 	}
 
-	if (!connection->doneProcessing && !connection->commandList) {
+	if (connection->receiving && !connection->commandList) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
 				  "not done processing current command");
@@ -160,7 +160,7 @@ mpd_send_command(struct mpd_connection *connection, const char *command, ...)
 		return false;
 
 	if (!connection->commandList)
-		connection->doneProcessing = false;
+		connection->receiving = true;
 	else if (connection->commandList == COMMAND_LIST_OK)
 		connection->listOks++;
 

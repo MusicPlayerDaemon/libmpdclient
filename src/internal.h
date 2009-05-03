@@ -48,7 +48,11 @@ struct mpd_connection {
 
 	struct mpd_socket socket;
 
-	int doneProcessing;
+	/**
+	 * Are we currently receiving the response of a command?
+	 */
+	bool receiving;
+
 	int listOks;
 	int doneListOk;
 	int commandList;

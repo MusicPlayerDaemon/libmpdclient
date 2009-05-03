@@ -105,7 +105,7 @@ void mpd_stopIdle(struct mpd_connection *connection)
 
 	connection->idle = 0;
 	connection->notify_cb = NULL;
-	connection->doneProcessing = 1;
+	connection->receiving = false;
 	mpd_send_command(connection, "noidle", NULL);
 	mpd_readChanges(connection);
 }
