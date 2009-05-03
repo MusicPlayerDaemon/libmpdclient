@@ -102,10 +102,10 @@ mpd_connect(struct mpd_connection *connection, const char * host, int port)
 	return 0;
 }
 
-static int
-mpd_parseWelcome(struct mpd_connection *connection,
-		 const char *host, int port,
-		 const char *output)
+static bool
+mpd_parse_welcome(struct mpd_connection *connection,
+		  const char *host, int port,
+		  const char *output)
 {
 	const char *tmp;
 	char * test;
@@ -116,7 +116,7 @@ mpd_parseWelcome(struct mpd_connection *connection,
 		mpd_error_printf(&connection->error,
 				 "mpd not running on port %i on host \"%s\"",
 				 port, host);
-		return 1;
+		return false;
 	}
 
 	tmp = &output[strlen(MPD_WELCOME_MESSAGE)];
@@ -129,12 +129,13 @@ mpd_parseWelcome(struct mpd_connection *connection,
 			mpd_error_printf(&connection->error,
 					 "error parsing version number at \"%s\"",
 					 &output[strlen(MPD_WELCOME_MESSAGE)]);
-			return 1;
+			return false;
 		}
+
 		tmp = ++test;
 	}
 
-	return 0;
+	return true;
 }
 
 struct mpd_connection *
@@ -177,7 +178,7 @@ mpd_connection_new(const char *host, int port, float timeout)
 	if (line == NULL)
 		return connection;
 
-	if (mpd_parseWelcome(connection, host, port, line) == 0)
+	if (!mpd_parse_welcome(connection, host, port, line))
 		connection->doneProcessing = 1;
 
 	return connection;
