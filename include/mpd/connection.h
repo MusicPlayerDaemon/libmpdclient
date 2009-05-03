@@ -105,7 +105,7 @@ mpd_get_server_version(const struct mpd_connection *connection);
 #define COMMAND_LIST    1
 #define COMMAND_LIST_OK 2
 
-void
+const struct mpd_pair *
 mpd_get_next_return_element(struct mpd_connection *connection);
 
 char *

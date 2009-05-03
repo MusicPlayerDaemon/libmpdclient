@@ -248,7 +248,8 @@ mpd_get_server_version(const struct mpd_connection *connection)
 	return connection->version;
 }
 
-void mpd_get_next_return_element(struct mpd_connection *connection)
+const struct mpd_pair *
+mpd_get_next_return_element(struct mpd_connection *connection)
 {
 	char * output = NULL;
 	char * name = NULL;
@@ -266,12 +267,12 @@ void mpd_get_next_return_element(struct mpd_connection *connection)
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
 				  "already done processing current command");
-		return;
+		return NULL;
 	}
 
 	output = mpd_socket_recv_line(&connection->socket, &connection->error);
 	if (output == NULL)
-		return;
+		return NULL;
 
 	if (strcmp(output, "OK")==0) {
 		if (connection->listOks > 0) {
@@ -283,7 +284,7 @@ void mpd_get_next_return_element(struct mpd_connection *connection)
 		connection->listOks = 0;
 		connection->doneProcessing = 1;
 		connection->doneListOk = 0;
-		return;
+		return NULL;
 	} else if (strcmp(output, "list_OK") == 0) {
 		if (!connection->listOks) {
 			mpd_error_code(&connection->error,
@@ -295,7 +296,7 @@ void mpd_get_next_return_element(struct mpd_connection *connection)
 			connection->doneListOk = 1;
 			connection->listOks--;
 		}
-		return;
+		return NULL;
 	} else if (strncmp(output, "ACK", strlen("ACK"))==0) {
 		size_t length = strlen(output);
 		char * test;
@@ -309,31 +310,40 @@ void mpd_get_next_return_element(struct mpd_connection *connection)
 		connection->doneListOk = 0;
 
 		needle = strchr(output, '[');
-		if (!needle) return;
+		if (needle == NULL)
+			return NULL;
+
 		val = strtol(needle+1, &test, 10);
-		if (*test != '@') return;
+		if (*test != '@')
+			return NULL;
+
 		connection->error.ack = val;
+
 		val = strtol(test+1, &test, 10);
-		if (*test != ']') return;
+		if (*test != ']')
+			return NULL;
+
 		connection->error.at = val;
-		return;
+		return NULL;
 	}
 
 	tok = strchr(output, ':');
-	if (!tok) return;
+	if (tok == NULL)
+		return NULL;
+
 	pos = tok - output;
 	value = ++tok;
 	name = output;
 	name[pos] = '\0';
 
-	if (value[0]==' ') {
-		connection->pair = mpd_pair_new(name, value + 1);
-	}
-	else {
+	if (value[0] != ' ') {
 		mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);
 		mpd_error_printf(&connection->error,
 				 "error parsing: %s:%s", name, value);
+		return NULL;
 	}
+
+	return connection->pair = mpd_pair_new(name, value + 1);
 }
 
 char *
