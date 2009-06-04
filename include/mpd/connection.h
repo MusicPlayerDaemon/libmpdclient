@@ -38,9 +38,9 @@
 
 #include <stdlib.h>
 
-/* mpd_connection
- * holds info about connection to mpd
- * use error, and errorStr to detect errors
+/**
+ * This opaque object represents a connection to a MPD server.  Call
+ * mpd_connection_new() to create a new instance.
  */
 struct mpd_connection;
 
