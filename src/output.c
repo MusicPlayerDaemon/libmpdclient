@@ -38,6 +38,7 @@
 #include <limits.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 struct mpd_output_entity *
 mpd_output_get_next(struct mpd_connection *connection)

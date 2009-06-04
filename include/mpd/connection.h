@@ -36,8 +36,6 @@
 #include <mpd/protocol.h>
 #include <mpd/error.h>
 
-#include <stdlib.h>
-
 /**
  * This opaque object represents a connection to a MPD server.  Call
  * mpd_connection_new() to create a new instance.
