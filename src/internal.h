@@ -46,7 +46,8 @@ struct mpd_connection {
 
 	/* DON'T TOUCH any of the rest of this stuff */
 
-	struct mpd_socket socket;
+	struct mpd_async *async;
+	struct timeval timeout;
 
 	/**
 	 * Are we currently receiving the response of a command?
@@ -139,5 +140,11 @@ struct mpd_search_stats {
 	int number_of_songs;
 	unsigned long play_time;
 };
+
+/**
+ * Copies the error state from connection->sync to connection->error.
+ */
+void
+mpd_connection_sync_error(struct mpd_connection *connection);
 
 #endif

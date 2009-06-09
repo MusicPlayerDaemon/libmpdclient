@@ -32,9 +32,11 @@
 
 #include "internal.h"
 #include <mpd/connection.h>
+#include <mpd/async.h>
 #include <mpd/idle.h>
 #include <mpd/pair.h>
 #include "resolver.h"
+#include "sync.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -116,22 +118,47 @@ mpd_parse_welcome(struct mpd_connection *connection,
 	return true;
 }
 
+static void
+mpd_copy_async_error(struct mpd_error_info *error,
+		     const struct mpd_async *async)
+{
+	assert(!mpd_async_is_alive(async));
+
+	mpd_error_code(error, mpd_async_get_error(async));
+	mpd_error_message(error, mpd_async_get_error_message(async));
+}
+
+static void
+mpd_connection_async_error(struct mpd_connection *connection)
+{
+	mpd_copy_async_error(&connection->error, connection->async);
+}
+
+void
+mpd_connection_sync_error(struct mpd_connection *connection)
+{
+	if (mpd_async_is_alive(connection->async)) {
+		/* no error noticed by async: must be a timeout in the
+		   sync.c code */
+		mpd_error_code(&connection->error, MPD_ERROR_TIMEOUT);
+		mpd_error_message(&connection->error, "Timeout");
+	} else
+		mpd_connection_async_error(connection);
+}
+
 struct mpd_connection *
 mpd_connection_new(const char *host, int port, float timeout)
 {
 	const char *line;
 	struct mpd_connection *connection = malloc(sizeof(*connection));
-	const struct timeval tv = {
-		.tv_sec = (long)timeout,
-		.tv_usec = ((long)(timeout * 1e6)) % 1000000,
-	};
+	struct mpd_socket s;
 	bool success;
 
 	if (connection == NULL)
 		return NULL;
 
-	mpd_socket_init(&connection->socket, &tv);
 	mpd_error_init(&connection->error);
+	connection->async = NULL;
 	connection->receiving = false;
 	connection->commandList = 0;
 	connection->listOks = 0;
@@ -151,14 +178,24 @@ mpd_connection_new(const char *host, int port, float timeout)
 
 	mpd_connection_set_timeout(connection,timeout);
 
-	success = mpd_socket_connect(&connection->socket, host, port,
+	mpd_socket_init(&s, &connection->timeout);
+	success = mpd_socket_connect(&s, host, port,
 				     &connection->error);
 	if (!success)
 		return connection;
 
-	line = mpd_socket_recv_line(&connection->socket, &connection->error);
-	if (line == NULL)
+	connection->async = mpd_async_new(s.fd);
+	if (connection->async == NULL) {
+		mpd_socket_deinit(&s);
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
 		return connection;
+	}
+
+	line = mpd_sync_recv_line(connection->async, &connection->timeout);
+	if (line == NULL) {
+		mpd_connection_sync_error(connection);
+		return connection;
+	}
 
 	mpd_parse_welcome(connection, host, port, line);
 
@@ -199,7 +236,8 @@ void mpd_clear_error(struct mpd_connection *connection)
 
 void mpd_connection_close(struct mpd_connection *connection)
 {
-	mpd_socket_deinit(&connection->socket);
+	if (connection->async != NULL)
+		mpd_async_free(connection->async);
 
 	if (connection->pair != NULL)
 		free(connection->pair);
@@ -215,12 +253,8 @@ void mpd_connection_close(struct mpd_connection *connection)
 void
 mpd_connection_set_timeout(struct mpd_connection *connection, float timeout)
 {
-	const struct timeval tv = {
-		.tv_sec = (long)timeout,
-		.tv_usec = ((long)(timeout * 1e6)) % 1000000,
-	};
-
-	mpd_socket_set_timeout(&connection->socket, &tv);
+	connection->timeout.tv_sec = (long)timeout;
+	connection->timeout.tv_usec = ((long)(timeout * 1e6)) % 1000000;
 }
 
 const int *
@@ -251,7 +285,7 @@ mpd_get_next_return_element(struct mpd_connection *connection)
 		return NULL;
 	}
 
-	output = mpd_socket_recv_line(&connection->socket, &connection->error);
+	output = mpd_sync_recv_line(connection->async, &connection->timeout);
 	if (output == NULL)
 		return NULL;
 
