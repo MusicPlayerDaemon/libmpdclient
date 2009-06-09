@@ -51,6 +51,7 @@ src_libmpdclient_la_SOURCES = \
 	src/status.c \
 	src/stats.c \
 	src/stored_playlist.c \
+	src/sync.c src/sync.h \
 	src/tag.c \
 	src/libmpdclient.c
 
