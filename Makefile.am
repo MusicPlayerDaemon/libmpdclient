@@ -6,6 +6,7 @@ EXTRA_DIST = libmpdclient.ld
 
 mpdincludedir = $(includedir)/mpd
 mpdinclude_HEADERS = \
+	include/mpd/async.h \
 	include/mpd/client.h \
 	include/mpd/command.h \
 	include/mpd/connection.h \
@@ -29,6 +30,7 @@ AM_CPPFLAGS += -I$(srcdir)/include
 lib_LTLIBRARIES = src/libmpdclient.la
 
 src_libmpdclient_la_SOURCES = \
+	src/async.c \
 	src/buffer.h \
 	src/internal.h \
 	src/str_pool.c src/str_pool.h \
