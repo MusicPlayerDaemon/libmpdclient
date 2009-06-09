@@ -30,7 +30,6 @@
 #define MPD_SOCKET_H
 
 #include <stdbool.h>
-#include <stddef.h>
 #include <sys/select.h>
 
 struct mpd_error_info;
@@ -42,10 +41,6 @@ struct mpd_error_info;
 struct mpd_socket {
 	/** the socket file descriptor */
 	int fd;
-
-	char buffer[16384];
-	size_t buflen;
-	size_t bufstart;
 
 	struct timeval timeout;
 };
@@ -77,8 +72,6 @@ static inline void
 mpd_socket_init(struct mpd_socket *s, const struct timeval *timeout)
 {
 	s->fd = -1;
-	s->buflen = 0;
-	s->bufstart = 0;
 	mpd_socket_set_timeout(s, timeout);
 }
 
@@ -96,26 +89,5 @@ mpd_socket_deinit(struct mpd_socket *s);
 bool
 mpd_socket_connect(struct mpd_socket *s, const char *host, int port,
 		   struct mpd_error_info *error);
-
-/**
- * Attempt to read one line from the socket into the input buffer.
- * This function returns a writable string pointer, because callers
- * may find it useful to modify the buffer during parsing.
- *
- * @return a pointer to the beginning of the line; NULL on error or
- * timeout
- */
-char *
-mpd_socket_recv_line(struct mpd_socket *s, struct mpd_error_info *error);
-
-/**
- * Attempt to send data.
- *
- * @return true if everything was sent; false on error or timeout;
- * partial write plus timeout is regarded as an error
- */
-bool
-mpd_socket_send(struct mpd_socket *s, const void *data, size_t length,
-		struct mpd_error_info *error);
 
 #endif
