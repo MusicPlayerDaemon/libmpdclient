@@ -140,6 +140,9 @@ mpd_connection_new(const char *host, int port, float timeout)
 		.tv_usec = ((long)(timeout * 1e6)) % 1000000,
 	};
 
+	if (connection == NULL)
+		return NULL;
+
 	mpd_socket_init(&connection->socket, &tv);
 	mpd_error_init(&connection->error);
 	connection->receiving = false;
