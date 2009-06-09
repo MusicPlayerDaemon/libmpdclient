@@ -40,6 +40,7 @@ src_libmpdclient_la_SOURCES = \
 	src/pair.c \
 	src/entity.c \
 	src/idle.c \
+	src/quote.c src/quote.h \
 	src/search.c \
 	src/send.c \
 	src/socket.c src/socket.h \
