@@ -52,7 +52,15 @@ mpd_can_send(struct mpd_connection *connection)
 	return true;
 }
 
-bool
+/**
+ * Sends a buffer to the MPD server.
+ *
+ * @param connection the connection to the MPD server
+ * @param p a pointer to the first byte of the buffer
+ * @param length the length of the buffer
+ * @return true on success
+ */
+static bool
 mpd_send(struct mpd_connection *connection, const void *p, size_t length)
 {
 	if (!mpd_can_send(connection))

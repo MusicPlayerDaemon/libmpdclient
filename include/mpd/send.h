@@ -39,17 +39,6 @@ extern "C" {
 #endif
 
 /**
- * Sends a buffer to the MPD server.
- *
- * @param connection the connection to the MPD server
- * @param p a pointer to the first byte of the buffer
- * @param length the length of the buffer
- * @return true on success
- */
-bool
-mpd_send(struct mpd_connection *connection, const void *p, size_t length);
-
-/**
  * Sends a command with arguments to the MPD server.  The argument
  * list must be terminated with a NULL.
  *
