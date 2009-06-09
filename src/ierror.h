@@ -149,4 +149,10 @@ mpd_error_message_n(struct mpd_error_info *error,
 void
 mpd_error_printf(struct mpd_error_info *error, const char *fmt, ...);
 
+/**
+ * Sets MPD_ERROR_SYSTEM and strerror(errno).
+ */
+void
+mpd_error_errno(struct mpd_error_info *error);
+
 #endif

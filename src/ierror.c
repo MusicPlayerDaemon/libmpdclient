@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 
 void
 mpd_error_deinit(struct mpd_error_info *error)
@@ -77,4 +78,11 @@ mpd_error_printf(struct mpd_error_info *error, const char *fmt, ...)
 	va_end(ap);
 
 	mpd_error_message(error, buffer);
+}
+
+void
+mpd_error_errno(struct mpd_error_info *error)
+{
+	mpd_error_code(error, MPD_ERROR_SYSTEM);
+	mpd_error_message(error, strerror(errno));
 }
