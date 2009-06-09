@@ -80,19 +80,6 @@ static int winsock_dll_error(struct mpd_connection *connection)
 }
 #endif /* !WIN32 */
 
-static int
-mpd_connect(struct mpd_connection *connection, const char * host, int port)
-{
-	bool ret;
-
-	ret = mpd_socket_connect(&connection->socket, host, port,
-				 &connection->error);
-	if (!ret)
-		return -1;
-
-	return 0;
-}
-
 static bool
 mpd_parse_welcome(struct mpd_connection *connection,
 		  const char *host, int port,
@@ -132,13 +119,13 @@ mpd_parse_welcome(struct mpd_connection *connection,
 struct mpd_connection *
 mpd_connection_new(const char *host, int port, float timeout)
 {
-	int err;
 	const char *line;
 	struct mpd_connection *connection = malloc(sizeof(*connection));
 	const struct timeval tv = {
 		.tv_sec = (long)timeout,
 		.tv_usec = ((long)(timeout * 1e6)) % 1000000,
 	};
+	bool success;
 
 	if (connection == NULL)
 		return NULL;
@@ -164,8 +151,9 @@ mpd_connection_new(const char *host, int port, float timeout)
 
 	mpd_connection_set_timeout(connection,timeout);
 
-	err = mpd_connect(connection, host, port);
-	if (err < 0)
+	success = mpd_socket_connect(&connection->socket, host, port,
+				     &connection->error);
+	if (!success)
 		return connection;
 
 	line = mpd_socket_recv_line(&connection->socket, &connection->error);
