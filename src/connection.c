@@ -151,8 +151,7 @@ mpd_connection_new(const char *host, int port, float timeout)
 {
 	const char *line;
 	struct mpd_connection *connection = malloc(sizeof(*connection));
-	struct mpd_socket s;
-	bool success;
+	int fd;
 
 	if (connection == NULL)
 		return NULL;
@@ -178,15 +177,14 @@ mpd_connection_new(const char *host, int port, float timeout)
 
 	mpd_connection_set_timeout(connection,timeout);
 
-	mpd_socket_init(&s, &connection->timeout);
-	success = mpd_socket_connect(&s, host, port,
-				     &connection->error);
-	if (!success)
+	fd = mpd_socket_connect(host, port, &connection->timeout,
+				&connection->error);
+	if (fd < 0)
 		return connection;
 
-	connection->async = mpd_async_new(s.fd);
+	connection->async = mpd_async_new(fd);
 	if (connection->async == NULL) {
-		mpd_socket_deinit(&s);
+		mpd_socket_close(fd);
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
 		return connection;
 	}

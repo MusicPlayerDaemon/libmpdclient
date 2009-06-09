@@ -34,6 +34,8 @@
 #include <mpd/status.h>
 #include "socket.h"
 
+#include <sys/select.h>
+
 /* mpd_connection
  * holds info about connection to mpd
  * use error, and errorStr to detect errors

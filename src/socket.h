@@ -29,65 +29,23 @@
 #ifndef MPD_SOCKET_H
 #define MPD_SOCKET_H
 
-#include <stdbool.h>
-#include <sys/select.h>
-
+struct timeval;
 struct mpd_error_info;
-
-/**
- * A socket connection between the client (that's us) and the MPD
- * server.
- */
-struct mpd_socket {
-	/** the socket file descriptor */
-	int fd;
-
-	struct timeval timeout;
-};
-
-/**
- * Checks whether the socket object is defined, i.e. the OS level
- * socket was created, but it may not be connected yet.
- */
-static inline bool
-mpd_socket_defined(const struct mpd_socket *s)
-{
-	return s->fd >= 0;
-}
-
-/**
- * Modifies the timeout for sending and receiving.
- */
-static inline void
-mpd_socket_set_timeout(struct mpd_socket *s, const struct timeval *timeout)
-{
-	s->timeout = *timeout;
-}
-
-/**
- * Initialize a socket object.  This does not create the OS level
- * socket, and does not attempt to connect it.
- */
-static inline void
-mpd_socket_init(struct mpd_socket *s, const struct timeval *timeout)
-{
-	s->fd = -1;
-	mpd_socket_set_timeout(s, timeout);
-}
-
-/**
- * Free all resources of the socket object.
- */
-void
-mpd_socket_deinit(struct mpd_socket *s);
 
 /**
  * Connects the socket to the specified host and port.
  *
- * @return false if an error occured
+ * @return the socket file descriptor, or -1 on failure
  */
-bool
-mpd_socket_connect(struct mpd_socket *s, const char *host, int port,
+int
+mpd_socket_connect(const char *host, int port, const struct timeval *tv,
 		   struct mpd_error_info *error);
+
+/**
+ * Closes a socket descriptor.  This is a wrapper for close() or
+ * closesocket(), depending on the OS.
+ */
+int
+mpd_socket_close(int fd);
 
 #endif

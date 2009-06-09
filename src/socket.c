@@ -59,16 +59,8 @@
 #  define SELECT_ERRNO_IGNORE   (errno == EINTR)
 #  define SENDRECV_ERRNO_IGNORE (errno == EINTR || errno == EAGAIN)
 #  define winsock_dll_error(c)  0
-#  define closesocket(s)        close(s)
 #  define WSACleanup()          do { /* nothing */ } while (0)
 #endif
-
-void
-mpd_socket_deinit(struct mpd_socket *s)
-{
-	if (s->fd >= 0)
-		closesocket(s->fd);
-}
 
 #ifdef WIN32
 
@@ -84,14 +76,14 @@ static int do_connect_fail(struct mpd_socket *s,
 
 #else /* !WIN32 (sane operating systems) */
 
-static int do_connect_fail(struct mpd_socket *s,
+static int do_connect_fail(int fd,
                            const struct sockaddr *serv_addr, int addrlen)
 {
 	int flags;
-	if (connect(s->fd, serv_addr, addrlen) < 0)
+	if (connect(fd, serv_addr, addrlen) < 0)
 		return 1;
-	flags = fcntl(s->fd, F_GETFL, 0);
-	fcntl(s->fd, F_SETFL, flags | O_NONBLOCK);
+	flags = fcntl(fd, F_GETFL, 0);
+	fcntl(fd, F_SETFL, flags | O_NONBLOCK);
 	return 0;
 }
 
@@ -101,20 +93,18 @@ static int do_connect_fail(struct mpd_socket *s,
  * Wait for the socket to become readable.
  */
 static int
-mpd_socket_wait(struct mpd_socket *s)
+mpd_socket_wait(int fd, struct timeval *tv)
 {
-	struct timeval tv;
 	fd_set fds;
 	int ret;
 
-	assert(s->fd >= 0);
+	assert(fd >= 0);
 
 	while (1) {
-		tv = s->timeout;
 		FD_ZERO(&fds);
-		FD_SET(s->fd, &fds);
+		FD_SET(fd, &fds);
 
-		ret = select(s->fd + 1, &fds, NULL, NULL, &tv);
+		ret = select(fd + 1, &fds, NULL, NULL, tv);
 		if (ret > 0)
 			return 0;
 
@@ -128,17 +118,17 @@ mpd_socket_wait(struct mpd_socket *s)
  * on success, 0 on timeout, -errno on error.
  */
 static int
-mpd_socket_wait_connected(struct mpd_socket *s)
+mpd_socket_wait_connected(int fd, struct timeval *tv)
 {
 	int ret;
 	int s_err = 0;
 	socklen_t s_err_size = sizeof(s_err);
 
-	ret = mpd_socket_wait(s);
+	ret = mpd_socket_wait(fd, tv);
 	if (ret < 0)
 		return 0;
 
-	ret = getsockopt(s->fd, SOL_SOCKET, SO_ERROR,
+	ret = getsockopt(fd, SOL_SOCKET, SO_ERROR,
 			 (char*)&s_err, &s_err_size);
 	if (ret < 0)
 		return -errno;
@@ -149,25 +139,25 @@ mpd_socket_wait_connected(struct mpd_socket *s)
 	return 1;
 }
 
-bool
-mpd_socket_connect(struct mpd_socket *s, const char *host, int port,
+int
+mpd_socket_connect(const char *host, int port, const struct timeval *tv0,
 		   struct mpd_error_info *error)
 {
+	struct timeval tv = *tv0;
 	struct resolver *resolver;
 	const struct resolver_address *address;
-	int ret;
+	int fd, ret;
 
 	resolver = resolver_new(host, port);
 	if (resolver == NULL) {
 		mpd_error_code(error, MPD_ERROR_UNKHOST);
 		mpd_error_printf(error, "host \"%s\" not found", host);
-		return false;
+		return -1;
 	}
 
 	while ((address = resolver_next(resolver)) != NULL) {
-		s->fd = socket(address->family, SOCK_STREAM,
-					  address->protocol);
-		if (!mpd_socket_defined(s)) {
+		fd = socket(address->family, SOCK_STREAM, address->protocol);
+		if (fd < 0) {
 			mpd_error_code(error, MPD_ERROR_SYSTEM);
 			mpd_error_printf(error,
 					 "problems creating socket: %s",
@@ -175,23 +165,22 @@ mpd_socket_connect(struct mpd_socket *s, const char *host, int port,
 			continue;
 		}
 
-		ret = do_connect_fail(s, address->addr, address->addrlen);
+		ret = do_connect_fail(fd, address->addr, address->addrlen);
 		if (ret != 0) {
 			mpd_error_code(error, MPD_ERROR_CONNPORT);
 			mpd_error_printf(error,
 					 "problems connecting to \"%s\" on port %i: %s",
 					 host, port, strerror(errno));
 
-			closesocket(s->fd);
-			s->fd = -1;
+			mpd_socket_close(fd);
 			continue;
 		}
 
-		ret = mpd_socket_wait_connected(s);
+		ret = mpd_socket_wait_connected(fd, &tv);
 		if (ret > 0) {
 			resolver_free(resolver);
 			mpd_error_clear(error);
-			return true;
+			return fd;
 		}
 
 		if (ret == 0) {
@@ -206,10 +195,19 @@ mpd_socket_connect(struct mpd_socket *s, const char *host, int port,
 					 host, port, strerror(-ret));
 		}
 
-		closesocket(s->fd);
-		s->fd = -1;
+		mpd_socket_close(fd);
 	}
 
 	resolver_free(resolver);
-	return false;
+	return -1;
+}
+
+int
+mpd_socket_close(int fd)
+{
+#ifndef WIN32
+	return close(fd);
+#else
+	return closesocket(fd);
+#endif
 }
