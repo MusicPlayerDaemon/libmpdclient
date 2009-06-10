@@ -13,6 +13,17 @@ global:
 	mpd_async_send_command;
 	mpd_async_recv_line;
 
+	/* mpd/parser.h */
+	mpd_parser_new;
+	mpd_parser_free;
+	mpd_parser_feed;
+	mpd_parser_is_partial;
+	mpd_parser_get_ack;
+	mpd_parser_get_at;
+	mpd_parser_get_message;
+	mpd_parser_get_name;
+	mpd_parser_get_value;
+
 	/* mpd/send.h */
 	mpd_send_command;
 

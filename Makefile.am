@@ -14,6 +14,7 @@ mpdinclude_HEADERS = \
 	include/mpd/entity.h \
 	include/mpd/error.h \
 	include/mpd/idle.h \
+	include/mpd/parser.h \
 	include/mpd/protocol.h \
 	include/mpd/send.h \
 	include/mpd/status.h \
@@ -43,6 +44,7 @@ src_libmpdclient_la_SOURCES = \
 	src/pair.c \
 	src/entity.c \
 	src/idle.c \
+	src/parser.c \
 	src/quote.c src/quote.h \
 	src/search.c \
 	src/send.c \
