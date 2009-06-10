@@ -85,7 +85,7 @@ sparse-check:
 # Documentation
 #
 
-doc_DATA = README
+doc_DATA = README COPYING
 
 #
 # Distribution
