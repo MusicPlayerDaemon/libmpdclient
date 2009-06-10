@@ -76,10 +76,7 @@ SPARSE_CPPFLAGS = $(DEFAULT_INCLUDES) \
 	-I$(shell $(CC) -print-file-name=include) \
 	-I$(shell $(CC) -print-file-name=include-fixed)
 sparse-check:
-	for i in $(src_libmpdclient_la_SOURCES); \
-	do \
-		$(SPARSE) -I. $(CFLAGS) $(AM_CPPFLAGS) $(SPARSE_FLAGS) $(SPARSE_CPPFLAGS) $(srcdir)/$$i || exit; \
-	done
+	$(SPARSE) -I. $(CFLAGS) $(AM_CPPFLAGS) $(SPARSE_FLAGS) $(SPARSE_CPPFLAGS) $(src_libmpdclient_la_SOURCES)
 
 #
 # Documentation
