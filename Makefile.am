@@ -1,9 +1,6 @@
 ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = foreign 1.9 dist-bzip2
 
-doc_DATA = README
-EXTRA_DIST = libmpdclient.ld
-
 mpdincludedir = $(includedir)/mpd
 mpdinclude_HEADERS = \
 	include/mpd/async.h \
@@ -83,3 +80,17 @@ sparse-check:
 	do \
 		$(SPARSE) -I. $(CFLAGS) $(AM_CPPFLAGS) $(SPARSE_FLAGS) $(SPARSE_CPPFLAGS) $(srcdir)/$$i || exit; \
 	done
+
+#
+# Documentation
+#
+
+doc_DATA = README
+
+#
+# Distribution
+#
+
+EXTRA_DIST = \
+	libmpdclient.ld \
+	$(doc_DATA)
