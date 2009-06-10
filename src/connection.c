@@ -35,6 +35,7 @@
 #include <mpd/async.h>
 #include <mpd/idle.h>
 #include <mpd/pair.h>
+#include <mpd/parser.h>
 #include "resolver.h"
 #include "sync.h"
 
@@ -158,6 +159,7 @@ mpd_connection_new(const char *host, int port, float timeout)
 
 	mpd_error_init(&connection->error);
 	connection->async = NULL;
+	connection->parser = NULL;
 	connection->receiving = false;
 	connection->commandList = 0;
 	connection->listOks = 0;
@@ -185,6 +187,12 @@ mpd_connection_new(const char *host, int port, float timeout)
 	connection->async = mpd_async_new(fd);
 	if (connection->async == NULL) {
 		mpd_socket_close(fd);
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return connection;
+	}
+
+	connection->parser = mpd_parser_new();
+	if (connection->parser == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
 		return connection;
 	}
@@ -234,6 +242,9 @@ void mpd_clear_error(struct mpd_connection *connection)
 
 void mpd_connection_close(struct mpd_connection *connection)
 {
+	if (connection->parser != NULL)
+		mpd_parser_free(connection->parser);
+
 	if (connection->async != NULL)
 		mpd_async_free(connection->async);
 
@@ -264,11 +275,9 @@ mpd_get_server_version(const struct mpd_connection *connection)
 const struct mpd_pair *
 mpd_get_next_return_element(struct mpd_connection *connection)
 {
-	char * output = NULL;
-	char * name = NULL;
-	char * value = NULL;
-	char * tok = NULL;
-	int pos;
+	enum mpd_parser_result result;
+	char *line;
+	const char *msg;
 
 	if (connection->pair != NULL) {
 		mpd_pair_free(connection->pair);
@@ -283,80 +292,63 @@ mpd_get_next_return_element(struct mpd_connection *connection)
 		return NULL;
 	}
 
-	output = mpd_sync_recv_line(connection->async, &connection->timeout);
-	if (output == NULL)
+	line = mpd_sync_recv_line(connection->async, &connection->timeout);
+	if (line == NULL)
 		return NULL;
 
-	if (strcmp(output, "OK")==0) {
-		if (connection->listOks > 0) {
-			mpd_error_code(&connection->error,
-				       MPD_ERROR_MALFORMED);
-			mpd_error_message(&connection->error,
-					  "expected more list_OK's");
-		}
-		connection->listOks = 0;
-		connection->receiving = false;
-		connection->doneListOk = 0;
-		return NULL;
-	} else if (strcmp(output, "list_OK") == 0) {
-		if (!connection->listOks) {
-			mpd_error_code(&connection->error,
-				       MPD_ERROR_MALFORMED);
-			mpd_error_message(&connection->error,
-					  "got an unexpected list_OK");
-		}
-		else {
-			connection->doneListOk = 1;
-			connection->listOks--;
-		}
-		return NULL;
-	} else if (strncmp(output, "ACK", strlen("ACK"))==0) {
-		size_t length = strlen(output);
-		char * test;
-		char * needle;
-		int val;
-
-		mpd_error_ack(&connection->error,
-			      MPD_ACK_ERROR_UNK, MPD_ERROR_AT_UNK);
-		mpd_error_message_n(&connection->error, output, length);
-		connection->receiving = false;
-		connection->doneListOk = 0;
-
-		needle = strchr(output, '[');
-		if (needle == NULL)
-			return NULL;
-
-		val = strtol(needle+1, &test, 10);
-		if (*test != '@')
-			return NULL;
-
-		connection->error.ack = val;
-
-		val = strtol(test+1, &test, 10);
-		if (*test != ']')
-			return NULL;
-
-		connection->error.at = val;
-		return NULL;
-	}
-
-	tok = strchr(output, ':');
-	if (tok == NULL)
-		return NULL;
-
-	pos = tok - output;
-	value = ++tok;
-	name = output;
-	name[pos] = '\0';
-
-	if (value[0] != ' ') {
+	result = mpd_parser_feed(connection->parser, line);
+	switch (result) {
+	case MPD_PARSER_MALFORMED:
 		mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);
 		mpd_error_printf(&connection->error,
-				 "error parsing: %s:%s", name, value);
+				 "Failed to parse MPD response");
 		return NULL;
+
+	case MPD_PARSER_SUCCESS:
+		if (!mpd_parser_is_partial(connection->parser)) {
+			if (connection->listOks > 0) {
+				mpd_error_code(&connection->error,
+					       MPD_ERROR_MALFORMED);
+				mpd_error_message(&connection->error,
+						  "expected more list_OK's");
+			}
+
+			connection->listOks = 0;
+			connection->receiving = false;
+			connection->doneListOk = 0;
+		} else {
+			if (!connection->listOks) {
+				mpd_error_code(&connection->error,
+					       MPD_ERROR_MALFORMED);
+				mpd_error_message(&connection->error,
+						  "got an unexpected list_OK");
+			} else {
+				connection->doneListOk = 1;
+				connection->listOks--;
+			}
+		}
+
+		return NULL;
+
+	case MPD_PARSER_ERROR:
+		mpd_error_ack(&connection->error,
+			      mpd_parser_get_ack(connection->parser),
+			      mpd_parser_get_at(connection->parser));
+		msg = mpd_parser_get_message(connection->parser);
+		if (msg == NULL)
+			msg = "Unspecified MPD error";
+		mpd_error_message(&connection->error, msg);
+		return NULL;
+
+	case MPD_PARSER_PAIR:
+		return connection->pair =
+			mpd_pair_new(mpd_parser_get_name(connection->parser),
+				     mpd_parser_get_value(connection->parser));
 	}
 
-	return connection->pair = mpd_pair_new(name, value + 1);
+	/* unreachable */
+	assert(false);
+	return NULL;
 }
 
 char *

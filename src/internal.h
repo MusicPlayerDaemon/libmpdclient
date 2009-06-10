@@ -51,6 +51,8 @@ struct mpd_connection {
 	struct mpd_async *async;
 	struct timeval timeout;
 
+	struct mpd_parser *parser;
+
 	/**
 	 * Are we currently receiving the response of a command?
 	 */
