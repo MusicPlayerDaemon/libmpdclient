@@ -88,9 +88,17 @@ sparse-check:
 doc_DATA = README COPYING
 
 #
+# Installation
+#
+
+pkgconfigdir = $(datadir)/pkgconfig
+pkgconfig_DATA = libmpdclient.pc
+
+#
 # Distribution
 #
 
 EXTRA_DIST = \
 	libmpdclient.ld \
+	libmpdclient.pc.in \
 	$(doc_DATA)
