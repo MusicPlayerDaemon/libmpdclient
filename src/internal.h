@@ -42,7 +42,7 @@
  */
 struct mpd_connection {
 	/* use this to check the version of mpd */
-	int version[3];
+	unsigned version[3];
 
 	struct mpd_error_info error;
 

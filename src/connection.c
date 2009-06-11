@@ -266,7 +266,7 @@ mpd_connection_set_timeout(struct mpd_connection *connection, float timeout)
 	connection->timeout.tv_usec = ((long)(timeout * 1e6)) % 1000000;
 }
 
-const int *
+const unsigned *
 mpd_get_server_version(const struct mpd_connection *connection)
 {
 	return connection->version;
