@@ -178,97 +178,98 @@ void mpd_status_free(struct mpd_status * status) {
 	free(status);
 }
 
-int mpd_status_get_volume(struct mpd_status * status)
+int mpd_status_get_volume(const struct mpd_status *status)
 {
 	return status->volume;
 }
 
-int mpd_status_get_repeat(struct mpd_status * status)
+int mpd_status_get_repeat(const struct mpd_status *status)
 {
         return status->repeat;
 }
 
-int mpd_status_get_random(struct mpd_status * status)
+int mpd_status_get_random(const struct mpd_status *status)
 {
         return status->random;
 }
 
-int mpd_status_get_single(struct mpd_status * status)
+int mpd_status_get_single(const struct mpd_status *status)
 {
         return status->single;
 }
 
-int mpd_status_get_consume(struct mpd_status * status)
+int mpd_status_get_consume(const struct mpd_status *status)
 {
         return status->consume;
 }
 
-int mpd_status_get_playlist_length(struct mpd_status * status)
+int mpd_status_get_playlist_length(const struct mpd_status *status)
 {
         return status->playlist_length;
 }
 
-long long mpd_status_get_playlist(struct mpd_status * status)
+long long mpd_status_get_playlist(const struct mpd_status *status)
 {
         return status->playlist;
 }
 
-int mpd_status_get_state(struct mpd_status * status)
+int mpd_status_get_state(const struct mpd_status *status)
 {
         return status->state;
 }
 
-int mpd_status_get_crossfade(struct mpd_status * status)
+int mpd_status_get_crossfade(const struct mpd_status *status)
 {
         return status->crossfade;
 }
 
-int mpd_status_get_song(struct mpd_status * status)
+int mpd_status_get_song(const struct mpd_status *status)
 {
         return status->song;
 }
 
-int mpd_status_get_songid(struct mpd_status * status)
+int mpd_status_get_songid(const struct mpd_status *status)
 {
         return status->songid;
 }
 
-int mpd_status_get_elapsed_time(struct mpd_status * status)
+int mpd_status_get_elapsed_time(const struct mpd_status *status)
 {
         return status->elapsed_time;
 }
 
-int mpd_status_get_total_time(struct mpd_status * status)
+int mpd_status_get_total_time(const struct mpd_status *status)
 {
         return status->total_time;
 }
 
-int mpd_status_get_bit_rate(struct mpd_status * status)
+int mpd_status_get_bit_rate(const struct mpd_status *status)
 {
         return status->bit_rate;
 }
 
-unsigned int mpd_status_get_sample_rate(struct mpd_status * status)
+unsigned int mpd_status_get_sample_rate(const struct mpd_status *status)
 {
         return status->sample_rate;
 }
 
-int mpd_status_get_bits(struct mpd_status * status)
+int mpd_status_get_bits(const struct mpd_status *status)
 {
         return status->bits;
 }
 
-int mpd_status_get_channels(struct mpd_status * status)
+int mpd_status_get_channels(const struct mpd_status *status)
 {
         return status->channels;
 }
 
-int mpd_status_get_updatingdb(struct mpd_status * status)
+int mpd_status_get_updatingdb(const struct mpd_status *status)
 {
         return status->updatingdb;
 }
 
-char * mpd_status_get_error(struct mpd_status * status)
+const char *
+mpd_status_get_error(const struct mpd_status *status)
 {
         return status->error;
 }

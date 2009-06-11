@@ -70,100 +70,101 @@ void mpd_status_free(struct mpd_status * status);
  * Returns the current volume: 0-100, or MPD_STATUS_NO_VOLUME when there is no
  * volume support
  */
-int mpd_status_get_volume(struct mpd_status * status);
+int mpd_status_get_volume(const struct mpd_status *status);
 
 /**
  * Returns 1 if repeat is on, 0 otherwise
  */
-int mpd_status_get_repeat(struct mpd_status * status);
+int mpd_status_get_repeat(const struct mpd_status *status);
 
 /**
  * Returns 1 if random is on, 0 otherwise
  */
-int mpd_status_get_random(struct mpd_status * status);
+int mpd_status_get_random(const struct mpd_status *status);
 
 /**
  * Returns 1 if single is on, 0 otherwise
  */
-int mpd_status_get_single(struct mpd_status * status);
+int mpd_status_get_single(const struct mpd_status *status);
 
 /**
  * Returns 1 if consume is on, 0 otherwise
  */
-int mpd_status_get_consume(struct mpd_status * status);
+int mpd_status_get_consume(const struct mpd_status *status);
 
 /**
  * Returns playlist length
  */
-int mpd_status_get_playlist_length(struct mpd_status * status);
+int mpd_status_get_playlist_length(const struct mpd_status *status);
 
 /**
  * Returns playlist number, use this to determine when the playlist has changed
  */
-long long mpd_status_get_playlist(struct mpd_status * status);
+long long mpd_status_get_playlist(const struct mpd_status *status);
 
 /**
  * Returns the state of the player (use with MPD_STATUS_STATE_*)
  */
-int mpd_status_get_state(struct mpd_status * status);
+int mpd_status_get_state(const struct mpd_status *status);
 
 /**
  * Returns crossfade setting in seconds
  */
-int mpd_status_get_crossfade(struct mpd_status * status);
+int mpd_status_get_crossfade(const struct mpd_status *status);
 
 /**
  * Returns the position of the currently playing song in the playlist
  * (beginning with 0) if a song is currently selected (always the case when
  * state is PLAY or PAUSE)
  */
-int mpd_status_get_song(struct mpd_status * status);
+int mpd_status_get_song(const struct mpd_status *status);
 
 /**
  * Returns Song ID of the currently selected song
  */
-int mpd_status_get_songid(struct mpd_status * status);
+int mpd_status_get_songid(const struct mpd_status *status);
 
 /**
  * Returns time in seconds that have elapsed in the currently playing/paused
  * song
  */
-int mpd_status_get_elapsed_time(struct mpd_status * status);
+int mpd_status_get_elapsed_time(const struct mpd_status *status);
 
 /**
  * Returns the length in seconds of the currently playing/paused song
  */
-int mpd_status_get_total_time(struct mpd_status * status);
+int mpd_status_get_total_time(const struct mpd_status *status);
 
 /**
  * Returns current bit rate in kbs
  */
-int mpd_status_get_bit_rate(struct mpd_status * status);
+int mpd_status_get_bit_rate(const struct mpd_status *status);
 
 /**
  * Returns audio sample rate
  */
-unsigned int mpd_status_get_sample_rate(struct mpd_status * status);
+unsigned int mpd_status_get_sample_rate(const struct mpd_status *status);
 
 /**
  * Returns audio bits
  */
-int mpd_status_get_bits(struct mpd_status * status);
+int mpd_status_get_bits(const struct mpd_status *status);
 
 /**
  * Returns audio channels
  */
-int mpd_status_get_channels(struct mpd_status * status);
+int mpd_status_get_channels(const struct mpd_status *status);
 
 /**
  * Returns 1 if mpd is updating, 0 otherwise
  */
-int mpd_status_get_updatingdb(struct mpd_status * status);
+int mpd_status_get_updatingdb(const struct mpd_status *status);
 
 /**
  * Returns the error message
  */
-char * mpd_status_get_error(struct mpd_status * status);
+const char *
+mpd_status_get_error(const struct mpd_status *status);
 
 #ifdef __cplusplus
 }
