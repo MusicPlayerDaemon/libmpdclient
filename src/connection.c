@@ -272,6 +272,22 @@ mpd_get_server_version(const struct mpd_connection *connection)
 	return connection->version;
 }
 
+int
+mpd_cmp_server_version(const struct mpd_connection *connection, unsigned major,
+		       unsigned minor, unsigned patch)
+{
+	const unsigned *v = connection->version;
+
+	if (v[0] > major || (v[0] == major &&
+			     (v[1] > minor || (v[1] == minor &&
+					       v[2] > patch))))
+		return 1;
+	else if (v[0] == major && v[1] == minor && v[2] == patch)
+		return 0;
+	else
+		return -1;
+}
+
 const struct mpd_pair *
 mpd_get_next_return_element(struct mpd_connection *connection)
 {

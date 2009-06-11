@@ -97,6 +97,16 @@ void mpd_clear_error(struct mpd_connection *connection);
 const unsigned *
 mpd_get_server_version(const struct mpd_connection *connection);
 
+/**
+ * Compares the MPD server version with the specified triple.
+ *
+ * @return -1 if the server is older, 1 if it is newer, 0 if it is
+ * equal
+ */
+int
+mpd_cmp_server_version(const struct mpd_connection *connection, unsigned major,
+		       unsigned minor, unsigned patch);
+
 /*
  * TODO: Following methods should be internal
  */
