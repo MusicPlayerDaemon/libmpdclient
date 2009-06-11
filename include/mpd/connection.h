@@ -71,12 +71,12 @@ enum mpd_error
 mpd_get_error(const struct mpd_connection *connection);
 
 /**
- * Returns the human-readable (English) libmpdclient error string.
+ * Returns the human-readable (English) libmpdclient error message.
  * Calling this function is only valid if an error really occured.
  * Check with mpd_get_error().
  */
 const char *
-mpd_get_error_string(const struct mpd_connection *connection);
+mpd_get_error_message(const struct mpd_connection *connection);
 
 /**
  * Returns the error code returned from the server.  Calling this

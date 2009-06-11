@@ -215,7 +215,7 @@ mpd_get_error(const struct mpd_connection *connection)
 }
 
 const char *
-mpd_get_error_string(const struct mpd_connection *connection)
+mpd_get_error_message(const struct mpd_connection *connection)
 {
 	assert(connection->error.code != MPD_ERROR_SUCCESS);
 	assert(connection->error.message != NULL ||

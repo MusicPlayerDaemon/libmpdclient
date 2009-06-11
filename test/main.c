@@ -74,7 +74,7 @@
 
 #define CHECK_CONNECTION(conn) \
 	if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) { \
-		LOG_ERROR("%s", mpd_get_error_string(conn)); \
+		LOG_ERROR("%s", mpd_get_error_message(conn)); \
 		return -1; \
 	}
 
@@ -92,7 +92,7 @@ test_new_connection(struct mpd_connection **conn)
 	*conn = mpd_connection_new(hostname, atoi(port), 10);
 
 	if (!*conn || mpd_get_error(*conn) != MPD_ERROR_SUCCESS) {
-		LOG_ERROR("%s", mpd_get_error_string(*conn));
+		LOG_ERROR("%s", mpd_get_error_message(*conn));
 		mpd_connection_free(*conn);
 		*conn = NULL;
 		return -1;
@@ -168,7 +168,7 @@ test_status(struct mpd_connection *conn)
 
 	status = mpd_get_status(conn);
 	if (!status) {
-		LOG_ERROR("%s", mpd_get_error_string(conn));
+		LOG_ERROR("%s", mpd_get_error_message(conn));
 		return -1;
 	}
 	if (mpd_status_get_error(status)) {
@@ -235,7 +235,7 @@ test_list_status_currentsong(struct mpd_connection *conn)
 
 	status = mpd_get_status(conn);
 	if (!status) {
-		LOG_ERROR("%s", mpd_get_error_string(conn));
+		LOG_ERROR("%s", mpd_get_error_message(conn));
 		return -1;
 	}
 	if (mpd_status_get_error(status)) {
