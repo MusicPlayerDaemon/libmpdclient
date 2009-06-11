@@ -56,6 +56,11 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 		return NULL;
 
 	status = malloc(sizeof(struct mpd_status));
+	if (status == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return NULL;
+	}
+
 	status->volume = -1;
 	status->repeat = false;
 	status->random = false;
