@@ -151,13 +151,13 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 
 		mpd_get_next_return_element(connection);
 		if (mpd_error_is_defined(&connection->error)) {
-			free(status);
+			mpd_status_free(status);
 			return NULL;
 		}
 	}
 
 	if (mpd_error_is_defined(&connection->error)) {
-		free(status);
+		mpd_status_free(status);
 		return NULL;
 	}
 
