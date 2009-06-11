@@ -183,22 +183,26 @@ int mpd_status_get_volume(const struct mpd_status *status)
 	return status->volume;
 }
 
-int mpd_status_get_repeat(const struct mpd_status *status)
+bool
+mpd_status_get_repeat(const struct mpd_status *status)
 {
         return status->repeat;
 }
 
-int mpd_status_get_random(const struct mpd_status *status)
+bool
+mpd_status_get_random(const struct mpd_status *status)
 {
         return status->random;
 }
 
-int mpd_status_get_single(const struct mpd_status *status)
+bool
+mpd_status_get_single(const struct mpd_status *status)
 {
         return status->single;
 }
 
-int mpd_status_get_consume(const struct mpd_status *status)
+bool
+mpd_status_get_consume(const struct mpd_status *status)
 {
         return status->consume;
 }

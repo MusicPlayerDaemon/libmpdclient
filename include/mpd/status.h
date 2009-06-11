@@ -33,6 +33,8 @@
 #ifndef MPD_STATUS_H
 #define MPD_STATUS_H
 
+#include <stdbool.h>
+
 /* use these with status.state to determine what state the player is in */
 #define MPD_STATUS_STATE_UNKNOWN	0
 #define MPD_STATUS_STATE_STOP		1
@@ -73,24 +75,28 @@ void mpd_status_free(struct mpd_status * status);
 int mpd_status_get_volume(const struct mpd_status *status);
 
 /**
- * Returns 1 if repeat is on, 0 otherwise
+ * Returns true if repeat mode is on.
  */
-int mpd_status_get_repeat(const struct mpd_status *status);
+bool
+mpd_status_get_repeat(const struct mpd_status *status);
 
 /**
- * Returns 1 if random is on, 0 otherwise
+ * Returns true if random mode is on.
  */
-int mpd_status_get_random(const struct mpd_status *status);
+bool
+mpd_status_get_random(const struct mpd_status *status);
 
 /**
- * Returns 1 if single is on, 0 otherwise
+ * Returns true if single mode is on.
  */
-int mpd_status_get_single(const struct mpd_status *status);
+bool
+mpd_status_get_single(const struct mpd_status *status);
 
 /**
- * Returns 1 if consume is on, 0 otherwise
+ * Returns true if consume mode is on.
  */
-int mpd_status_get_consume(const struct mpd_status *status);
+bool
+mpd_status_get_consume(const struct mpd_status *status);
 
 /**
  * Returns playlist length
