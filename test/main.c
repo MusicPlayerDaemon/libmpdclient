@@ -93,7 +93,7 @@ test_new_connection(struct mpd_connection **conn)
 
 	if (!*conn || mpd_get_error(*conn) != MPD_ERROR_SUCCESS) {
 		LOG_ERROR("%s", mpd_get_error_string(*conn));
-		mpd_connection_close(*conn);
+		mpd_connection_free(*conn);
 		*conn = NULL;
 		return -1;
 	}
@@ -333,7 +333,7 @@ test_list_artists(struct mpd_connection *conn)
 static int
 test_close_connection(struct mpd_connection *conn)
 {
-	mpd_connection_close(conn);
+	mpd_connection_free(conn);
 	return 0;
 }
 

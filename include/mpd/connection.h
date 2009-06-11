@@ -55,13 +55,13 @@ extern "C" {
 struct mpd_connection *
 mpd_connection_new(const char *host, int port, float timeout);
 
+/**
+ * Close the connection and free all memory.
+ */
+void mpd_connection_free(struct mpd_connection *connection);
+
 void mpd_connection_set_timeout(struct mpd_connection *connection,
 			      float timeout);
-
-/* mpd_connection_close
- * use this to close a connection and free'ing subsequent memory
- */
-void mpd_connection_close(struct mpd_connection *connection);
 
 /**
  * Returns the libmpdclient error code.  MPD_ERROR_SUCCESS means no

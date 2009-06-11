@@ -240,7 +240,7 @@ void mpd_clear_error(struct mpd_connection *connection)
 	mpd_error_clear(&connection->error);
 }
 
-void mpd_connection_close(struct mpd_connection *connection)
+void mpd_connection_free(struct mpd_connection *connection)
 {
 	if (connection->parser != NULL)
 		mpd_parser_free(connection->parser);
