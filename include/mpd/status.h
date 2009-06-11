@@ -35,11 +35,22 @@
 
 #include <stdbool.h>
 
-/* use these with status.state to determine what state the player is in */
-#define MPD_STATUS_STATE_UNKNOWN	0
-#define MPD_STATUS_STATE_STOP		1
-#define MPD_STATUS_STATE_PLAY		2
-#define MPD_STATUS_STATE_PAUSE		3
+/**
+ * MPD's playback state.
+ */
+enum mpd_state {
+	/** no information available */
+	MPD_STATE_UNKNOWN = 0,
+
+	/** not playing */
+	MPD_STATE_STOP = 1,
+
+	/** playing */
+	MPD_STATE_PLAY = 2,
+
+	/** playing, but paused */
+	MPD_STATE_PAUSE = 3,
+};
 
 /* us this with status.volume to determine if mpd has volume support */
 #define MPD_STATUS_NO_VOLUME		-1
@@ -111,7 +122,8 @@ long long mpd_status_get_playlist(const struct mpd_status *status);
 /**
  * Returns the state of the player (use with MPD_STATUS_STATE_*)
  */
-int mpd_status_get_state(const struct mpd_status *status);
+enum mpd_state
+mpd_status_get_state(const struct mpd_status *status);
 
 /**
  * Returns crossfade setting in seconds

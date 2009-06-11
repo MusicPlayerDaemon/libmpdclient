@@ -123,8 +123,8 @@ print_status(struct mpd_status *status)
 	LOG_INFO("playlist: %lli", mpd_status_get_playlist(status));
 	LOG_INFO("playlistLength: %i", mpd_status_get_playlist_length(status));
 
-	if (mpd_status_get_state(status) == MPD_STATUS_STATE_PLAY ||
-	    mpd_status_get_state(status) == MPD_STATUS_STATE_PAUSE) {
+	if (mpd_status_get_state(status) == MPD_STATE_PLAY ||
+	    mpd_status_get_state(status) == MPD_STATE_PAUSE) {
 		LOG_INFO("song: %i", mpd_status_get_song(status));
 		LOG_INFO("elaspedTime: %i", mpd_status_get_elapsed_time(status));
 		LOG_INFO("totalTime: %i", mpd_status_get_total_time(status));

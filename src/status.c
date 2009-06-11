@@ -63,7 +63,7 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 	status->consume = false;
 	status->playlist = -1;
 	status->playlist_length = -1;
-	status->state = -1;
+	status->state = MPD_STATE_UNKNOWN;
 	status->song = 0;
 	status->songid = 0;
 	status->elapsed_time = 0;
@@ -105,16 +105,13 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 		}
 		else if (strcmp(pair->name, "state") == 0) {
 			if (strcmp(pair->value,"play") == 0) {
-				status->state = MPD_STATUS_STATE_PLAY;
+				status->state = MPD_STATE_PLAY;
 			}
 			else if (strcmp(pair->value,"stop") == 0) {
-				status->state = MPD_STATUS_STATE_STOP;
+				status->state = MPD_STATE_STOP;
 			}
 			else if (strcmp(pair->value,"pause") == 0) {
-				status->state = MPD_STATUS_STATE_PAUSE;
-			}
-			else {
-				status->state = MPD_STATUS_STATE_UNKNOWN;
+				status->state = MPD_STATE_PAUSE;
 			}
 		}
 		else if (strcmp(pair->name, "song") == 0) {
@@ -160,12 +157,6 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 	}
 
 	if (mpd_error_is_defined(&connection->error)) {
-		free(status);
-		return NULL;
-	}
-	else if (status->state<0) {
-		mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);
-		mpd_error_message(&connection->error, "state not found");
 		free(status);
 		return NULL;
 	}
@@ -217,7 +208,8 @@ long long mpd_status_get_playlist(const struct mpd_status *status)
         return status->playlist;
 }
 
-int mpd_status_get_state(const struct mpd_status *status)
+enum mpd_state
+mpd_status_get_state(const struct mpd_status *status)
 {
         return status->state;
 }

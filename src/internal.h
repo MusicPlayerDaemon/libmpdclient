@@ -99,8 +99,10 @@ struct mpd_status {
 	int playlist_length;
 	/* playlist, use this to determine when the playlist has changed */
 	long long playlist;
-	/* use with MPD_STATUS_STATE_* to determine state of player */
-	int state;
+
+	/** MPD's current playback state */
+	enum mpd_state state;
+
 	/* crossfade setting in seconds */
 	int crossfade;
 	/* if a song is currently selected (always the case when state is
