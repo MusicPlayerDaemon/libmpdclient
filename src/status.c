@@ -130,6 +130,9 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 			}
 		}
 		else if (strcmp(pair->name, "error") == 0) {
+			if (status->error != NULL)
+				free(status->error);
+
 			status->error = strdup(pair->value);
 		}
 		else if (strcmp(pair->name, "xfade") == 0) {
