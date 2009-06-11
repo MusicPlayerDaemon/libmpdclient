@@ -33,8 +33,6 @@
 #ifndef MPD_STATUS_H
 #define MPD_STATUS_H
 
-#include <mpd/connection.h>
-
 /* use these with status.state to determine what state the player is in */
 #define MPD_STATUS_STATE_UNKNOWN	0
 #define MPD_STATUS_STATE_STOP		1
@@ -43,6 +41,8 @@
 
 /* us this with status.volume to determine if mpd has volume support */
 #define MPD_STATUS_NO_VOLUME		-1
+
+struct mpd_connection;
 
 /* struct mpd_status
  * holds info about MPD status
