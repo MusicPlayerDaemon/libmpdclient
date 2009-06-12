@@ -33,9 +33,7 @@
 #ifndef MPD_IDLE_H
 #define MPD_IDLE_H
 
-#include <mpd/connection.h>
-
-#include <stdlib.h>
+struct mpd_connection;
 
 enum {
 	/** song database has been updated*/

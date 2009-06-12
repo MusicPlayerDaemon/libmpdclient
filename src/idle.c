@@ -35,7 +35,6 @@
 #include <mpd/send.h>
 #include "internal.h"
 
-#include <stdio.h>
 #include <string.h>
 #ifdef MPD_GLIB
 #include <glib.h>
