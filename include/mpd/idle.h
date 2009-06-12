@@ -35,7 +35,10 @@
 
 struct mpd_connection;
 
-enum {
+/**
+ * This enum contains bit masks for all idle events.
+ */
+enum mpd_idle {
 	/** song database has been updated*/
 	IDLE_DATABASE = 0x1,
 
@@ -69,7 +72,7 @@ extern "C" {
 void
 mpd_startIdle(struct mpd_connection *connection);
 
-unsigned
+enum mpd_idle
 mpd_stopIdle(struct mpd_connection *connection);
 
 #ifdef __cplusplus

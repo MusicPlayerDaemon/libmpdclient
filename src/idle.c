@@ -48,10 +48,10 @@ static const char *const idle_names[] = {
 	NULL
 };
 
-static unsigned
+static enum mpd_idle
 mpd_readChanges(struct mpd_connection *connection)
 {
-	unsigned flags = 0;
+	enum mpd_idle flags = 0;
 	const char *changed;
 
 	if (connection->error.code == MPD_ERROR_CONNCLOSED)
@@ -75,7 +75,7 @@ mpd_startIdle(struct mpd_connection *connection)
 	connection->idle = 1;
 }
 
-unsigned
+enum mpd_idle
 mpd_stopIdle(struct mpd_connection *connection)
 {
 	connection->idle = 0;
