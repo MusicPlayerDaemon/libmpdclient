@@ -54,8 +54,8 @@ mpd_readChanges(struct mpd_connection *connection)
 	enum mpd_idle flags = 0;
 	const char *changed;
 
-	if (connection->error.code == MPD_ERROR_CONNCLOSED)
-		return IDLE_DISCONNECT;
+	if (mpd_error_is_defined(&connection->error))
+		return 0;
 
 	while ((changed = mpd_get_pair_named(connection, "changed")) != NULL)
 		for (unsigned i = 0; idle_names[i] != NULL; ++i)

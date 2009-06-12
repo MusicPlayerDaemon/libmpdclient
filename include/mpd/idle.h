@@ -60,9 +60,6 @@ enum mpd_idle {
 
 	/** options have changed: crossfade, random, repeat, ... */
 	IDLE_OPTIONS = 0x40,
-
-	/** MPD closed the connection or the connection was lost */
-	IDLE_DISCONNECT = 0x80,
 };
 
 #ifdef __cplusplus
