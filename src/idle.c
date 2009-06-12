@@ -48,7 +48,7 @@ static const char *const idle_names[] = {
 	NULL
 };
 
-static enum mpd_idle
+enum mpd_idle
 mpd_recv_idle(struct mpd_connection *connection)
 {
 	enum mpd_idle flags = 0;
@@ -65,15 +65,14 @@ mpd_recv_idle(struct mpd_connection *connection)
 	return flags;
 }
 
-void
+bool
 mpd_send_idle(struct mpd_connection *connection)
 {
-	mpd_send_command(connection, "idle", NULL);
+	return mpd_send_command(connection, "idle", NULL);
 }
 
-enum mpd_idle
+bool
 mpd_send_noidle(struct mpd_connection *connection)
 {
-	mpd_send_command(connection, "noidle", NULL);
-	return mpd_recv_idle(connection);
+	return mpd_send_command(connection, "noidle", NULL);
 }

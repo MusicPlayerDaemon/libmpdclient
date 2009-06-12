@@ -33,6 +33,8 @@
 #ifndef MPD_IDLE_H
 #define MPD_IDLE_H
 
+#include <stdbool.h>
+
 struct mpd_connection;
 
 /**
@@ -66,11 +68,29 @@ enum mpd_idle {
 extern "C" {
 #endif
 
-void
+/**
+ * Enters "idle" mode: MPD will stall the response until an event has
+ * occured.  Call mpd_send_noidle() to abort the idle mode, or
+ * mpd_recv_idle() to read the event mask (or synchronously wait for
+ * events).
+ */
+bool
 mpd_send_idle(struct mpd_connection *connection);
 
-enum mpd_idle
+/**
+ * Tells MPD to leave the "idle" mode.  MPD will then respond with a
+ * list of events which have occured (which may be empty).  Call
+ * mpd_recv_idle() after that.
+ */
+bool
 mpd_send_noidle(struct mpd_connection *connection);
+
+/**
+ * Waits until MPD sends the list of idle events and returns it in a
+ * bit mask.
+ */
+enum mpd_idle
+mpd_recv_idle(struct mpd_connection *connection);
 
 #ifdef __cplusplus
 }
