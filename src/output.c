@@ -73,7 +73,7 @@ mpd_output_get_next(struct mpd_connection *connection)
 		else if (strcmp(pair->name, "outputenabled") == 0) {
 			output->enabled = atoi(pair->value) != 0;
 		}
-	} while (connection->pair != NULL);
+	}
 
 	if (mpd_error_is_defined(&connection->error)) {
 		if (output->name != NULL)
