@@ -166,7 +166,7 @@ int mpd_stats_get_number_of_songs(struct mpd_stats * stats)
 	return stats->number_of_songs;
 }
 
-unsigned long mpd_stats_get_updtime(struct mpd_stats * stats)
+unsigned long mpd_stats_get_uptime(struct mpd_stats * stats)
 {
 	return stats->uptime;
 }

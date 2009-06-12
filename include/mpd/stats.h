@@ -59,7 +59,7 @@ int mpd_stats_get_number_of_albums(struct mpd_stats * stats);
 
 int mpd_stats_get_number_of_songs(struct mpd_stats * stats);
 
-unsigned long mpd_stats_get_updtime(struct mpd_stats * stats);
+unsigned long mpd_stats_get_uptime(struct mpd_stats * stats);
 
 unsigned long mpd_stats_get_db_update_time(struct mpd_stats * stats);
 
