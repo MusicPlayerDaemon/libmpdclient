@@ -63,7 +63,6 @@ struct mpd_connection {
 	int commandList;
 	struct mpd_pair *pair;
 	char *request;
-	int idle;
 };
 
 extern const char *const mpdTagItemKeys[];

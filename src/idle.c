@@ -68,17 +68,12 @@ mpd_readChanges(struct mpd_connection *connection)
 void
 mpd_startIdle(struct mpd_connection *connection)
 {
-	if (connection->idle)
-		return;
-
 	mpd_send_command(connection, "idle", NULL);
-	connection->idle = 1;
 }
 
 enum mpd_idle
 mpd_stopIdle(struct mpd_connection *connection)
 {
-	connection->idle = 0;
 	mpd_send_command(connection, "noidle", NULL);
 	return mpd_readChanges(connection);
 }
