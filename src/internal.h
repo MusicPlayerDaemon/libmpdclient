@@ -67,21 +67,6 @@ struct mpd_connection {
 
 extern const char *const mpdTagItemKeys[];
 
-struct mpd_stats {
-	int number_of_artists;
-	int number_of_albums;
-	int number_of_songs;
-	unsigned long uptime;
-	unsigned long db_update_time;
-	unsigned long play_time;
-	unsigned long db_play_time;
-};
-
-struct mpd_search_stats {
-	int number_of_songs;
-	unsigned long play_time;
-};
-
 /**
  * Copies the error state from connection->sync to connection->error.
  */

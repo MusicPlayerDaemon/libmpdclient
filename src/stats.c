@@ -38,6 +38,21 @@
 #include <stdlib.h>
 #include <string.h>
 
+struct mpd_stats {
+	int number_of_artists;
+	int number_of_albums;
+	int number_of_songs;
+	unsigned long uptime;
+	unsigned long db_update_time;
+	unsigned long play_time;
+	unsigned long db_play_time;
+};
+
+struct mpd_search_stats {
+	int number_of_songs;
+	unsigned long play_time;
+};
+
 void mpd_send_stats(struct mpd_connection * connection) {
 	mpd_send_command(connection, "stats", NULL);
 }
