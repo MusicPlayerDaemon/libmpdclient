@@ -40,26 +40,26 @@ struct mpd_connection;
  */
 enum mpd_idle {
 	/** song database has been updated*/
-	IDLE_DATABASE = 0x1,
+	MPD_IDLE_DATABASE = 0x1,
 
 	/** a stored playlist has been modified, created, deleted or
 	    renamed */
-	IDLE_STORED_PLAYLIST = 0x2,
+	MPD_IDLE_STORED_PLAYLIST = 0x2,
 
 	/** the current playlist has been modified */
-	IDLE_PLAYLIST = 0x4,
+	MPD_IDLE_PLAYLIST = 0x4,
 
 	/** the player state has changed: play, stop, pause, seek, ... */
-	IDLE_PLAYER = 0x8,
+	MPD_IDLE_PLAYER = 0x8,
 
 	/** the volume has been modified */
-	IDLE_MIXER = 0x10,
+	MPD_IDLE_MIXER = 0x10,
 
 	/** an audio output device has been enabled or disabled */
-	IDLE_OUTPUT = 0x20,
+	MPD_IDLE_OUTPUT = 0x20,
 
 	/** options have changed: crossfade, random, repeat, ... */
-	IDLE_OPTIONS = 0x40,
+	MPD_IDLE_OPTIONS = 0x40,
 };
 
 #ifdef __cplusplus
