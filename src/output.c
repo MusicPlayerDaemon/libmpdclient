@@ -55,7 +55,7 @@ mpd_output_get_next(struct mpd_connection *connection)
 	output = malloc(sizeof(*output));
 	output->id = -10;
 	output->name = NULL;
-	output->enabled = 0;
+	output->enabled = false;
 
 	do {
 		const struct mpd_pair *pair = connection->pair;
@@ -68,7 +68,7 @@ mpd_output_get_next(struct mpd_connection *connection)
 			output->name = strdup(pair->value);
 		}
 		else if (strcmp(pair->name, "outputenabled") == 0) {
-			output->enabled = atoi(pair->value);
+			output->enabled = atoi(pair->value) != 0;
 		}
 
 		mpd_get_next_return_element(connection);

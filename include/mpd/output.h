@@ -33,12 +33,14 @@
 #ifndef MPD_OUTPUT_H
 #define MPD_OUTPUT_H
 
+#include <stdbool.h>
+
 struct mpd_connection;
 
 struct mpd_output_entity {
 	int id;
 	char *name;
-	int enabled;
+	bool enabled;
 };
 
 #ifdef __cplusplus
