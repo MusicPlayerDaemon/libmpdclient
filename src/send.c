@@ -27,6 +27,7 @@
 */
 
 #include <mpd/send.h>
+
 #include "internal.h"
 #include "sync.h"
 

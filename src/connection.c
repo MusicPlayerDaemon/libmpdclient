@@ -38,6 +38,7 @@
 #include <mpd/parser.h>
 #include "resolver.h"
 #include "sync.h"
+#include "socket.h"
 
 #include <assert.h>
 #include <stdlib.h>

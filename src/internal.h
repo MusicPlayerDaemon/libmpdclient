@@ -30,9 +30,6 @@
 #define MPD_INTERNAL_H
 
 #include "ierror.h"
-#include <mpd/connection.h>
-#include <mpd/status.h>
-#include "socket.h"
 
 #include <sys/select.h>
 
