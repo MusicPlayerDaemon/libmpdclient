@@ -34,11 +34,16 @@
 #define MPD_CLIENT_H
 
 #include <mpd/connection.h>
-#include <mpd/send.h>
 #include <mpd/command.h>
-#include <mpd/song.h>
 #include <mpd/directory.h>
+#include <mpd/entity.h>
+#include <mpd/output.h>
 #include <mpd/pair.h>
+#include <mpd/search.h>
+#include <mpd/send.h>
+#include <mpd/song.h>
+#include <mpd/stats.h>
+#include <mpd/status.h>
 #include <mpd/stored_playlist.h>
 
 #ifdef WIN32
