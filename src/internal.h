@@ -76,62 +76,6 @@ struct mpd_connection {
 
 extern const char *const mpdTagItemKeys[];
 
-/* struct mpd_status
- * holds info about MPD status
- */
-struct mpd_status {
-	/* 0-100, or MPD_STATUS_NO_VOLUME when there is no volume support */
-	int volume;
-
-	/** Playlist repeat mode enabled? */
-	bool repeat;
-
-	/** Random mode enabled? */
-	bool random;
-
-	/** Single song mode enabled? */
-	bool single;
-
-	/** Song consume mode enabled? */
-	bool consume;
-
-	/* playlist length */
-	int playlist_length;
-	/* playlist, use this to determine when the playlist has changed */
-	long long playlist;
-
-	/** MPD's current playback state */
-	enum mpd_state state;
-
-	/* crossfade setting in seconds */
-	int crossfade;
-	/* if a song is currently selected (always the case when state is
-	 * PLAY or PAUSE), this is the position of the currently
-	 * playing song in the playlist, beginning with 0
-	 */
-	int song;
-	/* Song ID of the currently selected song */
-	int songid;
-	/* time in seconds that have elapsed in the currently playing/paused
-	 * song
-	 */
-	int elapsed_time;
-	/* length in seconds of the currently playing/paused song */
-	int total_time;
-	/* current bit rate in kbs */
-	int bit_rate;
-	/* audio sample rate */
-	unsigned int sample_rate;
-	/* audio bits */
-	int bits;
-	/* audio channels */
-	int channels;
-	/* 1 if mpd is updating, 0 otherwise */
-	int updatingdb;
-	/* error */
-	char * error;
-};
-
 struct mpd_stats {
 	int number_of_artists;
 	int number_of_albums;
