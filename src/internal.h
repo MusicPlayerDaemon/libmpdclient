@@ -33,21 +33,39 @@
 
 #include <sys/select.h>
 
-/* mpd_connection
- * holds info about connection to mpd
- * use error, and errorStr to detect errors
+/**
+ * This opaque object represents a connection to a MPD server.  Call
+ * mpd_connection_new() to create a new instance.
  */
 struct mpd_connection {
-	/* use this to check the version of mpd */
+	/**
+	 * The version number received by the MPD server.
+	 */
 	unsigned version[3];
 
+	/**
+	 * The last error which occured.  This attribute must be
+	 * cleared with mpd_clear_error() before another command may
+	 * be executed.
+	 */
 	struct mpd_error_info error;
 
-	/* DON'T TOUCH any of the rest of this stuff */
-
+	/**
+	 * The backend of the MPD connection.
+	 */
 	struct mpd_async *async;
+
+	/**
+	 * The timeout for all commands.  If the MPD server does not
+	 * respond within this time span, the connection is assumed to
+	 * be dead.
+	 */
 	struct timeval timeout;
 
+	/**
+	 * The parser object used to parse response lines received
+	 * from the MPD server.
+	 */
 	struct mpd_parser *parser;
 
 	/**
@@ -65,9 +83,27 @@ struct mpd_connection {
 	 */
 	bool sending_command_list_ok;
 
+	/**
+	 * The total number of "list_OK" responses to expect until the
+	 * command list is finished.
+	 */
 	int listOks;
+
+	/**
+	 * The number of "list_OK" responses we have already received
+	 * in the current command list.
+	 */
 	int doneListOk;
+
+	/**
+	 * The "current" response name-value pair.
+	 */
 	struct mpd_pair *pair;
+
+	/**
+	 * The search request which is being built, committed by
+	 * mpd_search_commit().
+	 */
 	char *request;
 };
 
