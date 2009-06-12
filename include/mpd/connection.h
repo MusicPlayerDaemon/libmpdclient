@@ -120,6 +120,20 @@ char *
 mpd_get_next_pair_named(struct mpd_connection *connection,
 			const char *name);
 
+/**
+ * Returns the current pair, or reads the next pair if there is none
+ * yet.
+ */
+const struct mpd_pair *
+mpd_get_pair(struct mpd_connection *connection);
+
+/**
+ * Returns the first pair value with the specified name, also checking
+ * the current pair.
+ */
+const char *
+mpd_get_pair_named(struct mpd_connection *connection, const char *name);
+
 #ifdef __cplusplus
 }
 #endif

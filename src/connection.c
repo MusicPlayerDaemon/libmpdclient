@@ -384,3 +384,23 @@ mpd_get_next_pair_named(struct mpd_connection *connection,
 	return NULL;
 }
 
+const struct mpd_pair *
+mpd_get_pair(struct mpd_connection *connection)
+{
+	return connection->pair != NULL
+		? connection->pair
+		: mpd_get_next_pair(connection);
+}
+
+const char *
+mpd_get_pair_named(struct mpd_connection *connection, const char *name)
+{
+	const struct mpd_pair *pair;
+
+	for (pair = mpd_get_pair(connection); pair != NULL;
+	     pair = mpd_get_next_pair(connection))
+		if (strcmp(pair->name, name) == 0)
+			return pair->value;
+
+	return NULL;
+}
