@@ -35,9 +35,8 @@
 #include <mpd/pair.h>
 #include "internal.h"
 
-#include <limits.h>
+#include <assert.h>
 #include <string.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 struct mpd_output_entity *
@@ -83,12 +82,22 @@ mpd_output_get_next(struct mpd_connection *connection)
 		return NULL;
 	}
 
+	if (output->name == NULL) {
+		free(output);
+		mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);
+		mpd_error_message(&connection->error, "No output name");
+		return NULL;
+	}
+
 	return output;
 }
 
 void
 mpd_output_free(struct mpd_output_entity *output)
 {
+	assert(output != NULL);
+	assert(output->name != NULL);
+
 	free(output->name);
 	free(output);
 }
