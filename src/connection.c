@@ -161,7 +161,7 @@ mpd_connection_new(const char *host, int port, float timeout)
 	connection->async = NULL;
 	connection->parser = NULL;
 	connection->receiving = false;
-	connection->commandList = 0;
+	connection->sending_command_list = false;
 	connection->listOks = 0;
 	connection->doneListOk = 0;
 	connection->pair = NULL;

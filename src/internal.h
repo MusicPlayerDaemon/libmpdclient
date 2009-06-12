@@ -58,9 +58,18 @@ struct mpd_connection {
 	 */
 	bool receiving;
 
+	/**
+	 * Sending a command list right now?
+	 */
+	bool sending_command_list;
+
+	/**
+	 * Sending a command list with "command_list_ok"?
+	 */
+	bool sending_command_list_ok;
+
 	int listOks;
 	int doneListOk;
-	int commandList;
 	struct mpd_pair *pair;
 	char *request;
 };

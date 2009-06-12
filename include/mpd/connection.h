@@ -107,12 +107,6 @@ int
 mpd_cmp_server_version(const struct mpd_connection *connection, unsigned major,
 		       unsigned minor, unsigned patch);
 
-/*
- * TODO: Following methods should be internal
- */
-#define COMMAND_LIST    1
-#define COMMAND_LIST_OK 2
-
 const struct mpd_pair *
 mpd_get_next_pair(struct mpd_connection *connection);
 

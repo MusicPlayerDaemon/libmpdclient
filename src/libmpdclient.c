@@ -110,38 +110,43 @@ int mpd_getUpdateId(struct mpd_connection *connection)
 
 void mpd_sendCommandListBegin(struct mpd_connection *connection)
 {
-	if (connection->commandList) {
+	if (connection->sending_command_list) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
 				  "already in command list mode");
 		return;
 	}
-	connection->commandList = COMMAND_LIST;
+
+	connection->sending_command_list = true;
+	connection->sending_command_list_ok = false;
 	mpd_send_command(connection, "command_list_begin", NULL);
 }
 
 void mpd_sendCommandListOkBegin(struct mpd_connection *connection)
 {
-	if (connection->commandList) {
+	if (connection->sending_command_list) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
 				  "already in command list mode");
 		return;
 	}
-	connection->commandList = COMMAND_LIST_OK;
+
+	connection->sending_command_list = true;
+	connection->sending_command_list_ok = true;
 	mpd_send_command(connection, "command_list_ok_begin", NULL);
 	connection->listOks = 0;
 }
 
 void mpd_sendCommandListEnd(struct mpd_connection *connection)
 {
-	if (!connection->commandList) {
+	if (!connection->sending_command_list) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
 				  "not in command list mode");
 		return;
 	}
-	connection->commandList = 0;
+
+	connection->sending_command_list = false;
 	mpd_send_command(connection, "command_list_end", NULL);
 }
 
