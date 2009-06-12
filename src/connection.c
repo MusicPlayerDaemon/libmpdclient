@@ -167,9 +167,6 @@ mpd_connection_new(const char *host, int port, float timeout)
 	connection->pair = NULL;
 	connection->request = NULL;
 	connection->idle = 0;
-	connection->startIdle = NULL;
-	connection->stopIdle = NULL;
-	connection->notify_cb = NULL;
 
 	if (winsock_dll_error(connection))
 		return connection;

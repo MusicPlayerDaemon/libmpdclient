@@ -66,11 +66,11 @@ enum {
 extern "C" {
 #endif
 
-typedef void (*mpd_NotificationCb) (struct mpd_connection *connection, unsigned flags, void *userdata);
+void
+mpd_startIdle(struct mpd_connection *connection);
 
-void mpd_startIdle(struct mpd_connection *connection, mpd_NotificationCb notify_cb, void *userdata);
-
-void mpd_stopIdle(struct mpd_connection *connection);
+unsigned
+mpd_stopIdle(struct mpd_connection *connection);
 
 #ifdef __cplusplus
 }

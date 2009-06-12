@@ -64,11 +64,6 @@ struct mpd_connection {
 	struct mpd_pair *pair;
 	char *request;
 	int idle;
-	void (*notify_cb)(struct mpd_connection *connection,
-			  unsigned flags, void *userdata);
-	void (*startIdle)(struct mpd_connection *connection);
-	void (*stopIdle)(struct mpd_connection *connection);
-	void *userdata;
 };
 
 extern const char *const mpdTagItemKeys[];

@@ -48,7 +48,8 @@ static const char *const idle_names[] = {
 	NULL
 };
 
-static void mpd_readChanges(struct mpd_connection *connection)
+static unsigned
+mpd_readChanges(struct mpd_connection *connection)
 {
 	unsigned i;
 	unsigned flags = 0;
@@ -56,10 +57,8 @@ static void mpd_readChanges(struct mpd_connection *connection)
 	if (connection->pair == NULL)
 		mpd_get_next_pair(connection);
 
-	if (connection->error.code == MPD_ERROR_CONNCLOSED) {
-		connection->notify_cb (connection, IDLE_DISCONNECT, connection->userdata);
-		return;
-	}
+	if (connection->error.code == MPD_ERROR_CONNCLOSED)
+		return IDLE_DISCONNECT;
 
 	while (connection->pair != NULL) {
 		const struct mpd_pair *pair = connection->pair;
@@ -75,33 +74,23 @@ static void mpd_readChanges(struct mpd_connection *connection)
 		mpd_get_next_pair(connection);
 	}
 
-	/* Notifiy application */
-	if (connection->notify_cb && flags)
-		connection->notify_cb (connection, flags, connection->userdata);
+	return flags;
 }
 
-void mpd_startIdle(struct mpd_connection *connection, mpd_NotificationCb notify_cb, void *userdata)
+void
+mpd_startIdle(struct mpd_connection *connection)
 {
 	if (connection->idle)
 		return;
 
-	if (connection->startIdle)
-		connection->startIdle(connection);
-
 	mpd_send_command(connection, "idle", NULL);
 	connection->idle = 1;
-	connection->notify_cb = notify_cb;
-	connection->userdata = userdata;
 }
 
-void mpd_stopIdle(struct mpd_connection *connection)
+unsigned
+mpd_stopIdle(struct mpd_connection *connection)
 {
-	if (connection->stopIdle)
-		connection->stopIdle(connection);
-
 	connection->idle = 0;
-	connection->notify_cb = NULL;
-	connection->receiving = false;
 	mpd_send_command(connection, "noidle", NULL);
-	mpd_readChanges(connection);
+	return mpd_readChanges(connection);
 }
