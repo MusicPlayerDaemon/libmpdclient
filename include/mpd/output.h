@@ -38,7 +38,7 @@
 struct mpd_connection;
 
 struct mpd_output_entity {
-	int id;
+	unsigned id;
 	char *name;
 	bool enabled;
 };

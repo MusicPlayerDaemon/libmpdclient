@@ -443,13 +443,13 @@ mpd_send_outputs(struct mpd_connection *connection)
 }
 
 bool
-mpd_send_enable_output(struct mpd_connection *connection, int outputId)
+mpd_send_enable_output(struct mpd_connection *connection, unsigned output_id)
 {
-	return mpd_send_int_command(connection, "enableoutput", outputId);
+	return mpd_send_int_command(connection, "enableoutput", output_id);
 }
 
 bool
-mpd_send_disable_output(struct mpd_connection *connection, int outputId)
+mpd_send_disable_output(struct mpd_connection *connection, unsigned output_id)
 {
-	return mpd_send_int_command(connection, "disableoutput", outputId);
+	return mpd_send_int_command(connection, "disableoutput", output_id);
 }
