@@ -143,10 +143,7 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		return NULL;
 	}
 
-	mpd_get_next_pair(connection);
-	while (connection->pair != NULL) {
-		pair = connection->pair;
-
+	while ((pair = mpd_get_next_pair(connection)) != NULL) {
 		if (strcmp(pair->name, "file") == 0 ||
 		    strcmp(pair->name, "directory") == 0 ||
 		    strcmp(pair->name, "playlist") == 0 ||
@@ -159,8 +156,6 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		}
 		else if (entity->type == MPD_ENTITY_TYPE_PLAYLISTFILE) {
 		}
-
-		mpd_get_next_pair(connection);
 	}
 
 	return entity;
