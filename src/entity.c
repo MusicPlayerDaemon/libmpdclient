@@ -70,6 +70,42 @@ mpd_entity_free(mpd_entity * entity) {
 	free(entity);
 }
 
+static void
+parse_song_pair(struct mpd_song *song, const char *name, char *value)
+{
+	if (*value == 0)
+		return;
+
+	if (song->artist == NULL && strcmp(name, "Artist") == 0)
+		song->artist = str_pool_dup(value);
+	else if (song->album == NULL && strcmp(name, "Album") == 0)
+		song->album = str_pool_dup(value);
+	else if (song->title == NULL && strcmp(name, "Title") == 0)
+		song->title = str_pool_dup(value);
+	else if (song->track == NULL && strcmp(name, "Track") == 0)
+		song->track = str_pool_dup(value);
+	else if (song->name == NULL && strcmp(name, "Name") == 0)
+		song->name = str_pool_dup(value);
+	else if (song->time == MPD_SONG_NO_TIME && strcmp(name, "Time") == 0)
+		song->time = atoi(value);
+	else if (song->pos == MPD_SONG_NO_NUM && strcmp(name, "Pos") == 0)
+		song->pos = atoi(value);
+	else if (song->id == MPD_SONG_NO_ID && strcmp(name, "Id") == 0)
+		song->id = atoi(value);
+	else if (song->date == NULL && strcmp(name, "Date") == 0)
+		song->date = str_pool_dup(value);
+	else if (song->genre == NULL && strcmp(name, "Genre") == 0)
+		song->genre = str_pool_dup(value);
+	else if (song->composer == NULL && strcmp(name, "Composer") == 0)
+		song->composer = str_pool_dup(value);
+	else if (song->performer == NULL && strcmp(name, "Performer") == 0)
+		song->performer = str_pool_dup(value);
+	else if (song->disc == NULL && strcmp(name, "Disc") == 0)
+		song->disc = str_pool_dup(value);
+	else if (song->comment == NULL && strcmp(name, "Comment") == 0)
+		song->comment = str_pool_dup(value);
+}
+
 mpd_entity *
 mpd_get_next_entity(struct mpd_connection *connection)
 {
@@ -117,65 +153,8 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		    strcmp(pair->name, "cpos") == 0)
 			return entity;
 
-		if (entity->type == MPD_ENTITY_TYPE_SONG &&
-		    pair->value[0] != 0) {
-			if (!entity->info.song->artist &&
-			    strcmp(pair->name,"Artist") == 0) {
-				entity->info.song->artist = str_pool_dup(pair->value);
-			}
-			else if (!entity->info.song->album &&
-				 strcmp(pair->name,"Album") == 0) {
-				entity->info.song->album = str_pool_dup(pair->value);
-			}
-			else if (!entity->info.song->title &&
-				 strcmp(pair->name,"Title") == 0) {
-				entity->info.song->title = str_pool_dup(pair->value);
-			}
-			else if (!entity->info.song->track &&
-				 strcmp(pair->name,"Track") == 0) {
-				entity->info.song->track = str_pool_dup(pair->value);
-			}
-			else if (!entity->info.song->name &&
-				 strcmp(pair->name,"Name") == 0) {
-				entity->info.song->name = str_pool_dup(pair->value);
-			}
-			else if (entity->info.song->time==MPD_SONG_NO_TIME &&
-				 strcmp(pair->name,"Time") == 0) {
-				entity->info.song->time = atoi(pair->value);
-			}
-			else if (entity->info.song->pos==MPD_SONG_NO_NUM &&
-				 strcmp(pair->name,"Pos") == 0) {
-				entity->info.song->pos = atoi(pair->value);
-			}
-			else if (entity->info.song->id==MPD_SONG_NO_ID &&
-				 strcmp(pair->name,"Id") == 0) {
-				entity->info.song->id = atoi(pair->value);
-			}
-			else if (!entity->info.song->date &&
-				 strcmp(pair->name, "Date") == 0) {
-				entity->info.song->date = str_pool_dup(pair->value);
-			}
-			else if (!entity->info.song->genre &&
-				 strcmp(pair->name, "Genre") == 0) {
-				entity->info.song->genre = str_pool_dup(pair->value);
-			}
-			else if (!entity->info.song->composer &&
-				 strcmp(pair->name, "Composer") == 0) {
-				entity->info.song->composer = str_pool_dup(pair->value);
-			}
-			else if (!entity->info.song->performer &&
-				 strcmp(pair->name, "Performer") == 0) {
-				entity->info.song->performer = str_pool_dup(pair->value);
-			}
-			else if (!entity->info.song->disc &&
-				 strcmp(pair->name, "Disc") == 0) {
-				entity->info.song->disc = str_pool_dup(pair->value);
-			}
-			else if (!entity->info.song->comment &&
-				 strcmp(pair->name, "Comment") == 0) {
-				entity->info.song->comment = str_pool_dup(pair->value);
-			}
-		}
+		if (entity->type == MPD_ENTITY_TYPE_SONG)
+			parse_song_pair(entity->info.song, pair->name, pair->value);
 		else if (entity->type == MPD_ENTITY_TYPE_DIRECTORY) {
 		}
 		else if (entity->type == MPD_ENTITY_TYPE_PLAYLISTFILE) {
