@@ -67,10 +67,10 @@ extern "C" {
 #endif
 
 void
-mpd_startIdle(struct mpd_connection *connection);
+mpd_send_idle(struct mpd_connection *connection);
 
 enum mpd_idle
-mpd_stopIdle(struct mpd_connection *connection);
+mpd_send_noidle(struct mpd_connection *connection);
 
 #ifdef __cplusplus
 }
