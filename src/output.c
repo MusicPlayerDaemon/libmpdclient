@@ -44,7 +44,7 @@ mpd_output_get_next(struct mpd_connection *connection)
 {
 	struct mpd_output *output = NULL;
 	const char *value;
-	const struct mpd_pair *pair = connection->pair;
+	const struct mpd_pair *pair;
 
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
