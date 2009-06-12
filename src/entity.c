@@ -76,10 +76,7 @@ mpd_get_next_entity(struct mpd_connection *connection)
 	const struct mpd_pair *pair;
 	mpd_entity * entity = NULL;
 
-	pair = connection->pair;
-	if (connection->pair == NULL)
-		pair = mpd_get_next_pair(connection);
-
+	pair = mpd_get_pair(connection);
 	if (pair == NULL)
 		return NULL;
 
