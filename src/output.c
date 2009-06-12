@@ -53,6 +53,11 @@ mpd_output_get_next(struct mpd_connection *connection)
 		return NULL;
 
 	output = malloc(sizeof(*output));
+	if (output == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return NULL;
+	}
+
 	output->id = -10;
 	output->name = NULL;
 	output->enabled = false;
