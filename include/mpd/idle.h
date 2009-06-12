@@ -72,10 +72,6 @@ void mpd_startIdle(struct mpd_connection *connection, mpd_NotificationCb notify_
 
 void mpd_stopIdle(struct mpd_connection *connection);
 
-#ifdef MPD_GLIB
-void mpd_glibInit(struct mpd_connection *connection);
-#endif
-
 #ifdef __cplusplus
 }
 #endif

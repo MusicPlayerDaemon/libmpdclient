@@ -36,9 +36,6 @@
 #include "internal.h"
 
 #include <string.h>
-#ifdef MPD_GLIB
-#include <glib.h>
-#endif
 
 static const char *const idle_names[] = {
 	"database",
@@ -108,59 +105,3 @@ void mpd_stopIdle(struct mpd_connection *connection)
 	mpd_send_command(connection, "noidle", NULL);
 	mpd_readChanges(connection);
 }
-
-#ifdef MPD_GLIB
-static gboolean mpd_glibReadCb (GIOChannel *iochan, GIOCondition cond, gpointer data)
-{
-	struct mpd_connection *connection = data;
-
-	if (!connection->idle) {
-		connection->source_id = 0;
-		return FALSE;
-	}
-
-	if ((cond & G_IO_IN)) {
-		connection->idle = 0;
-		if (connection->source_id) {
-			g_source_remove (connection->source_id);
-			connection->source_id = 0;
-		}
-		mpd_readChanges(connection);
-	}
-
-	return TRUE;
-}
-
-static void mpd_glibStartIdle(struct mpd_connection *connection)
-{
-	static GIOChannel* iochan = NULL;
-
-	if (!iochan) {
-#ifdef WIN32
-		iochan = g_io_channel_win32_new_socket (connection->sock);
-#else
-		iochan = g_io_channel_unix_new (connection->sock);
-#endif
-	}
-
-	connection->source_id = g_io_add_watch (iochan,
-						G_IO_IN | G_IO_ERR | G_IO_HUP,
-						mpd_glibReadCb,
-						connection);
-}
-
-static void mpd_glibStopIdle(struct mpd_connection *connection)
-{
-	if (connection->source_id) {
-		g_source_remove (connection->source_id);
-		connection->source_id = 0;
-	}
-}
-
-void mpd_glibInit(struct mpd_connection *connection)
-{
-	connection->startIdle = mpd_glibStartIdle;
-	connection->stopIdle = mpd_glibStopIdle;
-}
-#endif
-

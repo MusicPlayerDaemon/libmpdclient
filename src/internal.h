@@ -69,9 +69,6 @@ struct mpd_connection {
 	void (*startIdle)(struct mpd_connection *connection);
 	void (*stopIdle)(struct mpd_connection *connection);
 	void *userdata;
-#ifdef MPD_GLIB
-        int source_id;
-#endif
 };
 
 extern const char *const mpdTagItemKeys[];

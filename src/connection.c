@@ -166,9 +166,6 @@ mpd_connection_new(const char *host, int port, float timeout)
 	connection->doneListOk = 0;
 	connection->pair = NULL;
 	connection->request = NULL;
-#ifdef MPD_GLIB
-	connection->source_id = 0;
-#endif
 	connection->idle = 0;
 	connection->startIdle = NULL;
 	connection->stopIdle = NULL;
