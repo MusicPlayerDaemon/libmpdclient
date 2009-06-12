@@ -51,28 +51,16 @@ static const char *const idle_names[] = {
 static unsigned
 mpd_readChanges(struct mpd_connection *connection)
 {
-	unsigned i;
 	unsigned flags = 0;
-
-	if (connection->pair == NULL)
-		mpd_get_next_pair(connection);
+	const char *changed;
 
 	if (connection->error.code == MPD_ERROR_CONNCLOSED)
 		return IDLE_DISCONNECT;
 
-	while (connection->pair != NULL) {
-		const struct mpd_pair *pair = connection->pair;
-
-		if (pair->name != NULL &&
-		    strncmp(pair->name, "changed", strlen("changed")) == 0) {
-			for (i = 0; idle_names[i]; ++i) {
-				if (strcmp(pair->value, idle_names[i]) == 0) {
-					flags |= (1 << i);
-				}
-			}
-		}
-		mpd_get_next_pair(connection);
-	}
+	while ((changed = mpd_get_pair_named(connection, "changed")) != NULL)
+		for (unsigned i = 0; idle_names[i] != NULL; ++i)
+			if (strcmp(changed, idle_names[i]) == 0)
+				flags |= (1 << i);
 
 	return flags;
 }
