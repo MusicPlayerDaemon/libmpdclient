@@ -49,7 +49,7 @@ mpd_output_get_next(struct mpd_connection *connection)
 		return NULL;
 
 	if (connection->pair == NULL &&
-	    mpd_get_next_return_element(connection) == NULL)
+	    mpd_get_next_pair(connection) == NULL)
 		return NULL;
 
 	output = malloc(sizeof(*output));
@@ -76,7 +76,7 @@ mpd_output_get_next(struct mpd_connection *connection)
 			output->enabled = atoi(pair->value) != 0;
 		}
 
-		mpd_get_next_return_element(connection);
+		mpd_get_next_pair(connection);
 		if (mpd_error_is_defined(&connection->error)) {
 			if (output->name != NULL)
 				free(output->name);

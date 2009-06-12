@@ -51,7 +51,7 @@ void mpd_finishCommand(struct mpd_connection *connection)
 {
 	while (connection->receiving) {
 		if (connection->doneListOk) connection->doneListOk = 0;
-		mpd_get_next_return_element(connection);
+		mpd_get_next_pair(connection);
 	}
 }
 
@@ -60,7 +60,7 @@ static void mpd_finishListOkCommand(struct mpd_connection *connection)
 	while (connection->receiving && connection->listOks &&
 			!connection->doneListOk)
 	{
-		mpd_get_next_return_element(connection);
+		mpd_get_next_pair(connection);
 	}
 }
 
@@ -85,7 +85,7 @@ mpd_sendAddIdCommand(struct mpd_connection *connection, const char *file)
 	if (!ret)
 		return -1;
 
-	string = mpd_get_next_return_element_named(connection, "Id");
+	string = mpd_get_next_pair_named(connection, "Id");
 	if (string) {
 		retval = atoi(string);
 		free(string);
@@ -99,7 +99,7 @@ int mpd_getUpdateId(struct mpd_connection *connection)
 	char * jobid;
 	int ret = 0;
 
-	jobid = mpd_get_next_return_element_named(connection,"updating_db");
+	jobid = mpd_get_next_pair_named(connection,"updating_db");
 	if (jobid) {
 		ret = atoi(jobid);
 		free(jobid);
@@ -150,16 +150,16 @@ void mpd_sendCommandListEnd(struct mpd_connection *connection)
  */
 char * mpd_get_next_command(struct mpd_connection *connection)
 {
-	return mpd_get_next_return_element_named(connection, "command");
+	return mpd_get_next_pair_named(connection, "command");
 }
 
 char * mpd_get_next_handler(struct mpd_connection *connection)
 {
-	return mpd_get_next_return_element_named(connection, "handler");
+	return mpd_get_next_pair_named(connection, "handler");
 }
 
 char * mpd_get_next_tag_type(struct mpd_connection *connection)
 {
-	return mpd_get_next_return_element_named(connection, "tagtype");
+	return mpd_get_next_pair_named(connection, "tagtype");
 }
 

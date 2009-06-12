@@ -70,8 +70,8 @@ char *mpd_get_next_tag(struct mpd_connection *connection,
 	    type == MPD_TAG_TYPE_ANY)
 		return NULL;
 	if (type == MPD_TAG_TYPE_FILENAME)
-		return mpd_get_next_return_element_named(connection, "file");
-	return mpd_get_next_return_element_named(connection, mpdTagItemKeys[type]);
+		return mpd_get_next_pair_named(connection, "file");
+	return mpd_get_next_pair_named(connection, mpdTagItemKeys[type]);
 }
 
 void

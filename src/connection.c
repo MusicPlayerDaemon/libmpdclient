@@ -289,7 +289,7 @@ mpd_cmp_server_version(const struct mpd_connection *connection, unsigned major,
 }
 
 const struct mpd_pair *
-mpd_get_next_return_element(struct mpd_connection *connection)
+mpd_get_next_pair(struct mpd_connection *connection)
 {
 	enum mpd_parser_result result;
 	char *line;
@@ -368,17 +368,17 @@ mpd_get_next_return_element(struct mpd_connection *connection)
 }
 
 char *
-mpd_get_next_return_element_named(struct mpd_connection *connection,
-				 const char *name)
+mpd_get_next_pair_named(struct mpd_connection *connection,
+			const char *name)
 {
-	mpd_get_next_return_element(connection);
+	mpd_get_next_pair(connection);
 	while (connection->pair != NULL) {
 		const struct mpd_pair *pair = connection->pair;
 
 		if (strcmp(pair->name, name) == 0)
 			return strdup(pair->value);
 
-		mpd_get_next_return_element(connection);
+		mpd_get_next_pair(connection);
 	}
 
 	return NULL;

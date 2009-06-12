@@ -58,7 +58,7 @@ static void mpd_readChanges(struct mpd_connection *connection)
 	unsigned flags = 0;
 
 	if (connection->pair == NULL)
-		mpd_get_next_return_element(connection);
+		mpd_get_next_pair(connection);
 
 	if (connection->error.code == MPD_ERROR_CONNCLOSED) {
 		connection->notify_cb (connection, IDLE_DISCONNECT, connection->userdata);
@@ -76,7 +76,7 @@ static void mpd_readChanges(struct mpd_connection *connection)
 				}
 			}
 		}
-		mpd_get_next_return_element(connection);
+		mpd_get_next_pair(connection);
 	}
 
 	/* Notifiy application */

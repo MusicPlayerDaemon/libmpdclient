@@ -50,7 +50,7 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 	if (connection->error) return NULL;*/
 
 	if (connection->pair == NULL)
-		mpd_get_next_return_element(connection);
+		mpd_get_next_pair(connection);
 
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
@@ -157,7 +157,7 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 			}
 		}
 
-		mpd_get_next_return_element(connection);
+		mpd_get_next_pair(connection);
 		if (mpd_error_is_defined(&connection->error)) {
 			mpd_status_free(status);
 			return NULL;

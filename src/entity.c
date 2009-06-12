@@ -76,7 +76,7 @@ mpd_get_next_entity(struct mpd_connection *connection)
 	mpd_entity * entity = NULL;
 
 	if (connection->pair == NULL)
-		mpd_get_next_return_element(connection);
+		mpd_get_next_pair(connection);
 
 	if (connection->pair != NULL) {
 		if (strcmp(connection->pair->name, "file") == 0) {
@@ -115,7 +115,7 @@ mpd_get_next_entity(struct mpd_connection *connection)
 	}
 	else return NULL;
 
-	mpd_get_next_return_element(connection);
+	mpd_get_next_pair(connection);
 	while (connection->pair != NULL) {
 		const struct mpd_pair *pair = connection->pair;
 
@@ -189,7 +189,7 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		else if (entity->type == MPD_INFO_ENTITY_TYPE_PLAYLISTFILE) {
 		}
 
-		mpd_get_next_return_element(connection);
+		mpd_get_next_pair(connection);
 	}
 
 	return entity;
