@@ -46,11 +46,11 @@ mpd_initInfoEntity(mpd_entity * entity) {
 static void
 mpd_finishInfoEntity(mpd_entity * entity) {
 	if (entity->info.directory) {
-		if (entity->type == MPD_INFO_ENTITY_TYPE_DIRECTORY)
+		if (entity->type == MPD_ENTITY_TYPE_DIRECTORY)
 			mpd_directory_free(entity->info.directory);
-		else if (entity->type == MPD_INFO_ENTITY_TYPE_SONG)
+		else if (entity->type == MPD_ENTITY_TYPE_SONG)
 			mpd_song_free(entity->info.song);
-		else if (entity->type == MPD_INFO_ENTITY_TYPE_PLAYLISTFILE)
+		else if (entity->type == MPD_ENTITY_TYPE_PLAYLISTFILE)
 			mpd_stored_playlist_free(entity->info.playlistFile);
 	}
 }
@@ -82,22 +82,22 @@ mpd_get_next_entity(struct mpd_connection *connection)
 
 	if (strcmp(pair->name, "file") == 0) {
 		entity = mpd_entity_new();
-		entity->type = MPD_INFO_ENTITY_TYPE_SONG;
+		entity->type = MPD_ENTITY_TYPE_SONG;
 		entity->info.song = mpd_song_new();
 		entity->info.song->file = str_pool_dup(pair->value);
 	} else if (strcmp(pair->name, "directory") == 0) {
 		entity = mpd_entity_new();
-		entity->type = MPD_INFO_ENTITY_TYPE_DIRECTORY;
+		entity->type = MPD_ENTITY_TYPE_DIRECTORY;
 		entity->info.directory = mpd_directory_new();
 		entity->info.directory->path = str_pool_dup(pair->value);
 	} else if (strcmp(pair->name, "playlist") == 0) {
 		entity = mpd_entity_new();
-		entity->type = MPD_INFO_ENTITY_TYPE_PLAYLISTFILE;
+		entity->type = MPD_ENTITY_TYPE_PLAYLISTFILE;
 		entity->info.playlistFile = mpd_stored_playlist_new();
 		entity->info.playlistFile->path = str_pool_dup(pair->value);
 	} else if (strcmp(pair->name, "cpos") == 0){
 		entity = mpd_entity_new();
-		entity->type = MPD_INFO_ENTITY_TYPE_SONG;
+		entity->type = MPD_ENTITY_TYPE_SONG;
 		entity->info.song = mpd_song_new();
 		entity->info.song->pos = atoi(pair->value);
 	} else {
@@ -117,7 +117,7 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		    strcmp(pair->name, "cpos") == 0)
 			return entity;
 
-		if (entity->type == MPD_INFO_ENTITY_TYPE_SONG &&
+		if (entity->type == MPD_ENTITY_TYPE_SONG &&
 		    pair->value[0] != 0) {
 			if (!entity->info.song->artist &&
 			    strcmp(pair->name,"Artist") == 0) {
@@ -176,9 +176,9 @@ mpd_get_next_entity(struct mpd_connection *connection)
 				entity->info.song->comment = str_pool_dup(pair->value);
 			}
 		}
-		else if (entity->type == MPD_INFO_ENTITY_TYPE_DIRECTORY) {
+		else if (entity->type == MPD_ENTITY_TYPE_DIRECTORY) {
 		}
-		else if (entity->type == MPD_INFO_ENTITY_TYPE_PLAYLISTFILE) {
+		else if (entity->type == MPD_ENTITY_TYPE_PLAYLISTFILE) {
 		}
 
 		mpd_get_next_pair(connection);

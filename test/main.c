@@ -199,7 +199,7 @@ test_currentsong(struct mpd_connection *conn)
 	entity = mpd_get_next_entity(conn);
 	if (entity) {
 		song = entity->info.song;
-		if (entity->type != MPD_INFO_ENTITY_TYPE_SONG || !song) {
+		if (entity->type != MPD_ENTITY_TYPE_SONG || !song) {
 			LOG_ERROR("entity doesn't have the expected type (song)i :%d", entity->type);
 			mpd_entity_free(entity);
 			return -1;
@@ -252,7 +252,7 @@ test_list_status_currentsong(struct mpd_connection *conn)
 	entity = mpd_get_next_entity(conn);
 	if (entity) {
 		song = entity->info.song;
-		if (entity->type != MPD_INFO_ENTITY_TYPE_SONG || !song) {
+		if (entity->type != MPD_ENTITY_TYPE_SONG || !song) {
 			LOG_ERROR("entity doesn't have the expected type (song)i :%d", entity->type);
 			mpd_entity_free(entity);
 			return -1;
@@ -278,13 +278,13 @@ test_lsinfo(struct mpd_connection *conn, const char *path)
 	CHECK_CONNECTION(conn);
 
 	while ((entity = mpd_get_next_entity(conn))) {
-		if (entity->type == MPD_INFO_ENTITY_TYPE_SONG) {
+		if (entity->type == MPD_ENTITY_TYPE_SONG) {
 			struct mpd_song *song = entity->info.song;
 			print_song (song);
-		} else if (entity->type == MPD_INFO_ENTITY_TYPE_DIRECTORY) {
+		} else if (entity->type == MPD_ENTITY_TYPE_DIRECTORY) {
 			struct mpd_directory *dir = entity->info.directory;
 			LOG_INFO("directory: %s", dir->path);
-		} else if (entity->type == MPD_INFO_ENTITY_TYPE_PLAYLISTFILE) {
+		} else if (entity->type == MPD_ENTITY_TYPE_PLAYLISTFILE) {
 			struct mpd_stored_playlist * pl = entity->info.playlistFile;
 			LOG_INFO("playlist: %s", pl->path);
 		} else {

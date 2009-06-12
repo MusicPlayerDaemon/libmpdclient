@@ -41,16 +41,16 @@
  * use in conjunction with mpd_entity.type
  */
 enum mpd_entity_type {
-	MPD_INFO_ENTITY_TYPE_DIRECTORY,
-	MPD_INFO_ENTITY_TYPE_SONG,
-	MPD_INFO_ENTITY_TYPE_PLAYLISTFILE
+	MPD_ENTITY_TYPE_DIRECTORY,
+	MPD_ENTITY_TYPE_SONG,
+	MPD_ENTITY_TYPE_PLAYLISTFILE
 };
 
 /* mpd_entity
  * stores info on stuff returned info commands
  */
 typedef struct mpd_entity {
-	/* the type of entity, use with MPD_INFO_ENTITY_TYPE_* to determine
+	/* the type of entity, use with MPD_ENTITY_TYPE_* to determine
 	 * what this entity is (song, directory, etc...)
 	 */
 	enum mpd_entity_type type;

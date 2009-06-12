@@ -112,7 +112,7 @@ int main(int argc, char ** argv) {
 		while((entity = mpd_get_next_entity(conn))) {
 			struct mpd_song * song = entity->info.song;
 
-			if(entity->type!=MPD_INFO_ENTITY_TYPE_SONG) {
+			if (entity->type != MPD_ENTITY_TYPE_SONG) {
 				mpd_entity_free(entity);
 				continue;
 			}
@@ -172,7 +172,7 @@ int main(int argc, char ** argv) {
 		}
 
 		while((entity = mpd_get_next_entity(conn))) {
-			if(entity->type==MPD_INFO_ENTITY_TYPE_SONG) {
+			if (entity->type == MPD_ENTITY_TYPE_SONG) {
 				struct mpd_song * song = entity->info.song;
 
 				printf("file: %s\n",song->file);
@@ -189,13 +189,13 @@ int main(int argc, char ** argv) {
 					printf("track: %s\n",song->track);
 				}
 			}
-			else if(entity->type==MPD_INFO_ENTITY_TYPE_DIRECTORY) {
+			else if (entity->type == MPD_ENTITY_TYPE_DIRECTORY) {
 				struct mpd_directory *dir =
 					entity->info.directory;
 				printf("directory: %s\n",dir->path);
 			}
-			else if(entity->type==
-					MPD_INFO_ENTITY_TYPE_PLAYLISTFILE) {
+			else if (entity->type ==
+				 MPD_ENTITY_TYPE_PLAYLISTFILE) {
 				struct mpd_stored_playlist *pl =
 					entity->info.playlistFile;
 				printf("playlist: %s\n",pl->path);
