@@ -39,10 +39,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-struct mpd_output_entity *
+struct mpd_output *
 mpd_output_get_next(struct mpd_connection *connection)
 {
-	struct mpd_output_entity *output = NULL;
+	struct mpd_output *output = NULL;
 	const char *value;
 	const struct mpd_pair *pair = connection->pair;
 
@@ -93,7 +93,7 @@ mpd_output_get_next(struct mpd_connection *connection)
 }
 
 void
-mpd_output_free(struct mpd_output_entity *output)
+mpd_output_free(struct mpd_output *output)
 {
 	assert(output != NULL);
 	assert(output->name != NULL);

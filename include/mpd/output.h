@@ -37,7 +37,7 @@
 
 struct mpd_connection;
 
-struct mpd_output_entity {
+struct mpd_output {
 	unsigned id;
 	char *name;
 	bool enabled;
@@ -47,11 +47,11 @@ struct mpd_output_entity {
 extern "C" {
 #endif
 
-struct mpd_output_entity *
+struct mpd_output *
 mpd_output_get_next(struct mpd_connection *connection);
 
 void
-mpd_output_free(struct mpd_output_entity *output);
+mpd_output_free(struct mpd_output *output);
 
 #ifdef __cplusplus
 }
