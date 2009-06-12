@@ -44,12 +44,14 @@ struct mpd_output_entity *
 mpd_output_get_next(struct mpd_connection *connection)
 {
 	struct mpd_output_entity *output = NULL;
+	const char *value;
+	const struct mpd_pair *pair = connection->pair;
 
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
 
-	if (connection->pair == NULL &&
-	    mpd_get_next_pair(connection) == NULL)
+	value = mpd_get_pair_named(connection, "outputid");
+	if (value == NULL)
 		return NULL;
 
 	output = malloc(sizeof(*output));
@@ -58,16 +60,13 @@ mpd_output_get_next(struct mpd_connection *connection)
 		return NULL;
 	}
 
-	output->id = -10;
+	output->id = atoi(value);
 	output->name = NULL;
 	output->enabled = false;
 
-	do {
-		const struct mpd_pair *pair = connection->pair;
-
+	while ((pair = mpd_get_next_pair(connection)) != NULL) {
 		if (strcmp(pair->name, "outputid") == 0) {
-			if (output!=NULL && output->id>=0) return output;
-			output->id = atoi(pair->value);
+			return output;
 		}
 		else if (strcmp(pair->name, "outputname") == 0) {
 			output->name = strdup(pair->value);
@@ -75,15 +74,14 @@ mpd_output_get_next(struct mpd_connection *connection)
 		else if (strcmp(pair->name, "outputenabled") == 0) {
 			output->enabled = atoi(pair->value) != 0;
 		}
-
-		mpd_get_next_pair(connection);
-		if (mpd_error_is_defined(&connection->error)) {
-			if (output->name != NULL)
-				free(output->name);
-			free(output);
-			return NULL;
-		}
 	} while (connection->pair != NULL);
+
+	if (mpd_error_is_defined(&connection->error)) {
+		if (output->name != NULL)
+			free(output->name);
+		free(output);
+		return NULL;
+	}
 
 	return output;
 }
