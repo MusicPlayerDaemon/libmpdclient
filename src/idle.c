@@ -33,6 +33,7 @@
 #include <mpd/idle.h>
 #include <mpd/send.h>
 #include <mpd/connection.h>
+#include <mpd/pair.h>
 #include "internal.h"
 
 #include <string.h>
@@ -52,15 +53,17 @@ enum mpd_idle
 mpd_recv_idle(struct mpd_connection *connection)
 {
 	enum mpd_idle flags = 0;
-	const char *changed;
+	struct mpd_pair *pair;
 
 	if (mpd_error_is_defined(&connection->error))
 		return 0;
 
-	while ((changed = mpd_get_pair_named(connection, "changed")) != NULL)
+	while ((pair = mpd_recv_pair_named(connection, "changed")) != NULL) {
 		for (unsigned i = 0; idle_names[i] != NULL; ++i)
-			if (strcmp(changed, idle_names[i]) == 0)
+			if (strcmp(pair->value, idle_names[i]) == 0)
 				flags |= (1 << i);
+		mpd_pair_free(pair);
+	}
 
 	return flags;
 }

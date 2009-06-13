@@ -107,26 +107,38 @@ int
 mpd_cmp_server_version(const struct mpd_connection *connection, unsigned major,
 		       unsigned minor, unsigned patch);
 
-const struct mpd_pair *
-mpd_get_next_pair(struct mpd_connection *connection);
+/**
+ * Reads the next #mpd_pair from the server.  Returns NULL if there
+ * are no more pairs.
+ *
+ * The caller is responsible for freeing the returned object with
+ * mpd_pair_free().
+ */
+struct mpd_pair *
+mpd_recv_pair(struct mpd_connection *connection);
 
+/**
+ * Same as mpd_recv_pair(), but discards all pairs not matching the
+ * specified name.
+ */
+struct mpd_pair *
+mpd_recv_pair_named(struct mpd_connection *connection, const char *name);
+
+/**
+ * Similar to mpd_recv_pair_named(), but duplicates the string and
+ * frees the #mpd_pair object.  The caller has to free the return
+ * value with free().
+ */
 char *
-mpd_get_next_pair_named(struct mpd_connection *connection,
-			const char *name);
+mpd_recv_value_named(struct mpd_connection *connection, const char *name);
 
 /**
- * Returns the current pair, or reads the next pair if there is none
- * yet.
+ * Unreads a #mpd_pair.  You may unread only the one pair you just got
+ * from mpd_recv_pair().  Unreading the "NULL" pair is allowed, to
+ * allow you to call mpd_recv_pair() again at the end of a response.
  */
-const struct mpd_pair *
-mpd_get_pair(struct mpd_connection *connection);
-
-/**
- * Returns the first pair value with the specified name, also checking
- * the current pair.
- */
-const char *
-mpd_get_pair_named(struct mpd_connection *connection, const char *name);
+void
+mpd_enqueue_pair(struct mpd_connection *connection, struct mpd_pair *pair);
 
 #ifdef __cplusplus
 }

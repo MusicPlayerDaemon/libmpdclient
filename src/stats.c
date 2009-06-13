@@ -59,7 +59,7 @@ void mpd_send_stats(struct mpd_connection * connection) {
 
 struct mpd_stats * mpd_get_stats(struct mpd_connection * connection) {
 	struct mpd_stats * stats;
-	const struct mpd_pair *pair;
+	struct mpd_pair *pair;
 
 	/*mpd_send_command(connection, "stats", NULL);
 
@@ -77,7 +77,7 @@ struct mpd_stats * mpd_get_stats(struct mpd_connection * connection) {
 	stats->play_time = 0;
 	stats->db_play_time = 0;
 
-	while ((pair = mpd_get_pair(connection)) != NULL) {
+	while ((pair = mpd_recv_pair(connection)) != NULL) {
 		if (strcmp(pair->name, "artists") == 0) {
 			stats->number_of_artists = atoi(pair->value);
 		}
@@ -99,6 +99,8 @@ struct mpd_stats * mpd_get_stats(struct mpd_connection * connection) {
 		else if (strcmp(pair->name, "db_playtime") == 0) {
 			stats->db_play_time = strtol(pair->value,NULL,10);
 		}
+
+		mpd_pair_free(pair);
 	}
 
 	if (mpd_error_is_defined(&connection->error)) {
@@ -116,7 +118,7 @@ void mpd_stats_free(struct mpd_stats * stats) {
 struct mpd_search_stats * mpd_get_search_stats(struct mpd_connection * connection)
 {
 	struct mpd_search_stats * stats;
-	const struct mpd_pair *pair;
+	struct mpd_pair *pair;
 
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
@@ -125,12 +127,14 @@ struct mpd_search_stats * mpd_get_search_stats(struct mpd_connection * connectio
 	stats->number_of_songs = 0;
 	stats->play_time = 0;
 
-	while ((pair = mpd_get_pair(connection)) != NULL) {
+	while ((pair = mpd_recv_pair(connection)) != NULL) {
 		if (strcmp(pair->name, "songs") == 0) {
 			stats->number_of_songs = atoi(pair->value);
 		} else if (strcmp(pair->name, "playtime") == 0) {
 			stats->play_time = strtol(pair->value, NULL, 10);
 		}
+
+		mpd_pair_free(pair);
 	}
 
 	if (mpd_error_is_defined(&connection->error)) {

@@ -114,7 +114,7 @@ void mpd_send_status(struct mpd_connection * connection) {
 
 struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 	struct mpd_status * status;
-	const struct mpd_pair *pair;
+	struct mpd_pair *pair;
 
 	/*mpd_send_command(connection, "status", NULL);
 
@@ -146,8 +146,7 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 	status->error = NULL;
 	status->updatingdb = 0;
 
-	for (pair = mpd_get_pair(connection); pair != NULL;
-	     pair = mpd_get_next_pair(connection)) {
+	while ((pair = mpd_recv_pair(connection)) != NULL) {
 		if (strcmp(pair->name, "volume") == 0) {
 			status->volume = atoi(pair->value);
 		}
@@ -220,6 +219,8 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 					status->channels = atoi(tok+1);
 			}
 		}
+
+		mpd_pair_free(pair);
 	}
 
 	if (mpd_error_is_defined(&connection->error)) {

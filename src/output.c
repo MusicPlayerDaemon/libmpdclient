@@ -43,28 +43,29 @@ struct mpd_output *
 mpd_output_get_next(struct mpd_connection *connection)
 {
 	struct mpd_output *output = NULL;
-	const char *value;
-	const struct mpd_pair *pair;
+	struct mpd_pair *pair;
 
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
 
-	value = mpd_get_pair_named(connection, "outputid");
-	if (value == NULL)
+	pair = mpd_recv_pair_named(connection, "outputid");
+	if (pair == NULL)
 		return NULL;
 
 	output = malloc(sizeof(*output));
 	if (output == NULL) {
+		mpd_pair_free(pair);
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
 		return NULL;
 	}
 
-	output->id = atoi(value);
+	output->id = atoi(pair->value);
 	output->name = NULL;
 	output->enabled = false;
 
-	while ((pair = mpd_get_next_pair(connection)) != NULL) {
+	while ((pair = mpd_recv_pair(connection)) != NULL) {
 		if (strcmp(pair->name, "outputid") == 0) {
+			mpd_enqueue_pair(connection, pair);
 			return output;
 		}
 		else if (strcmp(pair->name, "outputname") == 0) {
@@ -73,6 +74,8 @@ mpd_output_get_next(struct mpd_connection *connection)
 		else if (strcmp(pair->name, "outputenabled") == 0) {
 			output->enabled = atoi(pair->value) != 0;
 		}
+
+		mpd_pair_free(pair);
 	}
 
 	if (mpd_error_is_defined(&connection->error)) {

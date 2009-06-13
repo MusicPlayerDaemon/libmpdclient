@@ -49,9 +49,14 @@
 
 void mpd_finishCommand(struct mpd_connection *connection)
 {
+	struct mpd_pair *pair;
+
 	while (connection->receiving) {
 		if (connection->doneListOk) connection->doneListOk = 0;
-		mpd_get_next_pair(connection);
+
+		pair = mpd_recv_pair(connection);
+		if (pair != NULL)
+			mpd_pair_free(pair);
 	}
 }
 
@@ -60,7 +65,9 @@ static void mpd_finishListOkCommand(struct mpd_connection *connection)
 	while (connection->receiving && connection->listOks &&
 			!connection->doneListOk)
 	{
-		mpd_get_next_pair(connection);
+		struct mpd_pair *pair = mpd_recv_pair(connection);
+		if (pair != NULL)
+			mpd_pair_free(pair);
 	}
 }
 
@@ -78,17 +85,17 @@ int
 mpd_sendAddIdCommand(struct mpd_connection *connection, const char *file)
 {
 	bool ret;
+	struct mpd_pair *pair;
 	int retval = -1;
-	char *string;
 
 	ret = mpd_send_addid(connection, file);
 	if (!ret)
 		return -1;
 
-	string = mpd_get_next_pair_named(connection, "Id");
-	if (string) {
-		retval = atoi(string);
-		free(string);
+	pair = mpd_recv_pair_named(connection, "Id");
+	if (pair != NULL) {
+		retval = atoi(pair->value);
+		mpd_pair_free(pair);
 	}
 	
 	return retval;
@@ -96,13 +103,13 @@ mpd_sendAddIdCommand(struct mpd_connection *connection, const char *file)
 
 int mpd_getUpdateId(struct mpd_connection *connection)
 {
-	char * jobid;
+	struct mpd_pair *pair;
 	int ret = 0;
 
-	jobid = mpd_get_next_pair_named(connection,"updating_db");
-	if (jobid) {
-		ret = atoi(jobid);
-		free(jobid);
+	pair = mpd_recv_pair_named(connection, "updating_db");
+	if (pair != NULL) {
+		ret = atoi(pair->value);
+		mpd_pair_free(pair);
 	}
 
 	return ret;
@@ -155,16 +162,16 @@ void mpd_sendCommandListEnd(struct mpd_connection *connection)
  */
 char * mpd_get_next_command(struct mpd_connection *connection)
 {
-	return mpd_get_next_pair_named(connection, "command");
+	return mpd_recv_value_named(connection, "command");
 }
 
 char * mpd_get_next_handler(struct mpd_connection *connection)
 {
-	return mpd_get_next_pair_named(connection, "handler");
+	return mpd_recv_value_named(connection, "handler");
 }
 
 char * mpd_get_next_tag_type(struct mpd_connection *connection)
 {
-	return mpd_get_next_pair_named(connection, "tagtype");
+	return mpd_recv_value_named(connection, "tagtype");
 }
 

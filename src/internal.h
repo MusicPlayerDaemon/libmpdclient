@@ -34,6 +34,12 @@
 #include <sys/select.h>
 
 /**
+ * This special value for mpd_connection means that no #mpd_pair was
+ * "unread".
+ */
+#define PAIR_NONE ((struct mpd_pair *)0x1)
+
+/**
  * This opaque object represents a connection to a MPD server.  Call
  * mpd_connection_new() to create a new instance.
  */
@@ -96,9 +102,12 @@ struct mpd_connection {
 	int doneListOk;
 
 	/**
-	 * The "current" response name-value pair.
+	 * The name-value pair which was "unread" with
+	 * mpd_enqueue_pair().  The special value #PAIR_NONE denotes
+	 * that this value is empty, while NULL means that somebody
+	 * "unread" the NULL pointer.
 	 */
-	struct mpd_pair *pair;
+	struct mpd_pair *x_pair;
 
 	/**
 	 * The search request which is being built, committed by

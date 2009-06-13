@@ -109,10 +109,10 @@ parse_song_pair(struct mpd_song *song, const char *name, char *value)
 mpd_entity *
 mpd_get_next_entity(struct mpd_connection *connection)
 {
-	const struct mpd_pair *pair;
+	struct mpd_pair *pair;
 	mpd_entity * entity = NULL;
 
-	pair = mpd_get_pair(connection);
+	pair = mpd_recv_pair(connection);
 	if (pair == NULL)
 		return NULL;
 
@@ -137,18 +137,22 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		entity->info.song = mpd_song_new();
 		entity->info.song->pos = atoi(pair->value);
 	} else {
+		mpd_pair_free(pair);
+
 		mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);
 		mpd_error_message(&connection->error,
 				  "problem parsing song info");
 		return NULL;
 	}
 
-	while ((pair = mpd_get_next_pair(connection)) != NULL) {
+	while ((pair = mpd_recv_pair(connection)) != NULL) {
 		if (strcmp(pair->name, "file") == 0 ||
 		    strcmp(pair->name, "directory") == 0 ||
 		    strcmp(pair->name, "playlist") == 0 ||
-		    strcmp(pair->name, "cpos") == 0)
+		    strcmp(pair->name, "cpos") == 0) {
+			mpd_enqueue_pair(connection, pair);
 			return entity;
+		}
 
 		if (entity->type == MPD_ENTITY_TYPE_SONG)
 			parse_song_pair(entity->info.song, pair->name, pair->value);
@@ -156,6 +160,8 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		}
 		else if (entity->type == MPD_ENTITY_TYPE_PLAYLISTFILE) {
 		}
+
+		mpd_pair_free(pair);
 	}
 
 	return entity;

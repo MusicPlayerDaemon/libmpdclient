@@ -32,6 +32,7 @@
 
 #include <mpd/search.h>
 #include <mpd/send.h>
+#include <mpd/pair.h>
 #include "internal.h"
 
 #include <ctype.h>
@@ -70,8 +71,8 @@ char *mpd_get_next_tag(struct mpd_connection *connection,
 	    type == MPD_TAG_TYPE_ANY)
 		return NULL;
 	if (type == MPD_TAG_TYPE_FILENAME)
-		return mpd_get_next_pair_named(connection, "file");
-	return mpd_get_next_pair_named(connection, mpdTagItemKeys[type]);
+		return mpd_recv_value_named(connection, "file");
+	return mpd_recv_value_named(connection, mpdTagItemKeys[type]);
 }
 
 void

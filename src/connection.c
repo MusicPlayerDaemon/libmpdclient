@@ -165,7 +165,7 @@ mpd_connection_new(const char *host, int port, float timeout)
 	connection->sending_command_list = false;
 	connection->listOks = 0;
 	connection->doneListOk = 0;
-	connection->pair = NULL;
+	connection->x_pair = PAIR_NONE;
 	connection->request = NULL;
 
 	if (winsock_dll_error(connection))
@@ -242,8 +242,8 @@ void mpd_connection_free(struct mpd_connection *connection)
 	if (connection->async != NULL)
 		mpd_async_free(connection->async);
 
-	if (connection->pair != NULL)
-		free(connection->pair);
+	if (connection->x_pair != NULL && connection->x_pair != PAIR_NONE)
+		free(connection->x_pair);
 
 	if (connection->request) free(connection->request);
 
@@ -282,17 +282,24 @@ mpd_cmp_server_version(const struct mpd_connection *connection, unsigned major,
 		return -1;
 }
 
-const struct mpd_pair *
-mpd_get_next_pair(struct mpd_connection *connection)
+struct mpd_pair *
+mpd_recv_pair(struct mpd_connection *connection)
 {
-	enum mpd_parser_result result;
+	struct mpd_pair *pair;
 	char *line;
+	enum mpd_parser_result result;
 	const char *msg;
 
-	if (connection->pair != NULL) {
-		mpd_pair_free(connection->pair);
-		connection->pair = NULL;
+	if (mpd_error_is_defined(&connection->error))
+		return NULL;
+
+	if (connection->x_pair != PAIR_NONE) {
+		/* dequeue the pair from mpd_enqueue_pair() */
+		pair = connection->x_pair;
+		connection->x_pair = NULL;
+		return pair;
 	}
+
 
 	if (!connection->receiving ||
 	    (connection->listOks && connection->doneListOk)) {
@@ -351,9 +358,11 @@ mpd_get_next_pair(struct mpd_connection *connection)
 		return NULL;
 
 	case MPD_PARSER_PAIR:
-		return connection->pair =
-			mpd_pair_new(mpd_parser_get_name(connection->parser),
-				     mpd_parser_get_value(connection->parser));
+		pair = mpd_pair_new(mpd_parser_get_name(connection->parser),
+				    mpd_parser_get_value(connection->parser));
+		if (pair == NULL)
+			mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return pair;
 	}
 
 	/* unreachable */
@@ -361,40 +370,46 @@ mpd_get_next_pair(struct mpd_connection *connection)
 	return NULL;
 }
 
-char *
-mpd_get_next_pair_named(struct mpd_connection *connection,
-			const char *name)
+struct mpd_pair *
+mpd_recv_pair_named(struct mpd_connection *connection, const char *name)
 {
-	mpd_get_next_pair(connection);
-	while (connection->pair != NULL) {
-		const struct mpd_pair *pair = connection->pair;
+	struct mpd_pair *pair;
 
+	while ((pair = mpd_recv_pair(connection)) != NULL) {
 		if (strcmp(pair->name, name) == 0)
-			return strdup(pair->value);
+			return pair;
 
-		mpd_get_next_pair(connection);
+		mpd_pair_free(pair);
 	}
 
 	return NULL;
 }
 
-const struct mpd_pair *
-mpd_get_pair(struct mpd_connection *connection)
+char *
+mpd_recv_value_named(struct mpd_connection *connection, const char *name)
 {
-	return connection->pair != NULL
-		? connection->pair
-		: mpd_get_next_pair(connection);
+	struct mpd_pair *pair;
+	char *value;
+
+	pair = mpd_recv_pair_named(connection, name);
+	if (pair == NULL)
+		return NULL;
+
+	value = strdup(pair->value);
+	mpd_pair_free(pair);
+
+	if (value == NULL)
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+
+	return value;
 }
 
-const char *
-mpd_get_pair_named(struct mpd_connection *connection, const char *name)
+void
+mpd_enqueue_pair(struct mpd_connection *connection, struct mpd_pair *pair)
 {
-	const struct mpd_pair *pair;
+	assert(connection != NULL);
+	assert(pair == NULL || (pair->name != NULL && pair->value != NULL));
+	assert(connection->x_pair == PAIR_NONE);
 
-	for (pair = mpd_get_pair(connection); pair != NULL;
-	     pair = mpd_get_next_pair(connection))
-		if (strcmp(pair->name, name) == 0)
-			return pair->value;
-
-	return NULL;
+	connection->x_pair = pair;
 }
