@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2008 The Music Player Daemon Project
+   (c) 2003-2009 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -30,40 +30,49 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MPD_CLIENT_H
-#define MPD_CLIENT_H
-
-#include <mpd/connection.h>
-#include <mpd/command.h>
-#include <mpd/directory.h>
-#include <mpd/entity.h>
 #include <mpd/list.h>
-#include <mpd/output.h>
-#include <mpd/pair.h>
-#include <mpd/response.h>
-#include <mpd/search.h>
 #include <mpd/send.h>
-#include <mpd/song.h>
-#include <mpd/stats.h>
-#include <mpd/status.h>
-#include <mpd/stored_playlist.h>
+#include "internal.h"
 
-#ifdef WIN32
-#  define __W32API_USE_DLLIMPORT__ 1
-#endif
+void mpd_sendCommandListBegin(struct mpd_connection *connection)
+{
+	if (connection->sending_command_list) {
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "already in command list mode");
+		return;
+	}
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/* INFO COMMANDS AND STUFF */
-
-/* SIMPLE COMMANDS */
-
-int mpd_sendAddIdCommand(struct mpd_connection *connection, const char *file);
-
-#ifdef __cplusplus
+	connection->sending_command_list = true;
+	connection->sending_command_list_ok = false;
+	mpd_send_command(connection, "command_list_begin", NULL);
 }
-#endif
 
-#endif
+void mpd_sendCommandListOkBegin(struct mpd_connection *connection)
+{
+	if (connection->sending_command_list) {
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "already in command list mode");
+		return;
+	}
+
+	connection->sending_command_list = true;
+	connection->sending_command_list_ok = true;
+	mpd_send_command(connection, "command_list_ok_begin", NULL);
+	connection->listOks = 0;
+}
+
+void mpd_sendCommandListEnd(struct mpd_connection *connection)
+{
+	if (!connection->sending_command_list) {
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "not in command list mode");
+		return;
+	}
+
+	connection->sending_command_list = false;
+	mpd_send_command(connection, "command_list_end", NULL);
+}
+

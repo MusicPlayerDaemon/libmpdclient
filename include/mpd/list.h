@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2008 The Music Player Daemon Project
+   (c) 2003-2009 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -30,40 +30,15 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MPD_CLIENT_H
-#define MPD_CLIENT_H
+#ifndef MPD_LIST_H
+#define MPD_LIST_H
 
-#include <mpd/connection.h>
-#include <mpd/command.h>
-#include <mpd/directory.h>
-#include <mpd/entity.h>
-#include <mpd/list.h>
-#include <mpd/output.h>
-#include <mpd/pair.h>
-#include <mpd/response.h>
-#include <mpd/search.h>
-#include <mpd/send.h>
-#include <mpd/song.h>
-#include <mpd/stats.h>
-#include <mpd/status.h>
-#include <mpd/stored_playlist.h>
+struct mpd_connection;
 
-#ifdef WIN32
-#  define __W32API_USE_DLLIMPORT__ 1
-#endif
+void mpd_sendCommandListBegin(struct mpd_connection *connection);
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+void mpd_sendCommandListOkBegin(struct mpd_connection *connection);
 
-/* INFO COMMANDS AND STUFF */
-
-/* SIMPLE COMMANDS */
-
-int mpd_sendAddIdCommand(struct mpd_connection *connection, const char *file);
-
-#ifdef __cplusplus
-}
-#endif
+void mpd_sendCommandListEnd(struct mpd_connection *connection);
 
 #endif
