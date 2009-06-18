@@ -229,9 +229,15 @@ mpd_get_server_error(const struct mpd_connection *connection)
 	return connection->error.ack;
 }
 
-void mpd_clear_error(struct mpd_connection *connection)
+bool
+mpd_clear_error(struct mpd_connection *connection)
 {
+	if (mpd_error_is_fatal(&connection->error))
+		/* impossible to recover */
+		return false;
+
 	mpd_error_clear(&connection->error);
+	return true;
 }
 
 void mpd_connection_free(struct mpd_connection *connection)

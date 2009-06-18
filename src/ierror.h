@@ -105,6 +105,18 @@ mpd_error_is_defined(const struct mpd_error_info *error)
 }
 
 /**
+ * Returns true if the error is not recoverable
+ */
+static inline bool
+mpd_error_is_fatal(const struct mpd_error_info *error)
+{
+	return error->code != MPD_ERROR_SUCCESS &&
+		error->code != MPD_ERROR_ARG &&
+		error->code != MPD_ERROR_STATE &&
+		error->code != MPD_ERROR_ACK;
+}
+
+/**
  * Sets an error code.
  */
 static inline void

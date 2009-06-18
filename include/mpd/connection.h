@@ -36,6 +36,8 @@
 #include <mpd/protocol.h>
 #include <mpd/error.h>
 
+#include <stdbool.h>
+
 /**
  * This opaque object represents a connection to a MPD server.  Call
  * mpd_connection_new() to create a new instance.
@@ -85,10 +87,14 @@ mpd_get_error_message(const struct mpd_connection *connection);
 enum mpd_ack
 mpd_get_server_error(const struct mpd_connection *connection);
 
-/* mpd_clear_error
- * clears error
+/**
+ * Attempts to recover from an error condition.
+ *
+ * @return true on success, false if the error is fatal and cannot be
+ * recovered
  */
-void mpd_clear_error(struct mpd_connection *connection);
+bool
+mpd_clear_error(struct mpd_connection *connection);
 
 /**
  * Returns a three-tuple containing the major, minor and patch version
