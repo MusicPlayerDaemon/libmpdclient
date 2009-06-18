@@ -46,6 +46,11 @@ mpd_response_finish(struct mpd_connection *connection)
 	if (mpd_error_is_defined(&connection->error))
 		return false;
 
+	if (connection->pair == NULL)
+		/* reset the stored NULL pair because it will conflict
+		   with an assertion within the loop */
+		connection->pair = PAIR_NONE;
+
 	while (connection->receiving) {
 		assert(!mpd_error_is_defined(&connection->error));
 
