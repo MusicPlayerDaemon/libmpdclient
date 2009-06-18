@@ -47,45 +47,6 @@
 #include <fcntl.h>
 #include <limits.h>
 
-void mpd_finishCommand(struct mpd_connection *connection)
-{
-	struct mpd_pair *pair;
-
-	while (connection->receiving) {
-		assert(!mpd_error_is_defined(&connection->error));
-
-		if (connection->doneListOk) connection->doneListOk = 0;
-
-		pair = mpd_recv_pair(connection);
-		assert(pair != NULL || !connection->receiving ||
-		       mpd_error_is_defined(&connection->error));
-
-		if (pair != NULL)
-			mpd_pair_free(pair);
-	}
-}
-
-static void mpd_finishListOkCommand(struct mpd_connection *connection)
-{
-	while (connection->receiving && connection->listOks &&
-			!connection->doneListOk)
-	{
-		struct mpd_pair *pair = mpd_recv_pair(connection);
-		if (pair != NULL)
-			mpd_pair_free(pair);
-	}
-}
-
-int mpd_nextListOkCommand(struct mpd_connection *connection)
-{
-	mpd_finishListOkCommand(connection);
-	if (connection->receiving)
-		connection->doneListOk = 0;
-	if (connection->listOks == 0 || !connection->receiving)
-		return -1;
-	return 0;
-}
-
 int
 mpd_sendAddIdCommand(struct mpd_connection *connection, const char *file)
 {
@@ -104,20 +65,6 @@ mpd_sendAddIdCommand(struct mpd_connection *connection, const char *file)
 	}
 	
 	return retval;
-}
-
-int mpd_getUpdateId(struct mpd_connection *connection)
-{
-	struct mpd_pair *pair;
-	int ret = 0;
-
-	pair = mpd_recv_pair_named(connection, "updating_db");
-	if (pair != NULL) {
-		ret = atoi(pair->value);
-		mpd_pair_free(pair);
-	}
-
-	return ret;
 }
 
 void mpd_sendCommandListBegin(struct mpd_connection *connection)
@@ -160,23 +107,5 @@ void mpd_sendCommandListEnd(struct mpd_connection *connection)
 
 	connection->sending_command_list = false;
 	mpd_send_command(connection, "command_list_end", NULL);
-}
-
-/**
- * Get the next returned command
- */
-char * mpd_get_next_command(struct mpd_connection *connection)
-{
-	return mpd_recv_value_named(connection, "command");
-}
-
-char * mpd_get_next_handler(struct mpd_connection *connection)
-{
-	return mpd_recv_value_named(connection, "handler");
-}
-
-char * mpd_get_next_tag_type(struct mpd_connection *connection)
-{
-	return mpd_recv_value_named(connection, "tagtype");
 }
 

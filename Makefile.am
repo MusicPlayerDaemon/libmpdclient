@@ -13,6 +13,7 @@ mpdinclude_HEADERS = \
 	include/mpd/idle.h \
 	include/mpd/parser.h \
 	include/mpd/protocol.h \
+	include/mpd/response.h \
 	include/mpd/send.h \
 	include/mpd/status.h \
 	include/mpd/stats.h \
@@ -43,6 +44,7 @@ src_libmpdclient_la_SOURCES = \
 	src/idle.c \
 	src/parser.c \
 	src/quote.c src/quote.h \
+	src/response.c \
 	src/search.c \
 	src/send.c \
 	src/socket.c src/socket.h \
