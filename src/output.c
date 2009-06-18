@@ -65,8 +65,7 @@ mpd_output_get_next(struct mpd_connection *connection)
 
 	while ((pair = mpd_recv_pair(connection)) != NULL) {
 		if (strcmp(pair->name, "outputid") == 0) {
-			mpd_enqueue_pair(connection, pair);
-			return output;
+			break;
 		}
 		else if (strcmp(pair->name, "outputname") == 0) {
 			output->name = strdup(pair->value);
@@ -92,6 +91,7 @@ mpd_output_get_next(struct mpd_connection *connection)
 		return NULL;
 	}
 
+	mpd_enqueue_pair(connection, pair);
 	return output;
 }
 
