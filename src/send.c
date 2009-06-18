@@ -42,6 +42,14 @@ mpd_send_command(struct mpd_connection *connection, const char *command, ...)
 	if (mpd_error_is_defined(&connection->error))
 		return false;
 
+	if (connection->receiving) {
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "Cannot send a new command while "
+				  "receiving another response");
+		return false;
+	}
+
 	va_start(ap, command);
 
 	success = mpd_sync_send_command_v(connection->async,
@@ -70,6 +78,14 @@ mpd_send_command2(struct mpd_connection *connection, const char *command)
 
 	if (mpd_error_is_defined(&connection->error))
 		return false;
+
+	if (connection->receiving) {
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "Cannot send a new command while "
+				  "receiving another response");
+		return false;
+	}
 
 	success = mpd_sync_send_command(connection->async,
 					&connection->timeout,
