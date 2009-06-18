@@ -192,7 +192,7 @@ mpd_search_commit(struct mpd_connection *connection)
 	}
 
 	mpd_send_command(connection, connection->request, NULL);
-
+	free(connection->request);
 	connection->request = NULL;
 }
 
