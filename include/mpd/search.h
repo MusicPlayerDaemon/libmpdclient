@@ -44,36 +44,6 @@ extern "C" {
 
 /**
  * @param connection a #mpd_connection
- * @param type The type of the tag to get
- *
- * Use this function to get the next tagi of o given type.
- * NULL means there are no more.
- */
-char *mpd_get_next_tag(struct mpd_connection *connection,
-		       enum mpd_tag_type type);
-
-/**
- * @param connection a #mpd_connection
- * @param type The tag type of the constraint
- * @param value The value of the constaint
- *
- * Add a constraint to a search.
- */
-void mpd_search_add_constraint(struct mpd_connection *connection,
-			       enum mpd_tag_type type,
-			       const char *value);
-
-/**
- * @param connection a #mpd_connection
- *
- * Starts the real search with constraints added with
- * mpd_search_add_constraint.
- */
-void mpd_search_commit(struct mpd_connection *connection);
-
-
-/**
- * @param connection a #mpd_connection
  * @param exact if to match exact
  *
  * Search for songs in the db given certain constraints
@@ -101,7 +71,7 @@ void mpd_search_playlist_songs(struct mpd_connection *connection,
  * Search for tags in the db given certain constraints
  * Use this method with mpd_search_add_constraint and mpd_search_commit
  * Use mpd_get_next_tag to get results of this method
- */ 
+ */
 void mpd_search_db_tags(struct mpd_connection *connection,
 			enum mpd_tag_type type);
 
@@ -111,9 +81,37 @@ void mpd_search_db_tags(struct mpd_connection *connection,
  * Counts the number of songs and the total playtime given certain constraints
  * Use this method with mpd_search_add_constraint and mpd_search_commit
  * Use mpd_get_stats to get results of this method
- */ 
+ */
 void mpd_count_db_songs(struct mpd_connection *connection);
 
+/**
+ * @param connection a #mpd_connection
+ * @param type The tag type of the constraint
+ * @param value The value of the constaint
+ *
+ * Add a constraint to a search.
+ */
+void mpd_search_add_constraint(struct mpd_connection *connection,
+			       enum mpd_tag_type type,
+			       const char *value);
+
+/**
+ * @param connection a #mpd_connection
+ *
+ * Starts the real search with constraints added with
+ * mpd_search_add_constraint.
+ */
+void mpd_search_commit(struct mpd_connection *connection);
+
+/**
+ * @param connection a #mpd_connection
+ * @param type The type of the tag to get
+ *
+ * Use this function to get the next tag of o given type.
+ * NULL means there are no more.
+ */
+char *mpd_get_next_tag(struct mpd_connection *connection,
+		       enum mpd_tag_type type);
 
 #ifdef __cplusplus
 }
