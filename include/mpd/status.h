@@ -66,8 +66,6 @@ struct mpd_status;
 extern "C" {
 #endif
 
-void mpd_send_status(struct mpd_connection * connection);
-
 /* mpd_get_status
  * returns status info, be sure to free it with mpd_status_free()
  * call this after mpd_send_status()

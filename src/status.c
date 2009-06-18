@@ -108,10 +108,6 @@ struct mpd_status {
 	char *error;
 };
 
-void mpd_send_status(struct mpd_connection * connection) {
-	mpd_send_command(connection, "status", NULL);
-}
-
 struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 	struct mpd_status * status;
 	struct mpd_pair *pair;

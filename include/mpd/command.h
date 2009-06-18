@@ -46,9 +46,18 @@ extern "C" {
 #endif
 
 /*
- * Player commands
+ * Status commands
  *
  */
+
+/**
+ * Sends the "status" command to MPD.  Call mpd_get_status() to read
+ * the response.
+ *
+ * @return true on success
+ */
+bool
+mpd_send_status(struct mpd_connection *connection);
 
 /**
  * Fetches the currently selected song (the song referenced by
@@ -56,6 +65,11 @@ extern "C" {
  */
 bool
 mpd_send_currentsong(struct mpd_connection *connection);
+
+/*
+ * Player commands
+ *
+ */
 
 bool
 mpd_send_play(struct mpd_connection *connection, int song_pos);
