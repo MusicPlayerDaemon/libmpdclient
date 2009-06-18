@@ -163,8 +163,6 @@ mpd_connection_new(const char *host, int port, float timeout)
 	connection->parser = NULL;
 	connection->receiving = false;
 	connection->sending_command_list = false;
-	connection->listOks = 0;
-	connection->doneListOk = 0;
 	connection->pair = PAIR_NONE;
 	connection->request = NULL;
 
@@ -308,7 +306,8 @@ mpd_recv_pair(struct mpd_connection *connection)
 
 
 	if (!connection->receiving ||
-	    (connection->listOks && connection->doneListOk)) {
+	    (connection->command_list_remaining > 0 &&
+	     connection->discrete_finished)) {
 		connection->receiving = false;
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
@@ -331,26 +330,26 @@ mpd_recv_pair(struct mpd_connection *connection)
 
 	case MPD_PARSER_SUCCESS:
 		if (!mpd_parser_is_discrete(connection->parser)) {
-			if (connection->listOks > 0) {
+			if (connection->command_list_remaining > 0) {
 				mpd_error_code(&connection->error,
 					       MPD_ERROR_MALFORMED);
 				mpd_error_message(&connection->error,
 						  "expected more list_OK's");
+				connection->command_list_remaining = 0;
 			}
 
-			connection->listOks = 0;
 			connection->receiving = false;
-			connection->doneListOk = 0;
+			connection->discrete_finished = false;
 		} else {
-			if (!connection->listOks) {
+			if (connection->command_list_remaining == 0) {
 				connection->receiving = false;
 				mpd_error_code(&connection->error,
 					       MPD_ERROR_MALFORMED);
 				mpd_error_message(&connection->error,
 						  "got an unexpected list_OK");
 			} else {
-				connection->doneListOk = 1;
-				connection->listOks--;
+				connection->discrete_finished = true;
+				--connection->command_list_remaining;
 			}
 		}
 

@@ -66,7 +66,7 @@ mpd_send_command(struct mpd_connection *connection, const char *command, ...)
 	if (!connection->sending_command_list)
 		connection->receiving = true;
 	else if (connection->sending_command_list_ok)
-		connection->listOks++;
+		++connection->command_list_remaining;
 
 	return true;
 }

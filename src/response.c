@@ -54,7 +54,7 @@ mpd_response_finish(struct mpd_connection *connection)
 	while (connection->receiving) {
 		assert(!mpd_error_is_defined(&connection->error));
 
-		if (connection->doneListOk) connection->doneListOk = 0;
+		connection->discrete_finished = false;
 
 		pair = mpd_recv_pair(connection);
 		assert(pair != NULL || !connection->receiving ||
@@ -69,8 +69,9 @@ mpd_response_finish(struct mpd_connection *connection)
 
 static void mpd_finishListOkCommand(struct mpd_connection *connection)
 {
-	while (connection->receiving && connection->listOks &&
-			!connection->doneListOk)
+	while (connection->receiving &&
+	       connection->command_list_remaining > 0 &&
+	       !connection->discrete_finished)
 	{
 		struct mpd_pair *pair = mpd_recv_pair(connection);
 		if (pair != NULL)
@@ -83,8 +84,8 @@ mpd_response_next(struct mpd_connection *connection)
 {
 	mpd_finishListOkCommand(connection);
 	if (connection->receiving)
-		connection->doneListOk = 0;
-	if (connection->listOks == 0 || !connection->receiving)
+		connection->discrete_finished = false;
+	if (connection->command_list_remaining == 0 || !connection->receiving)
 		return false;
 	return true;
 }

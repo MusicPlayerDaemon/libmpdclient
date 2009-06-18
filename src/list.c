@@ -55,8 +55,8 @@ mpd_command_list_begin(struct mpd_connection *connection, bool discrete_ok)
 
 	connection->sending_command_list = true;
 	connection->sending_command_list_ok = discrete_ok;
-	if (discrete_ok)
-		connection->listOks = 0;
+	connection->command_list_remaining = 0;
+	connection->discrete_finished = false;
 
 	return true;
 }

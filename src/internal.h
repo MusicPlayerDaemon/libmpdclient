@@ -90,16 +90,17 @@ struct mpd_connection {
 	bool sending_command_list_ok;
 
 	/**
-	 * The total number of "list_OK" responses to expect until the
-	 * command list is finished.
+	 * Did the caller finish reading one sub response?
+	 * (i.e. list_OK was received, and mpd_recv_pair() has
+	 * returned NULL)
 	 */
-	int listOks;
+	bool discrete_finished;
 
 	/**
-	 * The number of "list_OK" responses we have already received
-	 * in the current command list.
+	 * The number of list_OK responses remaining in the command
+	 * list response.
 	 */
-	int doneListOk;
+	int command_list_remaining;
 
 	/**
 	 * The name-value pair which was "unread" with
