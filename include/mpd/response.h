@@ -42,15 +42,18 @@ extern "C" {
 /* after executing a command, when your done with it to get its status
  * (you want to check connection->error for an error)
  */
-void mpd_finishCommand(struct mpd_connection *connection);
+void
+mpd_response_finish(struct mpd_connection *connection);
 
 /* advance to the next listOk
  * returns 0 if advanced to the next list_OK,
  * returns -1 if it advanced to an OK or ACK */
-int mpd_nextListOkCommand(struct mpd_connection *connection);
+int
+mpd_response_next(struct mpd_connection *connection);
 
 /* returns the update job id, call this after a update command*/
-int mpd_getUpdateId(struct mpd_connection *connection);
+int
+mpd_get_update_id(struct mpd_connection *connection);
 
 /**
  * @param connection a #mpd_connection

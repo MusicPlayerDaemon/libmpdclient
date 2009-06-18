@@ -178,7 +178,7 @@ test_status(struct mpd_connection *conn)
 	print_status(status);
 	mpd_status_free(status);
 
-	mpd_finishCommand(conn);
+	mpd_response_finish(conn);
 	CHECK_CONNECTION(conn);
 
 	return 0;
@@ -194,7 +194,7 @@ test_currentsong(struct mpd_connection *conn)
 
 	CHECK_CONNECTION(conn);
 
-	mpd_nextListOkCommand(conn);
+	mpd_response_next(conn);
 
 	entity = mpd_get_next_entity(conn);
 	if (entity) {
@@ -210,7 +210,7 @@ test_currentsong(struct mpd_connection *conn)
 		mpd_entity_free(entity);
 	}
 
-	mpd_finishCommand(conn);
+	mpd_response_finish(conn);
 	CHECK_CONNECTION(conn);
 
 	return 0;
@@ -247,7 +247,7 @@ test_list_status_currentsong(struct mpd_connection *conn)
 
 	CHECK_CONNECTION(conn);
 
-	mpd_nextListOkCommand(conn);
+	mpd_response_next(conn);
 
 	entity = mpd_get_next_entity(conn);
 	if (entity) {
@@ -263,7 +263,7 @@ test_list_status_currentsong(struct mpd_connection *conn)
 		mpd_entity_free(entity);
 	}
 
-	mpd_finishCommand(conn);
+	mpd_response_finish(conn);
 	CHECK_CONNECTION(conn);
 
 	return 0;
@@ -296,7 +296,7 @@ test_lsinfo(struct mpd_connection *conn, const char *path)
 		mpd_entity_free(entity);
 	}
 
-	mpd_finishCommand(conn);
+	mpd_response_finish(conn);
 	CHECK_CONNECTION(conn);
 
 	return 0;
@@ -324,7 +324,7 @@ test_list_artists(struct mpd_connection *conn)
 	}
 	printf("\n");
 
-	mpd_finishCommand(conn);
+	mpd_response_finish(conn);
 	CHECK_CONNECTION(conn);
 
 	return 0;

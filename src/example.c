@@ -107,7 +107,7 @@ int main(int argc, char ** argv) {
 			return -1;
 		}
 
-		mpd_nextListOkCommand(conn);
+		mpd_response_next(conn);
 
 		while((entity = mpd_get_next_entity(conn))) {
 			struct mpd_song * song = entity->info.song;
@@ -152,7 +152,7 @@ int main(int argc, char ** argv) {
 			return -1;
 		}
 
-		mpd_finishCommand(conn);
+		mpd_response_finish(conn);
 		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
 			fprintf(stderr,"%s\n", mpd_get_error_message(conn));
 			mpd_connection_free(conn);
@@ -210,7 +210,7 @@ int main(int argc, char ** argv) {
 			return -1;
 		}
 
-		mpd_finishCommand(conn);
+		mpd_response_finish(conn);
 		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
 			fprintf(stderr,"%s\n", mpd_get_error_message(conn));
 			mpd_connection_free(conn);
@@ -239,7 +239,7 @@ int main(int argc, char ** argv) {
 			return -1;
 		}
 
-		mpd_finishCommand(conn);
+		mpd_response_finish(conn);
 		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
 			fprintf(stderr,"%s\n", mpd_get_error_message(conn));
 			mpd_connection_free(conn);

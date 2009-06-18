@@ -38,7 +38,8 @@
 #include <assert.h>
 #include <stdlib.h>
 
-void mpd_finishCommand(struct mpd_connection *connection)
+void
+mpd_response_finish(struct mpd_connection *connection)
 {
 	struct mpd_pair *pair;
 
@@ -67,7 +68,8 @@ static void mpd_finishListOkCommand(struct mpd_connection *connection)
 	}
 }
 
-int mpd_nextListOkCommand(struct mpd_connection *connection)
+int
+mpd_response_next(struct mpd_connection *connection)
 {
 	mpd_finishListOkCommand(connection);
 	if (connection->receiving)
@@ -77,7 +79,8 @@ int mpd_nextListOkCommand(struct mpd_connection *connection)
 	return 0;
 }
 
-int mpd_getUpdateId(struct mpd_connection *connection)
+int
+mpd_get_update_id(struct mpd_connection *connection)
 {
 	struct mpd_pair *pair;
 	int ret = 0;
