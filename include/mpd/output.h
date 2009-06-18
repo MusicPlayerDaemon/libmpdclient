@@ -47,9 +47,19 @@ struct mpd_output {
 extern "C" {
 #endif
 
+/**
+ * Reads the next mpd_output from the MPD response.  Free the return
+ * value with mpd_output_free().
+ *
+ * @return a mpd_output object on success, NULL on error or
+ * end-of-response
+ */
 struct mpd_output *
 mpd_output_get_next(struct mpd_connection *connection);
 
+/**
+ * Frees a mpd_output object returned from mpd_output_get_next().
+ */
 void
 mpd_output_free(struct mpd_output *output);
 
