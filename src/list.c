@@ -46,10 +46,10 @@ mpd_command_list_begin(struct mpd_connection *connection, bool discrete_ok)
 		return false;
 	}
 
-	success = mpd_send_command(connection,
-				   discrete_ok
-				   ? "command_list_ok_begin"
-				   : "command_list_begin", NULL);
+	success = mpd_send_command2(connection,
+				    discrete_ok
+				    ? "command_list_ok_begin"
+				    : "command_list_begin");
 	if (!success)
 		return false;
 
@@ -73,10 +73,11 @@ mpd_command_list_end(struct mpd_connection *connection)
 		return false;
 	}
 
-	success = mpd_send_command(connection, "command_list_end", NULL);
+	success = mpd_send_command2(connection, "command_list_end");
 	if (!success)
 		return false;
 
 	connection->sending_command_list = false;
+	connection->receiving = true;
 	return true;
 }
