@@ -152,10 +152,8 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		if (strcmp(pair->name, "file") == 0 ||
 		    strcmp(pair->name, "directory") == 0 ||
 		    strcmp(pair->name, "playlist") == 0 ||
-		    strcmp(pair->name, "cpos") == 0) {
-			mpd_enqueue_pair(connection, pair);
-			return entity;
-		}
+		    strcmp(pair->name, "cpos") == 0)
+			break;
 
 		if (entity->type == MPD_ENTITY_TYPE_SONG)
 			parse_song_pair(entity->info.song, pair->name, pair->value);
@@ -166,6 +164,9 @@ mpd_get_next_entity(struct mpd_connection *connection)
 
 		mpd_pair_free(pair);
 	}
+
+	/* unread this pair for the next mpd_get_next_entity() call */
+	mpd_enqueue_pair(connection, pair);
 
 	return entity;
 }
