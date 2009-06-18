@@ -39,6 +39,9 @@ mpd_send_command(struct mpd_connection *connection, const char *command, ...)
 	va_list ap;
 	bool success;
 
+	if (mpd_error_is_defined(&connection->error))
+		return false;
+
 	va_start(ap, command);
 
 	success = mpd_sync_send_command_v(connection->async,

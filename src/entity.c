@@ -112,6 +112,9 @@ mpd_get_next_entity(struct mpd_connection *connection)
 	struct mpd_pair *pair;
 	mpd_entity * entity = NULL;
 
+	if (mpd_error_is_defined(&connection->error))
+		return NULL;
+
 	pair = mpd_recv_pair(connection);
 	if (pair == NULL)
 		return NULL;

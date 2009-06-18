@@ -116,6 +116,9 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 	struct mpd_status * status;
 	struct mpd_pair *pair;
 
+	if (mpd_error_is_defined(&connection->error))
+		return NULL;
+
 	/*mpd_send_command(connection, "status", NULL);
 
 	if (connection->error) return NULL;*/
