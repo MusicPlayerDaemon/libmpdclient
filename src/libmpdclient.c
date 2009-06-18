@@ -52,9 +52,14 @@ void mpd_finishCommand(struct mpd_connection *connection)
 	struct mpd_pair *pair;
 
 	while (connection->receiving) {
+		assert(!mpd_error_is_defined(&connection->error));
+
 		if (connection->doneListOk) connection->doneListOk = 0;
 
 		pair = mpd_recv_pair(connection);
+		assert(pair != NULL || !connection->receiving ||
+		       mpd_error_is_defined(&connection->error));
+
 		if (pair != NULL)
 			mpd_pair_free(pair);
 	}
