@@ -71,7 +71,7 @@ int main(int argc, char ** argv) {
 		struct mpd_status * status;
 		mpd_entity * entity;
 
-		mpd_command_list_ok_begin(conn);
+		mpd_command_list_begin(conn, true);
 		mpd_send_status(conn);
 		mpd_send_currentsong(conn);
 		mpd_command_list_end(conn);

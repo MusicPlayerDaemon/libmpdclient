@@ -226,7 +226,7 @@ test_list_status_currentsong(struct mpd_connection *conn)
 
 	CHECK_CONNECTION(conn);
 
-	mpd_command_list_ok_begin(conn);
+	mpd_command_list_begin(conn, true);
 	mpd_send_status(conn);
 	mpd_send_currentsong(conn);
 	mpd_command_list_end(conn);

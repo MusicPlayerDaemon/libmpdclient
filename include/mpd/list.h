@@ -44,13 +44,12 @@ struct mpd_connection;
  *
  * Note that there is no guarantee on atomicity.
  *
+ * @param discrete_ok tells MPD whether to acknowledge every list
+ * command with an "list_OK" response
  * @return true on success
  */
 bool
-mpd_command_list_begin(struct mpd_connection *connection);
-
-bool
-mpd_command_list_ok_begin(struct mpd_connection *connection);
+mpd_command_list_begin(struct mpd_connection *connection, bool discrete_ok);
 
 /*
  * Commits the command list, i.e. makes MPD execute all commands which

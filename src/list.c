@@ -35,7 +35,7 @@
 #include "internal.h"
 
 bool
-mpd_command_list_begin(struct mpd_connection *connection)
+mpd_command_list_begin(struct mpd_connection *connection, bool discrete_ok)
 {
 	bool success;
 
@@ -46,35 +46,17 @@ mpd_command_list_begin(struct mpd_connection *connection)
 		return false;
 	}
 
-	success = mpd_send_command(connection, "command_list_begin", NULL);
+	success = mpd_send_command(connection,
+				   discrete_ok
+				   ? "command_list_ok_begin"
+				   : "command_list_begin", NULL);
 	if (!success)
 		return false;
 
 	connection->sending_command_list = true;
-	connection->sending_command_list_ok = false;
-
-	return true;
-}
-
-bool
-mpd_command_list_ok_begin(struct mpd_connection *connection)
-{
-	bool success;
-
-	if (connection->sending_command_list) {
-		mpd_error_code(&connection->error, MPD_ERROR_STATE);
-		mpd_error_message(&connection->error,
-				  "already in command list mode");
-		return false;
-	}
-
-	success = mpd_send_command(connection, "command_list_ok_begin", NULL);
-	if (!success)
-		return false;
-
-	connection->sending_command_list = true;
-	connection->sending_command_list_ok = true;
-	connection->listOks = 0;
+	connection->sending_command_list_ok = discrete_ok;
+	if (discrete_ok)
+		connection->listOks = 0;
 
 	return true;
 }
