@@ -348,6 +348,7 @@ mpd_recv_pair(struct mpd_connection *connection)
 		return NULL;
 
 	case MPD_PARSER_ERROR:
+		connection->receiving = false;
 		mpd_error_ack(&connection->error,
 			      mpd_parser_get_ack(connection->parser),
 			      mpd_parser_get_at(connection->parser));
