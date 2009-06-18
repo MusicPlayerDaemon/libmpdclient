@@ -88,7 +88,7 @@ doc_DATA = README COPYING
 # Installation
 #
 
-pkgconfigdir = $(datadir)/pkgconfig
+pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libmpdclient.pc
 
 #
