@@ -50,8 +50,8 @@ extern "C" {
  * Use this method with mpd_search_add_constraint and mpd_search_commit
  * Use mpd_get_next_entity to get results of this method
  */
-void mpd_search_db_songs(struct mpd_connection *connection,
-			 bool exact);
+bool
+mpd_search_db_songs(struct mpd_connection *connection, bool exact);
 
 /**
  * @param connection a #mpd_connection
@@ -61,8 +61,8 @@ void mpd_search_db_songs(struct mpd_connection *connection,
  * Use this method with mpd_search_add_constraint and mpd_search_commit
  * Use mpd_get_next_entity to get results of this method
  */
-void mpd_search_playlist_songs(struct mpd_connection *connection,
-			       bool exact);
+bool
+mpd_search_playlist_songs(struct mpd_connection *connection, bool exact);
 
 /**
  * @param connection a #mpd_connection
@@ -72,8 +72,8 @@ void mpd_search_playlist_songs(struct mpd_connection *connection,
  * Use this method with mpd_search_add_constraint and mpd_search_commit
  * Use mpd_get_next_tag to get results of this method
  */
-void mpd_search_db_tags(struct mpd_connection *connection,
-			enum mpd_tag_type type);
+bool
+mpd_search_db_tags(struct mpd_connection *connection, enum mpd_tag_type type);
 
 /**
  * @param connection a #mpd_connection
@@ -82,7 +82,7 @@ void mpd_search_db_tags(struct mpd_connection *connection,
  * Use this method with mpd_search_add_constraint and mpd_search_commit
  * Use mpd_get_stats to get results of this method
  */
-void mpd_count_db_songs(struct mpd_connection *connection);
+bool mpd_count_db_songs(struct mpd_connection *connection);
 
 /**
  * @param connection a #mpd_connection
@@ -91,9 +91,9 @@ void mpd_count_db_songs(struct mpd_connection *connection);
  *
  * Add a constraint to a search.
  */
-void mpd_search_add_constraint(struct mpd_connection *connection,
-			       enum mpd_tag_type type,
-			       const char *value);
+bool
+mpd_search_add_constraint(struct mpd_connection *connection,
+			  enum mpd_tag_type type, const char *value);
 
 /**
  * @param connection a #mpd_connection
@@ -101,7 +101,8 @@ void mpd_search_add_constraint(struct mpd_connection *connection,
  * Starts the real search with constraints added with
  * mpd_search_add_constraint.
  */
-void mpd_search_commit(struct mpd_connection *connection);
+bool
+mpd_search_commit(struct mpd_connection *connection);
 
 /**
  * @param connection a #mpd_connection

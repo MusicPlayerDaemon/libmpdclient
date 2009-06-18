@@ -40,43 +40,52 @@
 #include <stdio.h>
 #include <string.h>
 
-void
-mpd_search_db_songs(struct mpd_connection *connection,
-		    bool exact)
+bool
+mpd_search_db_songs(struct mpd_connection *connection, bool exact)
 {
 	if (connection->request) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
 				  "search already in progress");
-		return;
+		return false;
 	}
 
 	if (exact)
 		connection->request = strdup("find");
 	else
 		connection->request = strdup("search");
+	if (connection->request == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return false;
+	}
+
+	return true;
 }
 
-void
-mpd_search_playlist_songs(struct mpd_connection *connection,
-			  bool exact)
+bool
+mpd_search_playlist_songs(struct mpd_connection *connection, bool exact)
 {
 	if (connection->request) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
 				  "search already in progress");
-		return;
+		return false;
 	}
 
 	if (exact)
 		connection->request = strdup("playlistfind");
 	else
 		connection->request = strdup("playlistsearch");
+	if (connection->request == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return false;
+	}
+
+	return true;
 }
 
-void
-mpd_search_db_tags(struct mpd_connection *connection,
-		   enum mpd_tag_type type)
+bool
+mpd_search_db_tags(struct mpd_connection *connection, enum mpd_tag_type type)
 {
 	const char *strtype;
 	int len;
@@ -85,36 +94,48 @@ mpd_search_db_tags(struct mpd_connection *connection,
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
 				  "search already in progress");
-		return;
+		return false;
 	}
 
 	if (type >= MPD_TAG_TYPE_COUNT) {
 		mpd_error_code(&connection->error, MPD_ERROR_ARG);
 		mpd_error_message(&connection->error,
 				  "invalid type specified");
-		return;
+		return false;
 	}
 
 	strtype = mpdTagItemKeys[type];
 
 	len = 5+strlen(strtype)+1;
 	connection->request = malloc(len);
+	if (connection->request == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return false;
+	}
 
 	snprintf(connection->request, len, "list %c%s",
 		 tolower(strtype[0]), strtype+1);
+
+	return true;
 }
 
-void
+bool
 mpd_count_db_songs(struct mpd_connection *connection)
 {
 	if (connection->request) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
 				  "search already in progress");
-		return;
+		return false;
 	}
 
 	connection->request = strdup("count");
+	if (connection->request == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return false;
+	}
+
+	return true;
 }
 
 
@@ -142,14 +163,13 @@ mpd_sanitize_arg(const char * arg)
 	return ret;
 }
 
-void
+bool
 mpd_search_add_constraint(struct mpd_connection *connection,
-			  enum mpd_tag_type type,
-			  const char *name)
+			  enum mpd_tag_type type, const char *name)
 {
 	size_t old_length;
 	const char *strtype;
-	char *arg;
+	char *arg, *request;
 	int len;
 
 	assert(name != NULL);
@@ -158,42 +178,58 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
 				  "no search in progress");
-		return;
+		return false;
 	}
 
 	if (type >= MPD_TAG_TYPE_COUNT) {
 		mpd_error_code(&connection->error, MPD_ERROR_ARG);
 		mpd_error_message(&connection->error,
 				  "invalid type specified");
-		return;
+		return false;
 	}
 
 	old_length = strlen(connection->request);
 
 	strtype = mpdTagItemKeys[type];
 	arg = mpd_sanitize_arg(name);
+	if (arg == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return false;
+	}
 
 	len = 1 + strlen(strtype) + 2 + strlen(arg) + 2;
-	connection->request = realloc(connection->request, old_length + len);
+	request = realloc(connection->request, old_length + len);
+	if (request == NULL) {
+		free(arg);
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return false;
+	}
+
+	connection->request = request;
 	snprintf(connection->request + old_length, len, " %c%s \"%s\"",
 		 tolower(strtype[0]), strtype+1, arg);
 
 	free(arg);
+	return true;
 }
 
-void
+bool
 mpd_search_commit(struct mpd_connection *connection)
 {
-	if (!connection->request) {
+	bool success;
+
+	if (connection->request == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
 				  "no search in progress");
-		return;
+		return false;
 	}
 
-	mpd_send_command(connection, connection->request, NULL);
+	success = mpd_send_command(connection, connection->request, NULL);
 	free(connection->request);
 	connection->request = NULL;
+
+	return success;
 }
 
 char *mpd_get_next_tag(struct mpd_connection *connection,
