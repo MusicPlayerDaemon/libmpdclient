@@ -296,7 +296,7 @@ mpd_recv_pair(struct mpd_connection *connection)
 	if (connection->pair != PAIR_NONE) {
 		/* dequeue the pair from mpd_enqueue_pair() */
 		pair = connection->pair;
-		connection->pair = NULL;
+		connection->pair = PAIR_NONE;
 		return pair;
 	}
 
