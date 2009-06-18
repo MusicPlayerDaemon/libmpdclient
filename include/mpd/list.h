@@ -33,12 +33,35 @@
 #ifndef MPD_LIST_H
 #define MPD_LIST_H
 
+#include <stdbool.h>
+
 struct mpd_connection;
 
-void mpd_command_list_begin(struct mpd_connection *connection);
+/*
+ * Starts a command list, i.e. a group of pipelined commands which are
+ * transferred in one block.  If one command fails, the rest of the
+ * command list is canceled.
+ *
+ * Note that there is no guarantee on atomicity.
+ *
+ * @return true on success
+ */
+bool
+mpd_command_list_begin(struct mpd_connection *connection);
 
-void mpd_command_list_ok_begin(struct mpd_connection *connection);
+bool
+mpd_command_list_ok_begin(struct mpd_connection *connection);
 
-void mpd_command_list_end(struct mpd_connection *connection);
+/*
+ * Commits the command list, i.e. makes MPD execute all commands which
+ * were queued.
+ *
+ * Note: there is no way to cancel a command list once it is started.
+ * You may however close the socket connection.
+ *
+ * @return true on success
+ */
+bool
+mpd_command_list_end(struct mpd_connection *connection);
 
 #endif

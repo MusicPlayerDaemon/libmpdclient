@@ -34,45 +34,67 @@
 #include <mpd/send.h>
 #include "internal.h"
 
-void mpd_command_list_begin(struct mpd_connection *connection)
+bool
+mpd_command_list_begin(struct mpd_connection *connection)
 {
+	bool success;
+
 	if (connection->sending_command_list) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
 				  "already in command list mode");
-		return;
+		return false;
 	}
+
+	success = mpd_send_command(connection, "command_list_begin", NULL);
+	if (!success)
+		return false;
 
 	connection->sending_command_list = true;
 	connection->sending_command_list_ok = false;
-	mpd_send_command(connection, "command_list_begin", NULL);
+
+	return true;
 }
 
-void mpd_command_list_ok_begin(struct mpd_connection *connection)
+bool
+mpd_command_list_ok_begin(struct mpd_connection *connection)
 {
+	bool success;
+
 	if (connection->sending_command_list) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
 				  "already in command list mode");
-		return;
+		return false;
 	}
+
+	success = mpd_send_command(connection, "command_list_ok_begin", NULL);
+	if (!success)
+		return false;
 
 	connection->sending_command_list = true;
 	connection->sending_command_list_ok = true;
-	mpd_send_command(connection, "command_list_ok_begin", NULL);
 	connection->listOks = 0;
+
+	return true;
 }
 
-void mpd_command_list_end(struct mpd_connection *connection)
+bool
+mpd_command_list_end(struct mpd_connection *connection)
 {
+	bool success;
+
 	if (!connection->sending_command_list) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
 				  "not in command list mode");
-		return;
+		return false;
 	}
 
-	connection->sending_command_list = false;
-	mpd_send_command(connection, "command_list_end", NULL);
-}
+	success = mpd_send_command(connection, "command_list_end", NULL);
+	if (!success)
+		return false;
 
+	connection->sending_command_list = false;
+	return true;
+}
