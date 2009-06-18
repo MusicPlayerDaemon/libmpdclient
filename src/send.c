@@ -62,3 +62,22 @@ mpd_send_command(struct mpd_connection *connection, const char *command, ...)
 
 	return true;
 }
+
+bool
+mpd_send_command2(struct mpd_connection *connection, const char *command)
+{
+	bool success;
+
+	if (mpd_error_is_defined(&connection->error))
+		return false;
+
+	success = mpd_sync_send_command(connection->async,
+					&connection->timeout,
+					command, NULL);
+	if (!success) {
+		mpd_connection_sync_error(connection);
+		return false;
+	}
+
+	return true;
+}
