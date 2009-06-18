@@ -92,7 +92,7 @@ mpd_parser_feed(struct mpd_parser *parser, char *line);
  * response.
  */
 bool
-mpd_parser_is_partial(const struct mpd_parser *parser);
+mpd_parser_is_discrete(const struct mpd_parser *parser);
 
 /**
  * Call this when mpd_parser_feed() has returned #MPD_PARSER_ERROR to

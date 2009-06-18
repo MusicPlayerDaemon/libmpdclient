@@ -324,7 +324,7 @@ mpd_recv_pair(struct mpd_connection *connection)
 		return NULL;
 
 	case MPD_PARSER_SUCCESS:
-		if (!mpd_parser_is_partial(connection->parser)) {
+		if (!mpd_parser_is_discrete(connection->parser)) {
 			if (connection->listOks > 0) {
 				mpd_error_code(&connection->error,
 					       MPD_ERROR_MALFORMED);

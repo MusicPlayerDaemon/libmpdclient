@@ -43,7 +43,7 @@ struct mpd_parser {
 #endif
 
 	union {
-		bool partial;
+		bool discrete;
 
 		struct {
 			enum mpd_ack ack;
@@ -96,10 +96,10 @@ enum mpd_parser_result
 mpd_parser_feed(struct mpd_parser *parser, char *line)
 {
 	if (strcmp(line, "OK") == 0) {
-		parser->u.partial = false;
+		parser->u.discrete = false;
 		return set_result(parser, MPD_PARSER_SUCCESS);
 	} else if (strcmp(line, "list_OK") == 0) {
-		parser->u.partial = true;
+		parser->u.discrete = true;
 		return set_result(parser, MPD_PARSER_SUCCESS);
 	} else if (memcmp(line, "ACK", 3) == 0) {
 		char *p, *q;
@@ -160,11 +160,11 @@ mpd_parser_feed(struct mpd_parser *parser, char *line)
 }
 
 bool
-mpd_parser_is_partial(const struct mpd_parser *parser)
+mpd_parser_is_discrete(const struct mpd_parser *parser)
 {
 	assert(parser->result == MPD_PARSER_SUCCESS);
 
-	return parser->u.partial;
+	return parser->u.discrete;
 }
 
 enum mpd_ack
