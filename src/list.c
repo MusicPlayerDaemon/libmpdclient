@@ -34,7 +34,7 @@
 #include <mpd/send.h>
 #include "internal.h"
 
-void mpd_sendCommandListBegin(struct mpd_connection *connection)
+void mpd_command_list_begin(struct mpd_connection *connection)
 {
 	if (connection->sending_command_list) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
@@ -48,7 +48,7 @@ void mpd_sendCommandListBegin(struct mpd_connection *connection)
 	mpd_send_command(connection, "command_list_begin", NULL);
 }
 
-void mpd_sendCommandListOkBegin(struct mpd_connection *connection)
+void mpd_command_list_ok_begin(struct mpd_connection *connection)
 {
 	if (connection->sending_command_list) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
@@ -63,7 +63,7 @@ void mpd_sendCommandListOkBegin(struct mpd_connection *connection)
 	connection->listOks = 0;
 }
 
-void mpd_sendCommandListEnd(struct mpd_connection *connection)
+void mpd_command_list_end(struct mpd_connection *connection)
 {
 	if (!connection->sending_command_list) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);

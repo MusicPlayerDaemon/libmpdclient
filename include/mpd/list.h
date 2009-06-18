@@ -35,10 +35,10 @@
 
 struct mpd_connection;
 
-void mpd_sendCommandListBegin(struct mpd_connection *connection);
+void mpd_command_list_begin(struct mpd_connection *connection);
 
-void mpd_sendCommandListOkBegin(struct mpd_connection *connection);
+void mpd_command_list_ok_begin(struct mpd_connection *connection);
 
-void mpd_sendCommandListEnd(struct mpd_connection *connection);
+void mpd_command_list_end(struct mpd_connection *connection);
 
 #endif

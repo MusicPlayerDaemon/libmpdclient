@@ -71,10 +71,10 @@ int main(int argc, char ** argv) {
 		struct mpd_status * status;
 		mpd_entity * entity;
 
-		mpd_sendCommandListOkBegin(conn);
+		mpd_command_list_ok_begin(conn);
 		mpd_send_status(conn);
 		mpd_send_currentsong(conn);
-		mpd_sendCommandListEnd(conn);
+		mpd_command_list_end(conn);
 
 		status = mpd_get_status(conn);
 		if (status == NULL) {
