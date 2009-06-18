@@ -43,6 +43,9 @@
 bool
 mpd_search_db_songs(struct mpd_connection *connection, bool exact)
 {
+	if (mpd_error_is_defined(&connection->error))
+		return false;
+
 	if (connection->request) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
@@ -65,6 +68,9 @@ mpd_search_db_songs(struct mpd_connection *connection, bool exact)
 bool
 mpd_search_playlist_songs(struct mpd_connection *connection, bool exact)
 {
+	if (mpd_error_is_defined(&connection->error))
+		return false;
+
 	if (connection->request) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
@@ -89,6 +95,9 @@ mpd_search_db_tags(struct mpd_connection *connection, enum mpd_tag_type type)
 {
 	const char *strtype;
 	int len;
+
+	if (mpd_error_is_defined(&connection->error))
+		return false;
 
 	if (connection->request) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
@@ -122,6 +131,9 @@ mpd_search_db_tags(struct mpd_connection *connection, enum mpd_tag_type type)
 bool
 mpd_count_db_songs(struct mpd_connection *connection)
 {
+	if (mpd_error_is_defined(&connection->error))
+		return false;
+
 	if (connection->request) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
@@ -174,6 +186,9 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 
 	assert(name != NULL);
 
+	if (mpd_error_is_defined(&connection->error))
+		return false;
+
 	if (!connection->request) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
@@ -217,6 +232,9 @@ bool
 mpd_search_commit(struct mpd_connection *connection)
 {
 	bool success;
+
+	if (mpd_error_is_defined(&connection->error))
+		return false;
 
 	if (connection->request == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
