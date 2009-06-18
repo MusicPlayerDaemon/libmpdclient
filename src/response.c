@@ -38,10 +38,13 @@
 #include <assert.h>
 #include <stdlib.h>
 
-void
+bool
 mpd_response_finish(struct mpd_connection *connection)
 {
 	struct mpd_pair *pair;
+
+	if (mpd_error_is_defined(&connection->error))
+		return false;
 
 	while (connection->receiving) {
 		assert(!mpd_error_is_defined(&connection->error));
@@ -55,6 +58,8 @@ mpd_response_finish(struct mpd_connection *connection)
 		if (pair != NULL)
 			mpd_pair_free(pair);
 	}
+
+	return !mpd_error_is_defined(&connection->error);
 }
 
 static void mpd_finishListOkCommand(struct mpd_connection *connection)
@@ -68,15 +73,15 @@ static void mpd_finishListOkCommand(struct mpd_connection *connection)
 	}
 }
 
-int
+bool
 mpd_response_next(struct mpd_connection *connection)
 {
 	mpd_finishListOkCommand(connection);
 	if (connection->receiving)
 		connection->doneListOk = 0;
 	if (connection->listOks == 0 || !connection->receiving)
-		return -1;
-	return 0;
+		return false;
+	return true;
 }
 
 int

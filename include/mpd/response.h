@@ -33,22 +33,30 @@
 #ifndef MPD_RESPONSE_H
 #define MPD_RESPONSE_H
 
+#include <stdbool.h>
+
 struct mpd_connection;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* after executing a command, when your done with it to get its status
- * (you want to check connection->error for an error)
+/*
+ * Finishes the response and checks if the command was successful.  If
+ * there are data pairs left, they are discarded.
+ *
+ * @return true on success, false on error
  */
-void
+bool
 mpd_response_finish(struct mpd_connection *connection);
 
-/* advance to the next listOk
- * returns 0 if advanced to the next list_OK,
- * returns -1 if it advanced to an OK or ACK */
-int
+/*
+ * Finishes the response of the current list command.  If there are
+ * data pairs left, they are discarded.
+ *
+ * @return true on success, false on error
+ */
+bool
 mpd_response_next(struct mpd_connection *connection);
 
 /* returns the update job id, call this after a update command*/
