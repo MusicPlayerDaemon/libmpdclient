@@ -165,7 +165,7 @@ mpd_connection_new(const char *host, int port, float timeout)
 	connection->sending_command_list = false;
 	connection->listOks = 0;
 	connection->doneListOk = 0;
-	connection->x_pair = PAIR_NONE;
+	connection->pair = PAIR_NONE;
 	connection->request = NULL;
 
 	if (winsock_dll_error(connection))
@@ -242,8 +242,8 @@ void mpd_connection_free(struct mpd_connection *connection)
 	if (connection->async != NULL)
 		mpd_async_free(connection->async);
 
-	if (connection->x_pair != NULL && connection->x_pair != PAIR_NONE)
-		free(connection->x_pair);
+	if (connection->pair != NULL && connection->pair != PAIR_NONE)
+		free(connection->pair);
 
 	if (connection->request) free(connection->request);
 
@@ -293,10 +293,10 @@ mpd_recv_pair(struct mpd_connection *connection)
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
 
-	if (connection->x_pair != PAIR_NONE) {
+	if (connection->pair != PAIR_NONE) {
 		/* dequeue the pair from mpd_enqueue_pair() */
-		pair = connection->x_pair;
-		connection->x_pair = NULL;
+		pair = connection->pair;
+		connection->pair = NULL;
 		return pair;
 	}
 
@@ -409,7 +409,7 @@ mpd_enqueue_pair(struct mpd_connection *connection, struct mpd_pair *pair)
 {
 	assert(connection != NULL);
 	assert(pair == NULL || (pair->name != NULL && pair->value != NULL));
-	assert(connection->x_pair == PAIR_NONE);
+	assert(connection->pair == PAIR_NONE);
 
-	connection->x_pair = pair;
+	connection->pair = pair;
 }

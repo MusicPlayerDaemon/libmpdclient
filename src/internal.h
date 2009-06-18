@@ -107,7 +107,7 @@ struct mpd_connection {
 	 * that this value is empty, while NULL means that somebody
 	 * "unread" the NULL pointer.
 	 */
-	struct mpd_pair *x_pair;
+	struct mpd_pair *pair;
 
 	/**
 	 * The search request which is being built, committed by
