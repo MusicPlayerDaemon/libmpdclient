@@ -165,6 +165,11 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		mpd_pair_free(pair);
 	}
 
+	if (mpd_error_is_defined(&connection->error)) {
+		mpd_entity_free(entity);
+		return NULL;
+	}
+
 	/* unread this pair for the next mpd_get_next_entity() call */
 	mpd_enqueue_pair(connection, pair);
 
