@@ -147,10 +147,10 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 			  enum mpd_tag_type type,
 			  const char *name)
 {
+	size_t old_length;
 	const char *strtype;
 	char *arg;
 	int len;
-	char *string;
 
 	if (!connection->request) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
@@ -172,16 +172,16 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 		return;
 	}
 
-	string = strdup(connection->request);
+	old_length = strlen(connection->request);
+
 	strtype = mpdTagItemKeys[type];
 	arg = mpd_sanitize_arg(name);
 
-	len = strlen(string)+1+strlen(strtype)+2+strlen(arg)+2;
-	connection->request = realloc(connection->request, len);
-	snprintf(connection->request, len, "%s %c%s \"%s\"",
-		 string, tolower(strtype[0]), strtype+1, arg);
+	len = 1 + strlen(strtype) + 2 + strlen(arg) + 2;
+	connection->request = realloc(connection->request, old_length + len);
+	snprintf(connection->request + old_length, len, " %c%s \"%s\"",
+		 tolower(strtype[0]), strtype+1, arg);
 
-	free(string);
 	free(arg);
 }
 
