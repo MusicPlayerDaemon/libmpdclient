@@ -152,6 +152,8 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 	char *arg;
 	int len;
 
+	assert(name != NULL);
+
 	if (!connection->request) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
@@ -163,12 +165,6 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 		mpd_error_code(&connection->error, MPD_ERROR_ARG);
 		mpd_error_message(&connection->error,
 				  "invalid type specified");
-		return;
-	}
-
-	if (name == NULL) {
-		mpd_error_code(&connection->error, MPD_ERROR_ARG);
-		mpd_error_message(&connection->error, "no name specified");
 		return;
 	}
 
