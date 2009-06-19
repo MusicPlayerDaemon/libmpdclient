@@ -39,6 +39,7 @@ const char *const mpd_tag_type_names[MPD_TAG_COUNT] =
 	"Filename",
 	"Artist",
 	"Album",
+	"AlbumArtist",
 	"Title",
 	"Track",
 	"Name",
@@ -48,4 +49,9 @@ const char *const mpd_tag_type_names[MPD_TAG_COUNT] =
 	"Performer",
 	"Comment",
 	"Disc",
+
+	[MPD_TAG_MUSICBRAINZ_ARTISTID] = "MUSICBRAINZ_ARTISTID",
+	[MPD_TAG_MUSICBRAINZ_ALBUMID] = "MUSICBRAINZ_ALBUMID",
+	[MPD_TAG_MUSICBRAINZ_ALBUMARTISTID] = "MUSICBRAINZ_ALBUMARTISTID",
+	[MPD_TAG_MUSICBRAINZ_TRACKID] = "MUSICBRAINZ_TRACKID",
 };
