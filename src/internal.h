@@ -117,7 +117,7 @@ struct mpd_connection {
 	char *request;
 };
 
-extern const char *const mpdTagItemKeys[];
+extern const char *const mpd_tag_type_names[];
 
 /**
  * Copies the error state from connection->sync to connection->error.

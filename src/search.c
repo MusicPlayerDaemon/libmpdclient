@@ -113,7 +113,7 @@ mpd_search_db_tags(struct mpd_connection *connection, enum mpd_tag_type type)
 		return false;
 	}
 
-	strtype = mpdTagItemKeys[type];
+	strtype = mpd_tag_type_names[type];
 
 	len = 5+strlen(strtype)+1;
 	connection->request = malloc(len);
@@ -205,7 +205,7 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 
 	old_length = strlen(connection->request);
 
-	strtype = mpdTagItemKeys[type];
+	strtype = mpd_tag_type_names[type];
 	arg = mpd_sanitize_arg(name);
 	if (arg == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
@@ -258,5 +258,5 @@ char *mpd_get_next_tag(struct mpd_connection *connection,
 		return NULL;
 	if (type == MPD_TAG_TYPE_FILENAME)
 		return mpd_recv_value_named(connection, "file");
-	return mpd_recv_value_named(connection, mpdTagItemKeys[type]);
+	return mpd_recv_value_named(connection, mpd_tag_type_names[type]);
 }
