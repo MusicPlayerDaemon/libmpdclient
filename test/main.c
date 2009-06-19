@@ -306,12 +306,12 @@ test_list_artists(struct mpd_connection *conn)
 	char *artist;
 	int first = 1;
 
-        mpd_search_db_tags(conn, MPD_TAG_TYPE_ARTIST);
+        mpd_search_db_tags(conn, MPD_TAG_ARTIST);
 	mpd_search_commit(conn);
 	CHECK_CONNECTION(conn);
 
 	LOG_INFO("%s: ", "Artists list");
-	while ((artist = mpd_get_next_tag(conn, MPD_TAG_TYPE_ARTIST))) {
+	while ((artist = mpd_get_next_tag(conn, MPD_TAG_ARTIST))) {
 		if (first) {
 			printf("    %s", artist);
 			first = 0;

@@ -33,7 +33,7 @@
 #include <mpd/tag.h>
 #include "internal.h"
 
-const char *const mpd_tag_type_names[MPD_TAG_TYPE_COUNT] =
+const char *const mpd_tag_type_names[MPD_TAG_COUNT] =
 {
 	"Artist",
 	"Album",
