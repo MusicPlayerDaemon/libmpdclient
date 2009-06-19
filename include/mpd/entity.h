@@ -66,8 +66,6 @@ typedef struct mpd_entity {
 extern "C" {
 #endif
 
-mpd_entity * mpd_entity_new(void);
-
 void mpd_entity_free(mpd_entity * entity);
 
 /* use this function to loop over after calling Info/Listall functions */
