@@ -41,7 +41,7 @@ struct mpd_connection;
 extern "C" {
 #endif
 
-/*
+/**
  * Finishes the response and checks if the command was successful.  If
  * there are data pairs left, they are discarded.
  *
@@ -50,7 +50,7 @@ extern "C" {
 bool
 mpd_response_finish(struct mpd_connection *connection);
 
-/*
+/**
  * Finishes the response of the current list command.  If there are
  * data pairs left, they are discarded.
  *

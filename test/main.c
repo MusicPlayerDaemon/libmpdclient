@@ -194,8 +194,6 @@ test_currentsong(struct mpd_connection *conn)
 
 	CHECK_CONNECTION(conn);
 
-	mpd_response_next(conn);
-
 	entity = mpd_get_next_entity(conn);
 	if (entity) {
 		song = entity->info.song;

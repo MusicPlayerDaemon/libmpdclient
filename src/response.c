@@ -67,26 +67,41 @@ mpd_response_finish(struct mpd_connection *connection)
 	return !mpd_error_is_defined(&connection->error);
 }
 
-static void mpd_finishListOkCommand(struct mpd_connection *connection)
-{
-	while (connection->receiving &&
-	       connection->command_list_remaining > 0 &&
-	       !connection->discrete_finished)
-	{
-		struct mpd_pair *pair = mpd_recv_pair(connection);
-		if (pair != NULL)
-			mpd_pair_free(pair);
-	}
-}
-
 bool
 mpd_response_next(struct mpd_connection *connection)
 {
-	mpd_finishListOkCommand(connection);
-	if (connection->receiving)
-		connection->discrete_finished = false;
-	if (connection->command_list_remaining == 0 || !connection->receiving)
+	struct mpd_pair *pair;
+
+	if (!connection->receiving) {
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "Response is already finished");
 		return false;
+	}
+
+	if (!connection->sending_command_list_ok) {
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "Not in command list mode");
+		return false;
+	}
+
+	while (!connection->discrete_finished) {
+		if (connection->command_list_remaining == 0 ||
+		    !connection->receiving) {
+			mpd_error_code(&connection->error,
+				       MPD_ERROR_MALFORMED);
+			mpd_error_message(&connection->error,
+					  "No list_OK found");
+			return false;
+		}
+
+		pair = mpd_recv_pair(connection);
+		if (pair != NULL)
+			mpd_pair_free(pair);
+	}
+
+	connection->discrete_finished = false;
 	return true;
 }
 
