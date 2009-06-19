@@ -48,10 +48,6 @@
 #include <mpd/status.h>
 #include <mpd/stored_playlist.h>
 
-#ifdef WIN32
-#  define __W32API_USE_DLLIMPORT__ 1
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
