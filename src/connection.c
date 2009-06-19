@@ -306,7 +306,8 @@ mpd_recv_pair(struct mpd_connection *connection)
 
 
 	if (!connection->receiving ||
-	    (connection->command_list_remaining > 0 &&
+	    (connection->sending_command_list &&
+	     connection->command_list_remaining > 0 &&
 	     connection->discrete_finished)) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
@@ -328,7 +329,8 @@ mpd_recv_pair(struct mpd_connection *connection)
 
 	case MPD_PARSER_SUCCESS:
 		if (!mpd_parser_is_discrete(connection->parser)) {
-			if (connection->command_list_remaining > 0) {
+			if (connection->sending_command_list &&
+			    connection->command_list_remaining > 0) {
 				mpd_error_code(&connection->error,
 					       MPD_ERROR_MALFORMED);
 				mpd_error_message(&connection->error,
@@ -339,7 +341,8 @@ mpd_recv_pair(struct mpd_connection *connection)
 			connection->receiving = false;
 			connection->discrete_finished = false;
 		} else {
-			if (connection->command_list_remaining == 0) {
+			if (!connection->sending_command_list ||
+			    connection->command_list_remaining == 0) {
 				mpd_error_code(&connection->error,
 					       MPD_ERROR_MALFORMED);
 				mpd_error_message(&connection->error,
