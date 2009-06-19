@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2008 The Music Player Daemon Project
+   (c) 2003-2009 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -30,27 +30,45 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <mpd/client.h>
+#include <mpd/run.h>
+#include <mpd/command.h>
+#include <mpd/response.h>
 #include "internal.h"
-#include "resolver.h"
-#include "str_pool.h"
 
-#include <assert.h>
-#include <errno.h>
-#include <ctype.h>
-#include <sys/types.h>
-#include <stdio.h>
-#include <sys/param.h>
-#include <string.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <limits.h>
+/**
+ * Checks whether it is possible to run a command now.
+ */
+static bool
+run_check(struct mpd_connection *connection)
+{
+	if (mpd_error_is_defined(&connection->error))
+		return false;
+
+	if (connection->sending_command_list) {
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "Not possible in command list mode");
+		return false;
+	}
+
+	return true;
+}
 
 int
-mpd_sendAddIdCommand(struct mpd_connection *connection, const char *file)
+mpd_run_addid(struct mpd_connection *connection, const char *file)
 {
-	return mpd_send_addid(connection, file)
-		? mpd_recv_song_id(connection)
-		: -1;
+	int id;
+
+	if (!run_check(connection))
+		return false;
+
+	if (!mpd_send_addid(connection, file))
+		return -1;
+
+	id = mpd_recv_song_id(connection);
+
+	if (!mpd_response_finish(connection))
+		id = -1;
+
+	return id;
 }

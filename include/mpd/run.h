@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2008 The Music Player Daemon Project
+   (c) 2003-2009 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -30,23 +30,25 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MPD_CLIENT_H
-#define MPD_CLIENT_H
+#ifndef MPD_RUN_H
+#define MPD_RUN_H
 
-#include <mpd/connection.h>
-#include <mpd/command.h>
-#include <mpd/directory.h>
-#include <mpd/entity.h>
-#include <mpd/list.h>
-#include <mpd/output.h>
-#include <mpd/pair.h>
-#include <mpd/response.h>
-#include <mpd/run.h>
-#include <mpd/search.h>
-#include <mpd/send.h>
-#include <mpd/song.h>
-#include <mpd/stats.h>
-#include <mpd/status.h>
-#include <mpd/stored_playlist.h>
+struct mpd_connection;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * Executes the "addid" command and reads the response.
+ *
+ * @return the new song id, -1 on error or if MPD did not send an id
+ */
+int
+mpd_run_addid(struct mpd_connection *connection, const char *file);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

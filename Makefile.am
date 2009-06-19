@@ -15,6 +15,7 @@ mpdinclude_HEADERS = \
 	include/mpd/parser.h \
 	include/mpd/protocol.h \
 	include/mpd/response.h \
+	include/mpd/run.h \
 	include/mpd/send.h \
 	include/mpd/status.h \
 	include/mpd/stats.h \
@@ -47,6 +48,7 @@ src_libmpdclient_la_SOURCES = \
 	src/parser.c \
 	src/quote.c src/quote.h \
 	src/response.c \
+	src/run.c \
 	src/search.c \
 	src/send.c \
 	src/socket.c src/socket.h \
@@ -55,8 +57,7 @@ src_libmpdclient_la_SOURCES = \
 	src/stats.c \
 	src/stored_playlist.c \
 	src/sync.c src/sync.h \
-	src/tag.c \
-	src/libmpdclient.c
+	src/tag.c
 
 src_libmpdclient_la_LDFLAGS = -version-info @LIBMPDCLIENT_LIBTOOL_VERSION@ \
 	-Wl,--version-script=$(srcdir)/libmpdclient.ld
