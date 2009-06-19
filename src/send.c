@@ -33,12 +33,12 @@
 
 #include <stdarg.h>
 
-bool
-mpd_send_command(struct mpd_connection *connection, const char *command, ...)
+/**
+ * Checks whether it is possible to send a command now.
+ */
+static bool
+send_check(struct mpd_connection *connection)
 {
-	va_list ap;
-	bool success;
-
 	if (mpd_error_is_defined(&connection->error))
 		return false;
 
@@ -49,6 +49,18 @@ mpd_send_command(struct mpd_connection *connection, const char *command, ...)
 				  "receiving another response");
 		return false;
 	}
+
+	return true;
+}
+
+bool
+mpd_send_command(struct mpd_connection *connection, const char *command, ...)
+{
+	va_list ap;
+	bool success;
+
+	if (!send_check(connection))
+		return false;
 
 	va_start(ap, command);
 
@@ -76,16 +88,8 @@ mpd_send_command2(struct mpd_connection *connection, const char *command)
 {
 	bool success;
 
-	if (mpd_error_is_defined(&connection->error))
+	if (!send_check(connection))
 		return false;
-
-	if (connection->receiving) {
-		mpd_error_code(&connection->error, MPD_ERROR_STATE);
-		mpd_error_message(&connection->error,
-				  "Cannot send a new command while "
-				  "receiving another response");
-		return false;
-	}
 
 	success = mpd_sync_send_command(connection->async,
 					&connection->timeout,
