@@ -243,97 +243,95 @@ int mpd_status_get_volume(const struct mpd_status *status)
 bool
 mpd_status_get_repeat(const struct mpd_status *status)
 {
-        return status->repeat;
+	return status->repeat;
 }
 
 bool
 mpd_status_get_random(const struct mpd_status *status)
 {
-        return status->random;
+	return status->random;
 }
 
 bool
 mpd_status_get_single(const struct mpd_status *status)
 {
-        return status->single;
+	return status->single;
 }
 
 bool
 mpd_status_get_consume(const struct mpd_status *status)
 {
-        return status->consume;
+	return status->consume;
 }
 
 int mpd_status_get_playlist_length(const struct mpd_status *status)
 {
-        return status->playlist_length;
+	return status->playlist_length;
 }
 
 long long mpd_status_get_playlist(const struct mpd_status *status)
 {
-        return status->playlist;
+	return status->playlist;
 }
 
 enum mpd_state
 mpd_status_get_state(const struct mpd_status *status)
 {
-        return status->state;
+	return status->state;
 }
 
 int mpd_status_get_crossfade(const struct mpd_status *status)
 {
-        return status->crossfade;
+	return status->crossfade;
 }
 
 int mpd_status_get_song(const struct mpd_status *status)
 {
-        return status->song;
+	return status->song;
 }
 
 int mpd_status_get_songid(const struct mpd_status *status)
 {
-        return status->songid;
+	return status->songid;
 }
 
 int mpd_status_get_elapsed_time(const struct mpd_status *status)
 {
-        return status->elapsed_time;
+	return status->elapsed_time;
 }
 
 int mpd_status_get_total_time(const struct mpd_status *status)
 {
-        return status->total_time;
+	return status->total_time;
 }
 
 int mpd_status_get_bit_rate(const struct mpd_status *status)
 {
-        return status->bit_rate;
+	return status->bit_rate;
 }
 
 unsigned int mpd_status_get_sample_rate(const struct mpd_status *status)
 {
-        return status->sample_rate;
+	return status->sample_rate;
 }
 
 int mpd_status_get_bits(const struct mpd_status *status)
 {
-        return status->bits;
+	return status->bits;
 }
 
 int mpd_status_get_channels(const struct mpd_status *status)
 {
-        return status->channels;
+	return status->channels;
 }
 
 int mpd_status_get_updatingdb(const struct mpd_status *status)
 {
-        return status->updatingdb;
+	return status->updatingdb;
 }
 
 const char *
 mpd_status_get_error(const struct mpd_status *status)
 {
-        return status->error;
+	return status->error;
 }
-
-
