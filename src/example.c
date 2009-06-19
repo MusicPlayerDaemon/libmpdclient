@@ -69,7 +69,7 @@ int main(int argc, char ** argv) {
 
 	if(argc==1) {
 		struct mpd_status * status;
-		mpd_entity * entity;
+		struct mpd_entity * entity;
 
 		mpd_command_list_begin(conn, true);
 		mpd_send_status(conn);
@@ -162,7 +162,7 @@ int main(int argc, char ** argv) {
 		mpd_status_free(status);
 	}
 	else if(argc==3 && strcmp(argv[1],"lsinfo")==0) {
-		mpd_entity * entity;
+		struct mpd_entity * entity;
 
 		mpd_send_lsinfo(conn,argv[2]);
 		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {

@@ -49,7 +49,7 @@ enum mpd_entity_type {
 /* mpd_entity
  * stores info on stuff returned info commands
  */
-typedef struct mpd_entity {
+struct mpd_entity {
 	/* the type of entity, use with MPD_ENTITY_TYPE_* to determine
 	 * what this entity is (song, directory, etc...)
 	 */
@@ -60,16 +60,18 @@ typedef struct mpd_entity {
 		struct mpd_song *song;
 		struct mpd_stored_playlist *playlistFile;
 	} info;
-} mpd_entity;
+};
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void mpd_entity_free(mpd_entity * entity);
+void
+mpd_entity_free(struct mpd_entity *entity);
 
 /* use this function to loop over after calling Info/Listall functions */
-mpd_entity * mpd_get_next_entity(struct mpd_connection *connection);
+struct mpd_entity *
+mpd_get_next_entity(struct mpd_connection *connection);
 
 #ifdef __cplusplus
 }

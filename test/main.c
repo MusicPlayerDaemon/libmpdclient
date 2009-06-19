@@ -188,7 +188,7 @@ static int
 test_currentsong(struct mpd_connection *conn)
 {
 	struct mpd_song *song;
-	mpd_entity *entity;
+	struct mpd_entity *entity;
 
 	mpd_send_currentsong(conn);
 
@@ -220,7 +220,7 @@ test_list_status_currentsong(struct mpd_connection *conn)
 {
 	struct mpd_status *status;
 	struct mpd_song *song;
-	mpd_entity *entity;
+	struct mpd_entity *entity;
 
 	CHECK_CONNECTION(conn);
 
@@ -270,7 +270,7 @@ test_list_status_currentsong(struct mpd_connection *conn)
 static int
 test_lsinfo(struct mpd_connection *conn, const char *path)
 {
-	mpd_entity *entity;
+	struct mpd_entity *entity;
 
 	mpd_send_lsinfo(conn, path);
 	CHECK_CONNECTION(conn);

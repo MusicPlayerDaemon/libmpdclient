@@ -39,7 +39,7 @@
 #include <string.h>
 
 void
-mpd_entity_free(mpd_entity * entity) {
+mpd_entity_free(struct mpd_entity *entity) {
 	switch (entity->type) {
 	case MPD_ENTITY_TYPE_DIRECTORY:
 		mpd_directory_free(entity->info.directory);
@@ -93,11 +93,11 @@ parse_song_pair(struct mpd_song *song, const char *name, char *value)
 		song->comment = str_pool_dup(value);
 }
 
-mpd_entity *
+struct mpd_entity *
 mpd_get_next_entity(struct mpd_connection *connection)
 {
 	struct mpd_pair *pair;
-	mpd_entity * entity = NULL;
+	struct mpd_entity *entity;
 
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
