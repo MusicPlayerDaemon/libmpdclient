@@ -124,21 +124,29 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		entity->type = MPD_ENTITY_TYPE_SONG;
 		entity->info.song = mpd_song_new();
 		entity->info.song->file = str_pool_dup(pair->value);
+
+		mpd_pair_free(pair);
 	} else if (strcmp(pair->name, "directory") == 0) {
 		entity = mpd_entity_new();
 		entity->type = MPD_ENTITY_TYPE_DIRECTORY;
 		entity->info.directory = mpd_directory_new();
 		entity->info.directory->path = str_pool_dup(pair->value);
+
+		mpd_pair_free(pair);
 	} else if (strcmp(pair->name, "playlist") == 0) {
 		entity = mpd_entity_new();
 		entity->type = MPD_ENTITY_TYPE_PLAYLISTFILE;
 		entity->info.playlistFile = mpd_stored_playlist_new();
 		entity->info.playlistFile->path = str_pool_dup(pair->value);
+
+		mpd_pair_free(pair);
 	} else if (strcmp(pair->name, "cpos") == 0){
 		entity = mpd_entity_new();
 		entity->type = MPD_ENTITY_TYPE_SONG;
 		entity->info.song = mpd_song_new();
 		entity->info.song->pos = atoi(pair->value);
+
+		mpd_pair_free(pair);
 	} else {
 		mpd_pair_free(pair);
 
