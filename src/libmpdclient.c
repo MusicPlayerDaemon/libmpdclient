@@ -50,19 +50,7 @@
 int
 mpd_sendAddIdCommand(struct mpd_connection *connection, const char *file)
 {
-	bool ret;
-	struct mpd_pair *pair;
-	int retval = -1;
-
-	ret = mpd_send_addid(connection, file);
-	if (!ret)
-		return -1;
-
-	pair = mpd_recv_pair_named(connection, "Id");
-	if (pair != NULL) {
-		retval = atoi(pair->value);
-		mpd_pair_free(pair);
-	}
-	
-	return retval;
+	return mpd_send_addid(connection, file)
+		? mpd_recv_song_id(connection)
+		: -1;
 }

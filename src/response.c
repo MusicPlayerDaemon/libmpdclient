@@ -106,6 +106,21 @@ mpd_response_next(struct mpd_connection *connection)
 }
 
 int
+mpd_recv_song_id(struct mpd_connection *connection)
+{
+	struct mpd_pair *pair;
+	int id = -1;
+
+	pair = mpd_recv_pair_named(connection, "Id");
+	if (pair != NULL) {
+		id = atoi(pair->value);
+		mpd_pair_free(pair);
+	}
+
+	return id;
+}
+
+int
 mpd_get_update_id(struct mpd_connection *connection)
 {
 	struct mpd_pair *pair;

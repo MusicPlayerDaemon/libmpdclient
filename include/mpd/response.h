@@ -59,6 +59,15 @@ mpd_response_finish(struct mpd_connection *connection);
 bool
 mpd_response_next(struct mpd_connection *connection);
 
+/**
+ * Returns the id of the new song in the playlist.  To be called after
+ * mpd_send_addid().
+ *
+ * @return the new song id, -1 on error or if MPD did not send an id
+ */
+int
+mpd_recv_song_id(struct mpd_connection *connection);
+
 /* returns the update job id, call this after a update command*/
 int
 mpd_get_update_id(struct mpd_connection *connection);
