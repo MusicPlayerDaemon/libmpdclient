@@ -38,21 +38,22 @@
 #include <stdlib.h>
 #include <string.h>
 
-static void
-mpd_finishInfoEntity(mpd_entity * entity) {
-	if (entity->info.directory) {
-		if (entity->type == MPD_ENTITY_TYPE_DIRECTORY)
-			mpd_directory_free(entity->info.directory);
-		else if (entity->type == MPD_ENTITY_TYPE_SONG)
-			mpd_song_free(entity->info.song);
-		else if (entity->type == MPD_ENTITY_TYPE_PLAYLISTFILE)
-			mpd_stored_playlist_free(entity->info.playlistFile);
-	}
-}
-
 void
 mpd_entity_free(mpd_entity * entity) {
-	mpd_finishInfoEntity(entity);
+	switch (entity->type) {
+	case MPD_ENTITY_TYPE_DIRECTORY:
+		mpd_directory_free(entity->info.directory);
+		break;
+
+	case MPD_ENTITY_TYPE_SONG:
+		mpd_song_free(entity->info.song);
+		break;
+
+	case MPD_ENTITY_TYPE_PLAYLISTFILE:
+		mpd_stored_playlist_free(entity->info.playlistFile);
+		break;
+	}
+
 	free(entity);
 }
 
