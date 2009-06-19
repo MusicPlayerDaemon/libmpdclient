@@ -308,7 +308,6 @@ mpd_recv_pair(struct mpd_connection *connection)
 	if (!connection->receiving ||
 	    (connection->command_list_remaining > 0 &&
 	     connection->discrete_finished)) {
-		connection->receiving = false;
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
 				  "already done processing current command");
@@ -322,7 +321,6 @@ mpd_recv_pair(struct mpd_connection *connection)
 	result = mpd_parser_feed(connection->parser, line);
 	switch (result) {
 	case MPD_PARSER_MALFORMED:
-		connection->receiving = false;
 		mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);
 		mpd_error_printf(&connection->error,
 				 "Failed to parse MPD response");
@@ -342,7 +340,6 @@ mpd_recv_pair(struct mpd_connection *connection)
 			connection->discrete_finished = false;
 		} else {
 			if (connection->command_list_remaining == 0) {
-				connection->receiving = false;
 				mpd_error_code(&connection->error,
 					       MPD_ERROR_MALFORMED);
 				mpd_error_message(&connection->error,
