@@ -35,6 +35,8 @@
 
 const char *const mpd_tag_type_names[MPD_TAG_COUNT] =
 {
+	"Any"
+	"Filename",
 	"Artist",
 	"Album",
 	"Title",
@@ -46,6 +48,4 @@ const char *const mpd_tag_type_names[MPD_TAG_COUNT] =
 	"Performer",
 	"Comment",
 	"Disc",
-	"Filename",
-	"Any"
 };
