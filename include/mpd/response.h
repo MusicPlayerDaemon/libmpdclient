@@ -70,7 +70,7 @@ mpd_recv_song_id(struct mpd_connection *connection);
 
 /* returns the update job id, call this after a update command*/
 int
-mpd_get_update_id(struct mpd_connection *connection);
+mpd_recv_update_id(struct mpd_connection *connection);
 
 /**
  * @param connection a #mpd_connection
@@ -79,11 +79,14 @@ mpd_get_update_id(struct mpd_connection *connection);
  *
  * @returns a string, needs to be free'ed
  */
-char *mpd_get_next_command(struct mpd_connection *connection);
+char *
+mpd_recv_command_name(struct mpd_connection *connection);
 
-char *mpd_get_next_handler(struct mpd_connection *connection);
+char *
+mpd_recv_handler(struct mpd_connection *connection);
 
-char *mpd_get_next_tag_type(struct mpd_connection *connection);
+char *
+mpd_recv_tag_type_name(struct mpd_connection *connection);
 
 #ifdef __cplusplus
 }

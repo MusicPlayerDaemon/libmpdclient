@@ -121,7 +121,7 @@ mpd_recv_song_id(struct mpd_connection *connection)
 }
 
 int
-mpd_get_update_id(struct mpd_connection *connection)
+mpd_recv_update_id(struct mpd_connection *connection)
 {
 	struct mpd_pair *pair;
 	int ret = 0;
@@ -138,17 +138,20 @@ mpd_get_update_id(struct mpd_connection *connection)
 /**
  * Get the next returned command
  */
-char * mpd_get_next_command(struct mpd_connection *connection)
+char *
+mpd_recv_command_name(struct mpd_connection *connection)
 {
 	return mpd_recv_value_named(connection, "command");
 }
 
-char * mpd_get_next_handler(struct mpd_connection *connection)
+char *
+mpd_recv_handler(struct mpd_connection *connection)
 {
 	return mpd_recv_value_named(connection, "handler");
 }
 
-char * mpd_get_next_tag_type(struct mpd_connection *connection)
+char *
+mpd_recv_tag_type_name(struct mpd_connection *connection)
 {
 	return mpd_recv_value_named(connection, "tagtype");
 }
