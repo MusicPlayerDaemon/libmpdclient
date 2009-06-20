@@ -135,9 +135,6 @@ mpd_recv_update_id(struct mpd_connection *connection)
 	return ret;
 }
 
-/**
- * Get the next returned command
- */
 char *
 mpd_recv_command_name(struct mpd_connection *connection)
 {
