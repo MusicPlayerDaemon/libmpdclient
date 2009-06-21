@@ -30,33 +30,17 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "internal.h"
 #include <mpd/connection.h>
 #include <mpd/async.h>
-#include <mpd/idle.h>
-#include <mpd/pair.h>
 #include <mpd/parser.h>
 #include "resolver.h"
 #include "sync.h"
 #include "socket.h"
+#include "internal.h"
 
 #include <assert.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <errno.h>
-
-#ifdef WIN32
-#  include <ws2tcpip.h>
-#  include <winsock.h>
-#else
-#  include <netinet/in.h>
-#  include <arpa/inet.h>
-#  include <sys/socket.h>
-#  include <netdb.h>
-#  include <sys/un.h>
-#endif
+#include <string.h>
 
 #define MPD_WELCOME_MESSAGE	"OK MPD "
 
