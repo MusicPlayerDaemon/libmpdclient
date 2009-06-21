@@ -14,6 +14,7 @@ mpdinclude_HEADERS = \
 	include/mpd/list.h \
 	include/mpd/parser.h \
 	include/mpd/protocol.h \
+	include/mpd/recv.h \
 	include/mpd/response.h \
 	include/mpd/run.h \
 	include/mpd/send.h \
@@ -47,6 +48,7 @@ src_libmpdclient_la_SOURCES = \
 	src/list.c \
 	src/parser.c \
 	src/quote.c src/quote.h \
+	src/recv.c \
 	src/response.c \
 	src/run.c \
 	src/search.c \

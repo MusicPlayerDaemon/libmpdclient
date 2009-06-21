@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2008 The Music Player Daemon Project
+   (c) 2003-2009 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -26,24 +26,51 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MPD_CLIENT_H
-#define MPD_CLIENT_H
+#ifndef MPD_RECV_H
+#define MPD_RECV_H
 
-#include <mpd/connection.h>
-#include <mpd/command.h>
-#include <mpd/directory.h>
-#include <mpd/entity.h>
-#include <mpd/list.h>
-#include <mpd/output.h>
-#include <mpd/pair.h>
-#include <mpd/recv.h>
-#include <mpd/response.h>
-#include <mpd/run.h>
-#include <mpd/search.h>
-#include <mpd/send.h>
-#include <mpd/song.h>
-#include <mpd/stats.h>
-#include <mpd/status.h>
-#include <mpd/stored_playlist.h>
+struct mpd_pair;
+struct mpd_connection;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * Reads the next #mpd_pair from the server.  Returns NULL if there
+ * are no more pairs.
+ *
+ * The caller is responsible for freeing the returned object with
+ * mpd_pair_free().
+ */
+struct mpd_pair *
+mpd_recv_pair(struct mpd_connection *connection);
+
+/**
+ * Same as mpd_recv_pair(), but discards all pairs not matching the
+ * specified name.
+ */
+struct mpd_pair *
+mpd_recv_pair_named(struct mpd_connection *connection, const char *name);
+
+/**
+ * Similar to mpd_recv_pair_named(), but duplicates the string and
+ * frees the #mpd_pair object.  The caller has to free the return
+ * value with free().
+ */
+char *
+mpd_recv_value_named(struct mpd_connection *connection, const char *name);
+
+/**
+ * Unreads a #mpd_pair.  You may unread only the one pair you just got
+ * from mpd_recv_pair().  Unreading the "NULL" pair is allowed, to
+ * allow you to call mpd_recv_pair() again at the end of a response.
+ */
+void
+mpd_enqueue_pair(struct mpd_connection *connection, struct mpd_pair *pair);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
