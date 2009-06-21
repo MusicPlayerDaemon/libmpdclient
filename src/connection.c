@@ -60,13 +60,10 @@
 
 #ifndef WIN32
 #  define winsock_dll_error(c)  0
-#  define closesocket(s)        close(s)
 #  define WSACleanup()          do { /* nothing */ } while (0)
 #endif
 
 #define MPD_WELCOME_MESSAGE	"OK MPD "
-
-#define MPD_ERROR_AT_UNK	-1
 
 #ifdef WIN32
 static int winsock_dll_error(struct mpd_connection *connection)
