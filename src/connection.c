@@ -60,7 +60,6 @@
 
 #ifndef WIN32
 #  define winsock_dll_error(c)  0
-#  define WSACleanup()          do { /* nothing */ } while (0)
 #endif
 
 #define MPD_WELCOME_MESSAGE	"OK MPD "
@@ -251,7 +250,6 @@ void mpd_connection_free(struct mpd_connection *connection)
 	mpd_error_deinit(&connection->error);
 
 	free(connection);
-	WSACleanup();
 }
 
 void
