@@ -29,8 +29,22 @@
 #ifndef MPD_SOCKET_H
 #define MPD_SOCKET_H
 
+#include <stdbool.h>
+
 struct timeval;
 struct mpd_error_info;
+
+#ifdef WIN32
+bool
+mpd_socket_global_init(struct mpd_error_info *error);
+#else
+static inline bool
+mpd_socket_global_init(struct mpd_error_info *error)
+{
+	(void)error;
+	return true;
+}
+#endif
 
 /**
  * Connects the socket to the specified host and port.

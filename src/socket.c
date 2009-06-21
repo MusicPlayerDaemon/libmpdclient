@@ -64,6 +64,27 @@
 
 #ifdef WIN32
 
+bool
+mpd_socket_global_init(struct mpd_error_info *error)
+{
+	WSADATA wsaData;
+
+	if ((WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0 ||
+			LOBYTE(wsaData.wVersion) != 2 ||
+			HIBYTE(wsaData.wVersion) != 2 ) {
+		mpd_error_code(error, MPD_ERROR_SYSTEM);
+		mpd_error_message(error,
+				  "Could not find usable WinSock DLL");
+		return false;
+	}
+
+	return true;
+}
+
+#endif
+
+#ifdef WIN32
+
 static int do_connect_fail(struct mpd_socket *s,
                            const struct sockaddr *serv_addr, int addrlen)
 {

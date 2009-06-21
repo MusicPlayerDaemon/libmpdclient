@@ -58,27 +58,7 @@
 #  include <sys/un.h>
 #endif
 
-#ifndef WIN32
-#  define winsock_dll_error(c)  0
-#endif
-
 #define MPD_WELCOME_MESSAGE	"OK MPD "
-
-#ifdef WIN32
-static int winsock_dll_error(struct mpd_connection *connection)
-{
-	WSADATA wsaData;
-	if ((WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0 ||
-			LOBYTE(wsaData.wVersion) != 2 ||
-			HIBYTE(wsaData.wVersion) != 2 ) {
-		snprintf(connection->errorStr, sizeof(connection->errorStr),
-			 "Could not find usable WinSock DLL.");
-		connection->error = MPD_ERROR_SYSTEM;
-		return 1;
-	}
-	return 0;
-}
-#endif /* !WIN32 */
 
 static bool
 mpd_parse_welcome(struct mpd_connection *connection,
@@ -162,7 +142,7 @@ mpd_connection_new(const char *host, int port, float timeout)
 	connection->pair = PAIR_NONE;
 	connection->request = NULL;
 
-	if (winsock_dll_error(connection))
+	if (!mpd_socket_global_init(&connection->error))
 		return connection;
 
 	mpd_connection_set_timeout(connection,timeout);
