@@ -37,6 +37,10 @@
 
 struct mpd_connection;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * Starts a command list, i.e. a group of pipelined commands which are
  * transferred in one block.  If one command fails, the rest of the
@@ -48,10 +52,6 @@ struct mpd_connection;
  * command with an "list_OK" response
  * @return true on success
  */
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 bool
 mpd_command_list_begin(struct mpd_connection *connection, bool discrete_ok);
