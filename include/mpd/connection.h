@@ -41,6 +41,10 @@
 /**
  * This opaque object represents a connection to a MPD server.  Call
  * mpd_connection_new() to create a new instance.
+ *
+ * Once an error occurs which invalidates the connection, this object
+ * cannot be reused for a new connection attempt.  Dispose it with
+ * mpd_connection_free().
  */
 struct mpd_connection;
 
@@ -48,11 +52,21 @@ struct mpd_connection;
 extern "C" {
 #endif
 
-/* mpd_connection_new
- * use this to open a new connection
- * you should use mpd_connection_close, when your done with the connection,
- * even if an error has occurred
- * _timeout_ is the connection timeout period in seconds
+/**
+ * Opens a new connection to a MPD server.  Both the name server
+ * lookup and the connect() call are done synchronously.  After this
+ * function has returned, you should check if the connection was
+ * successful with mpd_get_error().
+ *
+ * @param host the server's host name, IP address or Unix socket path.
+ * If the resolver returns more than one IP address for a host name,
+ * this functions tries all of them until one accepts the connection.
+ * @param port the TCP port to connect to.  If #host is a Unix socket
+ * path, this parameter is ignored.
+ * @param timeout the timeout in seconds; you may modify it later with
+ * mpd_connection_set_timeout()
+ * @return a mpd_connection object (which may have failed to connect),
+ * or NULL on out-of-memory
  */
 struct mpd_connection *
 mpd_connection_new(const char *host, int port, float timeout);
@@ -62,6 +76,11 @@ mpd_connection_new(const char *host, int port, float timeout);
  */
 void mpd_connection_free(struct mpd_connection *connection);
 
+/**
+ * Sets the timeout for synchronous operations.  If the MPD server
+ * does not send a response during this time span, the operation is
+ * aborted by libmpdclient.
+ */
 void mpd_connection_set_timeout(struct mpd_connection *connection,
 			      float timeout);
 
