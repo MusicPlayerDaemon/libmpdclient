@@ -48,6 +48,11 @@ struct mpd_connection;
  * command with an "list_OK" response
  * @return true on success
  */
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 bool
 mpd_command_list_begin(struct mpd_connection *connection, bool discrete_ok);
 
@@ -62,5 +67,9 @@ mpd_command_list_begin(struct mpd_connection *connection, bool discrete_ok);
  */
 bool
 mpd_command_list_end(struct mpd_connection *connection);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
