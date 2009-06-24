@@ -35,32 +35,20 @@
 
 #include <stdlib.h>
 
-static void
-mpd_initDirectory(struct mpd_directory *directory)
-{
-	directory->path = NULL;
-}
-
-static void
-mpd_finishDirectory(struct mpd_directory *directory)
-{
-	if (directory->path)
-		str_pool_put(directory->path);
-}
-
 struct mpd_directory *
 mpd_directory_new(void)
 {
 	struct mpd_directory *directory = malloc(sizeof(*directory));
 
-	mpd_initDirectory(directory);
+	directory->path = NULL;
 
 	return directory;
 }
 
 void mpd_directory_free(struct mpd_directory *directory)
 {
-	mpd_finishDirectory(directory);
+	if (directory->path)
+		str_pool_put(directory->path);
 
 	free(directory);
 }
