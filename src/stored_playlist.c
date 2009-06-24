@@ -36,25 +36,12 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-static void
-mpd_stored_playlist_init(struct mpd_stored_playlist *playlist)
-{
-	playlist->path = NULL;
-}
-
-static void
-mpd_stored_playlist_finish(struct mpd_stored_playlist *playlist)
-{
-	if (playlist->path)
-		str_pool_put(playlist->path);
-}
-
 struct mpd_stored_playlist *
 mpd_stored_playlist_new(void)
 {
 	struct mpd_stored_playlist *playlist = malloc(sizeof(*playlist));
 
-	mpd_stored_playlist_init(playlist);
+	playlist->path = NULL;
 
 	return playlist;
 }
@@ -62,7 +49,9 @@ mpd_stored_playlist_new(void)
 void
 mpd_stored_playlist_free(struct mpd_stored_playlist *playlist)
 {
-	mpd_stored_playlist_finish(playlist);
+	if (playlist->path)
+		str_pool_put(playlist->path);
+
 	free(playlist);
 }
 
