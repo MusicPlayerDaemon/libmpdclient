@@ -93,6 +93,8 @@ mpd_async_new(int fd)
 void
 mpd_async_free(struct mpd_async *async)
 {
+	assert(async != NULL);
+
 	closesocket(async->fd);
 	mpd_error_deinit(&async->error);
 	free(async);
@@ -138,6 +140,8 @@ mpd_async_events(const struct mpd_async *async)
 {
 	enum mpd_async_events events;
 
+	assert(async != NULL);
+
 	if (!async->alive)
 		return 0;
 
@@ -173,6 +177,7 @@ mpd_async_read(struct mpd_async *async)
 	size_t room;
 	ssize_t nbytes;
 
+	assert(async != NULL);
 	assert(async->fd >= 0);
 	assert(async->alive);
 
@@ -211,6 +216,7 @@ mpd_async_write(struct mpd_async *async)
 	size_t size;
 	ssize_t nbytes;
 
+	assert(async != NULL);
 	assert(async->fd >= 0);
 	assert(async->alive);
 
@@ -332,6 +338,9 @@ mpd_async_send_command(struct mpd_async *async, const char *command, ...)
 	va_list args;
 	bool success;
 
+	assert(async != NULL);
+	assert(command != NULL);
+
 	va_start(args, command);
 	success = mpd_async_send_command_v(async, command, args);
 	va_end(args);
@@ -344,6 +353,8 @@ mpd_async_recv_line(struct mpd_async *async)
 {
 	size_t size;
 	char *src, *newline;
+
+	assert(async != NULL);
 
 	size = mpd_buffer_size(&async->input);
 	if (size == 0)

@@ -34,10 +34,14 @@
 #include <mpd/send.h>
 #include "internal.h"
 
+#include <assert.h>
+
 bool
 mpd_command_list_begin(struct mpd_connection *connection, bool discrete_ok)
 {
 	bool success;
+
+	assert(connection != NULL);
 
 	if (connection->sending_command_list) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
@@ -65,6 +69,8 @@ bool
 mpd_command_list_end(struct mpd_connection *connection)
 {
 	bool success;
+
+	assert(connection != NULL);
 
 	if (!connection->sending_command_list) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);

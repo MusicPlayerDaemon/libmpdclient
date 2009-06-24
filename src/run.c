@@ -37,6 +37,8 @@
 static bool
 run_check(struct mpd_connection *connection)
 {
+	assert(connection != NULL);
+
 	if (mpd_error_is_defined(&connection->error))
 		return false;
 

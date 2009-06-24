@@ -33,6 +33,7 @@
 #include <mpd/directory.h>
 #include "str_pool.h"
 
+#include <assert.h>
 #include <stdlib.h>
 
 struct mpd_directory *
@@ -50,6 +51,8 @@ mpd_directory_new(void)
 
 void mpd_directory_free(struct mpd_directory *directory)
 {
+	assert(directory != NULL);
+
 	if (directory->path)
 		str_pool_put(directory->path);
 
@@ -59,7 +62,11 @@ void mpd_directory_free(struct mpd_directory *directory)
 struct mpd_directory *
 mpd_directory_dup(const struct mpd_directory *directory)
 {
-	struct mpd_directory *ret = mpd_directory_new();
+	struct mpd_directory *ret;
+
+	assert(directory != NULL);
+
+	ret = mpd_directory_new();
 	if (ret == NULL)
 		/* out of memory */
 		return NULL;

@@ -42,6 +42,8 @@ mpd_recv_pair(struct mpd_connection *connection)
 	enum mpd_parser_result result;
 	const char *msg;
 
+	assert(connection != NULL);
+
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
 

@@ -40,6 +40,8 @@
 
 void
 mpd_entity_free(struct mpd_entity *entity) {
+	assert(entity != NULL);
+
 	switch (entity->type) {
 	case MPD_ENTITY_TYPE_DIRECTORY:
 		mpd_directory_free(entity->info.directory);

@@ -55,6 +55,8 @@ mpd_recv_idle(struct mpd_connection *connection)
 	enum mpd_idle flags = 0;
 	struct mpd_pair *pair;
 
+	assert(connection != NULL);
+
 	if (mpd_error_is_defined(&connection->error))
 		return 0;
 

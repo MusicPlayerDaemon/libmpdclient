@@ -33,6 +33,7 @@
 #include <mpd/song.h>
 #include "str_pool.h"
 
+#include <assert.h>
 #include <stdlib.h>
 
 struct mpd_song *mpd_song_new(void) {
@@ -63,6 +64,8 @@ struct mpd_song *mpd_song_new(void) {
 }
 
 void mpd_song_free(struct mpd_song *song) {
+	assert(song != NULL);
+
 	if (song->file)
 		str_pool_put(song->file);
 	if (song->artist)
@@ -94,7 +97,11 @@ void mpd_song_free(struct mpd_song *song) {
 struct mpd_song *
 mpd_song_dup(const struct mpd_song *song)
 {
-	struct mpd_song *ret = mpd_song_new();
+	struct mpd_song *ret;
+
+	assert(song != NULL);
+
+	ret = mpd_song_new();
 	if (ret == NULL)
 		/* out of memory */
 		return NULL;
