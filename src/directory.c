@@ -39,6 +39,9 @@ struct mpd_directory *
 mpd_directory_new(void)
 {
 	struct mpd_directory *directory = malloc(sizeof(*directory));
+	if (directory == NULL)
+		/* out of memory */
+		return NULL;
 
 	directory->path = NULL;
 
@@ -57,6 +60,9 @@ struct mpd_directory *
 mpd_directory_dup(const struct mpd_directory *directory)
 {
 	struct mpd_directory *ret = mpd_directory_new();
+	if (ret == NULL)
+		/* out of memory */
+		return NULL;
 
 	if (directory->path)
 		ret->path = str_pool_dup(directory->path);
