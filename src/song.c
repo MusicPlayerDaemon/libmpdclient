@@ -35,7 +35,9 @@
 
 #include <stdlib.h>
 
-static void mpd_initSong(struct mpd_song *song) {
+struct mpd_song *mpd_song_new(void) {
+	struct mpd_song *song = malloc(sizeof(*song));
+
 	song->file = NULL;
 	song->artist = NULL;
 	song->album = NULL;
@@ -53,9 +55,11 @@ static void mpd_initSong(struct mpd_song *song) {
 	song->time = MPD_SONG_NO_TIME;
 	song->pos = MPD_SONG_NO_NUM;
 	song->id = MPD_SONG_NO_ID;
+
+	return song;
 }
 
-static void mpd_finishSong(struct mpd_song *song) {
+void mpd_song_free(struct mpd_song *song) {
 	if (song->file)
 		str_pool_put(song->file);
 	if (song->artist)
@@ -80,18 +84,7 @@ static void mpd_finishSong(struct mpd_song *song) {
 		str_pool_put(song->disc);
 	if (song->comment)
 		str_pool_put(song->comment);
-}
 
-struct mpd_song *mpd_song_new(void) {
-	struct mpd_song *ret = malloc(sizeof(*ret));
-
-	mpd_initSong(ret);
-
-	return ret;
-}
-
-void mpd_song_free(struct mpd_song *song) {
-	mpd_finishSong(song);
 	free(song);
 }
 
