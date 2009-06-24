@@ -191,7 +191,7 @@ mpd_send_swapid(struct mpd_connection *connection, int id1, int id2);
  *
  */
 bool
-mpd_send_listplaylist(struct mpd_connection *connection, char *name);
+mpd_send_listplaylist(struct mpd_connection *connection, const char *name);
 
 /**
  * @param connection a #mpd_connection
@@ -201,21 +201,21 @@ mpd_send_listplaylist(struct mpd_connection *connection, char *name);
  *
  */
 bool
-mpd_send_listplaylistinfo(struct mpd_connection *connection, char *name);
+mpd_send_listplaylistinfo(struct mpd_connection *connection, const char *name);
 
 bool
-mpd_send_playlistclear(struct mpd_connection *connection, char *name);
+mpd_send_playlistclear(struct mpd_connection *connection, const char *name);
 
 bool
-mpd_send_playlistadd(struct mpd_connection *connection, char *name,
+mpd_send_playlistadd(struct mpd_connection *connection, const char *name,
 		     const char *path);
 
 bool
-mpd_send_playlistmove(struct mpd_connection *connection, char *name,
+mpd_send_playlistmove(struct mpd_connection *connection, const char *name,
 		      int from, int to);
 
 bool
-mpd_send_playlistdelete(struct mpd_connection *connection, char *name,
+mpd_send_playlistdelete(struct mpd_connection *connection, const char *name,
 			int pos);
 
 bool
