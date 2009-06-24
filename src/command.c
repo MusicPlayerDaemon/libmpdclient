@@ -329,7 +329,7 @@ mpd_send_playlistdelete(struct mpd_connection *connection, const char *name,
 
 	snprintf(pos_string, sizeof(pos_string), "%i", pos);
 
-	return mpd_send_command(connection, "playlistdelete", name, pos);
+	return mpd_send_command(connection, "playlistdelete", name, pos_string, NULL);
 }
 
 bool
