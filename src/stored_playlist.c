@@ -40,6 +40,9 @@ struct mpd_stored_playlist *
 mpd_stored_playlist_new(void)
 {
 	struct mpd_stored_playlist *playlist = malloc(sizeof(*playlist));
+	if (playlist == NULL)
+		/* out of memory */
+		return NULL;
 
 	playlist->path = NULL;
 
@@ -59,6 +62,9 @@ struct mpd_stored_playlist *
 mpd_stored_playlist_dup(const struct mpd_stored_playlist *playlist)
 {
 	struct mpd_stored_playlist *ret = mpd_stored_playlist_new();
+	if (ret == NULL)
+		/* out of memory */
+		return NULL;
 
 	if (playlist->path)
 		ret->path = str_pool_dup(playlist->path);
