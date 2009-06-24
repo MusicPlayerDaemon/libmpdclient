@@ -37,6 +37,9 @@
 
 struct mpd_song *mpd_song_new(void) {
 	struct mpd_song *song = malloc(sizeof(*song));
+	if (song == NULL)
+		/* out of memory */
+		return NULL;
 
 	song->file = NULL;
 	song->artist = NULL;
@@ -92,6 +95,9 @@ struct mpd_song *
 mpd_song_dup(const struct mpd_song *song)
 {
 	struct mpd_song *ret = mpd_song_new();
+	if (ret == NULL)
+		/* out of memory */
+		return NULL;
 
 	if (song->file)
 		ret->file = str_pool_dup(song->file);
