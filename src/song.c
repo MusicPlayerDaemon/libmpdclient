@@ -143,6 +143,7 @@ mpd_song_add_tag(struct mpd_song *song,
 		return false;
 
 	if (tag->value == NULL) {
+		tag->next = NULL;
 		tag->value = str_pool_get(value);
 		if (tag->value == NULL)
 			return false;
