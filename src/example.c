@@ -41,6 +41,17 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+static void
+print_tag(const struct mpd_song *song, enum mpd_tag_type type,
+	  const char *label)
+{
+	unsigned i = 0;
+	const char *value;
+
+	while ((value = mpd_song_get_tag(song, type, i++)) != NULL)
+		printf("%s: %s\n", label, value);
+}
+
 int main(int argc, char ** argv) {
 	struct mpd_connection *conn;
 	const char *hostname = getenv("MPD_HOST");
@@ -117,30 +128,19 @@ int main(int argc, char ** argv) {
 				continue;
 			}
 
-			printf("file: %s\n",song->file);
-			if(song->artist) {
-				printf("artist: %s\n",song->artist);
+			print_tag(song, MPD_TAG_FILENAME, "file");
+			print_tag(song, MPD_TAG_ARTIST, "artist");
+			print_tag(song, MPD_TAG_ALBUM, "album");
+			print_tag(song, MPD_TAG_TITLE, "title");
+			print_tag(song, MPD_TAG_TRACK, "track");
+			print_tag(song, MPD_TAG_NAME, "name");
+			print_tag(song, MPD_TAG_DATE, "date");
+
+			if (mpd_song_get_time(song) != MPD_SONG_NO_TIME) {
+				printf("time: %i\n", mpd_song_get_time(song));
 			}
-			if(song->album) {
-				printf("album: %s\n",song->album);
-			}
-			if(song->title) {
-				printf("title: %s\n",song->title);
-			}
-			if(song->track) {
-				printf("track: %s\n",song->track);
-			}
-			if(song->name) {
-				printf("name: %s\n",song->name);
-			}
-			if(song->date) {
-				printf("date: %s\n",song->date);
-			}                                      			
-			if(song->time!=MPD_SONG_NO_TIME) {
-				printf("time: %i\n",song->time);
-			}
-			if(song->pos!=MPD_SONG_NO_NUM) {
-				printf("pos: %i\n",song->pos);
+			if (mpd_song_get_pos(song) != MPD_SONG_NO_NUM) {
+				printf("pos: %i\n", mpd_song_get_pos(song));
 			}
 
 			mpd_entity_free(entity);
@@ -175,19 +175,11 @@ int main(int argc, char ** argv) {
 			if (entity->type == MPD_ENTITY_TYPE_SONG) {
 				struct mpd_song * song = entity->info.song;
 
-				printf("file: %s\n",song->file);
-				if(song->artist) {
-					printf("artist: %s\n",song->artist);
-				}
-				if(song->album) {
-					printf("album: %s\n",song->album);
-				}
-				if(song->title) {
-					printf("title: %s\n",song->title);
-				}
-				if(song->track) {
-					printf("track: %s\n",song->track);
-				}
+				print_tag(song, MPD_TAG_FILENAME, "file");
+				print_tag(song, MPD_TAG_ARTIST, "artist");
+				print_tag(song, MPD_TAG_ALBUM, "album");
+				print_tag(song, MPD_TAG_TITLE, "title");
+				print_tag(song, MPD_TAG_TRACK, "track");
 			}
 			else if (entity->type == MPD_ENTITY_TYPE_DIRECTORY) {
 				struct mpd_directory *dir =

@@ -36,25 +36,32 @@
 #include <assert.h>
 #include <stdlib.h>
 
+struct mpd_tag_value {
+	struct mpd_tag_value *next;
+
+	char *value;
+};
+
+struct mpd_song {
+	struct mpd_tag_value tags[MPD_TAG_COUNT];
+
+	/* length of song in seconds, check that it is not MPD_SONG_NO_TIME  */
+	int time;
+	/* if plchanges/playlistinfo/playlistid used, is the position of the
+	 * song in the playlist */
+	int pos;
+	/* song id for a song in the playlist */
+	int id;
+};
+
 struct mpd_song *mpd_song_new(void) {
 	struct mpd_song *song = malloc(sizeof(*song));
 	if (song == NULL)
 		/* out of memory */
 		return NULL;
 
-	song->file = NULL;
-	song->artist = NULL;
-	song->album = NULL;
-	song->track = NULL;
-	song->title = NULL;
-	song->name = NULL;
-	song->date = NULL;
-	/* added by Qball */
-	song->genre = NULL;
-	song->composer = NULL;
-	song->performer = NULL;
-	song->disc = NULL;
-	song->comment = NULL;
+	for (unsigned i = 0; i < MPD_TAG_COUNT; ++i)
+		song->tags[i].value = NULL;
 
 	song->time = MPD_SONG_NO_TIME;
 	song->pos = MPD_SONG_NO_NUM;
@@ -66,30 +73,25 @@ struct mpd_song *mpd_song_new(void) {
 void mpd_song_free(struct mpd_song *song) {
 	assert(song != NULL);
 
-	if (song->file)
-		str_pool_put(song->file);
-	if (song->artist)
-		str_pool_put(song->artist);
-	if (song->album)
-		str_pool_put(song->album);
-	if (song->title)
-		str_pool_put(song->title);
-	if (song->track)
-		str_pool_put(song->track);
-	if (song->name)
-		str_pool_put(song->name);
-	if (song->date)
-		str_pool_put(song->date);
-	if (song->genre)
-		str_pool_put(song->genre);
-	if (song->composer)
-		str_pool_put(song->composer);
-	if (song->performer)
-		str_pool_put(song->performer);
-	if (song->disc)
-		str_pool_put(song->disc);
-	if (song->comment)
-		str_pool_put(song->comment);
+	for (unsigned i = 0; i < MPD_TAG_COUNT; ++i) {
+		struct mpd_tag_value *tag = &song->tags[i], *next;
+
+		if (tag->value == NULL)
+			continue;
+
+		str_pool_put(tag->value);
+
+		tag = tag->next;
+
+		while (tag != NULL) {
+			assert(tag->value != NULL);
+			str_pool_put(tag->value);
+
+			next = tag->next;
+			free(tag);
+			tag = next;
+		}
+	}
 
 	free(song);
 }
@@ -98,6 +100,7 @@ struct mpd_song *
 mpd_song_dup(const struct mpd_song *song)
 {
 	struct mpd_song *ret;
+	bool success;
 
 	assert(song != NULL);
 
@@ -106,34 +109,118 @@ mpd_song_dup(const struct mpd_song *song)
 		/* out of memory */
 		return NULL;
 
-	if (song->file)
-		ret->file = str_pool_dup(song->file);
-	if (song->artist)
-		ret->artist = str_pool_dup(song->artist);
-	if (song->album)
-		ret->album = str_pool_dup(song->album);
-	if (song->title)
-		ret->title = str_pool_dup(song->title);
-	if (song->track)
-		ret->track = str_pool_dup(song->track);
-	if (song->name)
-		ret->name = str_pool_dup(song->name);
-	if (song->date)
-		ret->date = str_pool_dup(song->date);
-	if (song->genre)
-		ret->genre = str_pool_dup(song->genre);
-	if (song->composer)
-		ret->composer = str_pool_dup(song->composer);
-	if (song->performer)
-		ret->performer = str_pool_dup(song->performer);
-	if (song->disc)
-		ret->disc = str_pool_dup(song->disc);
-	if (song->comment)
-		ret->comment = str_pool_dup(song->comment);
+	for (unsigned i = 0; i < MPD_TAG_COUNT; ++i) {
+		const struct mpd_tag_value *src_tag = &song->tags[i];
+
+		if (src_tag->value == NULL)
+			continue;
+
+		do {
+			success = mpd_song_add_tag(ret, i, src_tag->value);
+			if (!success) {
+				mpd_song_free(ret);
+				return NULL;
+			}
+
+			src_tag = src_tag->next;
+		} while (src_tag != NULL);
+	}
 
 	ret->time = song->time;
 	ret->pos = song->pos;
 	ret->id = song->id;
 
 	return ret;
+}
+
+bool
+mpd_song_add_tag(struct mpd_song *song,
+		 enum mpd_tag_type type, const char *value)
+{
+	struct mpd_tag_value *tag = &song->tags[type], *prev;
+
+	if ((int)type < 0 || type == MPD_TAG_ANY || type >= MPD_TAG_COUNT)
+		return false;
+
+	if (tag->value == NULL) {
+		tag->value = str_pool_get(value);
+		if (tag->value == NULL)
+			return false;
+	} else {
+		while (tag->next != NULL)
+			tag = tag->next;
+
+		prev = tag;
+		tag = malloc(sizeof(*tag));
+		if (tag == NULL)
+			return NULL;
+
+		tag->value = str_pool_get(value);
+		if (tag->value == NULL) {
+			free(tag);
+			return false;
+		}
+
+		tag->next = NULL;
+		prev->next = tag;
+	}
+
+	return true;
+}
+
+const char *
+mpd_song_get_tag(const struct mpd_song *song,
+		 enum mpd_tag_type type, unsigned idx)
+{
+	const struct mpd_tag_value *tag = &song->tags[type];
+
+	if ((int)type < 0 || type == MPD_TAG_ANY || type >= MPD_TAG_COUNT)
+		return NULL;
+
+	if (tag->value == NULL)
+		return NULL;
+
+	while (idx-- > 0) {
+		tag = tag->next;
+		if (tag == NULL)
+			return NULL;
+	}
+
+	return tag->value;
+}
+
+void
+mpd_song_set_time(struct mpd_song *song, int t)
+{
+	song->time = t;
+}
+
+int
+mpd_song_get_time(const struct mpd_song *song)
+{
+	return song->time;
+}
+
+void
+mpd_song_set_pos(struct mpd_song *song, int pos)
+{
+	song->pos = pos;
+}
+
+int
+mpd_song_get_pos(const struct mpd_song *song)
+{
+	return song->pos;
+}
+
+void
+mpd_song_set_id(struct mpd_song *song, int id)
+{
+	song->id = id;
+}
+
+int
+mpd_song_get_id(const struct mpd_song *song)
+{
+	return song->id;
 }

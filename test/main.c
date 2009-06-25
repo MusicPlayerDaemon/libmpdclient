@@ -136,25 +136,32 @@ print_status(struct mpd_status *status)
 }
 
 static void
+print_tag(const struct mpd_song *song, enum mpd_tag_type type,
+	  const char *label)
+{
+	unsigned i = 0;
+	const char *value;
+
+	while ((value = mpd_song_get_tag(song, type, i++)) != NULL)
+		LOG_INFO("%s: %s\n", label, value);
+}
+
+static void
 print_song(struct mpd_song *song)
 {
-	LOG_INFO("file: %s", song->file);
-	if (song->artist)
-		LOG_INFO("artist: %s", song->artist);
-	if (song->album)
-		LOG_INFO("album: %s", song->album);
-	if (song->title)
-		LOG_INFO("title: %s", song->title);
-	if (song->track)
-		LOG_INFO("track: %s", song->track);
-	if (song->name)
-		LOG_INFO("name: %s", song->name);
-	if (song->date)
-		LOG_INFO("date: %s", song->date);
-	if (song->time!=MPD_SONG_NO_TIME)
-		LOG_INFO("time: %i", song->time);
-	if (song->pos!=MPD_SONG_NO_NUM)
-		LOG_INFO("pos: %i", song->pos);
+	print_tag(song, MPD_TAG_FILENAME, "file");
+	print_tag(song, MPD_TAG_ARTIST, "artist");
+	print_tag(song, MPD_TAG_ALBUM, "album");
+	print_tag(song, MPD_TAG_TITLE, "title");
+	print_tag(song, MPD_TAG_TRACK, "track");
+	print_tag(song, MPD_TAG_NAME, "name");
+	print_tag(song, MPD_TAG_DATE, "date");
+
+	if (mpd_song_get_time(song) != MPD_SONG_NO_TIME)
+		LOG_INFO("time: %i\n", mpd_song_get_time(song));
+
+	if (mpd_song_get_pos(song) != MPD_SONG_NO_NUM)
+		LOG_INFO("pos: %i\n", mpd_song_get_pos(song));
 }
 
 static int

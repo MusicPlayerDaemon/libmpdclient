@@ -33,6 +33,10 @@
 #ifndef MPD_SONG_H
 #define MPD_SONG_H
 
+#include <mpd/tag.h>
+
+#include <stdbool.h>
+
 #define MPD_SONG_NO_TIME	-1
 #define MPD_SONG_NO_NUM		-1
 #define MPD_SONG_NO_ID		-1
@@ -40,43 +44,7 @@
 /* mpd_Song
  * for storing song info returned by mpd
  */
-struct mpd_song {
-	/* filename of song */
-	char * file;
-	/* artist, maybe NULL if there is no tag */
-	char * artist;
-	/* title, maybe NULL if there is no tag */
-	char * title;
-	/* album, maybe NULL if there is no tag */
-	char * album;
-	/* track, maybe NULL if there is no tag */
-	char * track;
-	/* name, maybe NULL if there is no tag; it's the name of the current
-	 * song, f.e. the icyName of the stream */
-	char * name;
-	/* date */
-	char *date;
-
-	/* added by qball */
-	/* Genre */
-	char *genre;
-	/* Composer */
-	char *composer;
-	/* Performer */
-	char *performer;
-	/* Disc */
-	char *disc;
-	/* Comment */
-	char *comment;
-
-	/* length of song in seconds, check that it is not MPD_SONG_NO_TIME  */
-	int time;
-	/* if plchanges/playlistinfo/playlistid used, is the position of the
-	 * song in the playlist */
-	int pos;
-	/* song id for a song in the playlist */
-	int id;
-};
+struct mpd_song;
 
 #ifdef __cplusplus
 extern "C" {
@@ -103,6 +71,73 @@ void mpd_song_free(struct mpd_song *song);
  */
 struct mpd_song *
 mpd_song_dup(const struct mpd_song *song);
+
+/**
+ * Adds a tag value to the song.
+ *
+ * @return true on success, false if the tag is not supported or if no
+ * memory could be allocated
+ */
+bool
+mpd_song_add_tag(struct mpd_song *song,
+		 enum mpd_tag_type type, const char *value);
+
+/**
+ * Queries a tag value.
+ *
+ * @param song the song object
+ * @param type the tag type; MPD_TAG_ANY and MPD_TAG_COUNT are invalid
+ * values
+ * @param idx pass 0 to get the first value for this tag type.  This
+ * argument may be used to iterate all values, until this function
+ * returns NULL
+ * @return the tag value, or NULL if this tag type (or this index)
+ * does not exist
+ */
+const char *
+mpd_song_get_tag(const struct mpd_song *song,
+		 enum mpd_tag_type type, unsigned idx);
+
+/**
+ * Sets the song duration in seconds.
+ */
+void
+mpd_song_set_time(struct mpd_song *song, int t);
+
+/**
+ * Returns the duration of this song in seconds.  #MPD_SONG_NO_TIME is
+ * a special value for "unknown".
+ */
+int
+mpd_song_get_time(const struct mpd_song *song);
+
+/**
+ * Sets the position within the playlist.  This value is not used for
+ * songs which are not in the playlist.
+ */
+void
+mpd_song_set_pos(struct mpd_song *song, int pos);
+
+/**
+ * Returns the position of this song in the playlist.
+ * #MPD_SONG_NO_NUM is a special value for "unknown".
+ */
+int
+mpd_song_get_pos(const struct mpd_song *song);
+
+/**
+ * Sets the id within the playlist.  This value is not used for songs
+ * which are not in the playlist.
+ */
+void
+mpd_song_set_id(struct mpd_song *song, int id);
+
+/**
+ * Returns the id of this song in the playlist.  #MPD_SONG_NO_ID is a
+ * special value for "unknown".
+ */
+int
+mpd_song_get_id(const struct mpd_song *song);
 
 #ifdef __cplusplus
 }

@@ -65,34 +65,19 @@ parse_song_pair(struct mpd_song *song, const char *name, char *value)
 	if (*value == 0)
 		return;
 
-	if (song->artist == NULL && strcmp(name, "Artist") == 0)
-		song->artist = str_pool_dup(value);
-	else if (song->album == NULL && strcmp(name, "Album") == 0)
-		song->album = str_pool_dup(value);
-	else if (song->title == NULL && strcmp(name, "Title") == 0)
-		song->title = str_pool_dup(value);
-	else if (song->track == NULL && strcmp(name, "Track") == 0)
-		song->track = str_pool_dup(value);
-	else if (song->name == NULL && strcmp(name, "Name") == 0)
-		song->name = str_pool_dup(value);
-	else if (song->time == MPD_SONG_NO_TIME && strcmp(name, "Time") == 0)
-		song->time = atoi(value);
-	else if (song->pos == MPD_SONG_NO_NUM && strcmp(name, "Pos") == 0)
-		song->pos = atoi(value);
-	else if (song->id == MPD_SONG_NO_ID && strcmp(name, "Id") == 0)
-		song->id = atoi(value);
-	else if (song->date == NULL && strcmp(name, "Date") == 0)
-		song->date = str_pool_dup(value);
-	else if (song->genre == NULL && strcmp(name, "Genre") == 0)
-		song->genre = str_pool_dup(value);
-	else if (song->composer == NULL && strcmp(name, "Composer") == 0)
-		song->composer = str_pool_dup(value);
-	else if (song->performer == NULL && strcmp(name, "Performer") == 0)
-		song->performer = str_pool_dup(value);
-	else if (song->disc == NULL && strcmp(name, "Disc") == 0)
-		song->disc = str_pool_dup(value);
-	else if (song->comment == NULL && strcmp(name, "Comment") == 0)
-		song->comment = str_pool_dup(value);
+	for (unsigned i = 0; i < MPD_TAG_COUNT; ++i) {
+		if (strcmp(name, mpd_tag_type_names[i]) == 0) {
+			mpd_song_add_tag(song, (enum mpd_tag_type)i, value);
+			return;
+		}
+	}
+
+	if (strcmp(name, "Time") == 0)
+		mpd_song_set_time(song, atoi(value));
+	else if (strcmp(name, "Pos") == 0)
+		mpd_song_set_pos(song, atoi(value));
+	else if (strcmp(name, "Id") == 0)
+		mpd_song_set_id(song, atoi(value));
 }
 
 struct mpd_entity *
@@ -118,7 +103,8 @@ mpd_get_next_entity(struct mpd_connection *connection)
 
 		entity->type = MPD_ENTITY_TYPE_SONG;
 		entity->info.song = mpd_song_new();
-		entity->info.song->file = str_pool_dup(pair->value);
+		mpd_song_add_tag(entity->info.song,
+				 MPD_TAG_FILENAME, pair->value);
 
 		mpd_pair_free(pair);
 	} else if (strcmp(pair->name, "directory") == 0) {
@@ -157,7 +143,7 @@ mpd_get_next_entity(struct mpd_connection *connection)
 
 		entity->type = MPD_ENTITY_TYPE_SONG;
 		entity->info.song = mpd_song_new();
-		entity->info.song->pos = atoi(pair->value);
+		mpd_song_set_pos(entity->info.song, atoi(pair->value));
 
 		mpd_pair_free(pair);
 	} else {
