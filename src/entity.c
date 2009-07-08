@@ -54,9 +54,6 @@ mpd_entity_free(struct mpd_entity *entity) {
 	case MPD_ENTITY_TYPE_PLAYLISTFILE:
 		mpd_stored_playlist_free(entity->info.playlistFile);
 		break;
-
-	case MPD_ENTITY_TYPE_CPOS:
-		break;
 	}
 
 	free(entity);
@@ -134,18 +131,6 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		entity->info.playlistFile->path = str_pool_dup(pair->value);
 
 		mpd_pair_free(pair);
-	} else if (strcmp(pair->name, "cpos") == 0){
-		entity = malloc(sizeof(*entity));
-		if (entity == NULL) {
-			mpd_pair_free(pair);
-			mpd_error_code(&connection->error, MPD_ERROR_OOM);
-			return NULL;
-		}
-
-		entity->type = MPD_ENTITY_TYPE_CPOS;
-		entity->info.cpos.pos = atoi(pair->value);
-
-		mpd_pair_free(pair);
 	} else {
 		mpd_pair_free(pair);
 
@@ -158,8 +143,7 @@ mpd_get_next_entity(struct mpd_connection *connection)
 	while ((pair = mpd_recv_pair(connection)) != NULL) {
 		if (strcmp(pair->name, "file") == 0 ||
 		    strcmp(pair->name, "directory") == 0 ||
-		    strcmp(pair->name, "playlist") == 0 ||
-		    strcmp(pair->name, "cpos") == 0)
+		    strcmp(pair->name, "playlist") == 0)
 			break;
 
 		if (entity->type == MPD_ENTITY_TYPE_SONG)
@@ -167,9 +151,6 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		else if (entity->type == MPD_ENTITY_TYPE_DIRECTORY) {
 		}
 		else if (entity->type == MPD_ENTITY_TYPE_PLAYLISTFILE) {
-		} else if (entity->type == MPD_ENTITY_TYPE_CPOS) {
-			if (strcmp(pair->name, "Id") == 0)
-				entity->info.cpos.id = atoi(pair->value);
 		}
 
 		mpd_pair_free(pair);

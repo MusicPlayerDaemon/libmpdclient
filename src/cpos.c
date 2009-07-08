@@ -13,10 +13,6 @@
    notice, this list of conditions and the following disclaimer in the
    documentation and/or other materials provided with the distribution.
 
-   - Neither the name of the Music Player Daemon nor the names of its
-   contributors may be used to endorse or promote products derived from
-   this software without specific prior written permission.
-
    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
    ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -30,51 +26,38 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MPD_ENTITY_H
-#define MPD_ENTITY_H
+#include <mpd/cpos.h>
+#include <mpd/pair.h>
+#include <mpd/connection.h>
+#include "internal.h"
 
-#include <mpd/song.h>
-#include <mpd/directory.h>
-#include <mpd/client.h>
+#include <stdlib.h>
+#include <string.h>
 
-/* the type of entity returned from one of the commands that generates info
- * use in conjunction with mpd_entity.type
- */
-enum mpd_entity_type {
-	MPD_ENTITY_TYPE_DIRECTORY,
-	MPD_ENTITY_TYPE_SONG,
-	MPD_ENTITY_TYPE_PLAYLISTFILE,
-};
+bool
+mpd_recv_cpos(struct mpd_connection *connection, struct mpd_cpos *cpos)
+{
+	struct mpd_pair *pair;
 
-/* mpd_entity
- * stores info on stuff returned info commands
- */
-struct mpd_entity {
-	/* the type of entity, use with MPD_ENTITY_TYPE_* to determine
-	 * what this entity is (song, directory, etc...)
-	 */
-	enum mpd_entity_type type;
-	/* the actual data you want, mpd_song, mpd_directory, etc */
-	union {
-		struct mpd_directory *directory;
-		struct mpd_song *song;
-		struct mpd_stored_playlist *playlistFile;
-	} info;
-};
+	if (mpd_error_is_defined(&connection->error))
+		return false;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+	pair = mpd_recv_pair_named(connection, "cpos");
+	if (pair == NULL)
+		return false;
 
-void
-mpd_entity_free(struct mpd_entity *entity);
+	cpos->position = atoi(pair->value);
+	mpd_pair_free(pair);
 
-/* use this function to loop over after calling Info/Listall functions */
-struct mpd_entity *
-mpd_get_next_entity(struct mpd_connection *connection);
+	while ((pair = mpd_recv_pair(connection)) != NULL) {
+		if (strcmp(pair->name, "Id") == 0) {
+			cpos->id = atoi(pair->value);
+			mpd_pair_free(pair);
+		} else {
+			mpd_enqueue_pair(connection, pair);
+			break;
+		}
+	}
 
-#ifdef __cplusplus
+	return !mpd_error_is_defined(&connection->error);
 }
-#endif
-
-#endif
