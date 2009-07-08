@@ -46,6 +46,7 @@ static const char *const idle_names[] = {
 	"mixer",
 	"output",
 	"options",
+	"update",
 	NULL
 };
 

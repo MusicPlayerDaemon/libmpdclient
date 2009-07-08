@@ -62,6 +62,9 @@ enum mpd_idle {
 
 	/** options have changed: crossfade, random, repeat, ... */
 	MPD_IDLE_OPTIONS = 0x40,
+
+	/** a database update has started or finished. */
+	MPD_IDLE_UPDATE = 0x100,
 };
 
 #ifdef __cplusplus
