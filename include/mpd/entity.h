@@ -43,7 +43,12 @@
 enum mpd_entity_type {
 	MPD_ENTITY_TYPE_DIRECTORY,
 	MPD_ENTITY_TYPE_SONG,
-	MPD_ENTITY_TYPE_PLAYLISTFILE
+	MPD_ENTITY_TYPE_PLAYLISTFILE,
+
+	/**
+	 * A changed playlist position.
+	 */
+	MPD_ENTITY_TYPE_CPOS,
 };
 
 /* mpd_entity
@@ -59,6 +64,13 @@ struct mpd_entity {
 		struct mpd_directory *directory;
 		struct mpd_song *song;
 		struct mpd_stored_playlist *playlistFile;
+
+		/**
+		 * Type is #MPD_ENTITY_TYPE_CPOS.
+		 */
+		struct {
+			int pos, id;
+		} cpos;
 	} info;
 };
 
