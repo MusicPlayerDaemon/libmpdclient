@@ -105,9 +105,7 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		}
 
 		entity->type = MPD_ENTITY_TYPE_SONG;
-		entity->info.song = mpd_song_new();
-		mpd_song_add_tag(entity->info.song,
-				 MPD_TAG_FILENAME, pair->value);
+		entity->info.song = mpd_song_new(pair->value);
 
 		mpd_pair_free(pair);
 	} else if (strcmp(pair->name, "directory") == 0) {

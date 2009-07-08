@@ -54,8 +54,15 @@ struct mpd_song {
 	int id;
 };
 
-struct mpd_song *mpd_song_new(void) {
-	struct mpd_song *song = malloc(sizeof(*song));
+struct mpd_song *
+mpd_song_new(const char *uri)
+{
+	struct mpd_song *song;
+	bool success;
+
+	assert(uri != NULL);
+
+	song = malloc(sizeof(*song));
 	if (song == NULL)
 		/* out of memory */
 		return NULL;
@@ -66,6 +73,12 @@ struct mpd_song *mpd_song_new(void) {
 	song->time = MPD_SONG_NO_TIME;
 	song->pos = MPD_SONG_NO_NUM;
 	song->id = MPD_SONG_NO_ID;
+
+	success = mpd_song_add_tag(song, MPD_TAG_FILENAME, uri);
+	if (!success) {
+		free(song);
+		return NULL;
+	}
 
 	return song;
 }
@@ -104,7 +117,7 @@ mpd_song_dup(const struct mpd_song *song)
 
 	assert(song != NULL);
 
-	ret = mpd_song_new();
+	ret = mpd_song_new(mpd_song_get_tag(song, MPD_TAG_FILENAME, 0));
 	if (ret == NULL)
 		/* out of memory */
 		return NULL;

@@ -57,8 +57,11 @@ extern "C" {
  * be sure to malloc or strdup the memory
  * use mpd_song_free to free the memory for the mpd_Song, it will also
  * free memory for file, artist, etc, so don't do it yourself
+ *
+ * @param uri the song URI
  */
-struct mpd_song *mpd_song_new(void);
+struct mpd_song *
+mpd_song_new(const char *uri);
 
 /* mpd_song_free
  * use to free memory allocated by mpd_song_new
