@@ -76,6 +76,13 @@ struct mpd_song *
 mpd_song_dup(const struct mpd_song *song);
 
 /**
+ * Returns the URI of the song.  It always returns a value, because a
+ * song cannot exist without an URI.
+ */
+const char *
+mpd_song_get_uri(const struct mpd_song *song);
+
+/**
  * Adds a tag value to the song.
  *
  * @return true on success, false if the tag is not supported or if no

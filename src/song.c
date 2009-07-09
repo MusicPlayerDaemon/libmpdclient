@@ -146,6 +146,12 @@ mpd_song_dup(const struct mpd_song *song)
 	return ret;
 }
 
+const char *
+mpd_song_get_uri(const struct mpd_song *song)
+{
+	return mpd_song_get_tag(song, MPD_TAG_FILENAME, 0);
+}
+
 bool
 mpd_song_add_tag(struct mpd_song *song,
 		 enum mpd_tag_type type, const char *value)
