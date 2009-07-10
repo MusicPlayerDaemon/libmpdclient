@@ -33,33 +33,41 @@
 #ifndef MPD_DIRECTORY_H
 #define MPD_DIRECTORY_H
 
-/* mpd_Directory
- * used to store info fro directory (right now that just the path)
+/**
+ * A directory object.  This is a container for more songs,
+ * directories or playlists.
  */
 struct mpd_directory {
-	char * path;
+	/**
+	 * The full path of this directory.  It does not begin with a
+	 * slash.
+	 */
+	char *path;
 };
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* mpd_directory_new
- * allocates memory for a new directory
- * use mpd_directory_free to free this memory
+/**
+ * Allocates a new directory object.  Call mpd_directory_free() to
+ * dispose it.
+ *
+ * @return the new object, or NULL on out of memory
  */
 struct mpd_directory *
 mpd_directory_new(void);
 
-/* mpd_directory_dup
- * works like strdup, but for mpd_Directory
+/**
+ * Duplicates a #mpd_directory object.
+ *
+ * @return the new object, or NULL on out of memory
  */
 struct mpd_directory *
 mpd_directory_dup(const struct mpd_directory *directory);
 
-/* mpd_directory_free
- * used to free memory allocated with mpd_directory_new, and it frees
- * path of mpd_Directory, so be careful
+/**
+ * Free memory allocated by the #mpd_directory object.  used to free
  */
 void mpd_directory_free(struct mpd_directory *directory);
 
