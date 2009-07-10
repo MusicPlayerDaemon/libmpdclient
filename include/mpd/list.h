@@ -41,7 +41,7 @@ struct mpd_connection;
 extern "C" {
 #endif
 
-/*
+/**
  * Starts a command list, i.e. a group of pipelined commands which are
  * transferred in one block.  If one command fails, the rest of the
  * command list is canceled.
@@ -52,11 +52,10 @@ extern "C" {
  * command with an "list_OK" response
  * @return true on success
  */
-
 bool
 mpd_command_list_begin(struct mpd_connection *connection, bool discrete_ok);
 
-/*
+/**
  * Commits the command list, i.e. makes MPD execute all commands which
  * were queued.
  *
