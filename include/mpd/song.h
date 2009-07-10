@@ -93,6 +93,12 @@ mpd_song_add_tag(struct mpd_song *song,
 		 enum mpd_tag_type type, const char *value);
 
 /**
+ * Removes all values of the specified tag.
+ */
+void
+mpd_song_clear_tag(struct mpd_song *song, enum mpd_tag_type type);
+
+/**
  * Queries a tag value.
  *
  * @param song the song object

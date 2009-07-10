@@ -188,6 +188,25 @@ mpd_song_add_tag(struct mpd_song *song,
 	return true;
 }
 
+void
+mpd_song_clear_tag(struct mpd_song *song, enum mpd_tag_type type)
+{
+	struct mpd_tag_value *tag = &song->tags[type];
+
+	if (tag->value == NULL)
+		/* this tag type is empty */
+		return;
+
+	/* free and clear the first value */
+	free(tag->value);
+	tag->value = NULL;
+
+	/* free all other values; no need to clear the "next" pointer,
+	   because it is "undefined" as long as value==NULL */
+	while ((tag = tag->next) != NULL)
+		free(tag->value);
+}
+
 const char *
 mpd_song_get_tag(const struct mpd_song *song,
 		 enum mpd_tag_type type, unsigned idx)
