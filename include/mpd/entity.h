@@ -37,27 +37,55 @@
 #include <mpd/directory.h>
 #include <mpd/client.h>
 
-/* the type of entity returned from one of the commands that generates info
- * use in conjunction with mpd_entity.type
+/**
+ * The type of a #mpd_entity object.
  */
 enum mpd_entity_type {
+	/**
+	 * A directory (#mpd_directory) containing more entities.
+	 */
 	MPD_ENTITY_TYPE_DIRECTORY,
+
+	/**
+	 * A song file (#mpd_song) which can be added to the playlist.
+	 */
 	MPD_ENTITY_TYPE_SONG,
+
+	/**
+	 * A stored playlist (#mpd_stored_playlist).
+	 */
 	MPD_ENTITY_TYPE_PLAYLISTFILE,
 };
 
-/* mpd_entity
- * stores info on stuff returned info commands
+/**
+ * An "entity" is an object returned by commands like "lsinfo".  It is
+ * an object wrapping all possible entity types.
  */
 struct mpd_entity {
-	/* the type of entity, use with MPD_ENTITY_TYPE_* to determine
-	 * what this entity is (song, directory, etc...)
+	/**
+	 * The type of this entity.
 	 */
 	enum mpd_entity_type type;
-	/* the actual data you want, mpd_song, mpd_directory, etc */
+
+	/**
+	 * This union contains type-safe pointers to the real object.
+	 * Check the entity type before attempting to obtain the
+	 * object!
+	 */
 	union {
+		/**
+		 * Only valid if type==#MPD_ENTITY_TYPE_DIRECTORY.
+		 */
 		struct mpd_directory *directory;
+
+		/**
+		 * Only valid if type==#MPD_ENTITY_TYPE_SONG.
+		 */
 		struct mpd_song *song;
+
+		/**
+		 * Only valid if type==#MPD_ENTITY_TYPE_PLAYLISTFILE.
+		 */
 		struct mpd_stored_playlist *playlistFile;
 	} info;
 };
@@ -66,10 +94,18 @@ struct mpd_entity {
 extern "C" {
 #endif
 
+/**
+ * Releases an entity.  This also frees the wrapped object.
+ */
 void
 mpd_entity_free(struct mpd_entity *entity);
 
-/* use this function to loop over after calling Info/Listall functions */
+/**
+ * Receives the next entity from the MPD server.
+ *
+ * @return an entity object, or NULL on error or if the entity list is
+ * finished
+ */
 struct mpd_entity *
 mpd_get_next_entity(struct mpd_connection *connection);
 
