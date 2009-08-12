@@ -66,8 +66,10 @@ mpd_recv_pair(struct mpd_connection *connection)
 	}
 
 	line = mpd_sync_recv_line(connection->async, &connection->timeout);
-	if (line == NULL)
+	if (line == NULL) {
+		connection->receiving = false;
 		return NULL;
+	}
 
 	result = mpd_parser_feed(connection->parser, line);
 	switch (result) {
