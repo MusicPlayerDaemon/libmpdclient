@@ -37,6 +37,7 @@
 #include "sync.h"
 #include "socket.h"
 #include "internal.h"
+#include "str_pool.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -208,8 +209,10 @@ void mpd_connection_free(struct mpd_connection *connection)
 	if (connection->async != NULL)
 		mpd_async_free(connection->async);
 
-	if (connection->pair_state == PAIR_STATE_QUEUED)
-		free(connection->pair);
+	if (connection->pair_state == PAIR_STATE_QUEUED) {
+		str_pool_put(connection->pair.name);
+		str_pool_put(connection->pair.value);
+	}
 
 	if (connection->request) free(connection->request);
 

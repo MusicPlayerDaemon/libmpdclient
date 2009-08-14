@@ -31,6 +31,7 @@
 #include <mpd/parser.h>
 #include "internal.h"
 #include "sync.h"
+#include "str_pool.h"
 
 #include <string.h>
 
@@ -58,7 +59,7 @@ mpd_recv_pair(struct mpd_connection *connection)
 
 	if (connection->pair_state == PAIR_STATE_QUEUED) {
 		/* dequeue the pair from mpd_enqueue_pair() */
-		pair = connection->pair;
+		pair = &connection->pair;
 		connection->pair_state = PAIR_STATE_FLOATING;
 		return pair;
 	}
@@ -132,15 +133,21 @@ mpd_recv_pair(struct mpd_connection *connection)
 		return NULL;
 
 	case MPD_PARSER_PAIR:
-		pair = mpd_pair_new(mpd_parser_get_name(connection->parser),
-				    mpd_parser_get_value(connection->parser));
-		if (pair == NULL) {
+		pair = &connection->pair;
+		pair->name = str_pool_get(mpd_parser_get_name(connection->parser));
+		if (pair->name == NULL) {
+			mpd_error_code(&connection->error, MPD_ERROR_OOM);
+			return NULL;
+		}
+
+		pair->value = str_pool_get(mpd_parser_get_value(connection->parser));
+		if (pair->value == NULL) {
+			str_pool_put(pair->name);
 			mpd_error_code(&connection->error, MPD_ERROR_OOM);
 			return NULL;
 		}
 
 		connection->pair_state = PAIR_STATE_FLOATING;
-		connection->pair = pair;
 		return pair;
 	}
 
@@ -189,11 +196,12 @@ mpd_return_pair(struct mpd_connection *connection, struct mpd_pair *pair)
 	assert(connection != NULL);
 	assert(pair != NULL);
 	assert(connection->pair_state == PAIR_STATE_FLOATING);
-	assert(pair == connection->pair);
+	assert(pair == &connection->pair);
+
+	str_pool_put(connection->pair.name);
+	str_pool_put(connection->pair.value);
 
 	connection->pair_state = PAIR_STATE_NONE;
-
-	mpd_pair_free(pair);
 }
 
 void
@@ -205,7 +213,7 @@ mpd_enqueue_pair(struct mpd_connection *connection, struct mpd_pair *pair)
 		/* enqueue the pair which was returned by
 		   mpd_recv_pair() */
 		assert(connection->pair_state == PAIR_STATE_FLOATING);
-		assert(pair == connection->pair);
+		assert(pair == &connection->pair);
 		assert(pair->name != NULL && pair->value != NULL);
 
 		connection->pair_state = PAIR_STATE_QUEUED;

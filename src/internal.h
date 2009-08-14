@@ -29,6 +29,8 @@
 #ifndef MPD_INTERNAL_H
 #define MPD_INTERNAL_H
 
+#include <mpd/pair.h>
+
 #include "ierror.h"
 
 #include <sys/select.h>
@@ -130,7 +132,7 @@ struct mpd_connection {
 	 * that this value is empty, while NULL means that somebody
 	 * "unread" the NULL pointer.
 	 */
-	struct mpd_pair *pair;
+	struct mpd_pair pair;
 
 	/**
 	 * The search request which is being built, committed by
