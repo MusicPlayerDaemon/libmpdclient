@@ -40,25 +40,4 @@ struct mpd_pair {
 	char *value;
 };
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/**
- * Allocates a new mpd_pair object.  Returns NULL on error *if there
- * is not enough memory).
- */
-struct mpd_pair *
-mpd_pair_new(const char *name, const char *value);
-
-/**
- * Frees a mpd_pair object.
- */
-void
-mpd_pair_free(struct mpd_pair *pair);
-
-#ifdef __cplusplus
-}
-#endif
-
 #endif
