@@ -63,6 +63,8 @@ mpd_recv_stats(struct mpd_connection *connection)
 	assert(connection != NULL);
 
 	if (mpd_error_is_defined(&connection->error))
+		/* refuse to receive a response if the connection's
+		   state is not clean */
 		return NULL;
 
 	stats = malloc(sizeof(struct mpd_stats));
@@ -74,6 +76,7 @@ mpd_recv_stats(struct mpd_connection *connection)
 	stats->play_time = 0;
 	stats->db_play_time = 0;
 
+	/* read and parse all response lines */
 	while ((pair = mpd_recv_pair(connection)) != NULL) {
 		if (strcmp(pair->name, "artists") == 0) {
 			stats->number_of_artists = atoi(pair->value);
@@ -101,6 +104,7 @@ mpd_recv_stats(struct mpd_connection *connection)
 	}
 
 	if (mpd_error_is_defined(&connection->error)) {
+		/* an error has occured; roll back */
 		free(stats);
 		return NULL;
 	}
