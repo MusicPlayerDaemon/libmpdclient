@@ -26,6 +26,22 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*! \file
+ * \brief MPD client library
+ *
+ * This is a client library for the Music Player Daemon, written in C.
+ *
+ * You can choose one of several APIs, depending on your requirements:
+ *
+ * - struct mpd_async: a very low-level asynchronous API which knows
+ *   the protocol syntax, but no specific commands
+ *
+ * - struct mpd_connection: a basic synchronous API which knows all
+ *   MPD commands and parses all responses
+ *
+ * \author Max Kellermann (max@duempel.org)
+ */
+
 #ifndef MPD_CLIENT_H
 #define MPD_CLIENT_H
 
