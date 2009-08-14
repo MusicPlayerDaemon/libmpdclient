@@ -41,7 +41,8 @@ struct mpd_stats;
 extern "C" {
 #endif
 
-void mpd_send_stats(struct mpd_connection * connection);
+bool
+mpd_send_stats(struct mpd_connection *connection);
 
 struct mpd_stats * mpd_get_stats(struct mpd_connection * connection);
 

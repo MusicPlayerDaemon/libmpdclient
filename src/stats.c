@@ -48,8 +48,10 @@ struct mpd_stats {
 	unsigned long db_play_time;
 };
 
-void mpd_send_stats(struct mpd_connection * connection) {
-	mpd_send_command(connection, "stats", NULL);
+bool
+mpd_send_stats(struct mpd_connection *connection)
+{
+	return mpd_send_command(connection, "stats", NULL);
 }
 
 struct mpd_stats * mpd_get_stats(struct mpd_connection * connection) {
