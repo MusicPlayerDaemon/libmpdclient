@@ -37,8 +37,6 @@
 
 struct mpd_stats;
 
-struct mpd_search_stats;
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -48,10 +46,6 @@ void mpd_send_stats(struct mpd_connection * connection);
 struct mpd_stats * mpd_get_stats(struct mpd_connection * connection);
 
 void mpd_stats_free(struct mpd_stats * stats);
-
-struct mpd_search_stats * mpd_get_search_stats(struct mpd_connection * connection);
-
-void mpd_stats_search_free(struct mpd_search_stats * stats);
 
 int mpd_stats_get_number_of_artists(struct mpd_stats * stats);
 
@@ -66,10 +60,6 @@ unsigned long mpd_stats_get_db_update_time(struct mpd_stats * stats);
 unsigned long mpd_stats_get_play_time(struct mpd_stats * stats);
 
 unsigned long mpd_stats_get_db_play_time(struct mpd_stats * stats);
-
-int mpd_search_stats_get_number_of_songs(struct mpd_search_stats * stats);
-
-unsigned long mpd_search_stats_get_play_time(struct mpd_search_stats * stats);
 
 #ifdef __cplusplus
 }

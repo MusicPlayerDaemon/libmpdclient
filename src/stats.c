@@ -48,11 +48,6 @@ struct mpd_stats {
 	unsigned long db_play_time;
 };
 
-struct mpd_search_stats {
-	int number_of_songs;
-	unsigned long play_time;
-};
-
 void mpd_send_stats(struct mpd_connection * connection) {
 	mpd_send_command(connection, "stats", NULL);
 }
@@ -119,43 +114,6 @@ void mpd_stats_free(struct mpd_stats * stats) {
 	free(stats);
 }
 
-struct mpd_search_stats * mpd_get_search_stats(struct mpd_connection * connection)
-{
-	struct mpd_search_stats * stats;
-	struct mpd_pair *pair;
-
-	if (mpd_error_is_defined(&connection->error))
-		return NULL;
-
-	stats = malloc(sizeof(struct mpd_search_stats));
-	stats->number_of_songs = 0;
-	stats->play_time = 0;
-
-	while ((pair = mpd_recv_pair(connection)) != NULL) {
-		if (strcmp(pair->name, "songs") == 0) {
-			stats->number_of_songs = atoi(pair->value);
-		} else if (strcmp(pair->name, "playtime") == 0) {
-			stats->play_time = strtol(pair->value, NULL, 10);
-		}
-
-		mpd_pair_free(pair);
-	}
-
-	if (mpd_error_is_defined(&connection->error)) {
-		free(stats);
-		return NULL;
-	}
-
-	return stats;
-}
-
-void mpd_stats_search_free(struct mpd_search_stats * stats)
-{
-	assert(stats != NULL);
-
-	free(stats);
-}
-
 int mpd_stats_get_number_of_artists(struct mpd_stats * stats)
 {
 	assert(stats != NULL);
@@ -204,19 +162,3 @@ unsigned long mpd_stats_get_db_play_time(struct mpd_stats * stats)
 
 	return stats->db_play_time;
 }
-
-int mpd_search_stats_get_number_of_songs(struct mpd_search_stats * stats)
-{
-	assert(stats != NULL);
-
-	return stats->number_of_songs;
-}
-
-unsigned long mpd_search_stats_get_play_time(struct mpd_search_stats * stats)
-{
-	assert(stats != NULL);
-
-	return stats->play_time;
-}
-
-
