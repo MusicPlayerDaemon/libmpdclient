@@ -35,6 +35,9 @@
 
 struct mpd_parser {
 #ifndef NDEBUG
+	/**
+	 * This is used by assertions in the "get" functions below.
+	 */
 	enum mpd_parser_result result;
 #endif
 
