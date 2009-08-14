@@ -143,7 +143,7 @@ print_tag(const struct mpd_song *song, enum mpd_tag_type type,
 	const char *value;
 
 	while ((value = mpd_song_get_tag(song, type, i++)) != NULL)
-		LOG_INFO("%s: %s\n", label, value);
+		LOG_INFO("%s: %s", label, value);
 }
 
 static void
@@ -158,10 +158,10 @@ print_song(struct mpd_song *song)
 	print_tag(song, MPD_TAG_DATE, "date");
 
 	if (mpd_song_get_time(song) != MPD_SONG_NO_TIME)
-		LOG_INFO("time: %i\n", mpd_song_get_time(song));
+		LOG_INFO("time: %i", mpd_song_get_time(song));
 
 	if (mpd_song_get_pos(song) != MPD_SONG_NO_NUM)
-		LOG_INFO("pos: %i\n", mpd_song_get_pos(song));
+		LOG_INFO("pos: %i", mpd_song_get_pos(song));
 }
 
 static int
