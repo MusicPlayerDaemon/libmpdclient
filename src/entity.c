@@ -60,7 +60,7 @@ mpd_entity_free(struct mpd_entity *entity) {
 }
 
 static void
-parse_song_pair(struct mpd_song *song, const char *name, char *value)
+parse_song_pair(struct mpd_song *song, const char *name, const char *value)
 {
 	if (*value == 0)
 		return;
@@ -115,7 +115,7 @@ mpd_get_next_entity(struct mpd_connection *connection)
 
 		entity->type = MPD_ENTITY_TYPE_DIRECTORY;
 		entity->info.directory = mpd_directory_new();
-		entity->info.directory->path = str_pool_dup(pair->value);
+		entity->info.directory->path = str_pool_get(pair->value);
 
 		mpd_return_pair(connection, pair);
 	} else if (strcmp(pair->name, "playlist") == 0) {
@@ -128,7 +128,7 @@ mpd_get_next_entity(struct mpd_connection *connection)
 
 		entity->type = MPD_ENTITY_TYPE_PLAYLISTFILE;
 		entity->info.playlistFile = mpd_stored_playlist_new();
-		entity->info.playlistFile->path = str_pool_dup(pair->value);
+		entity->info.playlistFile->path = str_pool_get(pair->value);
 
 		mpd_return_pair(connection, pair);
 	} else {

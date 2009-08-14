@@ -31,7 +31,6 @@
 #include <mpd/parser.h>
 #include "internal.h"
 #include "sync.h"
-#include "str_pool.h"
 
 #include <string.h>
 
@@ -134,18 +133,8 @@ mpd_recv_pair(struct mpd_connection *connection)
 
 	case MPD_PARSER_PAIR:
 		pair = &connection->pair;
-		pair->name = str_pool_get(mpd_parser_get_name(connection->parser));
-		if (pair->name == NULL) {
-			mpd_error_code(&connection->error, MPD_ERROR_OOM);
-			return NULL;
-		}
-
-		pair->value = str_pool_get(mpd_parser_get_value(connection->parser));
-		if (pair->value == NULL) {
-			str_pool_put(pair->name);
-			mpd_error_code(&connection->error, MPD_ERROR_OOM);
-			return NULL;
-		}
+		pair->name = mpd_parser_get_name(connection->parser);
+		pair->value = mpd_parser_get_value(connection->parser);
 
 		connection->pair_state = PAIR_STATE_FLOATING;
 		return pair;
@@ -197,9 +186,6 @@ mpd_return_pair(struct mpd_connection *connection, struct mpd_pair *pair)
 	assert(pair != NULL);
 	assert(connection->pair_state == PAIR_STATE_FLOATING);
 	assert(pair == &connection->pair);
-
-	str_pool_put(connection->pair.name);
-	str_pool_put(connection->pair.value);
 
 	connection->pair_state = PAIR_STATE_NONE;
 }

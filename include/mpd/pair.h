@@ -34,10 +34,10 @@
  */
 struct mpd_pair {
 	/** the name of the element */
-	char *name;
+	const char *name;
 
 	/** the value of the element */
-	char *value;
+	const char *value;
 };
 
 #endif
