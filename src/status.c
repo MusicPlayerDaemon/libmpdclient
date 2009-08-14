@@ -34,6 +34,7 @@
 #include <mpd/pair.h>
 #include <mpd/send.h>
 #include <mpd/connection.h>
+#include <mpd/recv.h>
 #include "internal.h"
 
 #include <stdlib.h>

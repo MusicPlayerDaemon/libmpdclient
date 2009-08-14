@@ -132,39 +132,6 @@ int
 mpd_cmp_server_version(const struct mpd_connection *connection, unsigned major,
 		       unsigned minor, unsigned patch);
 
-/**
- * Reads the next #mpd_pair from the server.  Returns NULL if there
- * are no more pairs.
- *
- * The caller is responsible for freeing the returned object with
- * mpd_pair_free().
- */
-struct mpd_pair *
-mpd_recv_pair(struct mpd_connection *connection);
-
-/**
- * Same as mpd_recv_pair(), but discards all pairs not matching the
- * specified name.
- */
-struct mpd_pair *
-mpd_recv_pair_named(struct mpd_connection *connection, const char *name);
-
-/**
- * Similar to mpd_recv_pair_named(), but duplicates the string and
- * frees the #mpd_pair object.  The caller has to free the return
- * value with free().
- */
-char *
-mpd_recv_value_named(struct mpd_connection *connection, const char *name);
-
-/**
- * Unreads a #mpd_pair.  You may unread only the one pair you just got
- * from mpd_recv_pair().  Unreading the "NULL" pair is allowed, to
- * allow you to call mpd_recv_pair() again at the end of a response.
- */
-void
-mpd_enqueue_pair(struct mpd_connection *connection, struct mpd_pair *pair);
-
 #ifdef __cplusplus
 }
 #endif

@@ -33,6 +33,7 @@
 #include <mpd/search.h>
 #include <mpd/send.h>
 #include <mpd/pair.h>
+#include <mpd/recv.h>
 #include "internal.h"
 
 #include <ctype.h>
