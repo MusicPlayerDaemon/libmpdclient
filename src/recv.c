@@ -68,6 +68,7 @@ mpd_recv_pair(struct mpd_connection *connection)
 	line = mpd_sync_recv_line(connection->async, &connection->timeout);
 	if (line == NULL) {
 		connection->receiving = false;
+		connection->sending_command_list = false;
 		return NULL;
 	}
 
@@ -91,6 +92,7 @@ mpd_recv_pair(struct mpd_connection *connection)
 			}
 
 			connection->receiving = false;
+			connection->sending_command_list = false;
 			connection->discrete_finished = false;
 		} else {
 			if (!connection->sending_command_list ||
@@ -109,6 +111,7 @@ mpd_recv_pair(struct mpd_connection *connection)
 
 	case MPD_PARSER_ERROR:
 		connection->receiving = false;
+		connection->sending_command_list = false;
 		mpd_error_ack(&connection->error,
 			      mpd_parser_get_ack(connection->parser),
 			      mpd_parser_get_at(connection->parser));

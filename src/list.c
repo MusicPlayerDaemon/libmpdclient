@@ -83,7 +83,6 @@ mpd_command_list_end(struct mpd_connection *connection)
 	if (!success)
 		return false;
 
-	connection->sending_command_list = false;
 	connection->receiving = true;
 	return true;
 }
