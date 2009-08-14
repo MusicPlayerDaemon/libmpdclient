@@ -62,10 +62,6 @@ mpd_recv_stats(struct mpd_connection *connection)
 
 	assert(connection != NULL);
 
-	/*mpd_send_command(connection, "stats", NULL);
-
-	if (connection->error) return NULL;*/
-
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
 
