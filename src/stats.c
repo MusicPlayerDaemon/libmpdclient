@@ -54,7 +54,9 @@ mpd_send_stats(struct mpd_connection *connection)
 	return mpd_send_command(connection, "stats", NULL);
 }
 
-struct mpd_stats * mpd_get_stats(struct mpd_connection * connection) {
+struct mpd_stats *
+mpd_recv_stats(struct mpd_connection *connection)
+{
 	struct mpd_stats * stats;
 	struct mpd_pair *pair;
 
@@ -108,6 +110,15 @@ struct mpd_stats * mpd_get_stats(struct mpd_connection * connection) {
 	}
 
 	return stats;
+}
+
+
+struct mpd_stats *
+mpd_get_stats(struct mpd_connection * connection)
+{
+	return mpd_send_stats(connection)
+		? mpd_recv_stats(connection)
+		: NULL;
 }
 
 void mpd_stats_free(struct mpd_stats * stats) {

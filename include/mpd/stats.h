@@ -44,6 +44,9 @@ extern "C" {
 bool
 mpd_send_stats(struct mpd_connection *connection);
 
+struct mpd_stats *
+mpd_recv_stats(struct mpd_connection *connection);
+
 struct mpd_stats * mpd_get_stats(struct mpd_connection * connection);
 
 void mpd_stats_free(struct mpd_stats * stats);
