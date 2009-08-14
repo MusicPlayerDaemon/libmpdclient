@@ -51,11 +51,14 @@ struct mpd_stats * mpd_get_stats(struct mpd_connection * connection);
 
 void mpd_stats_free(struct mpd_stats * stats);
 
-int mpd_stats_get_number_of_artists(struct mpd_stats * stats);
+unsigned
+mpd_stats_get_number_of_artists(struct mpd_stats * stats);
 
-int mpd_stats_get_number_of_albums(struct mpd_stats * stats);
+unsigned
+mpd_stats_get_number_of_albums(struct mpd_stats * stats);
 
-int mpd_stats_get_number_of_songs(struct mpd_stats * stats);
+unsigned
+mpd_stats_get_number_of_songs(struct mpd_stats * stats);
 
 unsigned long mpd_stats_get_uptime(struct mpd_stats * stats);
 

@@ -39,9 +39,9 @@
 #include <string.h>
 
 struct mpd_stats {
-	int number_of_artists;
-	int number_of_albums;
-	int number_of_songs;
+	unsigned number_of_artists;
+	unsigned number_of_albums;
+	unsigned number_of_songs;
 	unsigned long uptime;
 	unsigned long db_update_time;
 	unsigned long play_time;
@@ -127,21 +127,24 @@ void mpd_stats_free(struct mpd_stats * stats) {
 	free(stats);
 }
 
-int mpd_stats_get_number_of_artists(struct mpd_stats * stats)
+unsigned
+mpd_stats_get_number_of_artists(struct mpd_stats * stats)
 {
 	assert(stats != NULL);
 
 	return stats->number_of_artists;
 }
 
-int mpd_stats_get_number_of_albums(struct mpd_stats * stats)
+unsigned
+mpd_stats_get_number_of_albums(struct mpd_stats * stats)
 {
 	assert(stats != NULL);
 
 	return stats->number_of_albums;
 }
 
-int mpd_stats_get_number_of_songs(struct mpd_stats * stats)
+unsigned
+mpd_stats_get_number_of_songs(struct mpd_stats * stats)
 {
 	assert(stats != NULL);
 
