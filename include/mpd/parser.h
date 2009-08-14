@@ -41,7 +41,7 @@ enum mpd_parser_result {
 
 	/**
 	 * MPD has returned "OK" or "list_OK" (check with
-	 * mpd_parser_is_partial()).
+	 * mpd_parser_is_discrete()).
 	 */
 	MPD_PARSER_SUCCESS,
 
