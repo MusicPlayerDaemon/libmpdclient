@@ -34,12 +34,6 @@
 #include <sys/select.h>
 
 /**
- * This special value for mpd_connection means that no #mpd_pair was
- * "unread".
- */
-#define PAIR_NONE ((struct mpd_pair *)0x1)
-
-/**
  * This opaque object represents a connection to a MPD server.  Call
  * mpd_connection_new() to create a new instance.
  */
@@ -101,6 +95,34 @@ struct mpd_connection {
 	 * list response.
 	 */
 	int command_list_remaining;
+
+	/**
+	 * Declare the validity of the #pair attribute.
+	 */
+	enum {
+		/**
+		 * There is no pair currently.
+		 */
+		PAIR_STATE_NONE,
+
+		/**
+		 * The NULL pair has been enqueued with
+		 * mpd_enqueue_pair().
+		 */
+		PAIR_STATE_NULL,
+
+		/**
+		 * A pair has been enqueued with mpd_enqueue_pair().
+		 */
+		PAIR_STATE_QUEUED,
+
+		/**
+		 * There is a pair, and it has been delivered to the
+		 * caller via mpd_recv_pair().  We're waiting for him
+		 * to call mpd_return_pair().
+		 */
+		PAIR_STATE_FLOATING,
+	} pair_state;
 
 	/**
 	 * The name-value pair which was "unread" with

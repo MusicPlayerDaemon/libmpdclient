@@ -101,7 +101,7 @@ mpd_recv_stats(struct mpd_connection *connection)
 			stats->db_play_time = strtol(pair->value,NULL,10);
 		}
 
-		mpd_pair_free(pair);
+		mpd_return_pair(connection, pair);
 	}
 
 	if (mpd_error_is_defined(&connection->error)) {

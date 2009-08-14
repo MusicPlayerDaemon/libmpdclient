@@ -123,7 +123,7 @@ mpd_connection_new(const char *host, int port, float timeout)
 	connection->parser = NULL;
 	connection->receiving = false;
 	connection->sending_command_list = false;
-	connection->pair = PAIR_NONE;
+	connection->pair_state = PAIR_STATE_NONE;
 	connection->request = NULL;
 
 	if (!mpd_socket_global_init(&connection->error))
@@ -200,13 +200,15 @@ mpd_clear_error(struct mpd_connection *connection)
 
 void mpd_connection_free(struct mpd_connection *connection)
 {
+	assert(connection->pair_state != PAIR_STATE_FLOATING);
+
 	if (connection->parser != NULL)
 		mpd_parser_free(connection->parser);
 
 	if (connection->async != NULL)
 		mpd_async_free(connection->async);
 
-	if (connection->pair != NULL && connection->pair != PAIR_NONE)
+	if (connection->pair_state == PAIR_STATE_QUEUED)
 		free(connection->pair);
 
 	if (connection->request) free(connection->request);

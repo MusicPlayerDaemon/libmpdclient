@@ -47,10 +47,10 @@ mpd_response_finish(struct mpd_connection *connection)
 	if (mpd_error_is_defined(&connection->error))
 		return false;
 
-	if (connection->pair == NULL)
+	if (connection->pair_state == PAIR_STATE_NULL)
 		/* reset the stored NULL pair because it will conflict
 		   with an assertion within the loop */
-		connection->pair = PAIR_NONE;
+		connection->pair_state = PAIR_STATE_NONE;
 
 	while (connection->receiving) {
 		assert(!mpd_error_is_defined(&connection->error));
@@ -62,7 +62,7 @@ mpd_response_finish(struct mpd_connection *connection)
 		       mpd_error_is_defined(&connection->error));
 
 		if (pair != NULL)
-			mpd_pair_free(pair);
+			mpd_return_pair(connection, pair);
 	}
 
 	return !mpd_error_is_defined(&connection->error);
@@ -99,7 +99,7 @@ mpd_response_next(struct mpd_connection *connection)
 
 		pair = mpd_recv_pair(connection);
 		if (pair != NULL)
-			mpd_pair_free(pair);
+			mpd_return_pair(connection, pair);
 	}
 
 	connection->discrete_finished = false;
@@ -115,7 +115,7 @@ mpd_recv_song_id(struct mpd_connection *connection)
 	pair = mpd_recv_pair_named(connection, "Id");
 	if (pair != NULL) {
 		id = atoi(pair->value);
-		mpd_pair_free(pair);
+		mpd_return_pair(connection, pair);
 	}
 
 	return id;
@@ -130,7 +130,7 @@ mpd_recv_update_id(struct mpd_connection *connection)
 	pair = mpd_recv_pair_named(connection, "updating_db");
 	if (pair != NULL) {
 		ret = atoi(pair->value);
-		mpd_pair_free(pair);
+		mpd_return_pair(connection, pair);
 	}
 
 	return ret;

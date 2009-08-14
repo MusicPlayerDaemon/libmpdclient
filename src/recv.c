@@ -47,13 +47,23 @@ mpd_recv_pair(struct mpd_connection *connection)
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
 
-	if (connection->pair != PAIR_NONE) {
+	/* check if the caller has returned the previous pair */
+	assert(connection->pair_state != PAIR_STATE_FLOATING);
+
+	if (connection->pair_state == PAIR_STATE_NULL) {
+		/* return the enqueued NULL pair */
+		connection->pair_state = PAIR_STATE_NONE;
+		return NULL;
+	}
+
+	if (connection->pair_state == PAIR_STATE_QUEUED) {
 		/* dequeue the pair from mpd_enqueue_pair() */
 		pair = connection->pair;
-		connection->pair = PAIR_NONE;
+		connection->pair_state = PAIR_STATE_FLOATING;
 		return pair;
 	}
 
+	assert(connection->pair_state == PAIR_STATE_NONE);
 
 	if (!connection->receiving ||
 	    (connection->sending_command_list &&
@@ -124,8 +134,13 @@ mpd_recv_pair(struct mpd_connection *connection)
 	case MPD_PARSER_PAIR:
 		pair = mpd_pair_new(mpd_parser_get_name(connection->parser),
 				    mpd_parser_get_value(connection->parser));
-		if (pair == NULL)
+		if (pair == NULL) {
 			mpd_error_code(&connection->error, MPD_ERROR_OOM);
+			return NULL;
+		}
+
+		connection->pair_state = PAIR_STATE_FLOATING;
+		connection->pair = pair;
 		return pair;
 	}
 
@@ -143,7 +158,7 @@ mpd_recv_pair_named(struct mpd_connection *connection, const char *name)
 		if (strcmp(pair->name, name) == 0)
 			return pair;
 
-		mpd_pair_free(pair);
+		mpd_return_pair(connection, pair);
 	}
 
 	return NULL;
@@ -160,7 +175,7 @@ mpd_recv_value_named(struct mpd_connection *connection, const char *name)
 		return NULL;
 
 	value = strdup(pair->value);
-	mpd_pair_free(pair);
+	mpd_return_pair(connection, pair);
 
 	if (value == NULL)
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
@@ -169,11 +184,35 @@ mpd_recv_value_named(struct mpd_connection *connection, const char *name)
 }
 
 void
+mpd_return_pair(struct mpd_connection *connection, struct mpd_pair *pair)
+{
+	assert(connection != NULL);
+	assert(pair != NULL);
+	assert(connection->pair_state == PAIR_STATE_FLOATING);
+	assert(pair == connection->pair);
+
+	connection->pair_state = PAIR_STATE_NONE;
+
+	mpd_pair_free(pair);
+}
+
+void
 mpd_enqueue_pair(struct mpd_connection *connection, struct mpd_pair *pair)
 {
 	assert(connection != NULL);
-	assert(pair == NULL || (pair->name != NULL && pair->value != NULL));
-	assert(connection->pair == PAIR_NONE);
 
-	connection->pair = pair;
+	if (pair != NULL) {
+		/* enqueue the pair which was returned by
+		   mpd_recv_pair() */
+		assert(connection->pair_state == PAIR_STATE_FLOATING);
+		assert(pair == connection->pair);
+		assert(pair->name != NULL && pair->value != NULL);
+
+		connection->pair_state = PAIR_STATE_QUEUED;
+	} else {
+		/* enqueue the NULL pair */
+		assert(connection->pair_state == PAIR_STATE_NONE);
+
+		connection->pair_state = PAIR_STATE_NULL;
+	}
 }

@@ -96,7 +96,7 @@ mpd_get_next_entity(struct mpd_connection *connection)
 	if (strcmp(pair->name, "file") == 0) {
 		entity = malloc(sizeof(*entity));
 		if (entity == NULL) {
-			mpd_pair_free(pair);
+			mpd_return_pair(connection, pair);
 			mpd_error_code(&connection->error, MPD_ERROR_OOM);
 			return NULL;
 		}
@@ -104,11 +104,11 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		entity->type = MPD_ENTITY_TYPE_SONG;
 		entity->info.song = mpd_song_new(pair->value);
 
-		mpd_pair_free(pair);
+		mpd_return_pair(connection, pair);
 	} else if (strcmp(pair->name, "directory") == 0) {
 		entity = malloc(sizeof(*entity));
 		if (entity == NULL) {
-			mpd_pair_free(pair);
+			mpd_return_pair(connection, pair);
 			mpd_error_code(&connection->error, MPD_ERROR_OOM);
 			return NULL;
 		}
@@ -117,11 +117,11 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		entity->info.directory = mpd_directory_new();
 		entity->info.directory->path = str_pool_dup(pair->value);
 
-		mpd_pair_free(pair);
+		mpd_return_pair(connection, pair);
 	} else if (strcmp(pair->name, "playlist") == 0) {
 		entity = malloc(sizeof(*entity));
 		if (entity == NULL) {
-			mpd_pair_free(pair);
+			mpd_return_pair(connection, pair);
 			mpd_error_code(&connection->error, MPD_ERROR_OOM);
 			return NULL;
 		}
@@ -130,9 +130,9 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		entity->info.playlistFile = mpd_stored_playlist_new();
 		entity->info.playlistFile->path = str_pool_dup(pair->value);
 
-		mpd_pair_free(pair);
+		mpd_return_pair(connection, pair);
 	} else {
-		mpd_pair_free(pair);
+		mpd_return_pair(connection, pair);
 
 		mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);
 		mpd_error_message(&connection->error,
@@ -153,7 +153,7 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		else if (entity->type == MPD_ENTITY_TYPE_PLAYLISTFILE) {
 		}
 
-		mpd_pair_free(pair);
+		mpd_return_pair(connection, pair);
 	}
 
 	if (mpd_error_is_defined(&connection->error)) {

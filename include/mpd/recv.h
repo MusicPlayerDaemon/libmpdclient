@@ -40,8 +40,8 @@ extern "C" {
  * Reads the next #mpd_pair from the server.  Returns NULL if there
  * are no more pairs.
  *
- * The caller is responsible for freeing the returned object with
- * mpd_pair_free().
+ * The caller must dispose the pair with either mpd_return_pair() or
+ * mpd_enqueue_pair().
  */
 struct mpd_pair *
 mpd_recv_pair(struct mpd_connection *connection);
@@ -60,6 +60,14 @@ mpd_recv_pair_named(struct mpd_connection *connection, const char *name);
  */
 char *
 mpd_recv_value_named(struct mpd_connection *connection, const char *name);
+
+/**
+ * Indicates that the pair object is not needed anymore, and can be
+ * freed.  You must free the previous #mpd_pair object before calling
+ * mpd_recv_pair() again.
+ */
+void
+mpd_return_pair(struct mpd_connection *connection, struct mpd_pair *pair);
 
 /**
  * Unreads a #mpd_pair.  You may unread only the one pair you just got

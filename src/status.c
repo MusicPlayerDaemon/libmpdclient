@@ -220,7 +220,7 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 			}
 		}
 
-		mpd_pair_free(pair);
+		mpd_return_pair(connection, pair);
 	}
 
 	if (mpd_error_is_defined(&connection->error)) {

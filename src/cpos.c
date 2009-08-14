@@ -48,12 +48,12 @@ mpd_recv_cpos(struct mpd_connection *connection, struct mpd_cpos *cpos)
 		return false;
 
 	cpos->position = atoi(pair->value);
-	mpd_pair_free(pair);
+	mpd_return_pair(connection, pair);
 
 	while ((pair = mpd_recv_pair(connection)) != NULL) {
 		if (strcmp(pair->name, "Id") == 0) {
 			cpos->id = atoi(pair->value);
-			mpd_pair_free(pair);
+			mpd_return_pair(connection, pair);
 		} else {
 			mpd_enqueue_pair(connection, pair);
 			break;

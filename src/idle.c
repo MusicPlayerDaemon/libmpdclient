@@ -66,7 +66,8 @@ mpd_recv_idle(struct mpd_connection *connection)
 		for (unsigned i = 0; idle_names[i] != NULL; ++i)
 			if (strcmp(pair->value, idle_names[i]) == 0)
 				flags |= (1 << i);
-		mpd_pair_free(pair);
+
+		mpd_return_pair(connection, pair);
 	}
 
 	return flags;
