@@ -79,7 +79,9 @@ mpd_command_list_end(struct mpd_connection *connection)
 		return false;
 	}
 
-	success = mpd_send_command2(connection, "command_list_end");
+	connection->sending_command_list = false;
+	success = mpd_send_command(connection, "command_list_end", NULL);
+	connection->sending_command_list = true;
 	if (!success)
 		return false;
 
