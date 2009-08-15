@@ -36,9 +36,7 @@
 /* mpd_PlaylistFile
  * stores info about playlist file returned by lsinfo
  */
-struct mpd_stored_playlist {
-	char *path;
-};
+struct mpd_stored_playlist;
 
 #ifdef __cplusplus
 extern "C" {

@@ -37,6 +37,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+struct mpd_stored_playlist {
+	char *path;
+};
+
 struct mpd_stored_playlist *
 mpd_stored_playlist_new(const char *path)
 {
