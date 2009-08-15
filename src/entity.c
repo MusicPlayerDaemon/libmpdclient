@@ -114,8 +114,7 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		}
 
 		entity->type = MPD_ENTITY_TYPE_DIRECTORY;
-		entity->info.directory = mpd_directory_new();
-		entity->info.directory->path = str_pool_get(pair->value);
+		entity->info.directory = mpd_directory_new(pair->value);
 
 		mpd_return_pair(connection, pair);
 	} else if (strcmp(pair->name, "playlist") == 0) {

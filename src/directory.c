@@ -35,16 +35,29 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct mpd_directory *
-mpd_directory_new(void)
+mpd_directory_new(const char *path)
 {
-	struct mpd_directory *directory = malloc(sizeof(*directory));
+	struct mpd_directory *directory;
+
+	assert(path != NULL);
+	assert(*path != '/');
+	assert(*path != 0);
+	assert(path[strlen(path) - 1] != '/');
+
+	directory = malloc(sizeof(*directory));
 	if (directory == NULL)
 		/* out of memory */
 		return NULL;
 
-	directory->path = NULL;
+	directory->path = str_pool_get(path);
+	if (directory->path == NULL) {
+		/* out of memory */
+		free(directory);
+		return NULL;
+	}
 
 	return directory;
 }
@@ -66,13 +79,17 @@ mpd_directory_dup(const struct mpd_directory *directory)
 
 	assert(directory != NULL);
 
-	ret = mpd_directory_new();
+	ret = malloc(sizeof(*directory));
 	if (ret == NULL)
 		/* out of memory */
 		return NULL;
 
-	if (directory->path)
-		ret->path = str_pool_dup(directory->path);
+	ret->path = str_pool_dup(directory->path);
+	if (directory->path == NULL) {
+		/* out of memory */
+		free(ret);
+		return NULL;
+	}
 
 	return ret;
 }

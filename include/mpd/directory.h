@@ -53,10 +53,12 @@ extern "C" {
  * Allocates a new directory object.  Call mpd_directory_free() to
  * dispose it.
  *
+ * @param path the full path of the directory, which must not begin or
+ * end with a slash
  * @return the new object, or NULL on out of memory
  */
 struct mpd_directory *
-mpd_directory_new(void);
+mpd_directory_new(const char *path);
 
 /**
  * Duplicates a #mpd_directory object.
