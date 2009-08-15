@@ -73,10 +73,9 @@ mpd_directory_new(const char *path)
 void mpd_directory_free(struct mpd_directory *directory)
 {
 	assert(directory != NULL);
+	assert(directory->path != NULL);
 
-	if (directory->path)
-		str_pool_put(directory->path);
-
+	str_pool_put(directory->path);
 	free(directory);
 }
 
@@ -86,6 +85,7 @@ mpd_directory_dup(const struct mpd_directory *directory)
 	struct mpd_directory *ret;
 
 	assert(directory != NULL);
+	assert(directory->path != NULL);
 
 	ret = malloc(sizeof(*directory));
 	if (ret == NULL)
