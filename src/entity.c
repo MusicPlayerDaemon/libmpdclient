@@ -42,6 +42,10 @@ mpd_entity_free(struct mpd_entity *entity) {
 	assert(entity != NULL);
 
 	switch (entity->type) {
+	case MPD_ENTITY_TYPE_UNKNOWN:
+		/* nothing to free */
+		break;
+
 	case MPD_ENTITY_TYPE_DIRECTORY:
 		mpd_directory_free(entity->info.directory);
 		break;
@@ -129,12 +133,16 @@ mpd_recv_entity(struct mpd_connection *connection)
 
 		mpd_return_pair(connection, pair);
 	} else {
-		mpd_return_pair(connection, pair);
+		entity = malloc(sizeof(*entity));
+		if (entity == NULL) {
+			mpd_return_pair(connection, pair);
+			mpd_error_code(&connection->error, MPD_ERROR_OOM);
+			return NULL;
+		}
 
-		mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);
-		mpd_error_message(&connection->error,
-				  "problem parsing song info");
-		return NULL;
+		entity->type = MPD_ENTITY_TYPE_UNKNOWN;
+
+		mpd_return_pair(connection, pair);
 	}
 
 	while ((pair = mpd_recv_pair(connection)) != NULL) {

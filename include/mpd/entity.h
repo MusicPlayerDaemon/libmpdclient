@@ -42,6 +42,12 @@
  */
 enum mpd_entity_type {
 	/**
+	 * The type of the entity received from MPD is not implemented
+	 * in this version of libmpdclient.
+	 */
+	MPD_ENTITY_TYPE_UNKNOWN,
+
+	/**
 	 * A directory (#mpd_directory) containing more entities.
 	 */
 	MPD_ENTITY_TYPE_DIRECTORY,
