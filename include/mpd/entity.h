@@ -107,7 +107,7 @@ mpd_entity_free(struct mpd_entity *entity);
  * finished
  */
 struct mpd_entity *
-mpd_get_next_entity(struct mpd_connection *connection);
+mpd_recv_entity(struct mpd_connection *connection);
 
 #ifdef __cplusplus
 }

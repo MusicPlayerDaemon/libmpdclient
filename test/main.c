@@ -201,7 +201,7 @@ test_currentsong(struct mpd_connection *conn)
 
 	CHECK_CONNECTION(conn);
 
-	entity = mpd_get_next_entity(conn);
+	entity = mpd_recv_entity(conn);
 	if (entity) {
 		song = entity->info.song;
 		if (entity->type != MPD_ENTITY_TYPE_SONG || !song) {
@@ -254,7 +254,7 @@ test_list_status_currentsong(struct mpd_connection *conn)
 
 	mpd_response_next(conn);
 
-	entity = mpd_get_next_entity(conn);
+	entity = mpd_recv_entity(conn);
 	if (entity) {
 		song = entity->info.song;
 		if (entity->type != MPD_ENTITY_TYPE_SONG || !song) {
@@ -282,7 +282,7 @@ test_lsinfo(struct mpd_connection *conn, const char *path)
 	mpd_send_lsinfo(conn, path);
 	CHECK_CONNECTION(conn);
 
-	while ((entity = mpd_get_next_entity(conn))) {
+	while ((entity = mpd_recv_entity(conn)) != NULL) {
 		if (entity->type == MPD_ENTITY_TYPE_SONG) {
 			struct mpd_song *song = entity->info.song;
 			print_song (song);

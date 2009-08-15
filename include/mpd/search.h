@@ -48,7 +48,7 @@ extern "C" {
  *
  * Search for songs in the db given certain constraints
  * Use this method with mpd_search_add_constraint and mpd_search_commit
- * Use mpd_get_next_entity to get results of this method
+ * Use mpd_recv_entity to get results of this method
  */
 bool
 mpd_search_db_songs(struct mpd_connection *connection, bool exact);
@@ -59,7 +59,7 @@ mpd_search_db_songs(struct mpd_connection *connection, bool exact);
  *
  * Search for songs in the playlist given certain constraints
  * Use this method with mpd_search_add_constraint and mpd_search_commit
- * Use mpd_get_next_entity to get results of this method
+ * Use mpd_recv_entity to get results of this method
  */
 bool
 mpd_search_playlist_songs(struct mpd_connection *connection, bool exact);

@@ -120,7 +120,7 @@ int main(int argc, char ** argv) {
 
 		mpd_response_next(conn);
 
-		while((entity = mpd_get_next_entity(conn))) {
+		while ((entity = mpd_recv_entity(conn)) != NULL) {
 			struct mpd_song * song = entity->info.song;
 
 			if (entity->type != MPD_ENTITY_TYPE_SONG) {
@@ -171,7 +171,7 @@ int main(int argc, char ** argv) {
 			return -1;
 		}
 
-		while((entity = mpd_get_next_entity(conn))) {
+		while ((entity = mpd_recv_entity(conn)) != NULL) {
 			if (entity->type == MPD_ENTITY_TYPE_SONG) {
 				struct mpd_song * song = entity->info.song;
 

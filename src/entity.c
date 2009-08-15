@@ -80,7 +80,7 @@ parse_song_pair(struct mpd_song *song, const char *name, const char *value)
 }
 
 struct mpd_entity *
-mpd_get_next_entity(struct mpd_connection *connection)
+mpd_recv_entity(struct mpd_connection *connection)
 {
 	struct mpd_pair *pair;
 	struct mpd_entity *entity;
@@ -158,7 +158,7 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		return NULL;
 	}
 
-	/* unread this pair for the next mpd_get_next_entity() call */
+	/* unread this pair for the next mpd_recv_entity() call */
 	mpd_enqueue_pair(connection, pair);
 
 	return entity;
