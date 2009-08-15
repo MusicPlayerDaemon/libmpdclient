@@ -31,7 +31,6 @@
 */
 
 #include <mpd/stored_playlist.h>
-#include "str_pool.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -56,7 +55,7 @@ mpd_stored_playlist_new(const char *path)
 		/* out of memory */
 		return NULL;
 
-	playlist->path = str_pool_get(path);
+	playlist->path = strdup(path);
 	if (playlist->path == NULL) {
 		/* out of memory */
 		free(playlist);
@@ -72,25 +71,17 @@ mpd_stored_playlist_free(struct mpd_stored_playlist *playlist)
 	assert(playlist != NULL);
 	assert(playlist->path != NULL);
 
-	str_pool_put(playlist->path);
+	free(playlist->path);
 	free(playlist);
 }
 
 struct mpd_stored_playlist *
 mpd_stored_playlist_dup(const struct mpd_stored_playlist *playlist)
 {
-	struct mpd_stored_playlist *ret;
-
 	assert(playlist != NULL);
 	assert(playlist->path != NULL);
 
-	ret = malloc(sizeof(*ret));
-	if (ret == NULL)
-		/* out of memory */
-		return NULL;
-
-	ret->path = str_pool_dup(playlist->path);
-	return ret;
+	return mpd_stored_playlist_new(playlist->path);
 }
 
 const char *
