@@ -33,7 +33,6 @@
 #include <mpd/entity.h>
 #include <mpd/stored_playlist.h>
 #include "internal.h"
-#include "str_pool.h"
 
 #include <stdlib.h>
 #include <string.h>
