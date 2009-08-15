@@ -34,16 +34,10 @@
 #define MPD_DIRECTORY_H
 
 /**
- * A directory object.  This is a container for more songs,
+ * An opaque directory object.  This is a container for more songs,
  * directories or playlists.
  */
-struct mpd_directory {
-	/**
-	 * The full path of this directory.  It does not begin with a
-	 * slash.
-	 */
-	char *path;
-};
+struct mpd_directory;
 
 #ifdef __cplusplus
 extern "C" {

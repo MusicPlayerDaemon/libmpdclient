@@ -37,6 +37,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+struct mpd_directory {
+	/**
+	 * The full path of this directory.  It does not begin with a
+	 * slash.
+	 */
+	char *path;
+};
+
 struct mpd_directory *
 mpd_directory_new(const char *path)
 {
