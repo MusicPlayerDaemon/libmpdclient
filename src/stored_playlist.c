@@ -35,16 +35,29 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct mpd_stored_playlist *
-mpd_stored_playlist_new(void)
+mpd_stored_playlist_new(const char *path)
 {
-	struct mpd_stored_playlist *playlist = malloc(sizeof(*playlist));
+	struct mpd_stored_playlist *playlist;
+
+	assert(path != NULL);
+	assert(*path != '/');
+	assert(*path != 0);
+	assert(path[strlen(path) - 1] != '/');
+
+	playlist = malloc(sizeof(*playlist));
 	if (playlist == NULL)
 		/* out of memory */
 		return NULL;
 
-	playlist->path = NULL;
+	playlist->path = str_pool_get(path);
+	if (playlist->path == NULL) {
+		/* out of memory */
+		free(playlist);
+		return NULL;
+	}
 
 	return playlist;
 }
@@ -53,10 +66,9 @@ void
 mpd_stored_playlist_free(struct mpd_stored_playlist *playlist)
 {
 	assert(playlist != NULL);
+	assert(playlist->path != NULL);
 
-	if (playlist->path)
-		str_pool_put(playlist->path);
-
+	str_pool_put(playlist->path);
 	free(playlist);
 }
 
@@ -66,15 +78,14 @@ mpd_stored_playlist_dup(const struct mpd_stored_playlist *playlist)
 	struct mpd_stored_playlist *ret;
 
 	assert(playlist != NULL);
+	assert(playlist->path != NULL);
 
-	ret = mpd_stored_playlist_new();
+	ret = malloc(sizeof(*ret));
 	if (ret == NULL)
 		/* out of memory */
 		return NULL;
 
-	if (playlist->path)
-		ret->path = str_pool_dup(playlist->path);
-
+	ret->path = str_pool_dup(playlist->path);
 	return ret;
 }
 

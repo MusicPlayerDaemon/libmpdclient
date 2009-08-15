@@ -126,8 +126,7 @@ mpd_get_next_entity(struct mpd_connection *connection)
 		}
 
 		entity->type = MPD_ENTITY_TYPE_PLAYLISTFILE;
-		entity->info.playlistFile = mpd_stored_playlist_new();
-		entity->info.playlistFile->path = str_pool_get(pair->value);
+		entity->info.playlistFile = mpd_stored_playlist_new(pair->value);
 
 		mpd_return_pair(connection, pair);
 	} else {

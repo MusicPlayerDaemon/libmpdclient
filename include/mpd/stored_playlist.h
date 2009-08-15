@@ -47,9 +47,11 @@ extern "C" {
 /* mpd_stored_playlist_new
  * allocates memory for new mpd_PlaylistFile, path is set to NULL
  * free this memory with mpd_stored_playlist_free
+ *
+ * @param the path name of this playlist file
  */
 struct mpd_stored_playlist *
-mpd_stored_playlist_new(void);
+mpd_stored_playlist_new(const char *path);
 
 /* mpd_freePlaylist
  * free memory allocated for freePlaylistFile, will also free
