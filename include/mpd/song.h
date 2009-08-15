@@ -41,8 +41,10 @@
 #define MPD_SONG_NO_NUM		-1
 #define MPD_SONG_NO_ID		-1
 
-/* mpd_Song
- * for storing song info returned by mpd
+/**
+ * An opaque representation for a song in MPD's database or playlist.
+ * Use the functions provided by this header to access the object's
+ * attributes.
  */
 struct mpd_song;
 
@@ -50,27 +52,25 @@ struct mpd_song;
 extern "C" {
 #endif
 
-/* mpd_song_new
- * use to allocate memory for a new mpd_Song
- * file, artist, etc all initialized to NULL
- * if your going to assign values to file, artist, etc
- * be sure to malloc or strdup the memory
- * use mpd_song_free to free the memory for the mpd_Song, it will also
- * free memory for file, artist, etc, so don't do it yourself
+/**
+ * Allocate a new #mpd_song object.  Use mpd_song_free() to release
+ * it when you don't need it anymore.
  *
  * @param uri the song URI
+ * @returns the new object, or NULL if out of memory
  */
 struct mpd_song *
 mpd_song_new(const char *uri);
 
-/* mpd_song_free
- * use to free memory allocated by mpd_song_new
- * also it will free memory pointed to by file, artist, etc, so be careful
+/**
+ * Free memory allocated by the #mpd_song object.
  */
 void mpd_song_free(struct mpd_song *song);
 
-/* mpd_song_dup
- * works like strDup, but for a mpd_Song
+/**
+ * Duplicates the specified #mpd_song object.
+ *
+ * @returns the copy, or NULL if out of memory
  */
 struct mpd_song *
 mpd_song_dup(const struct mpd_song *song);
