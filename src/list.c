@@ -85,6 +85,6 @@ mpd_command_list_end(struct mpd_connection *connection)
 	if (!success)
 		return false;
 
-	connection->receiving = true;
+	assert(connection->receiving);
 	return true;
 }
