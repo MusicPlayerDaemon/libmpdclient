@@ -64,6 +64,13 @@ mpd_stored_playlist_free(struct mpd_stored_playlist *playlist);
 struct mpd_stored_playlist *
 mpd_stored_playlist_dup(const struct mpd_stored_playlist *playlist);
 
+/**
+ * Returns the path name of this playlist file.  It does not begin
+ * with a slash.
+ */
+const char *
+mpd_stored_playlist_get_path(const struct mpd_stored_playlist *playlist);
+
 #ifdef __cplusplus
 }
 #endif

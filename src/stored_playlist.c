@@ -77,3 +77,11 @@ mpd_stored_playlist_dup(const struct mpd_stored_playlist *playlist)
 
 	return ret;
 }
+
+const char *
+mpd_stored_playlist_get_path(const struct mpd_stored_playlist *playlist)
+{
+	assert(playlist != NULL);
+
+	return playlist->path;
+}

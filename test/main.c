@@ -291,7 +291,7 @@ test_lsinfo(struct mpd_connection *conn, const char *path)
 			LOG_INFO("directory: %s", mpd_directory_get_path(dir));
 		} else if (entity->type == MPD_ENTITY_TYPE_PLAYLISTFILE) {
 			struct mpd_stored_playlist * pl = entity->info.playlistFile;
-			LOG_INFO("playlist: %s", pl->path);
+			LOG_INFO("playlist: %s", mpd_stored_playlist_get_path(pl));
 		} else {
 			LOG_ERROR("Unknown type: %d", entity->type);
 			mpd_entity_free(entity);

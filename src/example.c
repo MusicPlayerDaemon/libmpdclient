@@ -190,7 +190,8 @@ int main(int argc, char ** argv) {
 				 MPD_ENTITY_TYPE_PLAYLISTFILE) {
 				struct mpd_stored_playlist *pl =
 					entity->info.playlistFile;
-				printf("playlist: %s\n",pl->path);
+				printf("playlist: %s\n",
+				       mpd_stored_playlist_get_path(pl));
 			}
 
 			mpd_entity_free(entity);
