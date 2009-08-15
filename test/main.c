@@ -288,7 +288,7 @@ test_lsinfo(struct mpd_connection *conn, const char *path)
 			print_song (song);
 		} else if (entity->type == MPD_ENTITY_TYPE_DIRECTORY) {
 			struct mpd_directory *dir = entity->info.directory;
-			LOG_INFO("directory: %s", dir->path);
+			LOG_INFO("directory: %s", mpd_directory_get_path(dir));
 		} else if (entity->type == MPD_ENTITY_TYPE_PLAYLISTFILE) {
 			struct mpd_stored_playlist * pl = entity->info.playlistFile;
 			LOG_INFO("playlist: %s", pl->path);

@@ -71,6 +71,13 @@ mpd_directory_dup(const struct mpd_directory *directory);
  */
 void mpd_directory_free(struct mpd_directory *directory);
 
+/**
+ * Returns the full path of this directory.  It does not begin with a
+ * slash.
+ */
+const char *
+mpd_directory_get_path(const struct mpd_directory *directory);
+
 #ifdef __cplusplus
 }
 #endif

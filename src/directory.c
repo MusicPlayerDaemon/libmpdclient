@@ -76,3 +76,13 @@ mpd_directory_dup(const struct mpd_directory *directory)
 
 	return ret;
 }
+
+const char *
+mpd_directory_get_path(const struct mpd_directory *directory)
+{
+	assert(directory != NULL);
+	assert(directory->path != NULL);
+
+	return directory->path;
+}
+

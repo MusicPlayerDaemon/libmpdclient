@@ -184,7 +184,7 @@ int main(int argc, char ** argv) {
 			else if (entity->type == MPD_ENTITY_TYPE_DIRECTORY) {
 				struct mpd_directory *dir =
 					entity->info.directory;
-				printf("directory: %s\n",dir->path);
+				printf("directory: %s\n", mpd_directory_get_path(dir));
 			}
 			else if (entity->type ==
 				 MPD_ENTITY_TYPE_PLAYLISTFILE) {
