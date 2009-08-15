@@ -37,6 +37,8 @@
 #include <mpd/directory.h>
 #include <mpd/client.h>
 
+struct mpd_pair;
+
 /**
  * The type of a #mpd_entity object.
  */
@@ -105,6 +107,26 @@ extern "C" {
  */
 void
 mpd_entity_free(struct mpd_entity *entity);
+
+/**
+ * Begins parsing a new entity.
+ *
+ * @param pair the first pair in this entity
+ * @return the new #mpd_entity object, or NULL on error (out of memory)
+ */
+struct mpd_entity *
+mpd_entity_begin(const struct mpd_pair *pair);
+
+/**
+ * Parses the pair, adding its information to the specified
+ * #mpd_entity object.
+ *
+ * @return true if the pair was parsed and added to the entity (or if
+ * the pair was not understood and ignored), false if this pair is the
+ * beginning of the next entity
+ */
+bool
+mpd_entity_feed(struct mpd_entity *entity, const struct mpd_pair *pair);
 
 /**
  * Receives the next entity from the MPD server.
