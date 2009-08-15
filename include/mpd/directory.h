@@ -47,8 +47,8 @@ extern "C" {
  * Allocates a new directory object.  Call mpd_directory_free() to
  * dispose it.
  *
- * @param path the full path of the directory, which must not begin or
- * end with a slash
+ * @param path the path of the directory relative to the MPD music
+ * directory.  It must not begin or end with a slash
  * @return the new object, or NULL on out of memory
  */
 struct mpd_directory *
@@ -68,8 +68,8 @@ mpd_directory_dup(const struct mpd_directory *directory);
 void mpd_directory_free(struct mpd_directory *directory);
 
 /**
- * Returns the full path of this directory.  It does not begin with a
- * slash.
+ * Returns the path of this directory, relative to the MPD music
+ * directory.  It does not begin with a slash.
  */
 const char *
 mpd_directory_get_path(const struct mpd_directory *directory);
