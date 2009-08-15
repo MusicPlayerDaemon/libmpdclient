@@ -33,8 +33,10 @@
 #ifndef LIBMPDCLIENT_STORED_PLAYLIST_H
 #define LIBMPDCLIENT_STORED_PLAYLIST_H
 
-/* mpd_PlaylistFile
- * stores info about playlist file returned by lsinfo
+/**
+ * An opaque representation for a stored playlist stored in MPD's
+ * playlist directory.  Use the functions provided by this header to
+ * access the object's attributes.
  */
 struct mpd_stored_playlist;
 
@@ -42,24 +44,28 @@ struct mpd_stored_playlist;
 extern "C" {
 #endif
 
-/* mpd_stored_playlist_new
- * allocates memory for new mpd_PlaylistFile, path is set to NULL
- * free this memory with mpd_stored_playlist_free
+/**
+ * Allocate a new #mpd_stored_playlist object.  Use
+ * mpd_stored_playlist_free() to release it when you don't need it
+ * anymore.
  *
- * @param the path name of this playlist file
+ * @param path the path of the playlist fle relative to the MPD
+ * playlist directory.  It must not begin or end with a slash
+ * @returns the new object, or NULL if out of memory
  */
 struct mpd_stored_playlist *
 mpd_stored_playlist_new(const char *path);
 
-/* mpd_freePlaylist
- * free memory allocated for freePlaylistFile, will also free
- * path, so be careful
+/**
+ * Free memory allocated by the #mpd_stored_playlist object.
  */
 void
 mpd_stored_playlist_free(struct mpd_stored_playlist *playlist);
 
-/* mpd_stored_playlist_dup
- * works like strdup, but for mpd_PlaylistFile
+/**
+ * Duplicates a #mpd_stored_playlist object.
+ *
+ * @return the new object, or NULL on out of memory
  */
 struct mpd_stored_playlist *
 mpd_stored_playlist_dup(const struct mpd_stored_playlist *playlist);
