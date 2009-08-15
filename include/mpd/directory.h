@@ -63,7 +63,7 @@ struct mpd_directory *
 mpd_directory_dup(const struct mpd_directory *directory);
 
 /**
- * Free memory allocated by the #mpd_directory object.  used to free
+ * Free memory allocated by the #mpd_directory object.
  */
 void mpd_directory_free(struct mpd_directory *directory);
 
