@@ -62,6 +62,31 @@ mpd_entity_free(struct mpd_entity *entity) {
 	free(entity);
 }
 
+static bool
+mpd_entity_feed_first(struct mpd_entity *entity, const struct mpd_pair *pair)
+{
+	if (strcmp(pair->name, "file") == 0) {
+		entity->type = MPD_ENTITY_TYPE_SONG;
+		entity->info.song = mpd_song_new(pair->value);
+		if (entity->info.song == NULL)
+			return false;
+	} else if (strcmp(pair->name, "directory") == 0) {
+		entity->type = MPD_ENTITY_TYPE_DIRECTORY;
+		entity->info.directory = mpd_directory_new(pair->value);
+		if (entity->info.directory == NULL)
+			return false;
+	} else if (strcmp(pair->name, "playlist") == 0) {
+		entity->type = MPD_ENTITY_TYPE_PLAYLISTFILE;
+		entity->info.playlistFile = mpd_stored_playlist_new(pair->value);
+		if (entity->info.playlistFile == NULL)
+			return false;
+	} else {
+		entity->type = MPD_ENTITY_TYPE_UNKNOWN;
+	}
+
+	return true;
+}
+
 static void
 parse_song_pair(struct mpd_song *song, const char *name, const char *value)
 {
@@ -88,6 +113,7 @@ mpd_recv_entity(struct mpd_connection *connection)
 {
 	struct mpd_pair *pair;
 	struct mpd_entity *entity;
+	bool success;
 
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
@@ -104,25 +130,13 @@ mpd_recv_entity(struct mpd_connection *connection)
 		return NULL;
 	}
 
-	if (strcmp(pair->name, "file") == 0) {
-		entity->type = MPD_ENTITY_TYPE_SONG;
-		entity->info.song = mpd_song_new(pair->value);
+	success = mpd_entity_feed_first(entity, pair);
+	mpd_return_pair(connection, pair);
 
-		mpd_return_pair(connection, pair);
-	} else if (strcmp(pair->name, "directory") == 0) {
-		entity->type = MPD_ENTITY_TYPE_DIRECTORY;
-		entity->info.directory = mpd_directory_new(pair->value);
-
-		mpd_return_pair(connection, pair);
-	} else if (strcmp(pair->name, "playlist") == 0) {
-		entity->type = MPD_ENTITY_TYPE_PLAYLISTFILE;
-		entity->info.playlistFile = mpd_stored_playlist_new(pair->value);
-
-		mpd_return_pair(connection, pair);
-	} else {
-		entity->type = MPD_ENTITY_TYPE_UNKNOWN;
-
-		mpd_return_pair(connection, pair);
+	if (!success) {
+		free(entity);
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return NULL;
 	}
 
 	while ((pair = mpd_recv_pair(connection)) != NULL) {
