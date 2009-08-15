@@ -96,50 +96,30 @@ mpd_recv_entity(struct mpd_connection *connection)
 	if (pair == NULL)
 		return NULL;
 
-	if (strcmp(pair->name, "file") == 0) {
-		entity = malloc(sizeof(*entity));
-		if (entity == NULL) {
-			mpd_return_pair(connection, pair);
-			mpd_error_code(&connection->error, MPD_ERROR_OOM);
-			return NULL;
-		}
+	entity = malloc(sizeof(*entity));
+	if (entity == NULL) {
+		/* out of memory */
+		mpd_return_pair(connection, pair);
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return NULL;
+	}
 
+	if (strcmp(pair->name, "file") == 0) {
 		entity->type = MPD_ENTITY_TYPE_SONG;
 		entity->info.song = mpd_song_new(pair->value);
 
 		mpd_return_pair(connection, pair);
 	} else if (strcmp(pair->name, "directory") == 0) {
-		entity = malloc(sizeof(*entity));
-		if (entity == NULL) {
-			mpd_return_pair(connection, pair);
-			mpd_error_code(&connection->error, MPD_ERROR_OOM);
-			return NULL;
-		}
-
 		entity->type = MPD_ENTITY_TYPE_DIRECTORY;
 		entity->info.directory = mpd_directory_new(pair->value);
 
 		mpd_return_pair(connection, pair);
 	} else if (strcmp(pair->name, "playlist") == 0) {
-		entity = malloc(sizeof(*entity));
-		if (entity == NULL) {
-			mpd_return_pair(connection, pair);
-			mpd_error_code(&connection->error, MPD_ERROR_OOM);
-			return NULL;
-		}
-
 		entity->type = MPD_ENTITY_TYPE_PLAYLISTFILE;
 		entity->info.playlistFile = mpd_stored_playlist_new(pair->value);
 
 		mpd_return_pair(connection, pair);
 	} else {
-		entity = malloc(sizeof(*entity));
-		if (entity == NULL) {
-			mpd_return_pair(connection, pair);
-			mpd_error_code(&connection->error, MPD_ERROR_OOM);
-			return NULL;
-		}
-
 		entity->type = MPD_ENTITY_TYPE_UNKNOWN;
 
 		mpd_return_pair(connection, pair);
