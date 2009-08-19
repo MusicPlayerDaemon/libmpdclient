@@ -31,10 +31,13 @@
 */
 
 #include <mpd/song.h>
+#include <mpd/pair.h>
 #include "str_pool.h"
+#include "internal.h"
 
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct mpd_tag_value {
 	struct mpd_tag_value *next;
@@ -262,4 +265,47 @@ int
 mpd_song_get_id(const struct mpd_song *song)
 {
 	return song->id;
+}
+
+struct mpd_song *
+mpd_song_begin(const struct mpd_pair *pair)
+{
+	assert(pair != NULL);
+	assert(pair->name != NULL);
+	assert(pair->value != NULL);
+
+	if (strcmp(pair->name, "file") != 0)
+		return NULL;
+
+	return mpd_song_new(pair->value);
+}
+
+bool
+mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair)
+{
+	assert(pair != NULL);
+	assert(pair->name != NULL);
+	assert(pair->value != NULL);
+
+	if (strcmp(pair->name, "file") == 0)
+		return false;
+
+	if (*pair->value == 0)
+		return true;
+
+	for (unsigned i = 0; i < MPD_TAG_COUNT; ++i) {
+		if (strcmp(pair->name, mpd_tag_type_names[i]) == 0) {
+			mpd_song_add_tag(song, (enum mpd_tag_type)i, pair->value);
+			return true;
+		}
+	}
+
+	if (strcmp(pair->name, "Time") == 0)
+		mpd_song_set_time(song, atoi(pair->value));
+	else if (strcmp(pair->name, "Pos") == 0)
+		mpd_song_set_pos(song, atoi(pair->value));
+	else if (strcmp(pair->name, "Id") == 0)
+		mpd_song_set_id(song, atoi(pair->value));
+
+	return true;
 }

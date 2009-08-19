@@ -41,6 +41,8 @@
 #define MPD_SONG_NO_NUM		-1
 #define MPD_SONG_NO_ID		-1
 
+struct mpd_pair;
+
 /**
  * An opaque representation for a song in MPD's database or playlist.
  * Use the functions provided by this header to access the object's
@@ -154,6 +156,27 @@ mpd_song_set_id(struct mpd_song *song, int id);
  */
 int
 mpd_song_get_id(const struct mpd_song *song);
+
+/**
+ * Begins parsing a new song.
+ *
+ * @param pair the first pair in this song (name must be "file")
+ * @return the new #mpd_entity object, or NULL on error (out of
+ * memory, or pair name is not "file")
+ */
+struct mpd_song *
+mpd_song_begin(const struct mpd_pair *pair);
+
+/**
+ * Parses the pair, adding its information to the specified
+ * #mpd_song object.
+ *
+ * @return true if the pair was parsed and added to the song (or if
+ * the pair was not understood and ignored), false if this pair is the
+ * beginning of the next song
+ */
+bool
+mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair);
 
 #ifdef __cplusplus
 }
