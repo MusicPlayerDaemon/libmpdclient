@@ -62,6 +62,41 @@ mpd_entity_free(struct mpd_entity *entity) {
 	free(entity);
 }
 
+enum mpd_entity_type
+mpd_entity_get_type(const struct mpd_entity *entity)
+{
+	assert(entity != NULL);
+
+	return entity->type;
+}
+
+const struct mpd_directory *
+mpd_entity_get_directory(const struct mpd_entity *entity)
+{
+	assert(entity != NULL);
+	assert(entity->type == MPD_ENTITY_TYPE_DIRECTORY);
+
+	return entity->info.directory;
+}
+
+const struct mpd_song *
+mpd_entity_get_song(const struct mpd_entity *entity)
+{
+	assert(entity != NULL);
+	assert(entity->type == MPD_ENTITY_TYPE_SONG);
+
+	return entity->info.song;
+}
+
+const struct mpd_stored_playlist *
+mpd_entity_get_stored_playlist(const struct mpd_entity *entity)
+{
+	assert(entity != NULL);
+	assert(entity->type == MPD_ENTITY_TYPE_PLAYLISTFILE);
+
+	return entity->info.playlistFile;
+}
+
 static bool
 mpd_entity_feed_first(struct mpd_entity *entity, const struct mpd_pair *pair)
 {

@@ -194,7 +194,7 @@ test_status(struct mpd_connection *conn)
 static int
 test_currentsong(struct mpd_connection *conn)
 {
-	struct mpd_song *song;
+	const struct mpd_song *song;
 	struct mpd_entity *entity;
 
 	mpd_send_currentsong(conn);
@@ -203,12 +203,14 @@ test_currentsong(struct mpd_connection *conn)
 
 	entity = mpd_recv_entity(conn);
 	if (entity) {
-		song = entity->info.song;
-		if (entity->type != MPD_ENTITY_TYPE_SONG || !song) {
-			LOG_ERROR("entity doesn't have the expected type (song)i :%d", entity->type);
+		if (mpd_entity_get_type(entity) != MPD_ENTITY_TYPE_SONG || !song) {
+			LOG_ERROR("entity doesn't have the expected type (song)i :%d",
+				  mpd_entity_get_type(entity));
 			mpd_entity_free(entity);
 			return -1;
 		}
+
+		song = mpd_entity_get_song(entity);
 
 		print_song(song);
 
@@ -226,7 +228,7 @@ static int
 test_list_status_currentsong(struct mpd_connection *conn)
 {
 	struct mpd_status *status;
-	struct mpd_song *song;
+	const struct mpd_song *song;
 	struct mpd_entity *entity;
 
 	CHECK_CONNECTION(conn);
@@ -256,12 +258,14 @@ test_list_status_currentsong(struct mpd_connection *conn)
 
 	entity = mpd_recv_entity(conn);
 	if (entity) {
-		song = entity->info.song;
-		if (entity->type != MPD_ENTITY_TYPE_SONG || !song) {
-			LOG_ERROR("entity doesn't have the expected type (song)i :%d", entity->type);
+		if (mpd_entity_get_type(entity) != MPD_ENTITY_TYPE_SONG) {
+			LOG_ERROR("entity doesn't have the expected type (song)i :%d",
+				  mpd_entity_get_type(entity));
 			mpd_entity_free(entity);
 			return -1;
 		}
+
+		song = mpd_entity_get_song(entity);
 
 		print_song(song);
 
@@ -287,23 +291,23 @@ test_lsinfo(struct mpd_connection *conn, const char *path)
 		const struct mpd_directory *dir;
 		const struct mpd_stored_playlist *pl;
 
-		switch (entity->type) {
+		switch (mpd_entity_get_type(entity)) {
 		case MPD_ENTITY_TYPE_UNKNOWN:
 			printf("Unknown type\n");
 			break;
 
 		case MPD_ENTITY_TYPE_SONG:
-			song = entity->info.song;
+			song = mpd_entity_get_song(entity);
 			print_song (song);
 			break;
 
 		case MPD_ENTITY_TYPE_DIRECTORY:
-			dir = entity->info.directory;
+			dir = mpd_entity_get_directory(entity);
 			printf("directory: %s\n", mpd_directory_get_path(dir));
 			break;
 
 		case MPD_ENTITY_TYPE_PLAYLISTFILE:
-			pl = entity->info.playlistFile;
+			pl = mpd_entity_get_stored_playlist(entity);
 			LOG_INFO("playlist: %s", mpd_stored_playlist_get_path(pl));
 			break;
 		}

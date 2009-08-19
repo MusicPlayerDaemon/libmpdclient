@@ -109,6 +109,42 @@ void
 mpd_entity_free(struct mpd_entity *entity);
 
 /**
+ * @return the type of this entity.
+ */
+enum mpd_entity_type
+mpd_entity_get_type(const struct mpd_entity *entity);
+
+/**
+ * Obtains a pointer to the #mpd_directory object enclosed by this
+ * #mpd_entity.  Calling this function is only allowed of
+ * mpd_entity_get_type() has returned #MPD_ENTITY_TYPE_DIRECTORY.
+ *
+ * @return the directory object
+ */
+const struct mpd_directory *
+mpd_entity_get_directory(const struct mpd_entity *entity);
+
+/**
+ * Obtains a pointer to the #mpd_song object enclosed by this
+ * #mpd_entity.  Calling this function is only allowed of
+ * mpd_entity_get_type() has returned #MPD_ENTITY_TYPE_SONG.
+ *
+ * @return the song object
+ */
+const struct mpd_song *
+mpd_entity_get_song(const struct mpd_entity *entity);
+
+/**
+ * Obtains a pointer to the #mpd_stored_playlist object enclosed by
+ * this #mpd_entity.  Calling this function is only allowed of
+ * mpd_entity_get_type() has returned #MPD_ENTITY_TYPE_PLAYLISTFILE.
+ *
+ * @return the directory object
+ */
+const struct mpd_stored_playlist *
+mpd_entity_get_stored_playlist(const struct mpd_entity *entity);
+
+/**
  * Begins parsing a new entity.
  *
  * @param pair the first pair in this entity
