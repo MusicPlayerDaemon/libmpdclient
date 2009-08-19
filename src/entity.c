@@ -37,6 +37,35 @@
 #include <stdlib.h>
 #include <string.h>
 
+struct mpd_entity {
+	/**
+	 * The type of this entity.
+	 */
+	enum mpd_entity_type type;
+
+	/**
+	 * This union contains type-safe pointers to the real object.
+	 * Check the entity type before attempting to obtain the
+	 * object!
+	 */
+	union {
+		/**
+		 * Only valid if type==#MPD_ENTITY_TYPE_DIRECTORY.
+		 */
+		struct mpd_directory *directory;
+
+		/**
+		 * Only valid if type==#MPD_ENTITY_TYPE_SONG.
+		 */
+		struct mpd_song *song;
+
+		/**
+		 * Only valid if type==#MPD_ENTITY_TYPE_PLAYLISTFILE.
+		 */
+		struct mpd_stored_playlist *playlistFile;
+	} info;
+};
+
 void
 mpd_entity_free(struct mpd_entity *entity) {
 	assert(entity != NULL);
