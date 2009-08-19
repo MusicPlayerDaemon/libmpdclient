@@ -194,27 +194,17 @@ test_status(struct mpd_connection *conn)
 static int
 test_currentsong(struct mpd_connection *conn)
 {
-	const struct mpd_song *song;
-	struct mpd_entity *entity;
+	struct mpd_song *song;
 
 	mpd_send_currentsong(conn);
 
 	CHECK_CONNECTION(conn);
 
-	entity = mpd_recv_entity(conn);
-	if (entity) {
-		if (mpd_entity_get_type(entity) != MPD_ENTITY_TYPE_SONG || !song) {
-			LOG_ERROR("entity doesn't have the expected type (song)i :%d",
-				  mpd_entity_get_type(entity));
-			mpd_entity_free(entity);
-			return -1;
-		}
-
-		song = mpd_entity_get_song(entity);
-
+	song = mpd_recv_song(conn);
+	if (song != NULL) {
 		print_song(song);
 
-		mpd_entity_free(entity);
+		mpd_song_free(song);
 	}
 
 	mpd_response_finish(conn);

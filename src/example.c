@@ -80,7 +80,7 @@ int main(int argc, char ** argv) {
 
 	if(argc==1) {
 		struct mpd_status * status;
-		struct mpd_entity * entity;
+		struct mpd_song *song;
 
 		mpd_command_list_begin(conn, true);
 		mpd_send_status(conn);
@@ -120,16 +120,7 @@ int main(int argc, char ** argv) {
 
 		mpd_response_next(conn);
 
-		while ((entity = mpd_recv_entity(conn)) != NULL) {
-			const struct mpd_song *song;
-
-			if (mpd_entity_get_type(entity) != MPD_ENTITY_TYPE_SONG) {
-				mpd_entity_free(entity);
-				continue;
-			}
-
-			song = mpd_entity_get_song(entity);
-
+		while ((song = mpd_recv_song(conn)) != NULL) {
 			print_tag(song, MPD_TAG_FILENAME, "file");
 			print_tag(song, MPD_TAG_ARTIST, "artist");
 			print_tag(song, MPD_TAG_ALBUM, "album");
@@ -145,7 +136,7 @@ int main(int argc, char ** argv) {
 				printf("pos: %i\n", mpd_song_get_pos(song));
 			}
 
-			mpd_entity_free(entity);
+			mpd_song_free(song);
 		}
 
 		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {

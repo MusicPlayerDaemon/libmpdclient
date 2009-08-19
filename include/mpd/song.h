@@ -42,6 +42,7 @@
 #define MPD_SONG_NO_ID		-1
 
 struct mpd_pair;
+struct mpd_connection;
 
 /**
  * An opaque representation for a song in MPD's database or playlist.
@@ -177,6 +178,15 @@ mpd_song_begin(const struct mpd_pair *pair);
  */
 bool
 mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair);
+
+/**
+ * Receives the next song from the MPD server.
+ *
+ * @return a #mpd_song object, or NULL on error or if the song list is
+ * finished
+ */
+struct mpd_song *
+mpd_recv_song(struct mpd_connection *connection);
 
 #ifdef __cplusplus
 }

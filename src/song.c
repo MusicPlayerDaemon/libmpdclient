@@ -32,6 +32,7 @@
 
 #include <mpd/song.h>
 #include <mpd/pair.h>
+#include <mpd/recv.h>
 #include "str_pool.h"
 #include "internal.h"
 
@@ -308,4 +309,39 @@ mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair)
 		mpd_song_set_id(song, atoi(pair->value));
 
 	return true;
+}
+
+struct mpd_song *
+mpd_recv_song(struct mpd_connection *connection)
+{
+	struct mpd_pair *pair;
+	struct mpd_song *song;
+
+	if (mpd_error_is_defined(&connection->error))
+		return NULL;
+
+	pair = mpd_recv_pair_named(connection, "file");
+	if (pair == NULL)
+		return NULL;
+
+	song = mpd_song_begin(pair);
+	mpd_return_pair(connection, pair);
+	if (song == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return NULL;
+	}
+
+	while ((pair = mpd_recv_pair(connection)) != NULL &&
+	       mpd_song_feed(song, pair))
+		mpd_return_pair(connection, pair);
+
+	if (mpd_error_is_defined(&connection->error)) {
+		mpd_song_free(song);
+		return NULL;
+	}
+
+	/* unread this pair for the next mpd_recv_song() call */
+	mpd_enqueue_pair(connection, pair);
+
+	return song;
 }
