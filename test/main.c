@@ -147,7 +147,7 @@ print_tag(const struct mpd_song *song, enum mpd_tag_type type,
 }
 
 static void
-print_song(struct mpd_song *song)
+print_song(const struct mpd_song *song)
 {
 	print_tag(song, MPD_TAG_FILENAME, "file");
 	print_tag(song, MPD_TAG_ARTIST, "artist");
@@ -283,19 +283,29 @@ test_lsinfo(struct mpd_connection *conn, const char *path)
 	CHECK_CONNECTION(conn);
 
 	while ((entity = mpd_recv_entity(conn)) != NULL) {
-		if (entity->type == MPD_ENTITY_TYPE_SONG) {
-			struct mpd_song *song = entity->info.song;
+		const struct mpd_song *song;
+		const struct mpd_directory *dir;
+		const struct mpd_stored_playlist *pl;
+
+		switch (entity->type) {
+		case MPD_ENTITY_TYPE_UNKNOWN:
+			printf("Unknown type\n");
+			break;
+
+		case MPD_ENTITY_TYPE_SONG:
+			song = entity->info.song;
 			print_song (song);
-		} else if (entity->type == MPD_ENTITY_TYPE_DIRECTORY) {
-			struct mpd_directory *dir = entity->info.directory;
-			LOG_INFO("directory: %s", mpd_directory_get_path(dir));
-		} else if (entity->type == MPD_ENTITY_TYPE_PLAYLISTFILE) {
-			struct mpd_stored_playlist * pl = entity->info.playlistFile;
+			break;
+
+		case MPD_ENTITY_TYPE_DIRECTORY:
+			dir = entity->info.directory;
+			printf("directory: %s\n", mpd_directory_get_path(dir));
+			break;
+
+		case MPD_ENTITY_TYPE_PLAYLISTFILE:
+			pl = entity->info.playlistFile;
 			LOG_INFO("playlist: %s", mpd_stored_playlist_get_path(pl));
-		} else {
-			LOG_ERROR("Unknown type: %d", entity->type);
-			mpd_entity_free(entity);
-			return -1;
+			break;
 		}
 
 		mpd_entity_free(entity);
