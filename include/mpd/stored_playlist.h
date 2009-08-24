@@ -33,6 +33,8 @@
 #ifndef LIBMPDCLIENT_STORED_PLAYLIST_H
 #define LIBMPDCLIENT_STORED_PLAYLIST_H
 
+#include <time.h>
+
 /**
  * An opaque representation for a stored playlist stored in MPD's
  * playlist directory.  Use the functions provided by this header to
@@ -76,6 +78,13 @@ mpd_stored_playlist_dup(const struct mpd_stored_playlist *playlist);
  */
 const char *
 mpd_stored_playlist_get_path(const struct mpd_stored_playlist *playlist);
+
+/**
+ * @return the POSIX UTC time stamp of the last modification, or 0 if
+ * that is unknown
+ */
+time_t
+mpd_stored_playlist_get_last_modified(const struct mpd_stored_playlist *playlist);
 
 #ifdef __cplusplus
 }

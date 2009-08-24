@@ -35,6 +35,7 @@
 #include <mpd/recv.h>
 #include "str_pool.h"
 #include "internal.h"
+#include "iso8601.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -51,6 +52,13 @@ struct mpd_song {
 
 	/* length of song in seconds, check that it is not MPD_SONG_NO_TIME  */
 	int time;
+
+	/**
+	 * The POSIX UTC time stamp of the last modification, or 0 if
+	 * that is unknown.
+	 */
+	time_t last_modified;
+
 	/* if plchanges/playlistinfo/playlistid used, is the position of the
 	 * song in the playlist */
 	int pos;
@@ -75,6 +83,7 @@ mpd_song_new(const char *uri)
 		song->tags[i].value = NULL;
 
 	song->time = MPD_SONG_NO_TIME;
+	song->last_modified = 0;
 	song->pos = MPD_SONG_NO_NUM;
 	song->id = MPD_SONG_NO_ID;
 
@@ -245,6 +254,18 @@ mpd_song_get_time(const struct mpd_song *song)
 }
 
 void
+mpd_song_set_last_modified(struct mpd_song *song, time_t mtime)
+{
+	song->last_modified = mtime;
+}
+
+time_t
+mpd_song_get_last_modified(const struct mpd_song *song)
+{
+	return song->last_modified;
+}
+
+void
 mpd_song_set_pos(struct mpd_song *song, int pos)
 {
 	song->pos = pos;
@@ -303,6 +324,8 @@ mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair)
 
 	if (strcmp(pair->name, "Time") == 0)
 		mpd_song_set_time(song, atoi(pair->value));
+	else if (strcmp(pair->name, "Last-Modified") == 0)
+		mpd_song_set_last_modified(song, iso8601_datetime_parse(pair->value));
 	else if (strcmp(pair->name, "Pos") == 0)
 		mpd_song_set_pos(song, atoi(pair->value));
 	else if (strcmp(pair->name, "Id") == 0)

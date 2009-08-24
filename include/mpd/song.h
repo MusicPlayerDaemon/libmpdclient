@@ -36,6 +36,7 @@
 #include <mpd/tag.h>
 
 #include <stdbool.h>
+#include <time.h>
 
 #define MPD_SONG_NO_TIME	-1
 #define MPD_SONG_NO_NUM		-1
@@ -129,6 +130,19 @@ mpd_song_set_time(struct mpd_song *song, int t);
  */
 int
 mpd_song_get_time(const struct mpd_song *song);
+
+/**
+ * Sets the POSIX UTC time stamp of the last modification.
+ */
+void
+mpd_song_set_last_modified(struct mpd_song *song, time_t mtime);
+
+/**
+ * @return the POSIX UTC time stamp of the last modification, or 0 if
+ * that is unknown
+ */
+time_t
+mpd_song_get_last_modified(const struct mpd_song *song);
 
 /**
  * Sets the position within the playlist.  This value is not used for

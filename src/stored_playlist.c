@@ -38,6 +38,12 @@
 
 struct mpd_stored_playlist {
 	char *path;
+
+	/**
+	 * The POSIX UTC time stamp of the last modification, or 0 if
+	 * that is unknown.
+	 */
+	time_t last_modified;
 };
 
 struct mpd_stored_playlist *
@@ -90,4 +96,10 @@ mpd_stored_playlist_get_path(const struct mpd_stored_playlist *playlist)
 	assert(playlist != NULL);
 
 	return playlist->path;
+}
+
+time_t
+mpd_stored_playlist_get_last_modified(const struct mpd_stored_playlist *playlist)
+{
+	return playlist->last_modified;
 }
