@@ -109,22 +109,12 @@ struct mpd_status {
 	char *error;
 };
 
-struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
-	struct mpd_status * status;
-	struct mpd_pair *pair;
-
-	if (mpd_error_is_defined(&connection->error))
+struct mpd_status *
+mpd_status_new(void)
+{
+	struct mpd_status *status = malloc(sizeof(*status));
+	if (status == NULL)
 		return NULL;
-
-	/*mpd_send_command(connection, "status", NULL);
-
-	if (connection->error) return NULL;*/
-
-	status = malloc(sizeof(struct mpd_status));
-	if (status == NULL) {
-		mpd_error_code(&connection->error, MPD_ERROR_OOM);
-		return NULL;
-	}
 
 	status->volume = -1;
 	status->repeat = false;
@@ -145,6 +135,26 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 	status->crossfade = -1;
 	status->error = NULL;
 	status->updatingdb = 0;
+
+	return status;
+}
+
+struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
+	struct mpd_status * status;
+	struct mpd_pair *pair;
+
+	if (mpd_error_is_defined(&connection->error))
+		return NULL;
+
+	/*mpd_send_command(connection, "status", NULL);
+
+	if (connection->error) return NULL;*/
+
+	status = mpd_status_new();
+	if (status == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return NULL;
+	}
 
 	while ((pair = mpd_recv_pair(connection)) != NULL) {
 		if (strcmp(pair->name, "volume") == 0) {

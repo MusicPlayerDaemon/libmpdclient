@@ -66,6 +66,16 @@ struct mpd_status;
 extern "C" {
 #endif
 
+/**
+ * Creates a new empty #mpd_status object.  Free it with
+ * mpd_status_free().
+ *
+ * @return the newly allocated #mpd_status object, or NULL if out of
+ * memory
+ */
+struct mpd_status *
+mpd_status_new(void);
+
 /* mpd_get_status
  * returns status info, be sure to free it with mpd_status_free()
  * call this after mpd_send_status()
