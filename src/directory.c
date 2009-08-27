@@ -31,6 +31,7 @@
 */
 
 #include <mpd/directory.h>
+#include <mpd/pair.h>
 
 #include <assert.h>
 #include <stdlib.h>
@@ -96,3 +97,34 @@ mpd_directory_get_path(const struct mpd_directory *directory)
 	return directory->path;
 }
 
+struct mpd_directory *
+mpd_directory_begin(const struct mpd_pair *pair)
+{
+	assert(pair != NULL);
+	assert(pair->name != NULL);
+	assert(pair->value != NULL);
+
+	if (strcmp(pair->name, "directory") != 0)
+		return NULL;
+
+	return mpd_directory_new(pair->value);
+}
+
+bool
+mpd_directory_feed(struct mpd_directory *directory,
+		   const struct mpd_pair *pair)
+{
+	assert(pair != NULL);
+	assert(pair->name != NULL);
+	assert(pair->value != NULL);
+
+	if (strcmp(pair->name, "directory") == 0)
+		return false;
+
+	/* ignore all other pairs - that might be attributes which we
+	   don't support yet */
+
+	(void)directory;
+
+	return true;
+}

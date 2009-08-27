@@ -183,8 +183,21 @@ mpd_entity_feed(struct mpd_entity *entity, const struct mpd_pair *pair)
 	    strcmp(pair->name, "playlist") == 0)
 		return false;
 
-	if (entity->type == MPD_ENTITY_TYPE_SONG)
+	switch (entity->type) {
+	case MPD_ENTITY_TYPE_UNKNOWN:
+		break;
+
+	case MPD_ENTITY_TYPE_DIRECTORY:
+		mpd_directory_feed(entity->info.directory, pair);
+		break;
+
+	case MPD_ENTITY_TYPE_SONG:
 		mpd_song_feed(entity->info.song, pair);
+		break;
+
+	case MPD_ENTITY_TYPE_PLAYLISTFILE:
+		break;
+	}
 
 	return true;
 }

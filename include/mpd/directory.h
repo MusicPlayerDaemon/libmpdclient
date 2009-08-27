@@ -33,6 +33,10 @@
 #ifndef MPD_DIRECTORY_H
 #define MPD_DIRECTORY_H
 
+#include <stdbool.h>
+
+struct mpd_pair;
+
 /**
  * An opaque directory object.  This is a container for more songs,
  * directories or playlists.
@@ -73,6 +77,28 @@ void mpd_directory_free(struct mpd_directory *directory);
  */
 const char *
 mpd_directory_get_path(const struct mpd_directory *directory);
+
+/**
+ * Begins parsing a new directory.
+ *
+ * @param pair the first pair in this directory (name must be "directory")
+ * @return the new #mpd_entity object, or NULL on error (out of
+ * memory, or pair name is not "directory")
+ */
+struct mpd_directory *
+mpd_directory_begin(const struct mpd_pair *pair);
+
+/**
+ * Parses the pair, adding its information to the specified
+ * #mpd_directory object.
+ *
+ * @return true if the pair was parsed and added to the directory (or if
+ * the pair was not understood and ignored), false if this pair is the
+ * beginning of the next directory
+ */
+bool
+mpd_directory_feed(struct mpd_directory *directory,
+		   const struct mpd_pair *pair);
 
 #ifdef __cplusplus
 }
