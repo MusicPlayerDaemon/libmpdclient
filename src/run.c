@@ -29,6 +29,7 @@
 #include <mpd/run.h>
 #include <mpd/command.h>
 #include <mpd/response.h>
+#include <mpd/status.h>
 #include "internal.h"
 
 /**
@@ -69,4 +70,24 @@ mpd_run_addid(struct mpd_connection *connection, const char *file)
 		id = -1;
 
 	return id;
+}
+
+struct mpd_status *
+mpd_run_status(struct mpd_connection *connection)
+{
+	struct mpd_status *status;
+
+	if (!run_check(connection) || !mpd_send_status(connection))
+		return NULL;
+
+	status = mpd_recv_status(connection);
+	if (status == NULL)
+		return NULL;
+
+	if (!mpd_response_finish(connection)) {
+		mpd_status_free(status);
+		return NULL;
+	}
+
+	return status;
 }

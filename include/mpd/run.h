@@ -43,6 +43,15 @@ extern "C" {
 int
 mpd_run_addid(struct mpd_connection *connection, const char *file);
 
+/**
+ * Executes the "status" command and reads the response.
+ *
+ * @return the #mpd_status object returned by the server, or NULL on
+ * error
+ */
+struct mpd_status *
+mpd_run_status(struct mpd_connection *connection);
+
 #ifdef __cplusplus
 }
 #endif

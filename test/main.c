@@ -169,17 +169,10 @@ test_status(struct mpd_connection *conn)
 {
 	struct mpd_status *status;
 
-	mpd_send_status(conn);
-
-	CHECK_CONNECTION(conn);
-
-	status = mpd_recv_status(conn);
+	status = mpd_run_status(conn);
 	if (!status) {
 		LOG_ERROR("%s", mpd_get_error_message(conn));
 		return -1;
-	}
-	if (mpd_status_get_error(status)) {
-		LOG_WARNING("status error: %s", mpd_status_get_error(status));
 	}
 
 	print_status(status);
