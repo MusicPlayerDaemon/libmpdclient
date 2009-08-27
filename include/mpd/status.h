@@ -92,8 +92,8 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair);
 struct mpd_status *
 mpd_recv_status(struct mpd_connection *connection);
 
-/* mpd_status_free
- * free's status info malloc'd and returned by mpd_get_status
+/**
+ * Releases a #mpd_status object.
  */
 void mpd_status_free(struct mpd_status * status);
 
