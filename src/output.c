@@ -40,6 +40,12 @@
 #include <string.h>
 #include <stdlib.h>
 
+struct mpd_output {
+	unsigned id;
+	char *name;
+	bool enabled;
+};
+
 struct mpd_output *
 mpd_output_get_next(struct mpd_connection *connection)
 {
