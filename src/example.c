@@ -87,7 +87,7 @@ int main(int argc, char ** argv) {
 		mpd_send_currentsong(conn);
 		mpd_command_list_end(conn);
 
-		status = mpd_get_status(conn);
+		status = mpd_recv_status(conn);
 		if (status == NULL) {
 			fprintf(stderr,"%s\n", mpd_get_error_message(conn));
 			mpd_connection_free(conn);

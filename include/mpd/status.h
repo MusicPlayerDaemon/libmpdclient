@@ -84,11 +84,13 @@ mpd_status_new(void);
 void
 mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair);
 
-/* mpd_get_status
- * returns status info, be sure to free it with mpd_status_free()
- * call this after mpd_send_status()
+/**
+ * Receives a #mpd_status object from the server.
+ *
+ * @return the received #mpd_status object, or NULL on error
  */
-struct mpd_status * mpd_get_status(struct mpd_connection * connection);
+struct mpd_status *
+mpd_recv_status(struct mpd_connection *connection);
 
 /* mpd_status_free
  * free's status info malloc'd and returned by mpd_get_status

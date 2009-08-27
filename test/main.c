@@ -173,7 +173,7 @@ test_status(struct mpd_connection *conn)
 
 	CHECK_CONNECTION(conn);
 
-	status = mpd_get_status(conn);
+	status = mpd_recv_status(conn);
 	if (!status) {
 		LOG_ERROR("%s", mpd_get_error_message(conn));
 		return -1;
@@ -230,7 +230,7 @@ test_list_status_currentsong(struct mpd_connection *conn)
 
 	CHECK_CONNECTION(conn);
 
-	status = mpd_get_status(conn);
+	status = mpd_recv_status(conn);
 	if (!status) {
 		LOG_ERROR("%s", mpd_get_error_message(conn));
 		return -1;
