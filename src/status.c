@@ -139,6 +139,74 @@ mpd_status_new(void)
 	return status;
 }
 
+static enum mpd_state
+parse_mpd_state(const char *p)
+{
+	if (strcmp(p, "play") == 0)
+		return MPD_STATE_PLAY;
+	else if (strcmp(p, "stop") == 0)
+		return MPD_STATE_STOP;
+	else if (strcmp(p, "pause") == 0)
+		return MPD_STATE_PAUSE;
+	else
+		return MPD_STATE_UNKNOWN;
+}
+
+void
+mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
+{
+	if (strcmp(pair->name, "volume") == 0)
+		status->volume = atoi(pair->value);
+	else if (strcmp(pair->name, "repeat") == 0)
+		status->repeat = !!atoi(pair->value);
+	else if (strcmp(pair->name, "random") == 0)
+		status->random = !!atoi(pair->value);
+	else if (strcmp(pair->name, "single") == 0)
+		status->single = !!atoi(pair->value);
+	else if (strcmp(pair->name, "consume") == 0)
+		status->consume = !!atoi(pair->value);
+	else if (strcmp(pair->name, "playlist") == 0)
+		status->playlist = strtol(pair->value,NULL,10);
+	else if (strcmp(pair->name, "playlistlength") == 0)
+		status->playlist_length = atoi(pair->value);
+	else if (strcmp(pair->name, "bitrate") == 0)
+		status->bit_rate = atoi(pair->value);
+	else if (strcmp(pair->name, "state") == 0)
+		status->state = parse_mpd_state(pair->value);
+	else if (strcmp(pair->name, "song") == 0)
+		status->song = atoi(pair->value);
+	else if (strcmp(pair->name, "songid") == 0)
+		status->songid = atoi(pair->value);
+	else if (strcmp(pair->name, "time") == 0) {
+		char * tok = strchr(pair->value,':');
+		/* the second strchr below is a safety check */
+		if (tok && (strchr(tok,0) > (tok+1))) {
+			/* atoi stops at the first non-[0-9] char: */
+			status->elapsed_time = atoi(pair->value);
+			status->total_time = atoi(tok+1);
+		}
+	} else if (strcmp(pair->name, "error") == 0) {
+		if (status->error != NULL)
+			free(status->error);
+
+		status->error = strdup(pair->value);
+	} else if (strcmp(pair->name, "xfade") == 0)
+		status->crossfade = atoi(pair->value);
+	else if (strcmp(pair->name, "updating_db") == 0)
+		status->updatingdb = atoi(pair->value);
+	else if (strcmp(pair->name, "audio") == 0) {
+		char * tok = strchr(pair->value,':');
+		if (tok && (strchr(tok,0) > (tok+1))) {
+			status->sample_rate = atoi(pair->value);
+			status->bits = atoi(++tok);
+			tok = strchr(tok,':');
+			if (tok && (strchr(tok,0) > (tok+1)))
+				status->channels = atoi(tok+1);
+		}
+	}
+
+}
+
 struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 	struct mpd_status * status;
 	struct mpd_pair *pair;
@@ -157,79 +225,7 @@ struct mpd_status * mpd_get_status(struct mpd_connection * connection) {
 	}
 
 	while ((pair = mpd_recv_pair(connection)) != NULL) {
-		if (strcmp(pair->name, "volume") == 0) {
-			status->volume = atoi(pair->value);
-		}
-		else if (strcmp(pair->name, "repeat") == 0) {
-			status->repeat = !!atoi(pair->value);
-		}
-		else if (strcmp(pair->name, "random") == 0) {
-			status->random = !!atoi(pair->value);
-		}
-		else if (strcmp(pair->name, "single") == 0) {
-			status->single = !!atoi(pair->value);
-		}
-		else if (strcmp(pair->name, "consume") == 0) {
-			status->consume = !!atoi(pair->value);
-		}
-		else if (strcmp(pair->name, "playlist") == 0) {
-			status->playlist = strtol(pair->value,NULL,10);
-		}
-		else if (strcmp(pair->name, "playlistlength") == 0) {
-			status->playlist_length = atoi(pair->value);
-		}
-		else if (strcmp(pair->name, "bitrate") == 0) {
-			status->bit_rate = atoi(pair->value);
-		}
-		else if (strcmp(pair->name, "state") == 0) {
-			if (strcmp(pair->value,"play") == 0) {
-				status->state = MPD_STATE_PLAY;
-			}
-			else if (strcmp(pair->value,"stop") == 0) {
-				status->state = MPD_STATE_STOP;
-			}
-			else if (strcmp(pair->value,"pause") == 0) {
-				status->state = MPD_STATE_PAUSE;
-			}
-		}
-		else if (strcmp(pair->name, "song") == 0) {
-			status->song = atoi(pair->value);
-		}
-		else if (strcmp(pair->name, "songid") == 0) {
-			status->songid = atoi(pair->value);
-		}
-		else if (strcmp(pair->name, "time") == 0) {
-			char * tok = strchr(pair->value,':');
-			/* the second strchr below is a safety check */
-			if (tok && (strchr(tok,0) > (tok+1))) {
-				/* atoi stops at the first non-[0-9] char: */
-				status->elapsed_time = atoi(pair->value);
-				status->total_time = atoi(tok+1);
-			}
-		}
-		else if (strcmp(pair->name, "error") == 0) {
-			if (status->error != NULL)
-				free(status->error);
-
-			status->error = strdup(pair->value);
-		}
-		else if (strcmp(pair->name, "xfade") == 0) {
-			status->crossfade = atoi(pair->value);
-		}
-		else if (strcmp(pair->name, "updating_db") == 0) {
-			status->updatingdb = atoi(pair->value);
-		}
-		else if (strcmp(pair->name, "audio") == 0) {
-			char * tok = strchr(pair->value,':');
-			if (tok && (strchr(tok,0) > (tok+1))) {
-				status->sample_rate = atoi(pair->value);
-				status->bits = atoi(++tok);
-				tok = strchr(tok,':');
-				if (tok && (strchr(tok,0) > (tok+1)))
-					status->channels = atoi(tok+1);
-			}
-		}
-
+		mpd_status_feed(status, pair);
 		mpd_return_pair(connection, pair);
 	}
 

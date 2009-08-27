@@ -56,6 +56,7 @@ enum mpd_state {
 #define MPD_STATUS_NO_VOLUME		-1
 
 struct mpd_connection;
+struct mpd_pair;
 
 /* struct mpd_status
  * holds info about MPD status
@@ -75,6 +76,13 @@ extern "C" {
  */
 struct mpd_status *
 mpd_status_new(void);
+
+/**
+ * Parses the pair, adding its information to the specified
+ * #mpd_status object.
+ */
+void
+mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair);
 
 /* mpd_get_status
  * returns status info, be sure to free it with mpd_status_free()
