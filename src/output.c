@@ -112,3 +112,28 @@ mpd_output_free(struct mpd_output *output)
 	free(output->name);
 	free(output);
 }
+
+unsigned
+mpd_output_get_id(const struct mpd_output *output)
+{
+	assert(output != NULL);
+
+	return output->id;
+}
+
+const char *
+mpd_output_get_name(const struct mpd_output *output)
+{
+	assert(output != NULL);
+	assert(output->name != NULL);
+
+	return output->name;
+}
+
+bool
+mpd_output_get_enabled(const struct mpd_output *output)
+{
+	assert(output != NULL);
+
+	return output->enabled;
+}
