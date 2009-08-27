@@ -33,7 +33,10 @@
 #ifndef LIBMPDCLIENT_STORED_PLAYLIST_H
 #define LIBMPDCLIENT_STORED_PLAYLIST_H
 
+#include <stdbool.h>
 #include <time.h>
+
+struct mpd_pair;
 
 /**
  * An opaque representation for a stored playlist stored in MPD's
@@ -80,11 +83,41 @@ const char *
 mpd_stored_playlist_get_path(const struct mpd_stored_playlist *playlist);
 
 /**
+ * Sets the POSIX UTC time stamp of the last modification.
+ */
+void
+mpd_stored_playlist_set_last_modified(struct mpd_stored_playlist *playlist,
+				      time_t mtime);
+
+/**
  * @return the POSIX UTC time stamp of the last modification, or 0 if
  * that is unknown
  */
 time_t
 mpd_stored_playlist_get_last_modified(const struct mpd_stored_playlist *playlist);
+
+/**
+ * Begins parsing a new playlist.
+ *
+ * @param pair the first pair in this stored_playlist (name must be
+ * "playlist")
+ * @return the new #mpd_entity object, or NULL on error (out of
+ * memory, or pair name is not "playlist")
+ */
+struct mpd_stored_playlist *
+mpd_stored_playlist_begin(const struct mpd_pair *pair);
+
+/**
+ * Parses the pair, adding its information to the specified
+ * #mpd_stored_playlist object.
+ *
+ * @return true if the pair was parsed and added to the playlist (or if
+ * the pair was not understood and ignored), false if this pair is the
+ * beginning of the next stored_playlist
+ */
+bool
+mpd_stored_playlist_feed(struct mpd_stored_playlist *stored_playlist,
+			 const struct mpd_pair *pair);
 
 #ifdef __cplusplus
 }

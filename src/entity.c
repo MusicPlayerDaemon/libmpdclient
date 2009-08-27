@@ -196,6 +196,7 @@ mpd_entity_feed(struct mpd_entity *entity, const struct mpd_pair *pair)
 		break;
 
 	case MPD_ENTITY_TYPE_PLAYLISTFILE:
+		mpd_stored_playlist_feed(entity->info.playlistFile, pair);
 		break;
 	}
 
