@@ -66,6 +66,8 @@ enum mpd_entity_type {
 };
 
 /**
+ * \struct mpd_entity
+ *
  * An "entity" is an object returned by commands like "lsinfo".  It is
  * an object wrapping all possible entity types.
  */

@@ -58,8 +58,10 @@ enum mpd_state {
 struct mpd_connection;
 struct mpd_pair;
 
-/* struct mpd_status
- * holds info about MPD status
+/**
+ * \struct mpd_status
+ *
+ * Holds information about MPD's status.
  */
 struct mpd_status;
 

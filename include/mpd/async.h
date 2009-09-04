@@ -64,6 +64,8 @@ enum mpd_async_events {
 };
 
 /**
+ * \struct mpd_async
+ *
  * This opaque object represents an asynchronous connection to a MPD
  * server.  Call mpd_async_new() to create a new instance.
  */

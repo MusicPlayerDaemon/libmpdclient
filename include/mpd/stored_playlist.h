@@ -39,6 +39,8 @@
 struct mpd_pair;
 
 /**
+ * \struct mpd_stored_playlist
+ *
  * An opaque representation for a stored playlist stored in MPD's
  * playlist directory.  Use the functions provided by this header to
  * access the object's attributes.

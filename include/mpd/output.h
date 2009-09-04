@@ -38,6 +38,8 @@
 struct mpd_connection;
 
 /**
+ * \struct mpd_output
+ *
  * This type represents an audio output device on the MPD server.
  */
 struct mpd_output;

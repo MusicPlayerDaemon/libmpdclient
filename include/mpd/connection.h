@@ -39,6 +39,8 @@
 #include <stdbool.h>
 
 /**
+ * \struct mpd_connection
+ *
  * This opaque object represents a connection to a MPD server.  Call
  * mpd_connection_new() to create a new instance.
  *

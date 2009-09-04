@@ -36,6 +36,8 @@
 #include <mpd/connection.h>
 
 /**
+ * \struct mpd_stats
+ *
  * An opaque object representing MPD's response to the "stats"
  * command.  To release this object, call mpd_stats_free().
  */

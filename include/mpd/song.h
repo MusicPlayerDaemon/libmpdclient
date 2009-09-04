@@ -46,6 +46,8 @@ struct mpd_pair;
 struct mpd_connection;
 
 /**
+ * \struct mpd_song
+ *
  * An opaque representation for a song in MPD's database or playlist.
  * Use the functions provided by this header to access the object's
  * attributes.

@@ -38,6 +38,8 @@
 struct mpd_pair;
 
 /**
+ * \struct mpd_directory
+ *
  * An opaque directory object.  This is a container for more songs,
  * directories or playlists.
  */
