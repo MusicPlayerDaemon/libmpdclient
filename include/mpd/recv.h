@@ -56,10 +56,20 @@ mpd_recv_pair_named(struct mpd_connection *connection, const char *name);
 /**
  * Similar to mpd_recv_pair_named(), but duplicates the string and
  * frees the #mpd_pair object.  The caller has to free the return
- * value with free().
+ * value with mpd_value_free().
  */
 char *
 mpd_recv_value_named(struct mpd_connection *connection, const char *name);
+
+/**
+ * This function frees the return value of mpd_recv_value_named().
+ *
+ * On some OS, it is not possible to use the caller's C library to
+ * free the mpd_recv_value_named() value.  This function calls
+ * libmpdclient's C library.
+ */
+void
+mpd_value_free(char *value);
 
 /**
  * Indicates that the pair object is not needed anymore, and can be

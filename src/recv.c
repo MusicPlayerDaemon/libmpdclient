@@ -33,6 +33,7 @@
 #include "sync.h"
 
 #include <string.h>
+#include <stdlib.h>
 
 struct mpd_pair *
 mpd_recv_pair(struct mpd_connection *connection)
@@ -177,6 +178,12 @@ mpd_recv_value_named(struct mpd_connection *connection, const char *name)
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
 
 	return value;
+}
+
+void
+mpd_value_free(char *value)
+{
+	free(value);
 }
 
 void
