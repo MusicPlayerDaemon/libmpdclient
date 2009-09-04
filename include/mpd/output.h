@@ -54,7 +54,7 @@ extern "C" {
  * end-of-response
  */
 struct mpd_output *
-mpd_output_get_next(struct mpd_connection *connection);
+mpd_recv_output(struct mpd_connection *connection);
 
 /**
  * Frees a mpd_output object returned from mpd_output_get_next().

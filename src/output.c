@@ -47,7 +47,7 @@ struct mpd_output {
 };
 
 struct mpd_output *
-mpd_output_get_next(struct mpd_connection *connection)
+mpd_recv_output(struct mpd_connection *connection)
 {
 	struct mpd_output *output = NULL;
 	struct mpd_pair *pair;
