@@ -164,6 +164,8 @@ mpd_sanitize_arg(const char * arg)
 	 * use a bit more memory and half running time
 	 */
 	ret = malloc(strlen(arg) * 2 + 1);
+	if (ret == NULL)
+		return NULL;
 
 	c = arg;
 	rc = ret;

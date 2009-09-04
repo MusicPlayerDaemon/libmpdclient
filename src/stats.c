@@ -69,6 +69,11 @@ mpd_recv_stats(struct mpd_connection *connection)
 		return NULL;
 
 	stats = malloc(sizeof(struct mpd_stats));
+	if (stats == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return NULL;
+	}
+
 	stats->number_of_artists = 0;
 	stats->number_of_albums = 0;
 	stats->number_of_songs = 0;
