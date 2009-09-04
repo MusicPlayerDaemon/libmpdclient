@@ -59,9 +59,6 @@ mpd_recv_idle(struct mpd_connection *connection)
 
 	assert(connection != NULL);
 
-	if (mpd_error_is_defined(&connection->error))
-		return 0;
-
 	while ((pair = mpd_recv_pair_named(connection, "changed")) != NULL) {
 		for (unsigned i = 0; idle_names[i] != NULL; ++i)
 			if (strcmp(pair->value, idle_names[i]) == 0)

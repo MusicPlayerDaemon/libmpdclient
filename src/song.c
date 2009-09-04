@@ -340,9 +340,6 @@ mpd_recv_song(struct mpd_connection *connection)
 	struct mpd_pair *pair;
 	struct mpd_song *song;
 
-	if (mpd_error_is_defined(&connection->error))
-		return NULL;
-
 	pair = mpd_recv_pair_named(connection, "file");
 	if (pair == NULL)
 		return NULL;

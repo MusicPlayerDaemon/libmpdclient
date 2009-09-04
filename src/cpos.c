@@ -40,9 +40,6 @@ mpd_recv_cpos(struct mpd_connection *connection, struct mpd_cpos *cpos)
 {
 	struct mpd_pair *pair;
 
-	if (mpd_error_is_defined(&connection->error))
-		return false;
-
 	pair = mpd_recv_pair_named(connection, "cpos");
 	if (pair == NULL)
 		return false;

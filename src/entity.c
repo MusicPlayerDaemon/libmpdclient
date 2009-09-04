@@ -209,9 +209,6 @@ mpd_recv_entity(struct mpd_connection *connection)
 	struct mpd_pair *pair;
 	struct mpd_entity *entity;
 
-	if (mpd_error_is_defined(&connection->error))
-		return NULL;
-
 	pair = mpd_recv_pair(connection);
 	if (pair == NULL)
 		return NULL;
