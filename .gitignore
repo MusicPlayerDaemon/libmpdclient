@@ -24,3 +24,5 @@ Makefile.in
 /m4/lt~obsolete.m4
 test/test
 /*.pc
+doc/doxygen.conf
+doc/api

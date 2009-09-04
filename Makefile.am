@@ -94,6 +94,24 @@ sparse-check:
 
 doc_DATA = README COPYING
 
+if DOXYGEN
+
+doc/api/html/index.html: doc/doxygen.conf $(wildcard include/mpd/*.h)
+	$(DOXYGEN) $<
+
+all-local: doc/api/html/index.html
+
+mostlyclean-local:
+	rm -rf doc/api
+
+install-data-local: doc/api/html/index.html
+	$(mkinstalldirs) $(DESTDIR)$(docdir)/html
+	$(INSTALL_DATA) -c -m 644 doc/api/html/*.html doc/api/html/*.css \
+		doc/api/html/*.png doc/api/html/*.gif \
+		$(DESTDIR)$(docdir)/html
+
+endif
+
 #
 # Installation
 #

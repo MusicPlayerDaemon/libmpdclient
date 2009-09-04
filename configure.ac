@@ -18,6 +18,10 @@ AC_PROG_CC_C99
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 
+AC_PATH_PROG(DOXYGEN, doxygen)
+AM_CONDITIONAL(DOXYGEN, test x$DOXYGEN != x)
+AC_SUBST(DOXYGEN)
+
 
 dnl
 dnl initialize variables
@@ -112,4 +116,4 @@ dnl
 dnl Done
 dnl
 
-AC_OUTPUT([Makefile libmpdclient.pc])
+AC_OUTPUT([Makefile libmpdclient.pc doc/doxygen.conf])
