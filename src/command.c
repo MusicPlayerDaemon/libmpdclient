@@ -448,12 +448,6 @@ mpd_send_tagtypes(struct mpd_connection *connection)
  */
 
 bool
-mpd_send_outputs(struct mpd_connection *connection)
-{
-	return mpd_send_command(connection, "outputs", NULL);
-}
-
-bool
 mpd_send_enable_output(struct mpd_connection *connection, unsigned output_id)
 {
 	return mpd_send_int_command(connection, "enableoutput", output_id);

@@ -47,6 +47,16 @@ extern "C" {
 #endif
 
 /**
+ * Sends the "outputs" command to MPD.  Call mpd_output_get_next() to
+ * read the response.
+ *
+ * @param connection A valid and connected mpd_connection.
+ * @return true on success
+ */
+bool
+mpd_send_outputs(struct mpd_connection *connection);
+
+/**
  * Reads the next mpd_output from the MPD response.  Free the return
  * value with mpd_output_free().
  *
