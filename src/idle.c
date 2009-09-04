@@ -52,6 +52,21 @@ static const char *const idle_names[] = {
 };
 
 enum mpd_idle
+mpd_idle_parse_pair(const struct mpd_pair *pair)
+{
+	assert(pair != NULL);
+
+	if (strcmp(pair->name, "changed") != 0)
+		return 0;
+
+	for (unsigned i = 0; idle_names[i] != NULL; ++i)
+		if (strcmp(pair->value, idle_names[i]) == 0)
+			return 1 << i;
+
+	return 0;
+}
+
+enum mpd_idle
 mpd_recv_idle(struct mpd_connection *connection)
 {
 	enum mpd_idle flags = 0;
@@ -59,13 +74,8 @@ mpd_recv_idle(struct mpd_connection *connection)
 
 	assert(connection != NULL);
 
-	while ((pair = mpd_recv_pair_named(connection, "changed")) != NULL) {
-		for (unsigned i = 0; idle_names[i] != NULL; ++i)
-			if (strcmp(pair->value, idle_names[i]) == 0)
-				flags |= (1 << i);
-
-		mpd_return_pair(connection, pair);
-	}
+	while ((pair = mpd_recv_pair(connection)) != NULL)
+		flags |= mpd_idle_parse_pair(pair);
 
 	return flags;
 }

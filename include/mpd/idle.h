@@ -35,6 +35,7 @@
 
 #include <stdbool.h>
 
+struct mpd_pair;
 struct mpd_connection;
 
 /**
@@ -87,6 +88,15 @@ mpd_send_idle(struct mpd_connection *connection);
  */
 bool
 mpd_send_noidle(struct mpd_connection *connection);
+
+/**
+ * Parses a "changed" pair, which is part of MPD's response to the
+ * "idle" command.
+ *
+ * @return an idle code, or 0 if the pair was not understood
+ */
+enum mpd_idle
+mpd_idle_parse_pair(const struct mpd_pair *pair);
 
 /**
  * Waits until MPD sends the list of idle events and returns it in a
