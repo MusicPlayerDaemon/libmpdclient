@@ -30,6 +30,7 @@
 #include <mpd/pair.h>
 #include <mpd/parser.h>
 #include "internal.h"
+#include "iasync.h"
 #include "sync.h"
 
 #include <string.h>
@@ -80,6 +81,8 @@ mpd_recv_pair(struct mpd_connection *connection)
 	if (line == NULL) {
 		connection->receiving = false;
 		connection->sending_command_list = false;
+
+		mpd_async_copy_error(connection->async, &connection->error);
 		return NULL;
 	}
 
