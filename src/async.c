@@ -26,7 +26,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <mpd/async.h>
+#include "iasync.h"
 #include "buffer.h"
 #include "ierror.h"
 #include "quote.h"
@@ -124,6 +124,15 @@ mpd_async_get_error_message(const struct mpd_async *async)
 	assert(!async->alive);
 
 	return async->error.message;
+}
+
+bool
+mpd_async_copy_error(const struct mpd_async *async,
+		     struct mpd_error_info *dest)
+{
+	assert(async != NULL);
+
+	return mpd_error_copy(dest, &async->error);
 }
 
 int
