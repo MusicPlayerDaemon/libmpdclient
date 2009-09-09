@@ -167,4 +167,15 @@ mpd_error_printf(struct mpd_error_info *error, const char *fmt, ...);
 void
 mpd_error_errno(struct mpd_error_info *error);
 
+/**
+ * Copies a #mpd_error_info onto another one.  Duplicates the error
+ * message.
+ *
+ * @return true if there was no error in #src, false if an error
+ * condition is stored in #src (in both cases, the information is
+ * copied)
+ */
+bool
+mpd_error_copy(struct mpd_error_info *dest, const struct mpd_error_info *src);
+
 #endif
