@@ -34,7 +34,6 @@
 #include <mpd/status.h>
 #include <mpd/send.h>
 #include <mpd/recv.h>
-#include <mpd/response.h>
 #include "internal.h"
 
 bool
@@ -74,19 +73,7 @@ mpd_recv_status(struct mpd_connection * connection)
 struct mpd_status *
 mpd_run_status(struct mpd_connection *connection)
 {
-	struct mpd_status *status;
-
-	if (!mpd_run_check(connection) || !mpd_send_status(connection))
-		return NULL;
-
-	status = mpd_recv_status(connection);
-	if (status == NULL)
-		return NULL;
-
-	if (!mpd_response_finish(connection)) {
-		mpd_status_free(status);
-		return NULL;
-	}
-
-	return status;
+	return mpd_run_check(connection) && mpd_send_status(connection)
+		? mpd_recv_status(connection)
+		: NULL;
 }
