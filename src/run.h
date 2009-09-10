@@ -26,49 +26,22 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "run.h"
-#include <mpd/run.h>
-#include <mpd/command.h>
-#include <mpd/response.h>
-#include <mpd/status.h>
-#include "internal.h"
+#ifndef MPD_IRUN_H
+#define MPD_IRUN_H
+
+#include <stdbool.h>
+
+struct mpd_connection;
 
 /**
- * Checks whether it is possible to run a command now.
+ * Check if it's possible to run a single command via mpd_run_X().
+ * This is not possible if the connection is currently sending a
+ * command list.
+ *
+ * @return true if that's possible, and false if not (error set
+ * accordingly)
  */
 bool
-mpd_run_check(struct mpd_connection *connection)
-{
-	assert(connection != NULL);
+mpd_run_check(struct mpd_connection *connection);
 
-	if (mpd_error_is_defined(&connection->error))
-		return false;
-
-	if (connection->sending_command_list) {
-		mpd_error_code(&connection->error, MPD_ERROR_STATE);
-		mpd_error_message(&connection->error,
-				  "Not possible in command list mode");
-		return false;
-	}
-
-	return true;
-}
-
-int
-mpd_run_addid(struct mpd_connection *connection, const char *file)
-{
-	int id;
-
-	if (!mpd_run_check(connection))
-		return false;
-
-	if (!mpd_send_addid(connection, file))
-		return -1;
-
-	id = mpd_recv_song_id(connection);
-
-	if (!mpd_response_finish(connection))
-		id = -1;
-
-	return id;
-}
+#endif
