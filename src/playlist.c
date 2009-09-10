@@ -38,7 +38,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct mpd_stored_playlist {
+struct mpd_playlist {
 	char *path;
 
 	/**
@@ -48,10 +48,10 @@ struct mpd_stored_playlist {
 	time_t last_modified;
 };
 
-struct mpd_stored_playlist *
-mpd_stored_playlist_new(const char *path)
+struct mpd_playlist *
+mpd_playlist_new(const char *path)
 {
-	struct mpd_stored_playlist *playlist;
+	struct mpd_playlist *playlist;
 
 	assert(path != NULL);
 	assert(*path != '/');
@@ -74,7 +74,7 @@ mpd_stored_playlist_new(const char *path)
 }
 
 void
-mpd_stored_playlist_free(struct mpd_stored_playlist *playlist)
+mpd_playlist_free(struct mpd_playlist *playlist)
 {
 	assert(playlist != NULL);
 	assert(playlist->path != NULL);
@@ -83,17 +83,17 @@ mpd_stored_playlist_free(struct mpd_stored_playlist *playlist)
 	free(playlist);
 }
 
-struct mpd_stored_playlist *
-mpd_stored_playlist_dup(const struct mpd_stored_playlist *playlist)
+struct mpd_playlist *
+mpd_playlist_dup(const struct mpd_playlist *playlist)
 {
 	assert(playlist != NULL);
 	assert(playlist->path != NULL);
 
-	return mpd_stored_playlist_new(playlist->path);
+	return mpd_playlist_new(playlist->path);
 }
 
 const char *
-mpd_stored_playlist_get_path(const struct mpd_stored_playlist *playlist)
+mpd_playlist_get_path(const struct mpd_playlist *playlist)
 {
 	assert(playlist != NULL);
 
@@ -101,20 +101,20 @@ mpd_stored_playlist_get_path(const struct mpd_stored_playlist *playlist)
 }
 
 time_t
-mpd_stored_playlist_get_last_modified(const struct mpd_stored_playlist *playlist)
+mpd_playlist_get_last_modified(const struct mpd_playlist *playlist)
 {
 	return playlist->last_modified;
 }
 
 void
-mpd_stored_playlist_set_last_modified(struct mpd_stored_playlist *playlist,
-				      time_t mtime)
+mpd_playlist_set_last_modified(struct mpd_playlist *playlist,
+			       time_t mtime)
 {
 	playlist->last_modified = mtime;
 }
 
-struct mpd_stored_playlist *
-mpd_stored_playlist_begin(const struct mpd_pair *pair)
+struct mpd_playlist *
+mpd_playlist_begin(const struct mpd_pair *pair)
 {
 	assert(pair != NULL);
 	assert(pair->name != NULL);
@@ -123,12 +123,11 @@ mpd_stored_playlist_begin(const struct mpd_pair *pair)
 	if (strcmp(pair->name, "playlist") != 0)
 		return NULL;
 
-	return mpd_stored_playlist_new(pair->value);
+	return mpd_playlist_new(pair->value);
 }
 
 bool
-mpd_stored_playlist_feed(struct mpd_stored_playlist *stored_playlist,
-			 const struct mpd_pair *pair)
+mpd_playlist_feed(struct mpd_playlist *playlist, const struct mpd_pair *pair)
 {
 	assert(pair != NULL);
 	assert(pair->name != NULL);
@@ -138,10 +137,8 @@ mpd_stored_playlist_feed(struct mpd_stored_playlist *stored_playlist,
 		return false;
 
 	if (strcmp(pair->name, "Last-Modified") == 0)
-		stored_playlist->last_modified =
+		playlist->last_modified =
 			iso8601_datetime_parse(pair->value);
-
-	(void)stored_playlist;
 
 	return true;
 }

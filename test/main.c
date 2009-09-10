@@ -272,7 +272,7 @@ test_lsinfo(struct mpd_connection *conn, const char *path)
 	while ((entity = mpd_recv_entity(conn)) != NULL) {
 		const struct mpd_song *song;
 		const struct mpd_directory *dir;
-		const struct mpd_stored_playlist *pl;
+		const struct mpd_playlist *pl;
 
 		switch (mpd_entity_get_type(entity)) {
 		case MPD_ENTITY_TYPE_UNKNOWN:
@@ -289,9 +289,9 @@ test_lsinfo(struct mpd_connection *conn, const char *path)
 			printf("directory: %s\n", mpd_directory_get_path(dir));
 			break;
 
-		case MPD_ENTITY_TYPE_PLAYLISTFILE:
-			pl = mpd_entity_get_stored_playlist(entity);
-			LOG_INFO("playlist: %s", mpd_stored_playlist_get_path(pl));
+		case MPD_ENTITY_TYPE_PLAYLIST:
+			pl = mpd_entity_get_playlist(entity);
+			LOG_INFO("playlist: %s", mpd_playlist_get_path(pl));
 			break;
 		}
 

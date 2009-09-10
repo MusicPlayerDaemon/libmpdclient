@@ -60,9 +60,9 @@ enum mpd_entity_type {
 	MPD_ENTITY_TYPE_SONG,
 
 	/**
-	 * A stored playlist (#mpd_stored_playlist).
+	 * A stored playlist (#mpd_playlist).
 	 */
-	MPD_ENTITY_TYPE_PLAYLISTFILE,
+	MPD_ENTITY_TYPE_PLAYLIST,
 };
 
 /**
@@ -110,14 +110,14 @@ const struct mpd_song *
 mpd_entity_get_song(const struct mpd_entity *entity);
 
 /**
- * Obtains a pointer to the #mpd_stored_playlist object enclosed by
+ * Obtains a pointer to the #mpd_playlist object enclosed by
  * this #mpd_entity.  Calling this function is only allowed of
- * mpd_entity_get_type() has returned #MPD_ENTITY_TYPE_PLAYLISTFILE.
+ * mpd_entity_get_type() has returned #MPD_ENTITY_TYPE_PLAYLIST.
  *
  * @return the directory object
  */
-const struct mpd_stored_playlist *
-mpd_entity_get_stored_playlist(const struct mpd_entity *entity);
+const struct mpd_playlist *
+mpd_entity_get_playlist(const struct mpd_entity *entity);
 
 /**
  * Begins parsing a new entity.

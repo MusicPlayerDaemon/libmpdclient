@@ -60,9 +60,9 @@ struct mpd_entity {
 		struct mpd_song *song;
 
 		/**
-		 * Only valid if type==#MPD_ENTITY_TYPE_PLAYLISTFILE.
+		 * Only valid if type==#MPD_ENTITY_TYPE_PLAYLIST.
 		 */
-		struct mpd_stored_playlist *playlistFile;
+		struct mpd_playlist *playlistFile;
 	} info;
 };
 
@@ -83,8 +83,8 @@ mpd_entity_free(struct mpd_entity *entity) {
 		mpd_song_free(entity->info.song);
 		break;
 
-	case MPD_ENTITY_TYPE_PLAYLISTFILE:
-		mpd_stored_playlist_free(entity->info.playlistFile);
+	case MPD_ENTITY_TYPE_PLAYLIST:
+		mpd_playlist_free(entity->info.playlistFile);
 		break;
 	}
 
@@ -117,11 +117,11 @@ mpd_entity_get_song(const struct mpd_entity *entity)
 	return entity->info.song;
 }
 
-const struct mpd_stored_playlist *
-mpd_entity_get_stored_playlist(const struct mpd_entity *entity)
+const struct mpd_playlist *
+mpd_entity_get_playlist(const struct mpd_entity *entity)
 {
 	assert(entity != NULL);
-	assert(entity->type == MPD_ENTITY_TYPE_PLAYLISTFILE);
+	assert(entity->type == MPD_ENTITY_TYPE_PLAYLIST);
 
 	return entity->info.playlistFile;
 }
@@ -140,8 +140,8 @@ mpd_entity_feed_first(struct mpd_entity *entity, const struct mpd_pair *pair)
 		if (entity->info.directory == NULL)
 			return false;
 	} else if (strcmp(pair->name, "playlist") == 0) {
-		entity->type = MPD_ENTITY_TYPE_PLAYLISTFILE;
-		entity->info.playlistFile = mpd_stored_playlist_new(pair->value);
+		entity->type = MPD_ENTITY_TYPE_PLAYLIST;
+		entity->info.playlistFile = mpd_playlist_new(pair->value);
 		if (entity->info.playlistFile == NULL)
 			return false;
 	} else {
@@ -195,8 +195,8 @@ mpd_entity_feed(struct mpd_entity *entity, const struct mpd_pair *pair)
 		mpd_song_feed(entity->info.song, pair);
 		break;
 
-	case MPD_ENTITY_TYPE_PLAYLISTFILE:
-		mpd_stored_playlist_feed(entity->info.playlistFile, pair);
+	case MPD_ENTITY_TYPE_PLAYLIST:
+		mpd_playlist_feed(entity->info.playlistFile, pair);
 		break;
 	}
 
