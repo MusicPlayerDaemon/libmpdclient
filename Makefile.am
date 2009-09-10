@@ -44,6 +44,7 @@ src_libmpdclient_la_SOURCES = \
 	src/cpos.c \
 	src/directory.c \
 	src/output.c \
+	src/coutput.c \
 	src/entity.c \
 	src/idle.c \
 	src/iso8601.h \

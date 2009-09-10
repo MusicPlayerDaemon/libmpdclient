@@ -13,10 +13,6 @@
    notice, this list of conditions and the following disclaimer in the
    documentation and/or other materials provided with the distribution.
 
-   - Neither the name of the Music Player Daemon nor the names of its
-   contributors may be used to endorse or promote products derived from
-   this software without specific prior written permission.
-
    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
    ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -31,87 +27,44 @@
 */
 
 #include <mpd/output.h>
-#include <mpd/pair.h>
+#include <mpd/send.h>
+#include <mpd/recv.h>
+#include "internal.h"
 
-#include <assert.h>
-#include <string.h>
-#include <stdlib.h>
-
-struct mpd_output {
-	unsigned id;
-	char *name;
-	bool enabled;
-};
+bool
+mpd_send_outputs(struct mpd_connection *connection)
+{
+	return mpd_send_command(connection, "outputs", NULL);
+}
 
 struct mpd_output *
-mpd_output_begin(const struct mpd_pair *pair)
+mpd_recv_output(struct mpd_connection *connection)
 {
 	struct mpd_output *output;
+	struct mpd_pair *pair;
 
-	assert(pair != NULL);
-
-	if (strcmp(pair->name, "outputid") != 0)
+	pair = mpd_recv_pair_named(connection, "outputid");
+	if (pair == NULL)
 		return NULL;
 
-	output = malloc(sizeof(*output));
-	if (output == NULL)
+	output = mpd_output_begin(pair);
+	mpd_return_pair(connection, pair);
+	if (output == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
 		return NULL;
+	}
 
-	output->id = atoi(pair->value);
+	while ((pair = mpd_recv_pair(connection)) != NULL &&
+	       mpd_output_feed(output, pair))
+		mpd_return_pair(connection, pair);
 
-	output->name = NULL;
-	output->enabled = false;
+	if (mpd_error_is_defined(&connection->error)) {
+		assert(pair == NULL);
 
+		mpd_output_free(output);
+		return NULL;
+	}
+
+	mpd_enqueue_pair(connection, pair);
 	return output;
-}
-
-bool
-mpd_output_feed(struct mpd_output *output, const struct mpd_pair *pair)
-{
-	if (strcmp(pair->name, "outputid") == 0)
-		return false;
-
-	if (strcmp(pair->name, "outputname") == 0) {
-		if (output->name != NULL)
-			free(output->name);
-
-		output->name = strdup(pair->value);
-	} else if (strcmp(pair->name, "outputenabled") == 0)
-		output->enabled = atoi(pair->value) != 0;
-
-	return true;
-}
-
-void
-mpd_output_free(struct mpd_output *output)
-{
-	assert(output != NULL);
-
-	if (output->name != NULL)
-		free(output->name);
-	free(output);
-}
-
-unsigned
-mpd_output_get_id(const struct mpd_output *output)
-{
-	assert(output != NULL);
-
-	return output->id;
-}
-
-const char *
-mpd_output_get_name(const struct mpd_output *output)
-{
-	assert(output != NULL);
-
-	return output->name;
-}
-
-bool
-mpd_output_get_enabled(const struct mpd_output *output)
-{
-	assert(output != NULL);
-
-	return output->enabled;
 }
