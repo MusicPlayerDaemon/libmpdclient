@@ -35,8 +35,8 @@
 /**
  * Checks whether it is possible to run a command now.
  */
-static bool
-run_check(struct mpd_connection *connection)
+bool
+mpd_run_check(struct mpd_connection *connection)
 {
 	assert(connection != NULL);
 
@@ -58,7 +58,7 @@ mpd_run_addid(struct mpd_connection *connection, const char *file)
 {
 	int id;
 
-	if (!run_check(connection))
+	if (!mpd_run_check(connection))
 		return false;
 
 	if (!mpd_send_addid(connection, file))
@@ -77,7 +77,7 @@ mpd_run_status(struct mpd_connection *connection)
 {
 	struct mpd_status *status;
 
-	if (!run_check(connection) || !mpd_send_status(connection))
+	if (!mpd_run_check(connection) || !mpd_send_status(connection))
 		return NULL;
 
 	status = mpd_recv_status(connection);
