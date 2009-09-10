@@ -103,6 +103,17 @@ mpd_send_update(struct mpd_connection *connection, const char *path);
 unsigned
 mpd_recv_update_id(struct mpd_connection *connection);
 
+/**
+ * Shortcut for mpd_send_update() and mpd_recv_update_id().
+ *
+ * @param connection the connection to MPD
+ * @param path optional path to update; if NULL, then all of the music
+ * directory is updated
+ * @return a positive job id on success, 0 on error
+ */
+unsigned
+mpd_run_update(struct mpd_connection *connection, const char *path);
+
 #ifdef __cplusplus
 }
 #endif

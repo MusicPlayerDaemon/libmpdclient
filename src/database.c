@@ -30,6 +30,8 @@
 #include <mpd/send.h>
 #include <mpd/recv.h>
 #include <mpd/pair.h>
+#include <mpd/response.h>
+#include "run.h"
 
 #include <stddef.h>
 #include <stdlib.h>
@@ -71,4 +73,17 @@ mpd_recv_update_id(struct mpd_connection *connection)
 	}
 
 	return ret;
+}
+
+unsigned
+mpd_run_update(struct mpd_connection *connection, const char *path)
+{
+	unsigned id;
+
+	if (!mpd_run_check(connection) || !mpd_send_update(connection, path))
+		return 0;
+
+	id = mpd_recv_update_id(connection);
+	return id != 0 && mpd_response_finish(connection)
+		? id : 0;
 }
