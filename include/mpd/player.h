@@ -31,14 +31,6 @@
 
 #include <stdbool.h>
 
-enum {
-	/**
-	 *  use this to start playing at the beginning, useful when in
-	 *  random mode
-	 */
-	MPD_PLAY_AT_BEGINNING = -1,
-};
-
 struct mpd_connection;
 
 #ifdef __cplusplus
@@ -52,9 +44,31 @@ extern "C" {
 bool
 mpd_send_currentsong(struct mpd_connection *connection);
 
+/**
+ * Starts playing the current song from the beginning.
+ *
+ * @param connection the connection to MPD
+ */
 bool
-mpd_send_play(struct mpd_connection *connection, int song_pos);
+mpd_send_play(struct mpd_connection *connection);
 
+/**
+ * Starts playing the specified song from the beginning.
+ *
+ * @param song_pos the position of the song in the queue
+ * @param connection the connection to MPD
+ * @return true on success, false on error
+ */
+bool
+mpd_send_playpos(struct mpd_connection *connection, unsigned song_pos);
+
+/**
+ * Starts playing the specified song from the beginning.
+ *
+ * @param connection the connection to MPD
+ * @param id the id of the song
+ * @return true on success, false on error
+ */
 bool
 mpd_send_playid(struct mpd_connection *connection, int id);
 
@@ -70,9 +84,35 @@ mpd_send_next(struct mpd_connection *connection);
 bool
 mpd_send_previous(struct mpd_connection *connection);
 
+/**
+ * Seeks the current song.
+ *
+ * @param connection the connection to MPD
+ * @param t the position within the song, in seconds
+ * @return true on success, false on error
+ */
 bool
-mpd_send_seek(struct mpd_connection *connection, int song_pos, int t);
+mpd_send_seek(struct mpd_connection *connection, int t);
 
+/**
+ * Seeks the specified song.
+ *
+ * @param connection the connection to MPD
+ * @param song_pos the position of the song in the queue
+ * @param t the position within the song, in seconds
+ * @return true on success, false on error
+ */
+bool
+mpd_send_seekpos(struct mpd_connection *connection, unsigned song_pos, int t);
+
+/**
+ * Seeks the specified song.
+ *
+ * @param connection the connection to MPD
+ * @param id the id of the song
+ * @param t the position within the song, in seconds
+ * @return true on success, false on error
+ */
 bool
 mpd_send_seekid(struct mpd_connection *connection, int id, int t);
 

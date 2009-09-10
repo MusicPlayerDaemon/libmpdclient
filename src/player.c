@@ -40,7 +40,13 @@ mpd_send_currentsong(struct mpd_connection *connection)
 }
 
 bool
-mpd_send_play(struct mpd_connection *connection, int song_pos)
+mpd_send_play(struct mpd_connection *connection)
+{
+	return mpd_send_command(connection, "play", NULL);
+}
+
+bool
+mpd_send_playpos(struct mpd_connection *connection, unsigned song_pos)
 {
 	return mpd_send_int_command(connection, "play", song_pos);
 }
@@ -76,7 +82,13 @@ mpd_send_previous(struct mpd_connection *connection)
 }
 
 bool
-mpd_send_seek(struct mpd_connection *connection, int song_pos, int t)
+mpd_send_seek(struct mpd_connection *connection, int t)
+{
+	return mpd_send_int2_command(connection, "seek", -1, t);
+}
+
+bool
+mpd_send_seekpos(struct mpd_connection *connection, unsigned song_pos, int t)
 {
 	return mpd_send_int2_command(connection, "seek", song_pos, t);
 }
