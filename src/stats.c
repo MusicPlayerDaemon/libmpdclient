@@ -32,10 +32,8 @@
 
 #include <mpd/stats.h>
 #include <mpd/pair.h>
-#include <mpd/send.h>
-#include <mpd/recv.h>
-#include "internal.h"
 
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -48,12 +46,6 @@ struct mpd_stats {
 	unsigned long play_time;
 	unsigned long db_play_time;
 };
-
-bool
-mpd_send_stats(struct mpd_connection *connection)
-{
-	return mpd_send_command(connection, "stats", NULL);
-}
 
 struct mpd_stats *
 mpd_stats_new(void)
@@ -90,49 +82,6 @@ mpd_stats_feed(struct mpd_stats *stats, const struct mpd_pair *pair)
 		stats->play_time = strtol(pair->value,NULL,10);
 	else if (strcmp(pair->name, "db_playtime") == 0)
 		stats->db_play_time = strtol(pair->value,NULL,10);
-}
-
-struct mpd_stats *
-mpd_recv_stats(struct mpd_connection *connection)
-{
-	struct mpd_stats * stats;
-	struct mpd_pair *pair;
-
-	assert(connection != NULL);
-
-	if (mpd_error_is_defined(&connection->error))
-		/* refuse to receive a response if the connection's
-		   state is not clean */
-		return NULL;
-
-	stats = mpd_stats_new();
-	if (stats == NULL) {
-		mpd_error_code(&connection->error, MPD_ERROR_OOM);
-		return NULL;
-	}
-
-	/* read and parse all response lines */
-	while ((pair = mpd_recv_pair(connection)) != NULL) {
-		mpd_stats_feed(stats, pair);
-		mpd_return_pair(connection, pair);
-	}
-
-	if (mpd_error_is_defined(&connection->error)) {
-		/* an error has occured; roll back */
-		mpd_stats_free(stats);
-		return NULL;
-	}
-
-	return stats;
-}
-
-
-struct mpd_stats *
-mpd_get_stats(struct mpd_connection * connection)
-{
-	return mpd_send_stats(connection)
-		? mpd_recv_stats(connection)
-		: NULL;
 }
 
 void mpd_stats_free(struct mpd_stats * stats) {

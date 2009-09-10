@@ -60,6 +60,7 @@ src_libmpdclient_la_SOURCES = \
 	src/song.c \
 	src/status.c \
 	src/stats.c \
+	src/cstats.c \
 	src/stored_playlist.c \
 	src/sync.c src/sync.h \
 	src/tag.c
