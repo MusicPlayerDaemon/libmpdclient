@@ -8,6 +8,7 @@ mpdinclude_HEADERS = \
 	include/mpd/command.h \
 	include/mpd/connection.h \
 	include/mpd/cpos.h \
+	include/mpd/database.h \
 	include/mpd/directory.h \
 	include/mpd/entity.h \
 	include/mpd/error.h \
@@ -43,6 +44,7 @@ src_libmpdclient_la_SOURCES = \
 	src/command.c \
 	src/connection.c \
 	src/cpos.c \
+	src/database.c \
 	src/directory.c \
 	src/output.c \
 	src/coutput.c \

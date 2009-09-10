@@ -60,13 +60,6 @@ bool
 mpd_response_next(struct mpd_connection *connection);
 
 /**
- * Receives the id the of the update job which was submitted by
- * mpd_send_update().
- */
-int
-mpd_recv_update_id(struct mpd_connection *connection);
-
-/**
  * Receives the next supported command.  Call this in a loop after
  * mpd_send_commands() or mpd_send_notcommands().
  *

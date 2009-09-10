@@ -106,21 +106,6 @@ mpd_response_next(struct mpd_connection *connection)
 	return true;
 }
 
-int
-mpd_recv_update_id(struct mpd_connection *connection)
-{
-	struct mpd_pair *pair;
-	int ret = 0;
-
-	pair = mpd_recv_pair_named(connection, "updating_db");
-	if (pair != NULL) {
-		ret = atoi(pair->value);
-		mpd_return_pair(connection, pair);
-	}
-
-	return ret;
-}
-
 char *
 mpd_recv_command_name(struct mpd_connection *connection)
 {

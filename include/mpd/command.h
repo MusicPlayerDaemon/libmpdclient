@@ -157,35 +157,6 @@ mpd_send_rm(struct mpd_connection *connection, const char *name);
 
 
 /*
- * Music database commands
- *
- */
-
-/**
- * recursively fetches all songs/dir/playlists in "dir" (no metadata
- * is returned)
- */
-bool
-mpd_send_listall(struct mpd_connection *connection, const char *dir);
-
-/**
- * same as mpd_send_listall(), but also metadata is returned
- */
-bool
-mpd_send_listallinfo(struct mpd_connection *connection, const char *dir);
-
-
-/**
- * non-recursive version of mpd_send_listallinfo()
- */
-bool
-mpd_send_lsinfo(struct mpd_connection *connection, const char *dir);
-
-bool
-mpd_send_update(struct mpd_connection *connection, const char *path);
-
-
-/*
  * Mixer commands
  *
  */

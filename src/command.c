@@ -216,36 +216,6 @@ mpd_send_rm(struct mpd_connection *connection, const char *name)
 
 
 /*
- * Music database commands
- *
- */
-
-bool
-mpd_send_listall(struct mpd_connection *connection, const char *dir)
-{
-	return mpd_send_command(connection, "listall", dir, NULL);
-}
-
-bool
-mpd_send_listallinfo(struct mpd_connection *connection, const char *dir)
-{
-	return mpd_send_command(connection, "listallinfo", dir, NULL);
-}
-
-bool
-mpd_send_lsinfo(struct mpd_connection *connection, const char *dir)
-{
-	return mpd_send_command(connection, "lsinfo", dir, NULL);
-}
-
-bool
-mpd_send_update(struct mpd_connection *connection, const char *path)
-{
-	return mpd_send_command(connection, "update", path, NULL);
-}
-
-
-/*
  * Mixer commands
  *
  */
