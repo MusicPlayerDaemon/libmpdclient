@@ -33,6 +33,7 @@
 #include <mpd/list.h>
 #include <mpd/send.h>
 #include "internal.h"
+#include "isend.h"
 
 #include <assert.h>
 

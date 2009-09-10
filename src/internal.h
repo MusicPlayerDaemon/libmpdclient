@@ -150,14 +150,6 @@ void
 mpd_connection_sync_error(struct mpd_connection *connection);
 
 /**
- * Sends a command without arguments to the server, but does not
- * update the "receiving" flag nor the "listOks" counter.  This is
- * used internally by the command_list functions.
- */
-bool
-mpd_send_command2(struct mpd_connection *connection, const char *command);
-
-/**
  * Check if it's possible to run a single command via mpd_run_X().
  * This is not possible if the connection is currently sending a
  * command list.

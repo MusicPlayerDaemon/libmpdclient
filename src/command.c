@@ -28,6 +28,7 @@
 
 #include <mpd/command.h>
 #include <mpd/send.h>
+#include "isend.h"
 
 #include <limits.h>
 #include <stdio.h>
@@ -37,49 +38,6 @@ enum {
 	INTLEN = (sizeof(int) * CHAR_BIT + 1) / 3 + 1,
 	LONGLONGLEN = (sizeof(long long) * CHAR_BIT + 1) / 3 + 1,
 };
-
-static bool
-mpd_send_int_command(struct mpd_connection *connection, const char *command,
-		     int arg)
-{
-	char arg_string[INTLEN];
-
-	snprintf(arg_string, sizeof(arg_string), "%i", arg);
-	return mpd_send_command(connection, command, arg_string, NULL);
-}
-
-static bool
-mpd_send_int2_command(struct mpd_connection *connection, const char *command,
-		      int arg1, int arg2)
-{
-	char arg1_string[INTLEN], arg2_string[INTLEN];
-
-	snprintf(arg1_string, sizeof(arg1_string), "%i", arg1);
-	snprintf(arg2_string, sizeof(arg2_string), "%i", arg2);
-	return mpd_send_command(connection, command,
-				arg1_string, arg2_string, NULL);
-}
-
-static bool
-mpd_send_range_command(struct mpd_connection *connection, const char *command,
-                       unsigned arg1, unsigned arg2)
-{
-	char arg_string[INTLEN*2+1];
-
-	snprintf(arg_string, sizeof arg_string, "%u:%u", arg1, arg2);
-	return mpd_send_command(connection, command, arg_string, NULL);
-}
-
-static bool
-mpd_send_ll_command(struct mpd_connection *connection, const char *command,
-		    long long arg)
-{
-	char arg_string[LONGLONGLEN];
-
-	snprintf(arg_string, sizeof(arg_string), "%lld", arg);
-	return mpd_send_command(connection, command, arg_string, NULL);
-}
-
 
 /*
  * Status commands
