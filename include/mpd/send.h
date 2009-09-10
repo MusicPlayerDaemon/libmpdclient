@@ -30,7 +30,6 @@
 #define LIBMPDCLIENT_SEND_H
 
 #include <stdbool.h>
-#include <stddef.h>
 
 struct mpd_connection;
 
