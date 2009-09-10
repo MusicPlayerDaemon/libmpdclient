@@ -32,10 +32,6 @@
 
 #include <mpd/status.h>
 #include <mpd/pair.h>
-#include <mpd/send.h>
-#include <mpd/connection.h>
-#include <mpd/recv.h>
-#include "internal.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -205,34 +201,6 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 		}
 	}
 
-}
-
-struct mpd_status *
-mpd_recv_status(struct mpd_connection * connection)
-{
-	struct mpd_status * status;
-	struct mpd_pair *pair;
-
-	if (mpd_error_is_defined(&connection->error))
-		return NULL;
-
-	status = mpd_status_new();
-	if (status == NULL) {
-		mpd_error_code(&connection->error, MPD_ERROR_OOM);
-		return NULL;
-	}
-
-	while ((pair = mpd_recv_pair(connection)) != NULL) {
-		mpd_status_feed(status, pair);
-		mpd_return_pair(connection, pair);
-	}
-
-	if (mpd_error_is_defined(&connection->error)) {
-		mpd_status_free(status);
-		return NULL;
-	}
-
-	return status;
 }
 
 void mpd_status_free(struct mpd_status * status) {

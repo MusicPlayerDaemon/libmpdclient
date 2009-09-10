@@ -59,6 +59,7 @@ src_libmpdclient_la_SOURCES = \
 	src/socket.c src/socket.h \
 	src/song.c \
 	src/status.c \
+	src/cstatus.c \
 	src/stats.c \
 	src/cstats.c \
 	src/stored_playlist.c \
