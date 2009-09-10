@@ -87,12 +87,30 @@ void
 mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair);
 
 /**
+ * Sends the "status" command to MPD.  Call mpd_recv_status() to read
+ * the response.
+ *
+ * @return true on success
+ */
+bool
+mpd_send_status(struct mpd_connection *connection);
+
+/**
  * Receives a #mpd_status object from the server.
  *
  * @return the received #mpd_status object, or NULL on error
  */
 struct mpd_status *
 mpd_recv_status(struct mpd_connection *connection);
+
+/**
+ * Executes the "status" command and reads the response.
+ *
+ * @return the #mpd_status object returned by the server, or NULL on
+ * error
+ */
+struct mpd_status *
+mpd_run_status(struct mpd_connection *connection);
 
 /**
  * Releases a #mpd_status object.

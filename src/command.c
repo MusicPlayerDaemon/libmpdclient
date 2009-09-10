@@ -87,11 +87,6 @@ mpd_send_ll_command(struct mpd_connection *connection, const char *command,
  */
 
 bool
-mpd_send_status(struct mpd_connection * connection) {
-	return mpd_send_command(connection, "status", NULL);
-}
-
-bool
 mpd_send_currentsong(struct mpd_connection *connection)
 {
 	return mpd_send_command(connection, "currentsong", NULL);

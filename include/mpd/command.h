@@ -51,15 +51,6 @@ extern "C" {
  */
 
 /**
- * Sends the "status" command to MPD.  Call mpd_get_status() to read
- * the response.
- *
- * @return true on success
- */
-bool
-mpd_send_status(struct mpd_connection *connection);
-
-/**
  * Fetches the currently selected song (the song referenced by
  * status->song and status->songid).
  */
