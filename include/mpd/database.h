@@ -26,6 +26,13 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*! \file
+ * \brief Database
+ *
+ * This file declares functions which query or update MPD's music
+ * database.
+ */
+
 #ifndef MPD_DATABASE_H
 #define MPD_DATABASE_H
 
@@ -38,31 +45,60 @@ extern "C" {
 #endif
 
 /**
- * recursively fetches all songs/dir/playlists in "dir" (no metadata
- * is returned)
+ * Get a recursive list of all directories, songs and playlist from
+ * MPD.  They are returned without metadata.  This is a rather
+ * expensive operation, because the response may be large.
+ *
+ * @param connection the connection to MPD
+ * @param path an optional base path for the query
+ * @return true on success, false on error
  */
 bool
-mpd_send_listall(struct mpd_connection *connection, const char *dir);
+mpd_send_listall(struct mpd_connection *connection, const char *path);
 
 /**
- * same as mpd_send_listall(), but also metadata is returned
+ * Like #mpd_send_listall(), but return metadata.  This operation is
+ * even more expensive, because the response is larger.  If it is
+ * larger than a configurable server-side limit, MPD may disconnect
+ * you.
+ *
+ * @param connection the connection to MPD
+ * @param path an optional base path for the query
+ * @return true on success, false on error
  */
 bool
-mpd_send_listallinfo(struct mpd_connection *connection, const char *dir);
+mpd_send_listallinfo(struct mpd_connection *connection, const char *path);
 
 
 /**
- * non-recursive version of mpd_send_listallinfo()
+ * Get a list of all directories, songs and playlist in a directory
+ * from MPD, including metadata.
+ *
+ * @param connection the connection to MPD
+ * @param path the directory to be listed
+ * @return true on success, false on error
  */
 bool
-mpd_send_lsinfo(struct mpd_connection *connection, const char *dir);
+mpd_send_lsinfo(struct mpd_connection *connection, const char *path);
 
+/**
+ * Instructs MPD to update the music database: find new files, remove
+ * deleted files, update modified files.
+ *
+ * @param connection the connection to MPD
+ * @param path optional path to update; if NULL, then all of the music
+ * directory is updated
+ * @return true on success, false on error
+ */
 bool
 mpd_send_update(struct mpd_connection *connection, const char *path);
 
 /**
  * Receives the id the of the update job which was submitted by
  * mpd_send_update().
+ *
+ * @param connection the connection to MPD
+ * @return a positive job id on success, 0 on error
  */
 int
 mpd_recv_update_id(struct mpd_connection *connection);
