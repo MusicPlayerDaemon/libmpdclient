@@ -95,7 +95,7 @@ mpd_run_addid(struct mpd_connection *connection, const char *file)
 	int id;
 
 	if (!mpd_run_check(connection))
-		return false;
+		return -1;
 
 	if (!mpd_send_addid(connection, file))
 		return -1;
