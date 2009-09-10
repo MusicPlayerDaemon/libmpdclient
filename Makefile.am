@@ -16,6 +16,7 @@ mpdinclude_HEADERS = \
 	include/mpd/list.h \
 	include/mpd/parser.h \
 	include/mpd/password.h \
+	include/mpd/player.h \
 	include/mpd/playlist.h \
 	include/mpd/protocol.h \
 	include/mpd/queue.h \
@@ -55,6 +56,7 @@ src_libmpdclient_la_SOURCES = \
 	src/list.c \
 	src/parser.c \
 	src/password.c \
+	src/player.c \
 	src/playlist.c \
 	src/queue.c \
 	src/quote.c src/quote.h \

@@ -26,43 +26,73 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*! \file
- * \brief MPD client library
- *
- * This is a client library for the Music Player Daemon, written in C.
- *
- * You can choose one of several APIs, depending on your requirements:
- *
- * - struct mpd_async: a very low-level asynchronous API which knows
- *   the protocol syntax, but no specific commands
- *
- * - struct mpd_connection: a basic synchronous API which knows all
- *   MPD commands and parses all responses
- *
- * \author Max Kellermann (max@duempel.org)
+#ifndef MPD_PLAYER_H
+#define MPD_PLAYER_H
+
+#include <stdbool.h>
+
+enum {
+	/**
+	 *  use this to start playing at the beginning, useful when in
+	 *  random mode
+	 */
+	MPD_PLAY_AT_BEGINNING = -1,
+};
+
+struct mpd_connection;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * Fetches the currently selected song (the song referenced by
+ * status->song and status->songid).
  */
+bool
+mpd_send_currentsong(struct mpd_connection *connection);
 
-#ifndef MPD_CLIENT_H
-#define MPD_CLIENT_H
+bool
+mpd_send_play(struct mpd_connection *connection, int song_pos);
 
-#include <mpd/connection.h>
-#include <mpd/command.h>
-#include <mpd/database.h>
-#include <mpd/directory.h>
-#include <mpd/entity.h>
-#include <mpd/list.h>
-#include <mpd/output.h>
-#include <mpd/pair.h>
-#include <mpd/password.h>
-#include <mpd/player.h>
-#include <mpd/playlist.h>
-#include <mpd/queue.h>
-#include <mpd/recv.h>
-#include <mpd/response.h>
-#include <mpd/search.h>
-#include <mpd/send.h>
-#include <mpd/song.h>
-#include <mpd/stats.h>
-#include <mpd/status.h>
+bool
+mpd_send_playid(struct mpd_connection *connection, int id);
+
+bool
+mpd_send_stop(struct mpd_connection *connection);
+
+bool
+mpd_send_pause(struct mpd_connection *connection, int mode);
+
+bool
+mpd_send_next(struct mpd_connection *connection);
+
+bool
+mpd_send_previous(struct mpd_connection *connection);
+
+bool
+mpd_send_seek(struct mpd_connection *connection, int song_pos, int time);
+
+bool
+mpd_send_seekid(struct mpd_connection *connection, int id, int time);
+
+bool
+mpd_send_repeat(struct mpd_connection *connection, int mode);
+
+bool
+mpd_send_random(struct mpd_connection *connection, int mode);
+
+bool
+mpd_send_single(struct mpd_connection *connection, int mode);
+
+bool
+mpd_send_consume(struct mpd_connection *connection, int mode);
+
+bool
+mpd_send_crossfade(struct mpd_connection *connection, int seconds);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -31,76 +31,11 @@
 
 #include <stdbool.h>
 
-enum {
-	/**
-	 *  use this to start playing at the beginning, useful when in
-	 *  random mode
-	 */
-	MPD_PLAY_AT_BEGINNING = -1,
-};
-
 struct mpd_connection;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/*
- * Status commands
- *
- */
-
-/**
- * Fetches the currently selected song (the song referenced by
- * status->song and status->songid).
- */
-bool
-mpd_send_currentsong(struct mpd_connection *connection);
-
-/*
- * Player commands
- *
- */
-
-bool
-mpd_send_play(struct mpd_connection *connection, int song_pos);
-
-bool
-mpd_send_playid(struct mpd_connection *connection, int id);
-
-bool
-mpd_send_stop(struct mpd_connection *connection);
-
-bool
-mpd_send_pause(struct mpd_connection *connection, int mode);
-
-bool
-mpd_send_next(struct mpd_connection *connection);
-
-bool
-mpd_send_previous(struct mpd_connection *connection);
-
-bool
-mpd_send_seek(struct mpd_connection *connection, int song_pos, int time);
-
-bool
-mpd_send_seekid(struct mpd_connection *connection, int id, int time);
-
-bool
-mpd_send_repeat(struct mpd_connection *connection, int mode);
-
-bool
-mpd_send_random(struct mpd_connection *connection, int mode);
-
-bool
-mpd_send_single(struct mpd_connection *connection, int mode);
-
-bool
-mpd_send_consume(struct mpd_connection *connection, int mode);
-
-bool
-mpd_send_crossfade(struct mpd_connection *connection, int seconds);
-
 
 /*
  * Stored playlist commands
