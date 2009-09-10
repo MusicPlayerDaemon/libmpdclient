@@ -53,48 +53,69 @@ mpd_send_outputs(struct mpd_connection *connection)
 }
 
 struct mpd_output *
+mpd_output_begin(const struct mpd_pair *pair)
+{
+	struct mpd_output *output;
+
+	assert(pair != NULL);
+
+	if (strcmp(pair->name, "outputid") != 0)
+		return NULL;
+
+	output = malloc(sizeof(*output));
+	if (output == NULL)
+		return NULL;
+
+	output->id = atoi(pair->value);
+
+	output->name = NULL;
+	output->enabled = false;
+
+	return output;
+}
+
+bool
+mpd_output_feed(struct mpd_output *output, const struct mpd_pair *pair)
+{
+	if (strcmp(pair->name, "outputid") == 0)
+		return false;
+
+	if (strcmp(pair->name, "outputname") == 0) {
+		if (output->name != NULL)
+			free(output->name);
+
+		output->name = strdup(pair->value);
+	} else if (strcmp(pair->name, "outputenabled") == 0)
+		output->enabled = atoi(pair->value) != 0;
+
+	return true;
+}
+
+struct mpd_output *
 mpd_recv_output(struct mpd_connection *connection)
 {
-	struct mpd_output *output = NULL;
+	struct mpd_output *output;
 	struct mpd_pair *pair;
 
 	pair = mpd_recv_pair_named(connection, "outputid");
 	if (pair == NULL)
 		return NULL;
 
-	output = malloc(sizeof(*output));
+	output = mpd_output_begin(pair);
+	mpd_return_pair(connection, pair);
 	if (output == NULL) {
-		mpd_return_pair(connection, pair);
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
 		return NULL;
 	}
 
-	output->id = atoi(pair->value);
-	mpd_return_pair(connection, pair);
-
-	output->name = NULL;
-	output->enabled = false;
-
-	while ((pair = mpd_recv_pair(connection)) != NULL) {
-		if (strcmp(pair->name, "outputid") == 0) {
-			break;
-		}
-		else if (strcmp(pair->name, "outputname") == 0) {
-			output->name = strdup(pair->value);
-		}
-		else if (strcmp(pair->name, "outputenabled") == 0) {
-			output->enabled = atoi(pair->value) != 0;
-		}
-
+	while ((pair = mpd_recv_pair(connection)) != NULL &&
+	       mpd_output_feed(output, pair))
 		mpd_return_pair(connection, pair);
-	}
 
 	if (mpd_error_is_defined(&connection->error)) {
 		assert(pair == NULL);
 
-		if (output->name != NULL)
-			free(output->name);
-		free(output);
+		mpd_output_free(output);
 		return NULL;
 	}
 

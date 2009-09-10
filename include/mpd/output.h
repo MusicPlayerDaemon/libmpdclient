@@ -36,6 +36,7 @@
 #include <stdbool.h>
 
 struct mpd_connection;
+struct mpd_pair;
 
 /**
  * \struct mpd_output
@@ -57,6 +58,27 @@ extern "C" {
  */
 bool
 mpd_send_outputs(struct mpd_connection *connection);
+
+/**
+ * Begins parsing a new #mpd_output.
+ *
+ * @param pair the first pair in this output (name is "outputid")
+ * @return the new #mpd_output object, or NULL on error (out of
+ * memory, or wrong pair name)
+ */
+struct mpd_output *
+mpd_output_begin(const struct mpd_pair *pair);
+
+/**
+ * Parses the pair, adding its information to the specified
+ * #mpd_output object.
+ *
+ * @return true if the pair was parsed and added to the output (or if
+ * the pair was not understood and ignored), false if this pair is the
+ * beginning of the next output
+ */
+bool
+mpd_output_feed(struct mpd_output *output, const struct mpd_pair *pair);
 
 /**
  * Reads the next mpd_output from the MPD response.  Free the return
