@@ -205,9 +205,6 @@ mpd_send_volume(struct mpd_connection *connection, int change);
  *
  */
 
-bool
-mpd_send_password(struct mpd_connection *connection, const char *password);
-
 /**
  * @param connection a #mpd_connection
  *

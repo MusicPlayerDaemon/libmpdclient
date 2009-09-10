@@ -26,41 +26,13 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*! \file
- * \brief MPD client library
- *
- * This is a client library for the Music Player Daemon, written in C.
- *
- * You can choose one of several APIs, depending on your requirements:
- *
- * - struct mpd_async: a very low-level asynchronous API which knows
- *   the protocol syntax, but no specific commands
- *
- * - struct mpd_connection: a basic synchronous API which knows all
- *   MPD commands and parses all responses
- *
- * \author Max Kellermann (max@duempel.org)
- */
-
-#ifndef MPD_CLIENT_H
-#define MPD_CLIENT_H
-
-#include <mpd/connection.h>
-#include <mpd/command.h>
-#include <mpd/directory.h>
-#include <mpd/entity.h>
-#include <mpd/list.h>
-#include <mpd/output.h>
-#include <mpd/pair.h>
 #include <mpd/password.h>
-#include <mpd/playlist.h>
-#include <mpd/recv.h>
-#include <mpd/response.h>
-#include <mpd/search.h>
 #include <mpd/send.h>
-#include <mpd/song.h>
-#include <mpd/stats.h>
-#include <mpd/status.h>
-#include <mpd/stored_playlist.h>
 
-#endif
+#include <stddef.h>
+
+bool
+mpd_send_password(struct mpd_connection *connection, const char *password)
+{
+	return mpd_send_command(connection, "password", password, NULL);
+}

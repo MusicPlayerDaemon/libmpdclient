@@ -50,6 +50,7 @@ src_libmpdclient_la_SOURCES = \
 	src/iso8601.c \
 	src/list.c \
 	src/parser.c \
+	src/password.c \
 	src/quote.c src/quote.h \
 	src/recv.c \
 	src/response.c \

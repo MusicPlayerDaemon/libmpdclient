@@ -269,12 +269,6 @@ mpd_send_volume(struct mpd_connection *connection, int change)
  */
 
 bool
-mpd_send_password(struct mpd_connection *connection, const char *password)
-{
-	return mpd_send_command(connection, "password", password, NULL);
-}
-
-bool
 mpd_send_commands(struct mpd_connection *connection)
 {
 	return mpd_send_command(connection, "commands", NULL);
