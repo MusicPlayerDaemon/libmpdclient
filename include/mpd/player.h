@@ -71,10 +71,10 @@ bool
 mpd_send_previous(struct mpd_connection *connection);
 
 bool
-mpd_send_seek(struct mpd_connection *connection, int song_pos, int time);
+mpd_send_seek(struct mpd_connection *connection, int song_pos, int t);
 
 bool
-mpd_send_seekid(struct mpd_connection *connection, int id, int time);
+mpd_send_seekid(struct mpd_connection *connection, int id, int t);
 
 bool
 mpd_send_repeat(struct mpd_connection *connection, int mode);

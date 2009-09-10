@@ -76,15 +76,15 @@ mpd_send_previous(struct mpd_connection *connection)
 }
 
 bool
-mpd_send_seek(struct mpd_connection *connection, int song_pos, int time)
+mpd_send_seek(struct mpd_connection *connection, int song_pos, int t)
 {
-	return mpd_send_int2_command(connection, "seek", song_pos, time);
+	return mpd_send_int2_command(connection, "seek", song_pos, t);
 }
 
 bool
-mpd_send_seekid(struct mpd_connection *connection, int id, int time)
+mpd_send_seekid(struct mpd_connection *connection, int id, int t)
 {
-	return mpd_send_int2_command(connection, "seekid", id, time);
+	return mpd_send_int2_command(connection, "seekid", id, t);
 }
 
 bool
