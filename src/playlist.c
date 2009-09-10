@@ -30,7 +30,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <mpd/stored_playlist.h>
+#include <mpd/playlist.h>
 #include <mpd/pair.h>
 #include "iso8601.h"
 

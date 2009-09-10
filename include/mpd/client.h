@@ -54,6 +54,7 @@
 #include <mpd/output.h>
 #include <mpd/pair.h>
 #include <mpd/password.h>
+#include <mpd/playlist.h>
 #include <mpd/queue.h>
 #include <mpd/recv.h>
 #include <mpd/response.h>
@@ -62,6 +63,5 @@
 #include <mpd/song.h>
 #include <mpd/stats.h>
 #include <mpd/status.h>
-#include <mpd/stored_playlist.h>
 
 #endif
