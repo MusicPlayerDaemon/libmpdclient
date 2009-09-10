@@ -14,6 +14,8 @@ mpdinclude_HEADERS = \
 	include/mpd/idle.h \
 	include/mpd/list.h \
 	include/mpd/parser.h \
+	include/mpd/password.h \
+	include/mpd/playlist.h \
 	include/mpd/protocol.h \
 	include/mpd/recv.h \
 	include/mpd/response.h \
