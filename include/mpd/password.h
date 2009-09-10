@@ -43,6 +43,14 @@ extern "C" {
 bool
 mpd_send_password(struct mpd_connection *connection, const char *password);
 
+/**
+ * Sends the password to MPD and receives its response.
+ *
+ * @return true on success, false on failure
+ */
+bool
+mpd_run_password(struct mpd_connection *connection, const char *password);
+
 #ifdef __cplusplus
 }
 #endif
