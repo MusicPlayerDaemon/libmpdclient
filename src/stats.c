@@ -56,6 +56,43 @@ mpd_send_stats(struct mpd_connection *connection)
 }
 
 struct mpd_stats *
+mpd_stats_new(void)
+{
+	struct mpd_stats *stats = malloc(sizeof(struct mpd_stats));
+	if (stats == NULL)
+		return NULL;
+
+	stats->number_of_artists = 0;
+	stats->number_of_albums = 0;
+	stats->number_of_songs = 0;
+	stats->uptime = 0;
+	stats->db_update_time = 0;
+	stats->play_time = 0;
+	stats->db_play_time = 0;
+
+	return stats;
+}
+
+void
+mpd_stats_feed(struct mpd_stats *stats, const struct mpd_pair *pair)
+{
+	if (strcmp(pair->name, "artists") == 0)
+		stats->number_of_artists = atoi(pair->value);
+	else if (strcmp(pair->name, "albums") == 0)
+		stats->number_of_albums = atoi(pair->value);
+	else if (strcmp(pair->name, "songs") == 0)
+		stats->number_of_songs = atoi(pair->value);
+	else if (strcmp(pair->name, "uptime") == 0)
+		stats->uptime = strtol(pair->value,NULL,10);
+	else if (strcmp(pair->name, "db_update") == 0)
+		stats->db_update_time = strtol(pair->value,NULL,10);
+	else if (strcmp(pair->name, "playtime") == 0)
+		stats->play_time = strtol(pair->value,NULL,10);
+	else if (strcmp(pair->name, "db_playtime") == 0)
+		stats->db_play_time = strtol(pair->value,NULL,10);
+}
+
+struct mpd_stats *
 mpd_recv_stats(struct mpd_connection *connection)
 {
 	struct mpd_stats * stats;
@@ -68,50 +105,21 @@ mpd_recv_stats(struct mpd_connection *connection)
 		   state is not clean */
 		return NULL;
 
-	stats = malloc(sizeof(struct mpd_stats));
+	stats = mpd_stats_new();
 	if (stats == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
 		return NULL;
 	}
 
-	stats->number_of_artists = 0;
-	stats->number_of_albums = 0;
-	stats->number_of_songs = 0;
-	stats->uptime = 0;
-	stats->db_update_time = 0;
-	stats->play_time = 0;
-	stats->db_play_time = 0;
-
 	/* read and parse all response lines */
 	while ((pair = mpd_recv_pair(connection)) != NULL) {
-		if (strcmp(pair->name, "artists") == 0) {
-			stats->number_of_artists = atoi(pair->value);
-		}
-		else if (strcmp(pair->name, "albums") == 0) {
-			stats->number_of_albums = atoi(pair->value);
-		}
-		else if (strcmp(pair->name, "songs") == 0) {
-			stats->number_of_songs = atoi(pair->value);
-		}
-		else if (strcmp(pair->name, "uptime") == 0) {
-			stats->uptime = strtol(pair->value,NULL,10);
-		}
-		else if (strcmp(pair->name, "db_update") == 0) {
-			stats->db_update_time = strtol(pair->value,NULL,10);
-		}
-		else if (strcmp(pair->name, "playtime") == 0) {
-			stats->play_time = strtol(pair->value,NULL,10);
-		}
-		else if (strcmp(pair->name, "db_playtime") == 0) {
-			stats->db_play_time = strtol(pair->value,NULL,10);
-		}
-
+		mpd_stats_feed(stats, pair);
 		mpd_return_pair(connection, pair);
 	}
 
 	if (mpd_error_is_defined(&connection->error)) {
 		/* an error has occured; roll back */
-		free(stats);
+		mpd_stats_free(stats);
 		return NULL;
 	}
 

@@ -33,7 +33,10 @@
 #ifndef MPD_STATS_H
 #define MPD_STATS_H
 
-#include <mpd/connection.h>
+#include <stdbool.h>
+
+struct mpd_connection;
+struct mpd_pair;
 
 /**
  * \struct mpd_stats
@@ -54,6 +57,23 @@ extern "C" {
  */
 bool
 mpd_send_stats(struct mpd_connection *connection);
+
+/**
+ * Creates a new empty #mpd_stats object.  Free it with
+ * mpd_stats_free().
+ *
+ * @return the newly allocated #mpd_stats object, or NULL if out of
+ * memory
+ */
+struct mpd_stats *
+mpd_stats_new(void);
+
+/**
+ * Parses the pair, adding its information to the specified #mpd_stats
+ * object.
+ */
+void
+mpd_stats_feed(struct mpd_stats *status, const struct mpd_pair *pair);
 
 /**
  * Reads the "stats" response from MPD.
