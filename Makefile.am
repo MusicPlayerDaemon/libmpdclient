@@ -33,7 +33,7 @@ AM_CPPFLAGS += -I$(srcdir)/include
 lib_LTLIBRARIES = src/libmpdclient.la
 
 src_libmpdclient_la_SOURCES = \
-	src/async.c \
+	src/async.c src/iasync.h \
 	src/buffer.h \
 	src/internal.h \
 	src/str_pool.c src/str_pool.h \
