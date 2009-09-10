@@ -42,11 +42,22 @@
  * \struct mpd_connection
  *
  * This opaque object represents a connection to a MPD server.  Call
- * mpd_connection_new() to create a new instance.
+ * mpd_connection_new() to create a new instance.  To free an
+ * instance, call mpd_connection_free().
  *
- * Once an error occurs which invalidates the connection, this object
- * cannot be reused for a new connection attempt.  Dispose it with
- * mpd_connection_free().
+ * Error handling: most functions return a "bool" indicating success
+ * or failure.  In this case, you may query the nature of the error
+ * with the functions mpd_get_error(), mpd_error_get_message(),
+ * mpd_get_server_error().
+ *
+ * Some errors can be cleared by calling mpd_clear_error(), like
+ * #MPD_ERROR_ACK, #MPD_ERROR_ARG.  Most others are fatal, and cannot
+ * be recovered, like #MPD_ERROR_CONNCLOSED - mpd_clear_error()
+ * returns false.
+ *
+ * Some functions like mpd_recv_pair() cannot differentiate between
+ * "end of response" and "error".  If this function returns NULL, you
+ * have to check mpd_get_error().
  */
 struct mpd_connection;
 
