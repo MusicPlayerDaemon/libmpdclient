@@ -53,22 +53,3 @@ mpd_run_check(struct mpd_connection *connection)
 
 	return true;
 }
-
-int
-mpd_run_addid(struct mpd_connection *connection, const char *file)
-{
-	int id;
-
-	if (!mpd_run_check(connection))
-		return false;
-
-	if (!mpd_send_addid(connection, file))
-		return -1;
-
-	id = mpd_recv_song_id(connection);
-
-	if (!mpd_response_finish(connection))
-		id = -1;
-
-	return id;
-}

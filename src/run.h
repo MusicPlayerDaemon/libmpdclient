@@ -26,8 +26,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MPD_IRUN_H
-#define MPD_IRUN_H
+#ifndef MPD_RUN_H
+#define MPD_RUN_H
 
 #include <stdbool.h>
 

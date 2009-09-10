@@ -52,9 +52,9 @@
 #include <mpd/list.h>
 #include <mpd/output.h>
 #include <mpd/pair.h>
+#include <mpd/playlist.h>
 #include <mpd/recv.h>
 #include <mpd/response.h>
-#include <mpd/run.h>
 #include <mpd/search.h>
 #include <mpd/send.h>
 #include <mpd/song.h>

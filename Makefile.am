@@ -17,7 +17,6 @@ mpdinclude_HEADERS = \
 	include/mpd/protocol.h \
 	include/mpd/recv.h \
 	include/mpd/response.h \
-	include/mpd/run.h \
 	include/mpd/send.h \
 	include/mpd/status.h \
 	include/mpd/stats.h \
@@ -63,6 +62,7 @@ src_libmpdclient_la_SOURCES = \
 	src/cstatus.c \
 	src/stats.c \
 	src/cstats.c \
+	src/playlist.c \
 	src/stored_playlist.c \
 	src/sync.c src/sync.h \
 	src/tag.c
