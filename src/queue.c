@@ -26,7 +26,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <mpd/playlist.h>
+#include <mpd/queue.h>
 #include <mpd/send.h>
 #include <mpd/recv.h>
 #include <mpd/pair.h>

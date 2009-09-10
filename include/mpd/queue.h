@@ -26,8 +26,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MPD_PLAYLIST_H
-#define MPD_PLAYLIST_H
+#ifndef MPD_QUEUE_H
+#define MPD_QUEUE_H
 
 #include <stdbool.h>
 

@@ -49,7 +49,7 @@ enum mpd_idle {
 	    renamed */
 	MPD_IDLE_STORED_PLAYLIST = 0x2,
 
-	/** the current playlist has been modified */
+	/** the current playlist (queue) has been modified */
 	MPD_IDLE_PLAYLIST = 0x4,
 
 	/** the player state has changed: play, stop, pause, seek, ... */
