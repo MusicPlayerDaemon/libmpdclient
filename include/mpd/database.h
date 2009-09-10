@@ -100,7 +100,7 @@ mpd_send_update(struct mpd_connection *connection, const char *path);
  * @param connection the connection to MPD
  * @return a positive job id on success, 0 on error
  */
-int
+unsigned
 mpd_recv_update_id(struct mpd_connection *connection);
 
 #ifdef __cplusplus

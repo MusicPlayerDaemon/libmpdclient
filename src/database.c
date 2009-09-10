@@ -58,7 +58,7 @@ mpd_send_update(struct mpd_connection *connection, const char *path)
 	return mpd_send_command(connection, "update", path, NULL);
 }
 
-int
+unsigned
 mpd_recv_update_id(struct mpd_connection *connection)
 {
 	struct mpd_pair *pair;
