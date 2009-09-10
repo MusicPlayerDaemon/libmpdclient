@@ -30,6 +30,19 @@
 #include <mpd/send.h>
 #include <mpd/recv.h>
 #include "internal.h"
+#include "isend.h"
+
+bool
+mpd_send_enable_output(struct mpd_connection *connection, unsigned output_id)
+{
+	return mpd_send_int_command(connection, "enableoutput", output_id);
+}
+
+bool
+mpd_send_disable_output(struct mpd_connection *connection, unsigned output_id)
+{
+	return mpd_send_int_command(connection, "disableoutput", output_id);
+}
 
 bool
 mpd_send_outputs(struct mpd_connection *connection)
