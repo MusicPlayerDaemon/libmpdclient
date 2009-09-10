@@ -70,7 +70,7 @@ mpd_send_toggle_pause(struct mpd_connection *connection)
 }
 
 bool
-mpd_send_pause(struct mpd_connection *connection, int mode)
+mpd_send_pause(struct mpd_connection *connection, bool mode)
 {
 	return mpd_send_int_command(connection, "pause", mode);
 }
@@ -106,25 +106,25 @@ mpd_send_seekid(struct mpd_connection *connection, int id, int t)
 }
 
 bool
-mpd_send_repeat(struct mpd_connection *connection, int mode)
+mpd_send_repeat(struct mpd_connection *connection, bool mode)
 {
 	return mpd_send_int_command(connection, "repeat", mode);
 }
 
 bool
-mpd_send_random(struct mpd_connection *connection, int mode)
+mpd_send_random(struct mpd_connection *connection, bool mode)
 {
 	return mpd_send_int_command(connection, "random", mode);
 }
 
 bool
-mpd_send_single(struct mpd_connection *connection, int mode)
+mpd_send_single(struct mpd_connection *connection, bool mode)
 {
 	return mpd_send_int_command(connection, "single", mode);
 }
 
 bool
-mpd_send_consume(struct mpd_connection *connection, int mode)
+mpd_send_consume(struct mpd_connection *connection, bool mode)
 {
 	return mpd_send_int_command(connection, "consume", mode);
 }
