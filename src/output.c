@@ -98,16 +98,6 @@ mpd_recv_output(struct mpd_connection *connection)
 		return NULL;
 	}
 
-	if (output->name == NULL) {
-		if (pair != NULL)
-			mpd_return_pair(connection, pair);
-
-		free(output);
-		mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);
-		mpd_error_message(&connection->error, "No output name");
-		return NULL;
-	}
-
 	mpd_enqueue_pair(connection, pair);
 	return output;
 }
@@ -116,9 +106,9 @@ void
 mpd_output_free(struct mpd_output *output)
 {
 	assert(output != NULL);
-	assert(output->name != NULL);
 
-	free(output->name);
+	if (output->name != NULL)
+		free(output->name);
 	free(output);
 }
 
@@ -134,7 +124,6 @@ const char *
 mpd_output_get_name(const struct mpd_output *output)
 {
 	assert(output != NULL);
-	assert(output->name != NULL);
 
 	return output->name;
 }
