@@ -32,6 +32,7 @@
 #include <stdbool.h>
 
 struct mpd_connection;
+struct mpd_song;
 
 #ifdef __cplusplus
 extern "C" {
@@ -45,12 +46,25 @@ bool
 mpd_send_currentsong(struct mpd_connection *connection);
 
 /**
+ * Shortcut for mpd_send_currentsong() and mpd_recv_song().
+ *
+ * @param connection the connection to MPD
+ * @return the current song, or NULL on error or if there is no
+ * current song
+ */
+struct mpd_song *
+mpd_run_currentsong(struct mpd_connection *connection);
+
+/**
  * Starts playing the current song from the beginning.
  *
  * @param connection the connection to MPD
  */
 bool
 mpd_send_play(struct mpd_connection *connection);
+
+bool
+mpd_run_play(struct mpd_connection *connection);
 
 /**
  * Starts playing the specified song from the beginning.
@@ -61,6 +75,9 @@ mpd_send_play(struct mpd_connection *connection);
  */
 bool
 mpd_send_playpos(struct mpd_connection *connection, unsigned song_pos);
+
+bool
+mpd_run_playpos(struct mpd_connection *connection, unsigned song_pos);
 
 /**
  * Starts playing the specified song from the beginning.
@@ -73,7 +90,13 @@ bool
 mpd_send_playid(struct mpd_connection *connection, unsigned id);
 
 bool
+mpd_run_playid(struct mpd_connection *connection, unsigned song_id);
+
+bool
 mpd_send_stop(struct mpd_connection *connection);
+
+bool
+mpd_run_stop(struct mpd_connection *connection);
 
 /**
  * Toggles the pause mode by sending "pause" without arguments.
@@ -84,13 +107,25 @@ bool
 mpd_send_toggle_pause(struct mpd_connection *connection);
 
 bool
+mpd_run_toggle_pause(struct mpd_connection *connection);
+
+bool
 mpd_send_pause(struct mpd_connection *connection, bool mode);
+
+bool
+mpd_run_pause(struct mpd_connection *connection, bool mode);
 
 bool
 mpd_send_next(struct mpd_connection *connection);
 
 bool
+mpd_run_next(struct mpd_connection *connection);
+
+bool
 mpd_send_previous(struct mpd_connection *connection);
+
+bool
+mpd_run_previous(struct mpd_connection *connection);
 
 /**
  * Seeks the current song.
@@ -101,6 +136,9 @@ mpd_send_previous(struct mpd_connection *connection);
  */
 bool
 mpd_send_seek(struct mpd_connection *connection, unsigned t);
+
+bool
+mpd_run_seek(struct mpd_connection *connection, unsigned t);
 
 /**
  * Seeks the specified song.
@@ -114,6 +152,10 @@ bool
 mpd_send_seekpos(struct mpd_connection *connection,
 		 unsigned song_pos, unsigned t);
 
+bool
+mpd_run_seekpos(struct mpd_connection *connection,
+		unsigned song_pos, unsigned t);
+
 /**
  * Seeks the specified song.
  *
@@ -126,19 +168,38 @@ bool
 mpd_send_seekid(struct mpd_connection *connection, unsigned id, unsigned t);
 
 bool
+mpd_run_seekid(struct mpd_connection *connection,
+	       unsigned song_id, unsigned t);
+
+bool
 mpd_send_repeat(struct mpd_connection *connection, bool mode);
+
+bool
+mpd_run_repeat(struct mpd_connection *connection, bool mode);
 
 bool
 mpd_send_random(struct mpd_connection *connection, bool mode);
 
 bool
+mpd_run_random(struct mpd_connection *connection, bool mode);
+
+bool
 mpd_send_single(struct mpd_connection *connection, bool mode);
+
+bool
+mpd_run_single(struct mpd_connection *connection, bool mode);
 
 bool
 mpd_send_consume(struct mpd_connection *connection, bool mode);
 
 bool
+mpd_run_consume(struct mpd_connection *connection, bool mode);
+
+bool
 mpd_send_crossfade(struct mpd_connection *connection, unsigned seconds);
+
+bool
+mpd_run_crossfade(struct mpd_connection *connection, unsigned seconds);
 
 #ifdef __cplusplus
 }
