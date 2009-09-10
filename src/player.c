@@ -64,6 +64,12 @@ mpd_send_stop(struct mpd_connection *connection)
 }
 
 bool
+mpd_send_toggle_pause(struct mpd_connection *connection)
+{
+	return mpd_send_command(connection, "pause", NULL);
+}
+
+bool
 mpd_send_pause(struct mpd_connection *connection, int mode)
 {
 	return mpd_send_int_command(connection, "pause", mode);

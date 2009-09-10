@@ -75,6 +75,14 @@ mpd_send_playid(struct mpd_connection *connection, int id);
 bool
 mpd_send_stop(struct mpd_connection *connection);
 
+/**
+ * Toggles the pause mode by sending "pause" without arguments.
+ *
+ * @param connection the connection to MPD
+ */
+bool
+mpd_send_toggle_pause(struct mpd_connection *connection);
+
 bool
 mpd_send_pause(struct mpd_connection *connection, int mode);
 
