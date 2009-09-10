@@ -70,7 +70,7 @@ mpd_send_playpos(struct mpd_connection *connection, unsigned song_pos);
  * @return true on success, false on error
  */
 bool
-mpd_send_playid(struct mpd_connection *connection, int id);
+mpd_send_playid(struct mpd_connection *connection, unsigned id);
 
 bool
 mpd_send_stop(struct mpd_connection *connection);
@@ -100,7 +100,7 @@ mpd_send_previous(struct mpd_connection *connection);
  * @return true on success, false on error
  */
 bool
-mpd_send_seek(struct mpd_connection *connection, int t);
+mpd_send_seek(struct mpd_connection *connection, unsigned t);
 
 /**
  * Seeks the specified song.
@@ -111,7 +111,8 @@ mpd_send_seek(struct mpd_connection *connection, int t);
  * @return true on success, false on error
  */
 bool
-mpd_send_seekpos(struct mpd_connection *connection, unsigned song_pos, int t);
+mpd_send_seekpos(struct mpd_connection *connection,
+		 unsigned song_pos, unsigned t);
 
 /**
  * Seeks the specified song.
@@ -122,7 +123,7 @@ mpd_send_seekpos(struct mpd_connection *connection, unsigned song_pos, int t);
  * @return true on success, false on error
  */
 bool
-mpd_send_seekid(struct mpd_connection *connection, int id, int t);
+mpd_send_seekid(struct mpd_connection *connection, unsigned id, unsigned t);
 
 bool
 mpd_send_repeat(struct mpd_connection *connection, bool mode);
@@ -137,7 +138,7 @@ bool
 mpd_send_consume(struct mpd_connection *connection, bool mode);
 
 bool
-mpd_send_crossfade(struct mpd_connection *connection, int seconds);
+mpd_send_crossfade(struct mpd_connection *connection, unsigned seconds);
 
 #ifdef __cplusplus
 }
