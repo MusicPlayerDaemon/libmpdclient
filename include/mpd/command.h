@@ -38,60 +38,6 @@ extern "C" {
 #endif
 
 /*
- * Stored playlist commands
- *
- */
-
-/**
- * @param connection a #mpd_connection
- * @param path	the path to the playlist.
- *
- * List the content of a stored playlist.
- *
- */
-bool
-mpd_send_listplaylist(struct mpd_connection *connection, const char *name);
-
-/**
- * @param connection a #mpd_connection
- * @param path	the path to the playlist.
- *
- * List the content, with full metadata, of a stored playlist.
- *
- */
-bool
-mpd_send_listplaylistinfo(struct mpd_connection *connection, const char *name);
-
-bool
-mpd_send_playlistclear(struct mpd_connection *connection, const char *name);
-
-bool
-mpd_send_playlistadd(struct mpd_connection *connection, const char *name,
-		     const char *path);
-
-bool
-mpd_send_playlistmove(struct mpd_connection *connection, const char *name,
-		      int from, int to);
-
-bool
-mpd_send_playlistdelete(struct mpd_connection *connection, const char *name,
-			int pos);
-
-bool
-mpd_send_save(struct mpd_connection *connection, const char *name);
-
-bool
-mpd_send_load(struct mpd_connection *connection, const char *name);
-
-bool
-mpd_send_rename(struct mpd_connection *connection,
-		const char *from, const char *to);
-
-bool
-mpd_send_rm(struct mpd_connection *connection, const char *name);
-
-
-/*
  * Mixer commands
  *
  */
