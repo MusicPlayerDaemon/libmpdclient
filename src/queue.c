@@ -127,15 +127,40 @@ mpd_send_shuffle(struct mpd_connection *connection)
 }
 
 bool
+mpd_run_shuffle(struct mpd_connection *connection)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_shuffle(connection) &&
+		mpd_response_finish(connection);
+}
+
+bool
 mpd_send_shuffle_range(struct mpd_connection *connection, unsigned start, unsigned end)
 {
 	return mpd_send_range_command(connection, "shuffle", start, end);
 }
 
 bool
+mpd_run_shuffle_range(struct mpd_connection *connection,
+		      unsigned start, unsigned end)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_shuffle_range(connection, start, end) &&
+		mpd_response_finish(connection);
+}
+
+bool
 mpd_send_clear(struct mpd_connection *connection)
 {
 	return mpd_send_command(connection, "clear", NULL);
+}
+
+bool
+mpd_run_clear(struct mpd_connection *connection)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_clear(connection) &&
+		mpd_response_finish(connection);
 }
 
 bool
