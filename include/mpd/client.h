@@ -50,6 +50,7 @@
 #include <mpd/database.h>
 #include <mpd/directory.h>
 #include <mpd/entity.h>
+#include <mpd/idle.h>
 #include <mpd/list.h>
 #include <mpd/output.h>
 #include <mpd/pair.h>
