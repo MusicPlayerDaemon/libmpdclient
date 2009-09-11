@@ -33,18 +33,6 @@
 #include "isend.h"
 
 bool
-mpd_send_enable_output(struct mpd_connection *connection, unsigned output_id)
-{
-	return mpd_send_int_command(connection, "enableoutput", output_id);
-}
-
-bool
-mpd_send_disable_output(struct mpd_connection *connection, unsigned output_id)
-{
-	return mpd_send_int_command(connection, "disableoutput", output_id);
-}
-
-bool
 mpd_send_outputs(struct mpd_connection *connection)
 {
 	return mpd_send_command(connection, "outputs", NULL);
@@ -80,4 +68,16 @@ mpd_recv_output(struct mpd_connection *connection)
 
 	mpd_enqueue_pair(connection, pair);
 	return output;
+}
+
+bool
+mpd_send_enable_output(struct mpd_connection *connection, unsigned output_id)
+{
+	return mpd_send_int_command(connection, "enableoutput", output_id);
+}
+
+bool
+mpd_send_disable_output(struct mpd_connection *connection, unsigned output_id)
+{
+	return mpd_send_int_command(connection, "disableoutput", output_id);
 }

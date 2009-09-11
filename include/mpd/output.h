@@ -50,38 +50,6 @@ extern "C" {
 #endif
 
 /**
- * Sends the "enableoutput" command to MPD.
- *
- * @param connection A valid and connected mpd_connection.
- * @param output_id an identifier for the output device (see
- * mpd_output_get_next())
- * @return true on success
- */
-bool
-mpd_send_enable_output(struct mpd_connection *connection, unsigned output_id);
-
-/**
- * Sends the "disableoutput" command to MPD.
- *
- * @param connection A valid and connected mpd_connection.
- * @param output_id an identifier for the output device (see
- * mpd_output_get_next())
- * @return true on success
- */
-bool
-mpd_send_disable_output(struct mpd_connection *connection, unsigned output_id);
-
-/**
- * Sends the "outputs" command to MPD.  Call mpd_output_get_next() to
- * read the response.
- *
- * @param connection A valid and connected mpd_connection.
- * @return true on success
- */
-bool
-mpd_send_outputs(struct mpd_connection *connection);
-
-/**
  * Begins parsing a new #mpd_output.
  *
  * @param pair the first pair in this output (name is "outputid")
@@ -101,16 +69,6 @@ mpd_output_begin(const struct mpd_pair *pair);
  */
 bool
 mpd_output_feed(struct mpd_output *output, const struct mpd_pair *pair);
-
-/**
- * Reads the next mpd_output from the MPD response.  Free the return
- * value with mpd_output_free().
- *
- * @return a mpd_output object on success, NULL on error or
- * end-of-response
- */
-struct mpd_output *
-mpd_recv_output(struct mpd_connection *connection);
 
 /**
  * Frees a mpd_output object returned from mpd_output_get_next().
@@ -135,6 +93,48 @@ mpd_output_get_name(const struct mpd_output *output);
  */
 bool
 mpd_output_get_enabled(const struct mpd_output *output);
+
+/**
+ * Sends the "outputs" command to MPD.  Call mpd_output_get_next() to
+ * read the response.
+ *
+ * @param connection A valid and connected mpd_connection.
+ * @return true on success
+ */
+bool
+mpd_send_outputs(struct mpd_connection *connection);
+
+/**
+ * Reads the next mpd_output from the MPD response.  Free the return
+ * value with mpd_output_free().
+ *
+ * @return a mpd_output object on success, NULL on error or
+ * end-of-response
+ */
+struct mpd_output *
+mpd_recv_output(struct mpd_connection *connection);
+
+/**
+ * Sends the "enableoutput" command to MPD.
+ *
+ * @param connection A valid and connected mpd_connection.
+ * @param output_id an identifier for the output device (see
+ * mpd_output_get_next())
+ * @return true on success
+ */
+bool
+mpd_send_enable_output(struct mpd_connection *connection, unsigned output_id);
+
+/**
+ * Sends the "disableoutput" command to MPD.
+ *
+ * @param connection A valid and connected mpd_connection.
+ * @param output_id an identifier for the output device (see
+ * mpd_output_get_next())
+ * @return true on success
+ */
+bool
+mpd_send_disable_output(struct mpd_connection *connection, unsigned output_id);
 
 #ifdef __cplusplus
 }
