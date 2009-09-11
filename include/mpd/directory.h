@@ -36,6 +36,7 @@
 #include <stdbool.h>
 
 struct mpd_pair;
+struct mpd_connection;
 
 /**
  * \struct mpd_directory
@@ -101,6 +102,15 @@ mpd_directory_begin(const struct mpd_pair *pair);
 bool
 mpd_directory_feed(struct mpd_directory *directory,
 		   const struct mpd_pair *pair);
+
+/**
+ * Receives the next directory from the MPD server.
+ *
+ * @return a #mpd_directory object, or NULL on error or if the directory list is
+ * finished
+ */
+struct mpd_directory *
+mpd_recv_directory(struct mpd_connection *connection);
 
 #ifdef __cplusplus
 }
