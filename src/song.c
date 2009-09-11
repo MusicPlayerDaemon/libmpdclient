@@ -305,6 +305,8 @@ mpd_song_begin(const struct mpd_pair *pair)
 bool
 mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair)
 {
+	enum mpd_tag_type tag_type;
+
 	assert(pair != NULL);
 	assert(pair->name != NULL);
 	assert(pair->value != NULL);
@@ -315,11 +317,10 @@ mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair)
 	if (*pair->value == 0)
 		return true;
 
-	for (unsigned i = 0; i < MPD_TAG_COUNT; ++i) {
-		if (strcmp(pair->name, mpd_tag_type_names[i]) == 0) {
-			mpd_song_add_tag(song, (enum mpd_tag_type)i, pair->value);
-			return true;
-		}
+	tag_type = mpd_tag_name_parse(pair->name);
+	if (tag_type != MPD_TAG_UNKNOWN) {
+		mpd_song_add_tag(song, tag_type, pair->value);
+		return true;
 	}
 
 	if (strcmp(pair->name, "Time") == 0)

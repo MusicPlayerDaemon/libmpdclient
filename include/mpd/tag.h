@@ -35,6 +35,12 @@
 
 enum mpd_tag_type
 {
+	/**
+	 * Special value returned by mpd_tag_name_parse() when an
+	 * unknown name was passed.
+	 */
+	MPD_TAG_UNKNOWN = -1,
+
 	MPD_TAG_ANY,
 	MPD_TAG_FILENAME,
 	MPD_TAG_ARTIST,
@@ -57,5 +63,22 @@ enum mpd_tag_type
 
 	MPD_TAG_COUNT
 };
+
+/**
+ * Looks up the name of the specified tag.
+ *
+ * @return the name, or NULL if the tag type is not valid
+ */
+const char *
+mpd_tag_name(enum mpd_tag_type type);
+
+/**
+ * Parses a tag name, and returns its #mpd_tag_type value.
+ *
+ * @return a #mpd_tag_type value, or MPD_TAG_UNKNOWN if the name was
+ * not recognized
+ */
+enum mpd_tag_type
+mpd_tag_name_parse(const char *name);
 
 #endif

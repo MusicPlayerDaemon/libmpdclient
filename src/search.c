@@ -107,14 +107,13 @@ mpd_search_db_tags(struct mpd_connection *connection, enum mpd_tag_type type)
 		return false;
 	}
 
-	if (type >= MPD_TAG_COUNT) {
+	strtype = mpd_tag_name(type);
+	if (strtype == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_ARG);
 		mpd_error_message(&connection->error,
 				  "invalid type specified");
 		return false;
 	}
-
-	strtype = mpd_tag_type_names[type];
 
 	len = 5+strlen(strtype)+1;
 	connection->request = malloc(len);
@@ -199,16 +198,16 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 		return false;
 	}
 
-	if (type >= MPD_TAG_COUNT) {
+	old_length = strlen(connection->request);
+
+	strtype = mpd_tag_name(type);
+	if (strtype == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_ARG);
 		mpd_error_message(&connection->error,
 				  "invalid type specified");
 		return false;
 	}
 
-	old_length = strlen(connection->request);
-
-	strtype = mpd_tag_type_names[type];
 	arg = mpd_sanitize_arg(name);
 	if (arg == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
@@ -256,9 +255,16 @@ mpd_search_commit(struct mpd_connection *connection)
 char *mpd_get_next_tag(struct mpd_connection *connection,
 		       enum mpd_tag_type type)
 {
-	if (type >= MPD_TAG_COUNT || type == MPD_TAG_ANY)
+	const char *name;
+
+	if (type == MPD_TAG_ANY)
 		return NULL;
 	if (type == MPD_TAG_FILENAME)
 		return mpd_recv_value_named(connection, "file");
-	return mpd_recv_value_named(connection, mpd_tag_type_names[type]);
+
+	name = mpd_tag_name(type);
+	if (name == NULL)
+		return NULL;
+
+	return mpd_recv_value_named(connection, name);
 }

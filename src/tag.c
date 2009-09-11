@@ -31,9 +31,11 @@
 */
 
 #include <mpd/tag.h>
-#include "internal.h"
 
-const char *const mpd_tag_type_names[MPD_TAG_COUNT] =
+#include <assert.h>
+#include <string.h>
+
+static const char *const mpd_tag_type_names[MPD_TAG_COUNT] =
 {
 	"Any",
 	"Filename",
@@ -55,3 +57,24 @@ const char *const mpd_tag_type_names[MPD_TAG_COUNT] =
 	[MPD_TAG_MUSICBRAINZ_ALBUMARTISTID] = "MUSICBRAINZ_ALBUMARTISTID",
 	[MPD_TAG_MUSICBRAINZ_TRACKID] = "MUSICBRAINZ_TRACKID",
 };
+
+const char *
+mpd_tag_name(enum mpd_tag_type type)
+{
+	if ((unsigned)type >= MPD_TAG_COUNT)
+		return NULL;
+
+	return mpd_tag_type_names[type];
+}
+
+enum mpd_tag_type
+mpd_tag_name_parse(const char *name)
+{
+	assert(name != NULL);
+
+	for (unsigned i = 0; i < MPD_TAG_COUNT; ++i)
+		if (strcmp(name, mpd_tag_type_names[i]) == 0)
+			return (enum mpd_tag_type)i;
+
+	return MPD_TAG_UNKNOWN;
+}
