@@ -170,19 +170,6 @@ mpd_run_previous(struct mpd_connection *connection)
 }
 
 bool
-mpd_send_seek(struct mpd_connection *connection, unsigned t)
-{
-	return mpd_send_int2_command(connection, "seek", -1, t);
-}
-
-bool
-mpd_run_seek(struct mpd_connection *connection, unsigned t)
-{
-	return mpd_run_check(connection) && mpd_send_seek(connection, t) &&
-		mpd_response_finish(connection);
-}
-
-bool
 mpd_send_seekpos(struct mpd_connection *connection,
 		 unsigned song_pos, unsigned t)
 {

@@ -128,19 +128,6 @@ bool
 mpd_run_previous(struct mpd_connection *connection);
 
 /**
- * Seeks the current song.
- *
- * @param connection the connection to MPD
- * @param t the position within the song, in seconds
- * @return true on success, false on error
- */
-bool
-mpd_send_seek(struct mpd_connection *connection, unsigned t);
-
-bool
-mpd_run_seek(struct mpd_connection *connection, unsigned t);
-
-/**
  * Seeks the specified song.
  *
  * @param connection the connection to MPD
