@@ -126,6 +126,17 @@ bool
 mpd_send_enable_output(struct mpd_connection *connection, unsigned output_id);
 
 /**
+ * Shortcut for mpd_send_enable_output() and mpd_response_finish().
+ *
+ * @param connection A valid and connected mpd_connection.
+ * @param output_id an identifier for the output device (see
+ * mpd_output_get_next())
+ * @return true on success
+ */
+bool
+mpd_run_enable_output(struct mpd_connection *connection, unsigned output_id);
+
+/**
  * Sends the "disableoutput" command to MPD.
  *
  * @param connection A valid and connected mpd_connection.
@@ -135,6 +146,17 @@ mpd_send_enable_output(struct mpd_connection *connection, unsigned output_id);
  */
 bool
 mpd_send_disable_output(struct mpd_connection *connection, unsigned output_id);
+
+/**
+ * Shortcut for mpd_send_disable_output() and mpd_response_finish().
+ *
+ * @param connection A valid and connected mpd_connection.
+ * @param output_id an identifier for the output device (see
+ * mpd_output_get_next())
+ * @return true on success
+ */
+bool
+mpd_run_disable_output(struct mpd_connection *connection, unsigned output_id);
 
 #ifdef __cplusplus
 }

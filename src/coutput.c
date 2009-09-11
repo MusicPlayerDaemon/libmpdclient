@@ -29,8 +29,10 @@
 #include <mpd/output.h>
 #include <mpd/send.h>
 #include <mpd/recv.h>
+#include <mpd/response.h>
 #include "internal.h"
 #include "isend.h"
+#include "run.h"
 
 bool
 mpd_send_outputs(struct mpd_connection *connection)
@@ -77,7 +79,23 @@ mpd_send_enable_output(struct mpd_connection *connection, unsigned output_id)
 }
 
 bool
+mpd_run_enable_output(struct mpd_connection *connection, unsigned output_id)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_enable_output(connection, output_id) &&
+		mpd_response_finish(connection);
+}
+
+bool
 mpd_send_disable_output(struct mpd_connection *connection, unsigned output_id)
 {
 	return mpd_send_int_command(connection, "disableoutput", output_id);
+}
+
+bool
+mpd_run_disable_output(struct mpd_connection *connection, unsigned output_id)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_disable_output(connection, output_id) &&
+		mpd_response_finish(connection);
 }
