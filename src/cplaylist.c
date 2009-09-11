@@ -28,6 +28,8 @@
 
 #include <mpd/playlist.h>
 #include <mpd/send.h>
+#include <mpd/response.h>
+#include "run.h"
 
 #include <limits.h>
 #include <stdio.h>
@@ -56,10 +58,27 @@ mpd_send_playlistclear(struct mpd_connection *connection, const char *name)
 }
 
 bool
+mpd_run_playlistclear(struct mpd_connection *connection, const char *name)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_playlistclear(connection, name) &&
+		mpd_response_finish(connection);
+}
+
+bool
 mpd_send_playlistadd(struct mpd_connection *connection, const char *name,
 		     const char *path)
 {
 	return mpd_send_command(connection, "playlistadd", name, path, NULL);
+}
+
+bool
+mpd_run_playlistadd(struct mpd_connection *connection,
+		    const char *name, const char *path)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_playlistadd(connection, name, path) &&
+		mpd_response_finish(connection);
 }
 
 bool
@@ -87,15 +106,40 @@ mpd_send_playlistdelete(struct mpd_connection *connection, const char *name,
 }
 
 bool
+mpd_run_playlistdelete(struct mpd_connection *connection,
+		       const char *name, int pos)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_playlistdelete(connection, name, pos) &&
+		mpd_response_finish(connection);
+}
+
+bool
 mpd_send_save(struct mpd_connection *connection, const char *name)
 {
 	return mpd_send_command(connection, "save", name, NULL);
 }
 
 bool
+mpd_run_save(struct mpd_connection *connection, const char *name)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_save(connection, name) &&
+		mpd_response_finish(connection);
+}
+
+bool
 mpd_send_load(struct mpd_connection *connection, const char *name)
 {
 	return mpd_send_command(connection, "load", name, NULL);
+}
+
+bool
+mpd_run_load(struct mpd_connection *connection, const char *name)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_load(connection, name) &&
+		mpd_response_finish(connection);
 }
 
 bool
@@ -106,7 +150,24 @@ mpd_send_rename(struct mpd_connection *connection,
 }
 
 bool
+mpd_run_rename(struct mpd_connection *connection,
+	       const char *from, const char *to)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_rename(connection, from, to) &&
+		mpd_response_finish(connection);
+}
+
+bool
 mpd_send_rm(struct mpd_connection *connection, const char *name)
 {
 	return mpd_send_command(connection, "rm", name, NULL);
+}
+
+bool
+mpd_run_rm(struct mpd_connection *connection, const char *name)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_rm(connection, name) &&
+		mpd_response_finish(connection);
 }

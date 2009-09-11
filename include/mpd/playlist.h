@@ -143,8 +143,15 @@ bool
 mpd_send_playlistclear(struct mpd_connection *connection, const char *name);
 
 bool
+mpd_run_playlistclear(struct mpd_connection *connection, const char *name);
+
+bool
 mpd_send_playlistadd(struct mpd_connection *connection, const char *name,
 		     const char *path);
+
+bool
+mpd_run_playlistadd(struct mpd_connection *connection,
+		    const char *name, const char *path);
 
 bool
 mpd_send_playlistmove(struct mpd_connection *connection, const char *name,
@@ -155,17 +162,34 @@ mpd_send_playlistdelete(struct mpd_connection *connection, const char *name,
 			int pos);
 
 bool
+mpd_run_playlistdelete(struct mpd_connection *connection,
+		       const char *name, int pos);
+
+bool
 mpd_send_save(struct mpd_connection *connection, const char *name);
 
 bool
+mpd_run_save(struct mpd_connection *connection, const char *name);
+
+bool
 mpd_send_load(struct mpd_connection *connection, const char *name);
+
+bool
+mpd_run_load(struct mpd_connection *connection, const char *name);
 
 bool
 mpd_send_rename(struct mpd_connection *connection,
 		const char *from, const char *to);
 
 bool
+mpd_run_rename(struct mpd_connection *connection,
+	       const char *from, const char *to);
+
+bool
 mpd_send_rm(struct mpd_connection *connection, const char *name);
+
+bool
+mpd_run_rm(struct mpd_connection *connection, const char *name);
 
 #ifdef __cplusplus
 }
