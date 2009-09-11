@@ -80,7 +80,7 @@ mpd_recv_stats(struct mpd_connection *connection)
 
 
 struct mpd_stats *
-mpd_get_stats(struct mpd_connection * connection)
+mpd_run_stats(struct mpd_connection *connection)
 {
 	return mpd_send_stats(connection)
 		? mpd_recv_stats(connection)

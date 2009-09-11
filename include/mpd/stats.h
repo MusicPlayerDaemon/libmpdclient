@@ -86,7 +86,8 @@ mpd_recv_stats(struct mpd_connection *connection);
 /**
  * Shortcut for mpd_send_stats() and mpd_recv_stats().
  */
-struct mpd_stats * mpd_get_stats(struct mpd_connection * connection);
+struct mpd_stats *
+mpd_run_stats(struct mpd_connection *connection);
 
 /**
  * Frees a #mpd_stats object.
