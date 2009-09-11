@@ -59,6 +59,7 @@ src_libmpdclient_la_SOURCES = \
 	src/password.c \
 	src/player.c \
 	src/playlist.c \
+	src/rplaylist.c \
 	src/cplaylist.c \
 	src/queue.c \
 	src/quote.c src/quote.h \

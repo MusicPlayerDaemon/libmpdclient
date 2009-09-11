@@ -120,6 +120,15 @@ bool
 mpd_playlist_feed(struct mpd_playlist *playlist, const struct mpd_pair *pair);
 
 /**
+ * Receives the next playlist from the MPD server.
+ *
+ * @return a #mpd_playlist object, or NULL on error or if the playlist list is
+ * finished
+ */
+struct mpd_playlist *
+mpd_recv_playlist(struct mpd_connection *connection);
+
+/**
  * @param connection a #mpd_connection
  * @param path	the path to the playlist.
  *
