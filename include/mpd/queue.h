@@ -116,14 +116,26 @@ mpd_run_clear(struct mpd_connection *connection);
 bool
 mpd_send_move(struct mpd_connection *connection, int from, int to);
 
+int
+mpd_run_move(struct mpd_connection *connection, int from, int to);
+
 bool
 mpd_send_moveid(struct mpd_connection *connection, int from, int to);
+
+int
+mpd_run_moveid(struct mpd_connection *connection, int from, int to);
 
 bool
 mpd_send_swap(struct mpd_connection *connection, int pos1, int pos2);
 
+int
+mpd_run_swap(struct mpd_connection *connection, int pos1, int pos2);
+
 bool
 mpd_send_swapid(struct mpd_connection *connection, int id1, int id2);
+
+int
+mpd_run_swapid(struct mpd_connection *connection, int id1, int id2);
 
 #ifdef __cplusplus
 }
