@@ -80,9 +80,15 @@ mpd_send_plchanges(struct mpd_connection *connection, unsigned version);
 bool
 mpd_send_plchangesposid(struct mpd_connection *connection, unsigned version);
 
+/**
+ * Appends a song to the playlist.
+ */
 bool
 mpd_send_add(struct mpd_connection *connection, const char *file);
 
+/**
+ * Appends a song to the playlist, and returns its id.
+ */
 bool
 mpd_send_add_id(struct mpd_connection *connection, const char *file);
 
@@ -103,52 +109,154 @@ mpd_recv_song_id(struct mpd_connection *connection);
 int
 mpd_run_add_id(struct mpd_connection *connection, const char *file);
 
+/**
+ * Deletes a song from the queue.
+ *
+ * @param connection the connection to MPD
+ * @param pos the position of the song to be deleted
+ */
 bool
 mpd_send_delete(struct mpd_connection *connection, unsigned pos);
 
+/**
+ * Deletes a song from the queue.
+ *
+ * @param connection the connection to MPD
+ * @param id the id of the song to be deleted
+ */
 bool
 mpd_send_delete_id(struct mpd_connection *connection, unsigned id);
 
+/**
+ * Shuffles the queue.
+ *
+ * @param connection the connection to MPD
+ */
 bool
 mpd_send_shuffle(struct mpd_connection *connection);
 
+/**
+ * Shortcut for mpd_send_shuffle() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ */
 bool
 mpd_run_shuffle(struct mpd_connection *connection);
 
+/**
+ * Shuffles a range within the queue.
+ *
+ * @param connection the connection to MPD
+ * @param start the start position of the range (including)
+ * @param end the end position of the range (excluding)
+ */
 bool
 mpd_send_shuffle_range(struct mpd_connection *connection, unsigned start, unsigned end);
 
+/**
+ * Shortcut for mpd_send_shuffle_range() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param start the start position of the range (including)
+ * @param end the end position of the range (excluding)
+ */
 bool
 mpd_run_shuffle_range(struct mpd_connection *connection,
 		      unsigned start, unsigned end);
 
+/**
+ * Clear the queue.
+ *
+ * @param connection the connection to MPD
+ */
 bool
 mpd_send_clear(struct mpd_connection *connection);
 
+/**
+ * Shortcut for mpd_send_clear() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ */
 bool
 mpd_run_clear(struct mpd_connection *connection);
 
+/**
+ * Moves a song within the queue.
+ *
+ * @param connection the connection to MPD
+ * @param from the source song position
+ * @param to the new position of the song
+ */
 bool
 mpd_send_move(struct mpd_connection *connection, unsigned from, unsigned to);
 
+/**
+ * Shortcut for mpd_send_move() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param from the source song position
+ * @param to the new position of the song
+ */
 bool
 mpd_run_move(struct mpd_connection *connection, unsigned from, unsigned to);
 
+/**
+ * Moves a song within the queue.
+ *
+ * @param connection the connection to MPD
+ * @param from the source song id
+ * @param to the new position of the song (not an id!)
+ */
 bool
 mpd_send_move_id(struct mpd_connection *connection, unsigned from, unsigned to);
 
+/**
+ * Shortcut for mpd_send_move_id() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param from the source song id
+ * @param to the new position of the song (not an id!)
+ */
 bool
 mpd_run_move_id(struct mpd_connection *connection, unsigned from, unsigned to);
 
+/**
+ * Swap the position of two songs in the queue.
+ *
+ * @param connection the connection to MPD
+ * @param pos1 the position of one song
+ * @param pos2 the position of the other song
+ */
 bool
 mpd_send_swap(struct mpd_connection *connection, unsigned pos1, unsigned pos2);
 
+/**
+ * Shortcut for mpd_send_swap() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param pos1 the position of one song
+ * @param pos2 the position of the other song
+ */
 bool
 mpd_run_swap(struct mpd_connection *connection, unsigned pos1, unsigned pos2);
 
+/**
+ * Swap the position of two songs in the queue.
+ *
+ * @param connection the connection to MPD
+ * @param id1 the id of one song
+ * @param id2 the id of the other song
+ */
 bool
 mpd_send_swap_id(struct mpd_connection *connection, unsigned id1, unsigned id2);
 
+/**
+ * Shortcut for mpd_send_swap_id() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param id1 the id of one song
+ * @param id2 the id of the other song
+ */
 bool
 mpd_run_swap_id(struct mpd_connection *connection, unsigned id1, unsigned id2);
 
