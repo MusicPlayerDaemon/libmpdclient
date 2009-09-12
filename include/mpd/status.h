@@ -162,7 +162,7 @@ unsigned
 mpd_status_get_playlist_version(const struct mpd_status *status);
 
 /**
- * Returns the state of the player (use with MPD_STATUS_STATE_*)
+ * Returns the state of the player: either stopped, playing or paused.
  */
 enum mpd_state
 mpd_status_get_state(const struct mpd_status *status);
