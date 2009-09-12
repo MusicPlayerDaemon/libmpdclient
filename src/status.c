@@ -56,7 +56,7 @@ struct mpd_status {
 	bool consume;
 
 	/** Number of songs in the playlist */
-	int playlist_length;
+	unsigned playlist_length;
 
 	/** playlist, use this to determine when the playlist has changed */
 	unsigned playlist_version;
@@ -118,7 +118,7 @@ mpd_status_new(void)
 	status->single = false;
 	status->consume = false;
 	status->playlist_version = 0;
-	status->playlist_length = -1;
+	status->playlist_length = 0;
 	status->state = MPD_STATE_UNKNOWN;
 	status->song = 0;
 	status->songid = 0;
@@ -237,7 +237,8 @@ mpd_status_get_consume(const struct mpd_status *status)
 	return status->consume;
 }
 
-int mpd_status_get_playlist_length(const struct mpd_status *status)
+unsigned
+mpd_status_get_playlist_length(const struct mpd_status *status)
 {
 	return status->playlist_length;
 }

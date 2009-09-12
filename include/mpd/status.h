@@ -148,9 +148,11 @@ bool
 mpd_status_get_consume(const struct mpd_status *status);
 
 /**
- * Returns playlist length
+ * Returns the number of songs in the playlist.  If MPD did not
+ * specify that, this function returns 0.
  */
-int mpd_status_get_playlist_length(const struct mpd_status *status);
+unsigned
+mpd_status_get_playlist_length(const struct mpd_status *status);
 
 /**
  * Returns playlist version number.  You may use this to determine
