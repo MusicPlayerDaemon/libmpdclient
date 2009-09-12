@@ -134,7 +134,7 @@ int main(int argc, char ** argv) {
 			print_tag(song, MPD_TAG_NAME, "name");
 			print_tag(song, MPD_TAG_DATE, "date");
 
-			if (mpd_song_get_time(song) != MPD_SONG_NO_TIME) {
+			if (mpd_song_get_time(song) > 0) {
 				printf("time: %i\n", mpd_song_get_time(song));
 			}
 			if (mpd_song_get_pos(song) != MPD_SONG_NO_NUM) {

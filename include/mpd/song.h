@@ -38,7 +38,6 @@
 #include <stdbool.h>
 #include <time.h>
 
-#define MPD_SONG_NO_TIME	-1
 #define MPD_SONG_NO_NUM		-1
 #define MPD_SONG_NO_ID		-1
 
@@ -124,13 +123,13 @@ mpd_song_get_tag(const struct mpd_song *song,
  * Sets the song duration in seconds.
  */
 void
-mpd_song_set_time(struct mpd_song *song, int t);
+mpd_song_set_time(struct mpd_song *song, unsigned t);
 
 /**
- * Returns the duration of this song in seconds.  #MPD_SONG_NO_TIME is
- * a special value for "unknown".
+ * Returns the duration of this song in seconds.  0 means the duration
+ * is unknown.
  */
-int
+unsigned
 mpd_song_get_time(const struct mpd_song *song);
 
 /**

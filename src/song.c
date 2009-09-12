@@ -50,8 +50,10 @@ struct mpd_tag_value {
 struct mpd_song {
 	struct mpd_tag_value tags[MPD_TAG_COUNT];
 
-	/* length of song in seconds, check that it is not MPD_SONG_NO_TIME  */
-	int time;
+	/**
+	 * Duration of the song in seconds, or 0 for unknown.
+	 */
+	unsigned time;
 
 	/**
 	 * The POSIX UTC time stamp of the last modification, or 0 if
@@ -82,7 +84,7 @@ mpd_song_new(const char *uri)
 	for (unsigned i = 0; i < MPD_TAG_COUNT; ++i)
 		song->tags[i].value = NULL;
 
-	song->time = MPD_SONG_NO_TIME;
+	song->time = 0;
 	song->last_modified = 0;
 	song->pos = MPD_SONG_NO_NUM;
 	song->id = MPD_SONG_NO_ID;
@@ -242,12 +244,12 @@ mpd_song_get_tag(const struct mpd_song *song,
 }
 
 void
-mpd_song_set_time(struct mpd_song *song, int t)
+mpd_song_set_time(struct mpd_song *song, unsigned t)
 {
 	song->time = t;
 }
 
-int
+unsigned
 mpd_song_get_time(const struct mpd_song *song)
 {
 	return song->time;
