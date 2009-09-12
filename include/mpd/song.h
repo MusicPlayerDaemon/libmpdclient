@@ -38,9 +38,6 @@
 #include <stdbool.h>
 #include <time.h>
 
-#define MPD_SONG_NO_NUM		-1
-#define MPD_SONG_NO_ID		-1
-
 struct mpd_pair;
 struct mpd_connection;
 
@@ -146,31 +143,31 @@ time_t
 mpd_song_get_last_modified(const struct mpd_song *song);
 
 /**
- * Sets the position within the playlist.  This value is not used for
- * songs which are not in the playlist.
+ * Sets the position within the queue.  This value is not used for
+ * songs which are not in the queue.
  */
 void
-mpd_song_set_pos(struct mpd_song *song, int pos);
+mpd_song_set_pos(struct mpd_song *song, unsigned pos);
 
 /**
- * Returns the position of this song in the playlist.
- * #MPD_SONG_NO_NUM is a special value for "unknown".
+ * Returns the position of this song in the queue.  The value is
+ * undefined if you did not obtain this song from the queue.
  */
-int
+unsigned
 mpd_song_get_pos(const struct mpd_song *song);
 
 /**
- * Sets the id within the playlist.  This value is not used for songs
- * which are not in the playlist.
+ * Sets the id within the queue.  This value is not used for songs
+ * which are not in the queue.
  */
 void
-mpd_song_set_id(struct mpd_song *song, int id);
+mpd_song_set_id(struct mpd_song *song, unsigned id);
 
 /**
- * Returns the id of this song in the playlist.  #MPD_SONG_NO_ID is a
- * special value for "unknown".
+ * Returns the id of this song in the playlist.  The value is
+ * undefined if you did not obtain this song from the queue.
  */
-int
+unsigned
 mpd_song_get_id(const struct mpd_song *song);
 
 /**

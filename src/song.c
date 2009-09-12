@@ -61,11 +61,15 @@ struct mpd_song {
 	 */
 	time_t last_modified;
 
-	/* if plchanges/playlistinfo/playlistid used, is the position of the
-	 * song in the playlist */
-	int pos;
-	/* song id for a song in the playlist */
-	int id;
+	/**
+	 * The position of this song within the queue.
+	 */
+	unsigned pos;
+
+	/**
+	 * The id of this song within the queue.
+	 */
+	unsigned id;
 };
 
 struct mpd_song *
@@ -86,8 +90,8 @@ mpd_song_new(const char *uri)
 
 	song->duration = 0;
 	song->last_modified = 0;
-	song->pos = MPD_SONG_NO_NUM;
-	song->id = MPD_SONG_NO_ID;
+	song->pos = 0;
+	song->id = 0;
 
 	success = mpd_song_add_tag(song, MPD_TAG_FILENAME, uri);
 	if (!success) {
@@ -268,24 +272,24 @@ mpd_song_get_last_modified(const struct mpd_song *song)
 }
 
 void
-mpd_song_set_pos(struct mpd_song *song, int pos)
+mpd_song_set_pos(struct mpd_song *song, unsigned pos)
 {
 	song->pos = pos;
 }
 
-int
+unsigned
 mpd_song_get_pos(const struct mpd_song *song)
 {
 	return song->pos;
 }
 
 void
-mpd_song_set_id(struct mpd_song *song, int id)
+mpd_song_set_id(struct mpd_song *song, unsigned id)
 {
 	song->id = id;
 }
 
-int
+unsigned
 mpd_song_get_id(const struct mpd_song *song)
 {
 	return song->id;

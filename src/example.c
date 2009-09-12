@@ -135,11 +135,10 @@ int main(int argc, char ** argv) {
 			print_tag(song, MPD_TAG_DATE, "date");
 
 			if (mpd_song_get_duration(song) > 0) {
-				printf("time: %i\n", mpd_song_get_duration(song));
+				printf("time: %u\n", mpd_song_get_duration(song));
 			}
-			if (mpd_song_get_pos(song) != MPD_SONG_NO_NUM) {
-				printf("pos: %i\n", mpd_song_get_pos(song));
-			}
+
+			printf("pos: %u\n", mpd_song_get_pos(song));
 
 			mpd_song_free(song);
 		}

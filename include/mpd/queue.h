@@ -52,7 +52,7 @@ mpd_send_list_queue_meta(struct mpd_connection *connection);
  * @param pos the position of the requested song
  */
 bool
-mpd_send_get_queue_song_pos(struct mpd_connection *connection, int pos);
+mpd_send_get_queue_song_pos(struct mpd_connection *connection, unsigned pos);
 
 /**
  * Requests information (including tags) about one song in the
@@ -62,7 +62,7 @@ mpd_send_get_queue_song_pos(struct mpd_connection *connection, int pos);
  * @param id the id of the requested song
  */
 bool
-mpd_send_get_queue_song_id(struct mpd_connection *connection, int id);
+mpd_send_get_queue_song_id(struct mpd_connection *connection, unsigned id);
 
 /**
  * Request the queue changes from MPD since the specified version.
@@ -104,10 +104,10 @@ int
 mpd_run_addid(struct mpd_connection *connection, const char *file);
 
 bool
-mpd_send_delete(struct mpd_connection *connection, int song_pos);
+mpd_send_delete(struct mpd_connection *connection, unsigned pos);
 
 bool
-mpd_send_deleteid(struct mpd_connection *connection, int id);
+mpd_send_deleteid(struct mpd_connection *connection, unsigned id);
 
 bool
 mpd_send_shuffle(struct mpd_connection *connection);
@@ -129,28 +129,28 @@ bool
 mpd_run_clear(struct mpd_connection *connection);
 
 bool
-mpd_send_move(struct mpd_connection *connection, int from, int to);
+mpd_send_move(struct mpd_connection *connection, unsigned from, unsigned to);
 
 int
-mpd_run_move(struct mpd_connection *connection, int from, int to);
+mpd_run_move(struct mpd_connection *connection, unsigned from, unsigned to);
 
 bool
-mpd_send_moveid(struct mpd_connection *connection, int from, int to);
+mpd_send_moveid(struct mpd_connection *connection, unsigned from, unsigned to);
 
 int
-mpd_run_moveid(struct mpd_connection *connection, int from, int to);
+mpd_run_moveid(struct mpd_connection *connection, unsigned from, unsigned to);
 
 bool
-mpd_send_swap(struct mpd_connection *connection, int pos1, int pos2);
+mpd_send_swap(struct mpd_connection *connection, unsigned pos1, unsigned pos2);
 
 int
-mpd_run_swap(struct mpd_connection *connection, int pos1, int pos2);
+mpd_run_swap(struct mpd_connection *connection, unsigned pos1, unsigned pos2);
 
 bool
-mpd_send_swapid(struct mpd_connection *connection, int id1, int id2);
+mpd_send_swapid(struct mpd_connection *connection, unsigned id1, unsigned id2);
 
 int
-mpd_run_swapid(struct mpd_connection *connection, int id1, int id2);
+mpd_run_swapid(struct mpd_connection *connection, unsigned id1, unsigned id2);
 
 #ifdef __cplusplus
 }

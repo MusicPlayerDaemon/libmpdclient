@@ -166,8 +166,7 @@ print_song(const struct mpd_song *song)
 	if (mpd_song_get_duration(song) > 0)
 		LOG_INFO("time: %i", mpd_song_get_duration(song));
 
-	if (mpd_song_get_pos(song) != MPD_SONG_NO_NUM)
-		LOG_INFO("pos: %i", mpd_song_get_pos(song));
+	LOG_INFO("pos: %u", mpd_song_get_pos(song));
 }
 
 static int

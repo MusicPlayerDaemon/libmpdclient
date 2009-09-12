@@ -45,13 +45,13 @@ mpd_send_list_queue_meta(struct mpd_connection *connection)
 }
 
 bool
-mpd_send_get_queue_song_pos(struct mpd_connection *connection, int pos)
+mpd_send_get_queue_song_pos(struct mpd_connection *connection, unsigned pos)
 {
 	return mpd_send_int_command(connection, "playlistinfo", pos);
 }
 
 bool
-mpd_send_get_queue_song_id(struct mpd_connection *connection, int id)
+mpd_send_get_queue_song_id(struct mpd_connection *connection, unsigned id)
 {
 	return mpd_send_int_command(connection, "playlistid", id);
 }
@@ -115,13 +115,13 @@ mpd_run_addid(struct mpd_connection *connection, const char *file)
 }
 
 bool
-mpd_send_delete(struct mpd_connection *connection, int song_pos)
+mpd_send_delete(struct mpd_connection *connection, unsigned pos)
 {
-	return mpd_send_int_command(connection, "delete", song_pos);
+	return mpd_send_int_command(connection, "delete", pos);
 }
 
 bool
-mpd_send_deleteid(struct mpd_connection *connection, int id)
+mpd_send_deleteid(struct mpd_connection *connection, unsigned id)
 {
 	return mpd_send_int_command(connection, "deleteid", id);
 }
@@ -170,13 +170,13 @@ mpd_run_clear(struct mpd_connection *connection)
 }
 
 bool
-mpd_send_move(struct mpd_connection *connection, int from, int to)
+mpd_send_move(struct mpd_connection *connection, unsigned from, unsigned to)
 {
 	return mpd_send_int2_command(connection, "move", from, to);
 }
 
 int
-mpd_run_move(struct mpd_connection *connection, int from, int to)
+mpd_run_move(struct mpd_connection *connection, unsigned from, unsigned to)
 {
 	return mpd_run_check(connection) &&
 		mpd_send_move(connection, from, to) &&
@@ -184,13 +184,13 @@ mpd_run_move(struct mpd_connection *connection, int from, int to)
 }
 
 bool
-mpd_send_moveid(struct mpd_connection *connection, int from, int to)
+mpd_send_moveid(struct mpd_connection *connection, unsigned from, unsigned to)
 {
 	return mpd_send_int2_command(connection, "moveid", from, to);
 }
 
 int
-mpd_run_moveid(struct mpd_connection *connection, int from, int to)
+mpd_run_moveid(struct mpd_connection *connection, unsigned from, unsigned to)
 {
 	return mpd_run_check(connection) &&
 		mpd_send_moveid(connection, from, to) &&
@@ -198,13 +198,13 @@ mpd_run_moveid(struct mpd_connection *connection, int from, int to)
 }
 
 bool
-mpd_send_swap(struct mpd_connection *connection, int pos1, int pos2)
+mpd_send_swap(struct mpd_connection *connection, unsigned pos1, unsigned pos2)
 {
 	return mpd_send_int2_command(connection, "swap", pos1, pos2);
 }
 
 int
-mpd_run_swap(struct mpd_connection *connection, int pos1, int pos2)
+mpd_run_swap(struct mpd_connection *connection, unsigned pos1, unsigned pos2)
 {
 	return mpd_run_check(connection) &&
 		mpd_send_swap(connection, pos1, pos2) &&
@@ -212,13 +212,13 @@ mpd_run_swap(struct mpd_connection *connection, int pos1, int pos2)
 }
 
 bool
-mpd_send_swapid(struct mpd_connection *connection, int id1, int id2)
+mpd_send_swapid(struct mpd_connection *connection, unsigned id1, unsigned id2)
 {
 	return mpd_send_int2_command(connection, "swapid", id1, id2);
 }
 
 int
-mpd_run_swapid(struct mpd_connection *connection, int id1, int id2)
+mpd_run_swapid(struct mpd_connection *connection, unsigned id1, unsigned id2)
 {
 	return mpd_run_check(connection) &&
 		mpd_send_swapid(connection, id1, id2) &&
