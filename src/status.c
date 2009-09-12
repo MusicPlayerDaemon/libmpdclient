@@ -65,7 +65,7 @@ struct mpd_status {
 	enum mpd_state state;
 
 	/** crossfade setting in seconds */
-	int crossfade;
+	unsigned crossfade;
 
 	/**
 	 * If a song is currently selected (always the case when state
@@ -128,7 +128,7 @@ mpd_status_new(void)
 	status->sample_rate = 0;
 	status->bits = 0;
 	status->channels = 0;
-	status->crossfade = -1;
+	status->crossfade = 0;
 	status->error = NULL;
 	status->update_id = 0;
 
@@ -255,7 +255,8 @@ mpd_status_get_state(const struct mpd_status *status)
 	return status->state;
 }
 
-int mpd_status_get_crossfade(const struct mpd_status *status)
+unsigned
+mpd_status_get_crossfade(const struct mpd_status *status)
 {
 	return status->crossfade;
 }

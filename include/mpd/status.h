@@ -168,9 +168,11 @@ enum mpd_state
 mpd_status_get_state(const struct mpd_status *status);
 
 /**
- * Returns crossfade setting in seconds
+ * Returns crossfade setting in seconds.  0 means crossfading is
+ * disabled.
  */
-int mpd_status_get_crossfade(const struct mpd_status *status);
+unsigned
+mpd_status_get_crossfade(const struct mpd_status *status);
 
 /**
  * Returns the position of the currently playing song in the playlist
