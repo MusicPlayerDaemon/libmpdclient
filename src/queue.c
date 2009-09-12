@@ -175,7 +175,7 @@ mpd_send_move(struct mpd_connection *connection, unsigned from, unsigned to)
 	return mpd_send_int2_command(connection, "move", from, to);
 }
 
-int
+bool
 mpd_run_move(struct mpd_connection *connection, unsigned from, unsigned to)
 {
 	return mpd_run_check(connection) &&
@@ -189,7 +189,7 @@ mpd_send_move_id(struct mpd_connection *connection, unsigned from, unsigned to)
 	return mpd_send_int2_command(connection, "moveid", from, to);
 }
 
-int
+bool
 mpd_run_move_id(struct mpd_connection *connection, unsigned from, unsigned to)
 {
 	return mpd_run_check(connection) &&
@@ -203,7 +203,7 @@ mpd_send_swap(struct mpd_connection *connection, unsigned pos1, unsigned pos2)
 	return mpd_send_int2_command(connection, "swap", pos1, pos2);
 }
 
-int
+bool
 mpd_run_swap(struct mpd_connection *connection, unsigned pos1, unsigned pos2)
 {
 	return mpd_run_check(connection) &&
@@ -217,7 +217,7 @@ mpd_send_swap_id(struct mpd_connection *connection, unsigned id1, unsigned id2)
 	return mpd_send_int2_command(connection, "swapid", id1, id2);
 }
 
-int
+bool
 mpd_run_swap_id(struct mpd_connection *connection, unsigned id1, unsigned id2)
 {
 	return mpd_run_check(connection) &&

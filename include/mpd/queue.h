@@ -131,25 +131,25 @@ mpd_run_clear(struct mpd_connection *connection);
 bool
 mpd_send_move(struct mpd_connection *connection, unsigned from, unsigned to);
 
-int
+bool
 mpd_run_move(struct mpd_connection *connection, unsigned from, unsigned to);
 
 bool
 mpd_send_move_id(struct mpd_connection *connection, unsigned from, unsigned to);
 
-int
+bool
 mpd_run_move_id(struct mpd_connection *connection, unsigned from, unsigned to);
 
 bool
 mpd_send_swap(struct mpd_connection *connection, unsigned pos1, unsigned pos2);
 
-int
+bool
 mpd_run_swap(struct mpd_connection *connection, unsigned pos1, unsigned pos2);
 
 bool
 mpd_send_swap_id(struct mpd_connection *connection, unsigned id1, unsigned id2);
 
-int
+bool
 mpd_run_swap_id(struct mpd_connection *connection, unsigned id1, unsigned id2);
 
 #ifdef __cplusplus
