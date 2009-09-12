@@ -50,20 +50,20 @@ bool
 mpd_send_playlistid(struct mpd_connection *connection, int id);
 
 /**
- * use this to get the changes in the playlist since version _playlist_
+ * Request the queue changes from MPD since the specified version.
  */
 bool
-mpd_send_plchanges(struct mpd_connection *connection, long long playlist);
+mpd_send_plchanges(struct mpd_connection *connection, unsigned version);
 
 /**
  * A more bandwidth efficient version of the mpd_send_plchanges.
  * It only returns the pos+id of the changes song.
  *
  * @param connection A valid and connected mpd_connection.
- * @param playlist The playlist version you want the diff with.
+ * @param version The playlist version you want the diff with.
  */
 bool
-mpd_send_plchangesposid(struct mpd_connection *connection, long long playlist);
+mpd_send_plchangesposid(struct mpd_connection *connection, unsigned version);
 
 bool
 mpd_send_add(struct mpd_connection *connection, const char *file);

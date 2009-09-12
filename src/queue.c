@@ -51,15 +51,15 @@ mpd_send_playlistid(struct mpd_connection *connection, int id)
 }
 
 bool
-mpd_send_plchanges(struct mpd_connection *connection, long long playlist)
+mpd_send_plchanges(struct mpd_connection *connection, unsigned version)
 {
-	return mpd_send_ll_command(connection, "plchanges", playlist);
+	return mpd_send_ll_command(connection, "plchanges", version);
 }
 
 bool
-mpd_send_plchangesposid(struct mpd_connection *connection, long long playlist)
+mpd_send_plchangesposid(struct mpd_connection *connection, unsigned version)
 {
-	return mpd_send_ll_command(connection, "plchangesposid", playlist);
+	return mpd_send_ll_command(connection, "plchangesposid", version);
 }
 
 bool
