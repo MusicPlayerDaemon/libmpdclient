@@ -26,45 +26,40 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*! \file
- * \brief MPD client library
- *
- * This is a client library for the Music Player Daemon, written in C.
- *
- * You can choose one of several APIs, depending on your requirements:
- *
- * - struct mpd_async: a very low-level asynchronous API which knows
- *   the protocol syntax, but no specific commands
- *
- * - struct mpd_connection: a basic synchronous API which knows all
- *   MPD commands and parses all responses
- *
- * \author Max Kellermann (max@duempel.org)
+#ifndef MPD_AUDIO_FORMAT_H
+#define MPD_AUDIO_FORMAT_H
+
+#include <stdint.h>
+
+/**
+ * This structure describes the format of a raw PCM stream.
  */
+struct mpd_audio_format {
+	/**
+	 * The sample rate in Hz.  A better name for this attribute is
+	 * "frame rate", because technically, you have two samples per
+	 * frame in stereo sound.
+	 */
+	uint32_t sample_rate;
 
-#ifndef MPD_CLIENT_H
-#define MPD_CLIENT_H
+	/**
+	 * The number of significant bits per sample.  Samples are
+	 * currently always signed.  Supported values are 8, 16, 24,
+	 * 32.  24 bit samples are packed in 32 bit integers.
+	 */
+	uint8_t bits;
 
-#include <mpd/audio_format.h>
-#include <mpd/connection.h>
-#include <mpd/command.h>
-#include <mpd/database.h>
-#include <mpd/directory.h>
-#include <mpd/entity.h>
-#include <mpd/idle.h>
-#include <mpd/list.h>
-#include <mpd/output.h>
-#include <mpd/pair.h>
-#include <mpd/password.h>
-#include <mpd/player.h>
-#include <mpd/playlist.h>
-#include <mpd/queue.h>
-#include <mpd/recv.h>
-#include <mpd/response.h>
-#include <mpd/search.h>
-#include <mpd/send.h>
-#include <mpd/song.h>
-#include <mpd/stats.h>
-#include <mpd/status.h>
+	/**
+	 * The number of channels.  Only mono (1) and stereo (2) are
+	 * fully supported currently.
+	 */
+	uint8_t channels;
+
+	/** reserved for future use */
+	uint16_t reserved0;
+
+	/** reserved for future use */
+	uint32_t reserved1;
+};
 
 #endif

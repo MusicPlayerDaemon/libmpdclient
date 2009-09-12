@@ -4,6 +4,7 @@ AUTOMAKE_OPTIONS = foreign 1.9 dist-bzip2
 mpdincludedir = $(includedir)/mpd
 mpdinclude_HEADERS = \
 	include/mpd/async.h \
+	include/mpd/audio_format.h \
 	include/mpd/client.h \
 	include/mpd/command.h \
 	include/mpd/connection.h \

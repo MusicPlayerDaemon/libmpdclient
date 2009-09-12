@@ -81,6 +81,7 @@ int main(int argc, char ** argv) {
 	if(argc==1) {
 		struct mpd_status * status;
 		struct mpd_song *song;
+		const struct mpd_audio_format *audio_format;
 
 		mpd_command_list_begin(conn, true);
 		mpd_send_status(conn);
@@ -107,9 +108,13 @@ int main(int argc, char ** argv) {
 			printf("elaspedTime: %i\n",mpd_status_get_elapsed_time(status));
 			printf("totalTime: %i\n", mpd_status_get_total_time(status));
 			printf("bitRate: %i\n", mpd_status_get_kbit_rate(status));
-			printf("sampleRate: %i\n", mpd_status_get_sample_rate(status));
-			printf("bits: %i\n", mpd_status_get_bits(status));
-			printf("channels: %i\n", mpd_status_get_channels(status));
+		}
+
+		audio_format = mpd_status_get_audio_format(status);
+		if (audio_format != NULL) {
+			printf("sampleRate: %i\n", audio_format->sample_rate);
+			printf("bits: %i\n", audio_format->bits);
+			printf("channels: %i\n", audio_format->channels);
 		}
 
 		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {

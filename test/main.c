@@ -115,6 +115,8 @@ test_version(struct mpd_connection *conn)
 static void
 print_status(struct mpd_status *status)
 {
+	const struct mpd_audio_format *audio_format;
+
 	LOG_INFO("volume: %i", mpd_status_get_volume(status));
 	LOG_INFO("repeat: %i", mpd_status_get_repeat(status));
 	LOG_INFO("single: %i", mpd_status_get_single(status));
@@ -129,9 +131,13 @@ print_status(struct mpd_status *status)
 		LOG_INFO("elaspedTime: %i", mpd_status_get_elapsed_time(status));
 		LOG_INFO("totalTime: %i", mpd_status_get_total_time(status));
 		LOG_INFO("bitRate: %i", mpd_status_get_kbit_rate(status));
-		LOG_INFO("sampleRate: %i", mpd_status_get_sample_rate(status));
-		LOG_INFO("bits: %i", mpd_status_get_bits(status));
-		LOG_INFO("channels: %i", mpd_status_get_channels(status));
+	}
+
+	audio_format = mpd_status_get_audio_format(status);
+	if (audio_format != NULL) {
+		printf("sampleRate: %i\n", audio_format->sample_rate);
+		printf("bits: %i\n", audio_format->bits);
+		printf("channels: %i\n", audio_format->channels);
 	}
 }
 

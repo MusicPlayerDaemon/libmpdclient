@@ -57,6 +57,7 @@ enum mpd_state {
 
 struct mpd_connection;
 struct mpd_pair;
+struct mpd_audio_format;
 
 /**
  * \struct mpd_status
@@ -209,19 +210,11 @@ unsigned
 mpd_status_get_kbit_rate(const struct mpd_status *status);
 
 /**
- * Returns audio sample rate
+ * Returns audio format which MPD is currently playing.  May return
+ * NULL if MPD is not playing or if the audio format is unknown.
  */
-unsigned int mpd_status_get_sample_rate(const struct mpd_status *status);
-
-/**
- * Returns audio bits
- */
-int mpd_status_get_bits(const struct mpd_status *status);
-
-/**
- * Returns audio channels
- */
-int mpd_status_get_channels(const struct mpd_status *status);
+const struct mpd_audio_format *
+mpd_status_get_audio_format(const struct mpd_status *status);
 
 /**
  * Returns 1 if mpd is updating, 0 otherwise

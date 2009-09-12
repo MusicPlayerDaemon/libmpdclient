@@ -32,6 +32,7 @@
 
 #include <mpd/status.h>
 #include <mpd/pair.h>
+#include <mpd/audio_format.h>
 
 #include <stdlib.h>
 #include <string.h>
@@ -89,14 +90,8 @@ struct mpd_status {
 	/** current bit rate in kbps */
 	unsigned kbit_rate;
 
-	/** audio sample rate */
-	unsigned int sample_rate;
-
-	/** audio bits */
-	int bits;
-
-	/** audio channels */
-	int channels;
+	/** the current audio format */
+	struct mpd_audio_format audio_format;
 
 	/** non-zero if MPD is updating, 0 otherwise */
 	unsigned update_id;
@@ -125,9 +120,7 @@ mpd_status_new(void)
 	status->elapsed_time = 0;
 	status->total_time = 0;
 	status->kbit_rate = 0;
-	status->sample_rate = 0;
-	status->bits = 0;
-	status->channels = 0;
+	memset(&status->audio_format, 0, sizeof(status->audio_format));
 	status->crossfade = 0;
 	status->error = NULL;
 	status->update_id = 0;
@@ -146,6 +139,23 @@ parse_mpd_state(const char *p)
 		return MPD_STATE_PAUSE;
 	else
 		return MPD_STATE_UNKNOWN;
+}
+
+static void
+parse_audio_format(struct mpd_audio_format *audio_format, const char *p)
+{
+	char *endptr;
+
+	audio_format->sample_rate = strtol(p, &endptr, 10);
+	if (*endptr == ':') {
+		audio_format->bits = strtol(endptr + 1, &endptr, 10);
+		audio_format->channels = *endptr == ':'
+			? strtol(endptr + 1, NULL, 10)
+			: 0;
+	} else {
+		audio_format->bits = 0;
+		audio_format->channels = 0;
+	}
 }
 
 void
@@ -188,17 +198,8 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 		status->crossfade = atoi(pair->value);
 	else if (strcmp(pair->name, "updating_db") == 0)
 		status->update_id = atoi(pair->value);
-	else if (strcmp(pair->name, "audio") == 0) {
-		char * tok = strchr(pair->value,':');
-		if (tok && (strchr(tok,0) > (tok+1))) {
-			status->sample_rate = atoi(pair->value);
-			status->bits = atoi(++tok);
-			tok = strchr(tok,':');
-			if (tok && (strchr(tok,0) > (tok+1)))
-				status->channels = atoi(tok+1);
-		}
-	}
-
+	else if (strcmp(pair->name, "audio") == 0)
+		parse_audio_format(&status->audio_format, pair->value);
 }
 
 void mpd_status_free(struct mpd_status * status) {
@@ -289,19 +290,14 @@ mpd_status_get_kbit_rate(const struct mpd_status *status)
 	return status->kbit_rate;
 }
 
-unsigned int mpd_status_get_sample_rate(const struct mpd_status *status)
+const struct mpd_audio_format *
+mpd_status_get_audio_format(const struct mpd_status *status)
 {
-	return status->sample_rate;
-}
-
-int mpd_status_get_bits(const struct mpd_status *status)
-{
-	return status->bits;
-}
-
-int mpd_status_get_channels(const struct mpd_status *status)
-{
-	return status->channels;
+	return status->audio_format.sample_rate > 0 ||
+		status->audio_format.bits > 0 ||
+		status->audio_format.channels > 0
+		? &status->audio_format
+		: NULL;
 }
 
 unsigned
