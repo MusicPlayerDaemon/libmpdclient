@@ -81,10 +81,10 @@ struct mpd_status {
 	 * Time in seconds that have elapsed in the currently
 	 * playing/paused song.
 	 */
-	int elapsed_time;
+	unsigned elapsed_time;
 
 	/** length in seconds of the currently playing/paused song */
-	int total_time;
+	unsigned total_time;
 
 	/** current bit rate in kbps */
 	int bit_rate;
@@ -273,12 +273,14 @@ mpd_status_get_song_id(const struct mpd_status *status)
 	return status->song_id;
 }
 
-int mpd_status_get_elapsed_time(const struct mpd_status *status)
+unsigned
+mpd_status_get_elapsed_time(const struct mpd_status *status)
 {
 	return status->elapsed_time;
 }
 
-int mpd_status_get_total_time(const struct mpd_status *status)
+unsigned
+mpd_status_get_total_time(const struct mpd_status *status)
 {
 	return status->total_time;
 }
