@@ -99,7 +99,7 @@ struct mpd_status {
 	int channels;
 
 	/** non-zero if MPD is updating, 0 otherwise */
-	int updatingdb;
+	unsigned update_id;
 
 	/** error message */
 	char *error;
@@ -130,7 +130,7 @@ mpd_status_new(void)
 	status->channels = 0;
 	status->crossfade = -1;
 	status->error = NULL;
-	status->updatingdb = 0;
+	status->update_id = 0;
 
 	return status;
 }
@@ -189,7 +189,7 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 	} else if (strcmp(pair->name, "xfade") == 0)
 		status->crossfade = atoi(pair->value);
 	else if (strcmp(pair->name, "updating_db") == 0)
-		status->updatingdb = atoi(pair->value);
+		status->update_id = atoi(pair->value);
 	else if (strcmp(pair->name, "audio") == 0) {
 		char * tok = strchr(pair->value,':');
 		if (tok && (strchr(tok,0) > (tok+1))) {
@@ -298,9 +298,10 @@ int mpd_status_get_channels(const struct mpd_status *status)
 	return status->channels;
 }
 
-int mpd_status_get_updatingdb(const struct mpd_status *status)
+unsigned
+mpd_status_get_update_id(const struct mpd_status *status)
 {
-	return status->updatingdb;
+	return status->update_id;
 }
 
 const char *

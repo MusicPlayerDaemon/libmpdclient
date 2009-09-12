@@ -214,7 +214,8 @@ int mpd_status_get_channels(const struct mpd_status *status);
 /**
  * Returns 1 if mpd is updating, 0 otherwise
  */
-int mpd_status_get_updatingdb(const struct mpd_status *status);
+unsigned
+mpd_status_get_update_id(const struct mpd_status *status);
 
 /**
  * Returns the error message
