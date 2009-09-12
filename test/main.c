@@ -125,7 +125,7 @@ print_status(struct mpd_status *status)
 
 	if (mpd_status_get_state(status) == MPD_STATE_PLAY ||
 	    mpd_status_get_state(status) == MPD_STATE_PAUSE) {
-		LOG_INFO("song: %i", mpd_status_get_song(status));
+		LOG_INFO("song: %i", mpd_status_get_song_pos(status));
 		LOG_INFO("elaspedTime: %i", mpd_status_get_elapsed_time(status));
 		LOG_INFO("totalTime: %i", mpd_status_get_total_time(status));
 		LOG_INFO("bitRate: %i", mpd_status_get_bit_rate(status));

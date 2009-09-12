@@ -175,14 +175,17 @@ int mpd_status_get_crossfade(const struct mpd_status *status);
 /**
  * Returns the position of the currently playing song in the playlist
  * (beginning with 0) if a song is currently selected (always the case when
- * state is PLAY or PAUSE)
+ * state is PLAY or PAUSE).  If there is no current song, -1 is returned.
  */
-int mpd_status_get_song(const struct mpd_status *status);
+int
+mpd_status_get_song_pos(const struct mpd_status *status);
 
 /**
- * Returns Song ID of the currently selected song
+ * Returns the id of the currently song.  If there is no current song,
+ * -1 is returned.
  */
-int mpd_status_get_songid(const struct mpd_status *status);
+int
+mpd_status_get_song_id(const struct mpd_status *status);
 
 /**
  * Returns time in seconds that have elapsed in the currently playing/paused

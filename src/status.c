@@ -72,10 +72,10 @@ struct mpd_status {
 	 * is PLAY or PAUSE), this is the position of the currently
 	 * playing song in the playlist, beginning with 0.
 	 */
-	int song;
+	int song_pos;
 
 	/** Song ID of the currently selected song */
-	int songid;
+	int song_id;
 
 	/**
 	 * Time in seconds that have elapsed in the currently
@@ -120,8 +120,8 @@ mpd_status_new(void)
 	status->playlist_version = 0;
 	status->playlist_length = 0;
 	status->state = MPD_STATE_UNKNOWN;
-	status->song = 0;
-	status->songid = 0;
+	status->song_pos = -1;
+	status->song_id = -1;
 	status->elapsed_time = 0;
 	status->total_time = 0;
 	status->bit_rate = 0;
@@ -170,9 +170,9 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 	else if (strcmp(pair->name, "state") == 0)
 		status->state = parse_mpd_state(pair->value);
 	else if (strcmp(pair->name, "song") == 0)
-		status->song = atoi(pair->value);
+		status->song_pos = atoi(pair->value);
 	else if (strcmp(pair->name, "songid") == 0)
-		status->songid = atoi(pair->value);
+		status->song_id = atoi(pair->value);
 	else if (strcmp(pair->name, "time") == 0) {
 		char * tok = strchr(pair->value,':');
 		/* the second strchr below is a safety check */
@@ -260,14 +260,16 @@ int mpd_status_get_crossfade(const struct mpd_status *status)
 	return status->crossfade;
 }
 
-int mpd_status_get_song(const struct mpd_status *status)
+int
+mpd_status_get_song_pos(const struct mpd_status *status)
 {
-	return status->song;
+	return status->song_pos;
 }
 
-int mpd_status_get_songid(const struct mpd_status *status)
+int
+mpd_status_get_song_id(const struct mpd_status *status)
 {
-	return status->songid;
+	return status->song_id;
 }
 
 int mpd_status_get_elapsed_time(const struct mpd_status *status)
