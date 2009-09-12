@@ -39,13 +39,19 @@
 #include <stdlib.h>
 
 bool
-mpd_send_playlistinfo(struct mpd_connection *connection, int song_pos)
+mpd_send_list_queue_meta(struct mpd_connection *connection)
 {
-	return mpd_send_int_command(connection, "playlistinfo", song_pos);
+	return mpd_send_command(connection, "playlistinfo", NULL);
 }
 
 bool
-mpd_send_playlistid(struct mpd_connection *connection, int id)
+mpd_send_get_queue_song_pos(struct mpd_connection *connection, int pos)
+{
+	return mpd_send_int_command(connection, "playlistinfo", pos);
+}
+
+bool
+mpd_send_get_queue_song_id(struct mpd_connection *connection, int id)
 {
 	return mpd_send_int_command(connection, "playlistid", id);
 }

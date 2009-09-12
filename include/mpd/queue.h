@@ -38,16 +38,31 @@ extern "C" {
 #endif
 
 /**
- * song_pos of -1, means to display the whole list
+ * Sends the "playlistinfo" command: list all songs in the queue
+ * including meta information.
  */
 bool
-mpd_send_playlistinfo(struct mpd_connection *connection, int song_pos);
+mpd_send_list_queue_meta(struct mpd_connection *connection);
 
 /**
- * songId of -1, means to display the whole list
+ * Requests information (including tags) about one song in the
+ * playlist (command "playlistid").
+ *
+ * @param connection the connection to MPD
+ * @param pos the position of the requested song
  */
 bool
-mpd_send_playlistid(struct mpd_connection *connection, int id);
+mpd_send_get_queue_song_pos(struct mpd_connection *connection, int pos);
+
+/**
+ * Requests information (including tags) about one song in the
+ * playlist (command "playlistid").
+ *
+ * @param connection the connection to MPD
+ * @param id the id of the requested song
+ */
+bool
+mpd_send_get_queue_song_id(struct mpd_connection *connection, int id);
 
 /**
  * Request the queue changes from MPD since the specified version.
