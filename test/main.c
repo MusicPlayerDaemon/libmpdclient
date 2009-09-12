@@ -120,7 +120,7 @@ print_status(struct mpd_status *status)
 	LOG_INFO("single: %i", mpd_status_get_single(status));
 	LOG_INFO("consume: %i", mpd_status_get_consume(status));
 	LOG_INFO("random: %i", mpd_status_get_random(status));
-	LOG_INFO("playlist: %lli", mpd_status_get_playlist(status));
+	LOG_INFO("playlist: %u", mpd_status_get_playlist_version(status));
 	LOG_INFO("playlistLength: %i", mpd_status_get_playlist_length(status));
 
 	if (mpd_status_get_state(status) == MPD_STATE_PLAY ||

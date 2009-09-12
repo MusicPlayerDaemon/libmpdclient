@@ -153,9 +153,11 @@ mpd_status_get_consume(const struct mpd_status *status);
 int mpd_status_get_playlist_length(const struct mpd_status *status);
 
 /**
- * Returns playlist number, use this to determine when the playlist has changed
+ * Returns playlist version number.  You may use this to determine
+ * when the playlist has changed since you have last queried it.
  */
-long long mpd_status_get_playlist(const struct mpd_status *status);
+unsigned
+mpd_status_get_playlist_version(const struct mpd_status *status);
 
 /**
  * Returns the state of the player (use with MPD_STATUS_STATE_*)

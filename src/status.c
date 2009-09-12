@@ -59,7 +59,7 @@ struct mpd_status {
 	int playlist_length;
 
 	/** playlist, use this to determine when the playlist has changed */
-	long long playlist;
+	unsigned playlist_version;
 
 	/** MPD's current playback state */
 	enum mpd_state state;
@@ -117,7 +117,7 @@ mpd_status_new(void)
 	status->random = false;
 	status->single = false;
 	status->consume = false;
-	status->playlist = -1;
+	status->playlist_version = 0;
 	status->playlist_length = -1;
 	status->state = MPD_STATE_UNKNOWN;
 	status->song = 0;
@@ -162,7 +162,7 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 	else if (strcmp(pair->name, "consume") == 0)
 		status->consume = !!atoi(pair->value);
 	else if (strcmp(pair->name, "playlist") == 0)
-		status->playlist = strtol(pair->value,NULL,10);
+		status->playlist_version = strtol(pair->value, NULL, 10);
 	else if (strcmp(pair->name, "playlistlength") == 0)
 		status->playlist_length = atoi(pair->value);
 	else if (strcmp(pair->name, "bitrate") == 0)
@@ -242,9 +242,10 @@ int mpd_status_get_playlist_length(const struct mpd_status *status)
 	return status->playlist_length;
 }
 
-long long mpd_status_get_playlist(const struct mpd_status *status)
+unsigned
+mpd_status_get_playlist_version(const struct mpd_status *status)
 {
-	return status->playlist;
+	return status->playlist_version;
 }
 
 enum mpd_state
