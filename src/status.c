@@ -87,7 +87,7 @@ struct mpd_status {
 	unsigned total_time;
 
 	/** current bit rate in kbps */
-	int bit_rate;
+	unsigned kbit_rate;
 
 	/** audio sample rate */
 	unsigned int sample_rate;
@@ -124,7 +124,7 @@ mpd_status_new(void)
 	status->song_id = -1;
 	status->elapsed_time = 0;
 	status->total_time = 0;
-	status->bit_rate = 0;
+	status->kbit_rate = 0;
 	status->sample_rate = 0;
 	status->bits = 0;
 	status->channels = 0;
@@ -166,7 +166,7 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 	else if (strcmp(pair->name, "playlistlength") == 0)
 		status->playlist_length = atoi(pair->value);
 	else if (strcmp(pair->name, "bitrate") == 0)
-		status->bit_rate = atoi(pair->value);
+		status->kbit_rate = atoi(pair->value);
 	else if (strcmp(pair->name, "state") == 0)
 		status->state = parse_mpd_state(pair->value);
 	else if (strcmp(pair->name, "song") == 0)
@@ -283,9 +283,10 @@ mpd_status_get_total_time(const struct mpd_status *status)
 	return status->total_time;
 }
 
-int mpd_status_get_bit_rate(const struct mpd_status *status)
+unsigned
+mpd_status_get_kbit_rate(const struct mpd_status *status)
 {
-	return status->bit_rate;
+	return status->kbit_rate;
 }
 
 unsigned int mpd_status_get_sample_rate(const struct mpd_status *status)

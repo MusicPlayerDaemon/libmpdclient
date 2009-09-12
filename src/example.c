@@ -106,7 +106,7 @@ int main(int argc, char ** argv) {
 			printf("song: %i\n", mpd_status_get_song_pos(status));
 			printf("elaspedTime: %i\n",mpd_status_get_elapsed_time(status));
 			printf("totalTime: %i\n", mpd_status_get_total_time(status));
-			printf("bitRate: %i\n", mpd_status_get_bit_rate(status));
+			printf("bitRate: %i\n", mpd_status_get_kbit_rate(status));
 			printf("sampleRate: %i\n", mpd_status_get_sample_rate(status));
 			printf("bits: %i\n", mpd_status_get_bits(status));
 			printf("channels: %i\n", mpd_status_get_channels(status));

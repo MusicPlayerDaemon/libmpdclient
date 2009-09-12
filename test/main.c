@@ -128,7 +128,7 @@ print_status(struct mpd_status *status)
 		LOG_INFO("song: %i", mpd_status_get_song_pos(status));
 		LOG_INFO("elaspedTime: %i", mpd_status_get_elapsed_time(status));
 		LOG_INFO("totalTime: %i", mpd_status_get_total_time(status));
-		LOG_INFO("bitRate: %i", mpd_status_get_bit_rate(status));
+		LOG_INFO("bitRate: %i", mpd_status_get_kbit_rate(status));
 		LOG_INFO("sampleRate: %i", mpd_status_get_sample_rate(status));
 		LOG_INFO("bits: %i", mpd_status_get_bits(status));
 		LOG_INFO("channels: %i", mpd_status_get_channels(status));

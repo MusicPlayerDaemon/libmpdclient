@@ -203,9 +203,10 @@ unsigned
 mpd_status_get_total_time(const struct mpd_status *status);
 
 /**
- * Returns current bit rate in kbs
+ * Returns current bit rate in kbps.  0 means unknown.
  */
-int mpd_status_get_bit_rate(const struct mpd_status *status);
+unsigned
+mpd_status_get_kbit_rate(const struct mpd_status *status);
 
 /**
  * Returns audio sample rate
