@@ -163,8 +163,8 @@ print_song(const struct mpd_song *song)
 	print_tag(song, MPD_TAG_NAME, "name");
 	print_tag(song, MPD_TAG_DATE, "date");
 
-	if (mpd_song_get_time(song) > 0)
-		LOG_INFO("time: %i", mpd_song_get_time(song));
+	if (mpd_song_get_duration(song) > 0)
+		LOG_INFO("time: %i", mpd_song_get_duration(song));
 
 	if (mpd_song_get_pos(song) != MPD_SONG_NO_NUM)
 		LOG_INFO("pos: %i", mpd_song_get_pos(song));

@@ -123,14 +123,14 @@ mpd_song_get_tag(const struct mpd_song *song,
  * Sets the song duration in seconds.
  */
 void
-mpd_song_set_time(struct mpd_song *song, unsigned t);
+mpd_song_set_duration(struct mpd_song *song, unsigned duration);
 
 /**
  * Returns the duration of this song in seconds.  0 means the duration
  * is unknown.
  */
 unsigned
-mpd_song_get_time(const struct mpd_song *song);
+mpd_song_get_duration(const struct mpd_song *song);
 
 /**
  * Sets the POSIX UTC time stamp of the last modification.

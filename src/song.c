@@ -53,7 +53,7 @@ struct mpd_song {
 	/**
 	 * Duration of the song in seconds, or 0 for unknown.
 	 */
-	unsigned time;
+	unsigned duration;
 
 	/**
 	 * The POSIX UTC time stamp of the last modification, or 0 if
@@ -84,7 +84,7 @@ mpd_song_new(const char *uri)
 	for (unsigned i = 0; i < MPD_TAG_COUNT; ++i)
 		song->tags[i].value = NULL;
 
-	song->time = 0;
+	song->duration = 0;
 	song->last_modified = 0;
 	song->pos = MPD_SONG_NO_NUM;
 	song->id = MPD_SONG_NO_ID;
@@ -154,7 +154,7 @@ mpd_song_dup(const struct mpd_song *song)
 		} while (src_tag != NULL);
 	}
 
-	ret->time = song->time;
+	ret->duration = song->duration;
 	ret->pos = song->pos;
 	ret->id = song->id;
 
@@ -244,15 +244,15 @@ mpd_song_get_tag(const struct mpd_song *song,
 }
 
 void
-mpd_song_set_time(struct mpd_song *song, unsigned t)
+mpd_song_set_duration(struct mpd_song *song, unsigned duration)
 {
-	song->time = t;
+	song->duration = duration;
 }
 
 unsigned
-mpd_song_get_time(const struct mpd_song *song)
+mpd_song_get_duration(const struct mpd_song *song)
 {
-	return song->time;
+	return song->duration;
 }
 
 void
@@ -326,7 +326,7 @@ mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair)
 	}
 
 	if (strcmp(pair->name, "Time") == 0)
-		mpd_song_set_time(song, atoi(pair->value));
+		mpd_song_set_duration(song, atoi(pair->value));
 	else if (strcmp(pair->name, "Last-Modified") == 0)
 		mpd_song_set_last_modified(song, iso8601_datetime_parse(pair->value));
 	else if (strcmp(pair->name, "Pos") == 0)
