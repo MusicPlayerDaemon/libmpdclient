@@ -75,7 +75,7 @@ mpd_send_add(struct mpd_connection *connection, const char *file)
 }
 
 bool
-mpd_send_addid(struct mpd_connection *connection, const char *file)
+mpd_send_add_id(struct mpd_connection *connection, const char *file)
 {
 	return mpd_send_command(connection, "addid", file, NULL);
 }
@@ -96,14 +96,14 @@ mpd_recv_song_id(struct mpd_connection *connection)
 }
 
 int
-mpd_run_addid(struct mpd_connection *connection, const char *file)
+mpd_run_add_id(struct mpd_connection *connection, const char *file)
 {
 	int id;
 
 	if (!mpd_run_check(connection))
 		return -1;
 
-	if (!mpd_send_addid(connection, file))
+	if (!mpd_send_add_id(connection, file))
 		return -1;
 
 	id = mpd_recv_song_id(connection);
@@ -121,7 +121,7 @@ mpd_send_delete(struct mpd_connection *connection, unsigned pos)
 }
 
 bool
-mpd_send_deleteid(struct mpd_connection *connection, unsigned id)
+mpd_send_delete_id(struct mpd_connection *connection, unsigned id)
 {
 	return mpd_send_int_command(connection, "deleteid", id);
 }
@@ -184,16 +184,16 @@ mpd_run_move(struct mpd_connection *connection, unsigned from, unsigned to)
 }
 
 bool
-mpd_send_moveid(struct mpd_connection *connection, unsigned from, unsigned to)
+mpd_send_move_id(struct mpd_connection *connection, unsigned from, unsigned to)
 {
 	return mpd_send_int2_command(connection, "moveid", from, to);
 }
 
 int
-mpd_run_moveid(struct mpd_connection *connection, unsigned from, unsigned to)
+mpd_run_move_id(struct mpd_connection *connection, unsigned from, unsigned to)
 {
 	return mpd_run_check(connection) &&
-		mpd_send_moveid(connection, from, to) &&
+		mpd_send_move_id(connection, from, to) &&
 		mpd_response_finish(connection);
 }
 
@@ -212,15 +212,15 @@ mpd_run_swap(struct mpd_connection *connection, unsigned pos1, unsigned pos2)
 }
 
 bool
-mpd_send_swapid(struct mpd_connection *connection, unsigned id1, unsigned id2)
+mpd_send_swap_id(struct mpd_connection *connection, unsigned id1, unsigned id2)
 {
 	return mpd_send_int2_command(connection, "swapid", id1, id2);
 }
 
 int
-mpd_run_swapid(struct mpd_connection *connection, unsigned id1, unsigned id2)
+mpd_run_swap_id(struct mpd_connection *connection, unsigned id1, unsigned id2)
 {
 	return mpd_run_check(connection) &&
-		mpd_send_swapid(connection, id1, id2) &&
+		mpd_send_swap_id(connection, id1, id2) &&
 		mpd_response_finish(connection);
 }

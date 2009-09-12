@@ -84,11 +84,11 @@ bool
 mpd_send_add(struct mpd_connection *connection, const char *file);
 
 bool
-mpd_send_addid(struct mpd_connection *connection, const char *file);
+mpd_send_add_id(struct mpd_connection *connection, const char *file);
 
 /**
  * Returns the id of the new song in the playlist.  To be called after
- * mpd_send_addid().
+ * mpd_send_add_id().
  *
  * @return the new song id, -1 on error or if MPD did not send an id
  */
@@ -101,13 +101,13 @@ mpd_recv_song_id(struct mpd_connection *connection);
  * @return the new song id, -1 on error or if MPD did not send an id
  */
 int
-mpd_run_addid(struct mpd_connection *connection, const char *file);
+mpd_run_add_id(struct mpd_connection *connection, const char *file);
 
 bool
 mpd_send_delete(struct mpd_connection *connection, unsigned pos);
 
 bool
-mpd_send_deleteid(struct mpd_connection *connection, unsigned id);
+mpd_send_delete_id(struct mpd_connection *connection, unsigned id);
 
 bool
 mpd_send_shuffle(struct mpd_connection *connection);
@@ -135,10 +135,10 @@ int
 mpd_run_move(struct mpd_connection *connection, unsigned from, unsigned to);
 
 bool
-mpd_send_moveid(struct mpd_connection *connection, unsigned from, unsigned to);
+mpd_send_move_id(struct mpd_connection *connection, unsigned from, unsigned to);
 
 int
-mpd_run_moveid(struct mpd_connection *connection, unsigned from, unsigned to);
+mpd_run_move_id(struct mpd_connection *connection, unsigned from, unsigned to);
 
 bool
 mpd_send_swap(struct mpd_connection *connection, unsigned pos1, unsigned pos2);
@@ -147,10 +147,10 @@ int
 mpd_run_swap(struct mpd_connection *connection, unsigned pos1, unsigned pos2);
 
 bool
-mpd_send_swapid(struct mpd_connection *connection, unsigned id1, unsigned id2);
+mpd_send_swap_id(struct mpd_connection *connection, unsigned id1, unsigned id2);
 
 int
-mpd_run_swapid(struct mpd_connection *connection, unsigned id1, unsigned id2);
+mpd_run_swap_id(struct mpd_connection *connection, unsigned id1, unsigned id2);
 
 #ifdef __cplusplus
 }
