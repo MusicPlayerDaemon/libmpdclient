@@ -174,13 +174,11 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 	else if (strcmp(pair->name, "songid") == 0)
 		status->song_id = atoi(pair->value);
 	else if (strcmp(pair->name, "time") == 0) {
-		char * tok = strchr(pair->value,':');
-		/* the second strchr below is a safety check */
-		if (tok && (strchr(tok,0) > (tok+1))) {
-			/* atoi stops at the first non-[0-9] char: */
-			status->elapsed_time = atoi(pair->value);
-			status->total_time = atoi(tok+1);
-		}
+		char *endptr;
+
+		status->elapsed_time = strtol(pair->value, &endptr, 10);
+		if (*endptr == ':')
+			status->total_time = strtol(endptr + 1, NULL, 10);
 	} else if (strcmp(pair->name, "error") == 0) {
 		if (status->error != NULL)
 			free(status->error);
