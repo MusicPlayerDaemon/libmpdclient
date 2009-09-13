@@ -78,13 +78,13 @@ extern "C" {
  * this functions tries all of them until one accepts the connection.
  * @param port the TCP port to connect to.  If #host is a Unix socket
  * path, this parameter is ignored.
- * @param timeout the timeout in seconds; you may modify it later with
- * mpd_connection_set_timeout()
+ * @param timeout the timeout in milliseconds; you may modify it later
+ * with mpd_connection_set_timeout()
  * @return a mpd_connection object (which may have failed to connect),
  * or NULL on out-of-memory
  */
 struct mpd_connection *
-mpd_connection_new(const char *host, int port, float timeout);
+mpd_connection_new(const char *host, int port, unsigned timeout_ms);
 
 /**
  * Creates a #mpd_connection object based on an existing asynchronous
@@ -110,9 +110,12 @@ void mpd_connection_free(struct mpd_connection *connection);
  * Sets the timeout for synchronous operations.  If the MPD server
  * does not send a response during this time span, the operation is
  * aborted by libmpdclient.
+ *
+ * @param connection the connection to MPD
+ * @param timeout_ms the desired timeout in milliseconds
  */
 void mpd_connection_set_timeout(struct mpd_connection *connection,
-			      float timeout);
+				unsigned timeout_ms);
 
 /**
  * Returns the libmpdclient error code.  MPD_ERROR_SUCCESS means no

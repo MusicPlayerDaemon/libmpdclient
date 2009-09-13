@@ -89,7 +89,7 @@ test_new_connection(struct mpd_connection **conn)
 	if (port == NULL)
 		port = "6600";
 
-	*conn = mpd_connection_new(hostname, atoi(port), 10);
+	*conn = mpd_connection_new(hostname, atoi(port), 30000);
 
 	if (!*conn || mpd_get_error(*conn) != MPD_ERROR_SUCCESS) {
 		LOG_ERROR("%s", mpd_get_error_message(*conn));

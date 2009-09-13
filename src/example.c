@@ -62,7 +62,7 @@ int main(int argc, char ** argv) {
 	if(port == NULL)
 		port = "6600";
 
-	conn = mpd_connection_new(hostname,atoi(port),10);
+	conn = mpd_connection_new(hostname, atoi(port), 30000);
 
 	if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
 		fprintf(stderr,"%s\n", mpd_get_error_message(conn));

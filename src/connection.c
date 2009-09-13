@@ -109,7 +109,7 @@ mpd_connection_sync_error(struct mpd_connection *connection)
 }
 
 struct mpd_connection *
-mpd_connection_new(const char *host, int port, float timeout)
+mpd_connection_new(const char *host, int port, unsigned timeout_ms)
 {
 	const char *line;
 	struct mpd_connection *connection = malloc(sizeof(*connection));
@@ -129,7 +129,7 @@ mpd_connection_new(const char *host, int port, float timeout)
 	if (!mpd_socket_global_init(&connection->error))
 		return connection;
 
-	mpd_connection_set_timeout(connection,timeout);
+	mpd_connection_set_timeout(connection, timeout_ms);
 
 	fd = mpd_socket_connect(host, port, &connection->timeout,
 				&connection->error);
@@ -251,10 +251,11 @@ void mpd_connection_free(struct mpd_connection *connection)
 }
 
 void
-mpd_connection_set_timeout(struct mpd_connection *connection, float timeout)
+mpd_connection_set_timeout(struct mpd_connection *connection,
+			   unsigned timeout_ms)
 {
-	connection->timeout.tv_sec = (long)timeout;
-	connection->timeout.tv_usec = ((long)(timeout * 1e6)) % 1000000;
+	connection->timeout.tv_sec = timeout_ms / 1000;
+	connection->timeout.tv_usec = timeout_ms % 1000;
 }
 
 const unsigned *
