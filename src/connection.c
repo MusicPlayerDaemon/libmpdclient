@@ -45,9 +45,7 @@
 #define MPD_WELCOME_MESSAGE	"OK MPD "
 
 static bool
-mpd_parse_welcome(struct mpd_connection *connection,
-		  const char *host, int port,
-		  const char *output)
+mpd_parse_welcome(struct mpd_connection *connection, const char *output)
 {
 	const char *tmp;
 	char * test;
@@ -55,9 +53,8 @@ mpd_parse_welcome(struct mpd_connection *connection,
 
 	if (strncmp(output,MPD_WELCOME_MESSAGE,strlen(MPD_WELCOME_MESSAGE))) {
 		mpd_error_code(&connection->error, MPD_ERROR_NOTMPD);
-		mpd_error_printf(&connection->error,
-				 "mpd not running on port %i on host \"%s\"",
-				 port, host);
+		mpd_error_message(&connection->error,
+				  "Malformed connect message received");
 		return false;
 	}
 
@@ -155,7 +152,7 @@ mpd_connection_new(const char *host, int port, float timeout)
 		return connection;
 	}
 
-	mpd_parse_welcome(connection, host, port, line);
+	mpd_parse_welcome(connection, line);
 
 	return connection;
 }
