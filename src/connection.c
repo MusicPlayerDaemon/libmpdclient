@@ -160,6 +160,41 @@ mpd_connection_new(const char *host, int port, float timeout)
 	return connection;
 }
 
+struct mpd_connection *
+mpd_connection_new_async(struct mpd_async *async, const char *welcome)
+{
+	struct mpd_connection *connection = malloc(sizeof(*connection));
+
+	assert(async != NULL);
+	assert(welcome != NULL);
+
+	if (connection == NULL)
+		return NULL;
+
+	mpd_error_init(&connection->error);
+	connection->async = async;
+	connection->timeout.tv_sec = 30;
+	connection->timeout.tv_usec = 0;
+	connection->parser = NULL;
+	connection->receiving = false;
+	connection->sending_command_list = false;
+	connection->pair_state = PAIR_STATE_NONE;
+	connection->request = NULL;
+
+	if (!mpd_socket_global_init(&connection->error))
+		return connection;
+
+	connection->parser = mpd_parser_new();
+	if (connection->parser == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return connection;
+	}
+
+	mpd_parse_welcome(connection, welcome);
+
+	return connection;
+}
+
 enum mpd_error
 mpd_get_error(const struct mpd_connection *connection)
 {

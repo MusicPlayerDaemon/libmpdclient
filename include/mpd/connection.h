@@ -38,6 +38,8 @@
 
 #include <stdbool.h>
 
+struct mpd_async;
+
 /**
  * \struct mpd_connection
  *
@@ -83,6 +85,21 @@ extern "C" {
  */
 struct mpd_connection *
 mpd_connection_new(const char *host, int port, float timeout);
+
+/**
+ * Creates a #mpd_connection object based on an existing asynchronous
+ * MPD connection.  You may continue to use the #mpd_async object.
+ * Note that mpd_connection_free() also frees your #mpd_async object!
+ *
+ * This function does not block at all, which is why you have to pass
+ * the welcome message to it.
+ *
+ * @param async a #mpd_async instance
+ * @param welcome the first line sent by MPD (the welcome message)
+ * @return a mpd_connection object, or NULL on out-of-memory
+ */
+struct mpd_connection *
+mpd_connection_new_async(struct mpd_async *async, const char *welcome);
 
 /**
  * Close the connection and free all memory.
