@@ -367,7 +367,7 @@ mpd_async_recv_line(struct mpd_async *async)
 
 	size = mpd_buffer_size(&async->input);
 	if (size == 0)
-		return false;
+		return NULL;
 
 	src = mpd_buffer_read(&async->input);
 	assert(src != NULL);
@@ -383,7 +383,7 @@ mpd_async_recv_line(struct mpd_async *async)
 			async->alive = false;
 		}
 
-		return false;
+		return NULL;
 	}
 
 	*newline = 0;
