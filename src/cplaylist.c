@@ -40,50 +40,50 @@ enum {
 };
 
 bool
-mpd_send_listplaylist(struct mpd_connection *connection, const char *name)
+mpd_send_list_playlist(struct mpd_connection *connection, const char *name)
 {
 	return mpd_send_command(connection, "listplaylist", name, NULL);
 }
 
 bool
-mpd_send_listplaylistinfo(struct mpd_connection *connection, const char *name)
+mpd_send_list_playlist_meta(struct mpd_connection *connection, const char *name)
 {
 	return mpd_send_command(connection, "listplaylistinfo", name, NULL);
 }
 
 bool
-mpd_send_playlistclear(struct mpd_connection *connection, const char *name)
+mpd_send_playlist_clear(struct mpd_connection *connection, const char *name)
 {
 	return mpd_send_command(connection, "playlistclear", name, NULL);
 }
 
 bool
-mpd_run_playlistclear(struct mpd_connection *connection, const char *name)
+mpd_run_playlist_clear(struct mpd_connection *connection, const char *name)
 {
 	return mpd_run_check(connection) &&
-		mpd_send_playlistclear(connection, name) &&
+		mpd_send_playlist_clear(connection, name) &&
 		mpd_response_finish(connection);
 }
 
 bool
-mpd_send_playlistadd(struct mpd_connection *connection, const char *name,
-		     const char *path)
+mpd_send_playlist_add(struct mpd_connection *connection, const char *name,
+		      const char *path)
 {
 	return mpd_send_command(connection, "playlistadd", name, path, NULL);
 }
 
 bool
-mpd_run_playlistadd(struct mpd_connection *connection,
-		    const char *name, const char *path)
+mpd_run_playlist_add(struct mpd_connection *connection,
+		     const char *name, const char *path)
 {
 	return mpd_run_check(connection) &&
-		mpd_send_playlistadd(connection, name, path) &&
+		mpd_send_playlist_add(connection, name, path) &&
 		mpd_response_finish(connection);
 }
 
 bool
-mpd_send_playlistmove(struct mpd_connection *connection, const char *name,
-		      int from, int to)
+mpd_send_playlist_move(struct mpd_connection *connection, const char *name,
+		       int from, int to)
 {
 	char from_string[INTLEN], to_string[INTLEN];
 
@@ -95,8 +95,8 @@ mpd_send_playlistmove(struct mpd_connection *connection, const char *name,
 }
 
 bool
-mpd_send_playlistdelete(struct mpd_connection *connection, const char *name,
-			int pos)
+mpd_send_playlist_delete(struct mpd_connection *connection, const char *name,
+			 int pos)
 {
 	char pos_string[INTLEN];
 
@@ -106,11 +106,11 @@ mpd_send_playlistdelete(struct mpd_connection *connection, const char *name,
 }
 
 bool
-mpd_run_playlistdelete(struct mpd_connection *connection,
-		       const char *name, int pos)
+mpd_run_playlist_delete(struct mpd_connection *connection,
+			const char *name, int pos)
 {
 	return mpd_run_check(connection) &&
-		mpd_send_playlistdelete(connection, name, pos) &&
+		mpd_send_playlist_delete(connection, name, pos) &&
 		mpd_response_finish(connection);
 }
 
