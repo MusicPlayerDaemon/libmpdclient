@@ -144,10 +144,10 @@ mpd_async_fd(const struct mpd_async *async)
 	return async->fd;
 }
 
-enum mpd_async_events
+enum mpd_async_event
 mpd_async_events(const struct mpd_async *async)
 {
-	enum mpd_async_events events;
+	enum mpd_async_event events;
 
 	assert(async != NULL);
 

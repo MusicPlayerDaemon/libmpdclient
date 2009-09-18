@@ -49,7 +49,7 @@
 /**
  * Event bit mask for polling.
  */
-enum mpd_async_events {
+enum mpd_async_event {
 	/** ready to read from the file descriptor */
 	MPD_ASYNC_EVENT_READ = 1,
 
@@ -127,7 +127,7 @@ mpd_async_fd(const struct mpd_async *async);
 /**
  * Returns a bit mask of events which should be polled for.
  */
-enum mpd_async_events
+enum mpd_async_event
 mpd_async_events(const struct mpd_async *async);
 
 /**
@@ -138,7 +138,7 @@ mpd_async_events(const struct mpd_async *async);
  * @return false if the connection was closed due to an error
  */
 bool
-mpd_async_io(struct mpd_async *async, enum mpd_async_events events);
+mpd_async_io(struct mpd_async *async, enum mpd_async_event events);
 
 /**
  * Appends a command to the output buffer.

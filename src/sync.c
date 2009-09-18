@@ -46,13 +46,13 @@ ignore_errno(int e)
 #endif
 }
 
-static enum mpd_async_events
+static enum mpd_async_event
 mpd_sync_poll(struct mpd_async *async, struct timeval *tv)
 {
 	int fd;
 	fd_set rfds, wfds, efds;
 	int ret;
-	enum mpd_async_events events;
+	enum mpd_async_event events;
 
 	if (!mpd_async_is_alive(async))
 		return 0;
@@ -96,7 +96,7 @@ mpd_sync_poll(struct mpd_async *async, struct timeval *tv)
 static bool
 mpd_sync_io(struct mpd_async *async, struct timeval *tv)
 {
-	enum mpd_async_events events = mpd_sync_poll(async, tv);
+	enum mpd_async_event events = mpd_sync_poll(async, tv);
 
 	if (events)
 		return mpd_async_io(async, events);
