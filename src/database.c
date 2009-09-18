@@ -37,19 +37,19 @@
 #include <stdlib.h>
 
 bool
-mpd_send_listall(struct mpd_connection *connection, const char *dir)
+mpd_send_list_all(struct mpd_connection *connection, const char *dir)
 {
 	return mpd_send_command(connection, "listall", dir, NULL);
 }
 
 bool
-mpd_send_listallinfo(struct mpd_connection *connection, const char *dir)
+mpd_send_list_all_meta(struct mpd_connection *connection, const char *dir)
 {
 	return mpd_send_command(connection, "listallinfo", dir, NULL);
 }
 
 bool
-mpd_send_lsinfo(struct mpd_connection *connection, const char *dir)
+mpd_send_ls_meta(struct mpd_connection *connection, const char *dir)
 {
 	return mpd_send_command(connection, "lsinfo", dir, NULL);
 }
