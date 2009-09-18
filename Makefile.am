@@ -6,7 +6,7 @@ mpdinclude_HEADERS = \
 	include/mpd/async.h \
 	include/mpd/audio_format.h \
 	include/mpd/client.h \
-	include/mpd/command.h \
+	include/mpd/capabilities.h \
 	include/mpd/connection.h \
 	include/mpd/cpos.h \
 	include/mpd/database.h \
@@ -44,7 +44,7 @@ src_libmpdclient_la_SOURCES = \
 	src/str_pool.c src/str_pool.h \
 	src/ierror.c src/ierror.h \
 	src/resolver.c src/resolver.h \
-	src/command.c \
+	src/capabilities.c \
 	src/connection.c \
 	src/cpos.c \
 	src/database.c \

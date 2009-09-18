@@ -46,8 +46,8 @@
 #define MPD_CLIENT_H
 
 #include <mpd/audio_format.h>
+#include <mpd/capabilities.h>
 #include <mpd/connection.h>
-#include <mpd/command.h>
 #include <mpd/database.h>
 #include <mpd/directory.h>
 #include <mpd/entity.h>

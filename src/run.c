@@ -27,7 +27,6 @@
 */
 
 #include "run.h"
-#include <mpd/command.h>
 #include <mpd/response.h>
 #include <mpd/status.h>
 #include "internal.h"

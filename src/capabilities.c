@@ -26,15 +26,10 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <mpd/command.h>
+#include <mpd/capabilities.h>
 #include <mpd/send.h>
 
 #include <stddef.h>
-
-/*
- * Connection commands
- *
- */
 
 bool
 mpd_send_commands(struct mpd_connection *connection)

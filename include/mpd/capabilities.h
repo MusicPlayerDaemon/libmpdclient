@@ -26,8 +26,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MPD_COMMAND_H
-#define MPD_COMMAND_H
+#ifndef MPD_CAPABILITIES_H
+#define MPD_CAPABILITIES_H
 
 #include <stdbool.h>
 
@@ -36,11 +36,6 @@ struct mpd_connection;
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/*
- * Connection commands
- *
- */
 
 /**
  * @param connection a #mpd_connection
