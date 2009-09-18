@@ -76,9 +76,9 @@ extern "C" {
  * @param host the server's host name, IP address or Unix socket path.
  * If the resolver returns more than one IP address for a host name,
  * this functions tries all of them until one accepts the connection.
- * @param port the TCP port to connect to.  If #host is a Unix socket
+ * @param port the TCP port to connect to.  If "host" is a Unix socket
  * path, this parameter is ignored.
- * @param timeout the timeout in milliseconds; you may modify it later
+ * @param timeout_ms the timeout in milliseconds; you may modify it later
  * with mpd_connection_set_timeout()
  * @return a mpd_connection object (which may have failed to connect),
  * or NULL on out-of-memory
@@ -103,6 +103,8 @@ mpd_connection_new_async(struct mpd_async *async, const char *welcome);
 
 /**
  * Close the connection and free all memory.
+ *
+ * @param connection the connection to MPD
  */
 void mpd_connection_free(struct mpd_connection *connection);
 
@@ -110,6 +112,10 @@ void mpd_connection_free(struct mpd_connection *connection);
  * Sets the timeout for synchronous operations.  If the MPD server
  * does not send a response during this time span, the operation is
  * aborted by libmpdclient.
+ *
+ * The initial value is the one passed to mpd_connection_new().  If
+ * you have used mpd_connection_new_async(), then the default value is
+ * 30 seconds.
  *
  * @param connection the connection to MPD
  * @param timeout_ms the desired timeout in milliseconds
@@ -140,7 +146,9 @@ enum mpd_ack
 mpd_get_server_error(const struct mpd_connection *connection);
 
 /**
- * Attempts to recover from an error condition.
+ * Attempts to recover from an error condition.  This function must be
+ * called after a non-fatal error before you can continue using this
+ * object.
  *
  * @return true on success, false if the error is fatal and cannot be
  * recovered
@@ -150,13 +158,13 @@ mpd_clear_error(struct mpd_connection *connection);
 
 /**
  * Returns a three-tuple containing the major, minor and patch version
- * of the MPD server.
+ * of the MPD protocol.
  */
 const unsigned *
 mpd_get_server_version(const struct mpd_connection *connection);
 
 /**
- * Compares the MPD server version with the specified triple.
+ * Compares the MPD protocol version with the specified triple.
  *
  * @return -1 if the server is older, 1 if it is newer, 0 if it is
  * equal
