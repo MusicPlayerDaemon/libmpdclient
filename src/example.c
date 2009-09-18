@@ -85,7 +85,7 @@ int main(int argc, char ** argv) {
 
 		mpd_command_list_begin(conn, true);
 		mpd_send_status(conn);
-		mpd_send_currentsong(conn);
+		mpd_send_current_song(conn);
 		mpd_command_list_end(conn);
 
 		status = mpd_recv_status(conn);

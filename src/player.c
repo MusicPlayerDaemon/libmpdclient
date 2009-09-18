@@ -37,17 +37,17 @@
 #include <stdio.h>
 
 bool
-mpd_send_currentsong(struct mpd_connection *connection)
+mpd_send_current_song(struct mpd_connection *connection)
 {
 	return mpd_send_command(connection, "currentsong", NULL);
 }
 
 struct mpd_song *
-mpd_run_currentsong(struct mpd_connection *connection)
+mpd_run_current_song(struct mpd_connection *connection)
 {
 	struct mpd_song *song;
 
-	if (!mpd_run_check(connection) || !mpd_send_currentsong(connection))
+	if (!mpd_run_check(connection) || !mpd_send_current_song(connection))
 		return NULL;
 
 	song = mpd_recv_song(connection);
@@ -76,30 +76,30 @@ mpd_run_play(struct mpd_connection *connection)
 }
 
 bool
-mpd_send_playpos(struct mpd_connection *connection, unsigned song_pos)
+mpd_send_play_pos(struct mpd_connection *connection, unsigned song_pos)
 {
 	return mpd_send_int_command(connection, "play", song_pos);
 }
 
 bool
-mpd_run_playpos(struct mpd_connection *connection, unsigned song_pos)
+mpd_run_play_pos(struct mpd_connection *connection, unsigned song_pos)
 {
 	return mpd_run_check(connection) &&
-		mpd_send_playpos(connection, song_pos) &&
+		mpd_send_play_pos(connection, song_pos) &&
 		mpd_response_finish(connection);
 }
 
 bool
-mpd_send_playid(struct mpd_connection *connection, unsigned id)
+mpd_send_play_id(struct mpd_connection *connection, unsigned id)
 {
 	return mpd_send_int_command(connection, "playid", id);
 }
 
 bool
-mpd_run_playid(struct mpd_connection *connection, unsigned song_id)
+mpd_run_play_id(struct mpd_connection *connection, unsigned song_id)
 {
 	return mpd_run_check(connection) &&
-		mpd_send_playid(connection, song_id) &&
+		mpd_send_play_id(connection, song_id) &&
 		mpd_response_finish(connection);
 }
 
@@ -170,33 +170,33 @@ mpd_run_previous(struct mpd_connection *connection)
 }
 
 bool
-mpd_send_seekpos(struct mpd_connection *connection,
+mpd_send_seek_pos(struct mpd_connection *connection,
 		 unsigned song_pos, unsigned t)
 {
 	return mpd_send_int2_command(connection, "seek", song_pos, t);
 }
 
 bool
-mpd_run_seekpos(struct mpd_connection *connection,
+mpd_run_seek_pos(struct mpd_connection *connection,
 		unsigned song_pos, unsigned t)
 {
 	return mpd_run_check(connection) &&
-		mpd_send_seekpos(connection, song_pos, t) &&
+		mpd_send_seek_pos(connection, song_pos, t) &&
 		mpd_response_finish(connection);
 }
 
 bool
-mpd_send_seekid(struct mpd_connection *connection, unsigned id, unsigned t)
+mpd_send_seek_id(struct mpd_connection *connection, unsigned id, unsigned t)
 {
 	return mpd_send_int2_command(connection, "seekid", id, t);
 }
 
 bool
-mpd_run_seekid(struct mpd_connection *connection,
+mpd_run_seek_id(struct mpd_connection *connection,
 	       unsigned song_id, unsigned t)
 {
 	return mpd_run_check(connection) &&
-		mpd_send_seekid(connection, song_id, t) &&
+		mpd_send_seek_id(connection, song_id, t) &&
 		mpd_response_finish(connection);
 }
 

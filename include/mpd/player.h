@@ -43,7 +43,7 @@ extern "C" {
  * status->song and status->songid).
  */
 bool
-mpd_send_currentsong(struct mpd_connection *connection);
+mpd_send_current_song(struct mpd_connection *connection);
 
 /**
  * Shortcut for mpd_send_currentsong() and mpd_recv_song().
@@ -53,7 +53,7 @@ mpd_send_currentsong(struct mpd_connection *connection);
  * current song
  */
 struct mpd_song *
-mpd_run_currentsong(struct mpd_connection *connection);
+mpd_run_current_song(struct mpd_connection *connection);
 
 /**
  * Starts playing the current song from the beginning.
@@ -74,10 +74,10 @@ mpd_run_play(struct mpd_connection *connection);
  * @return true on success, false on error
  */
 bool
-mpd_send_playpos(struct mpd_connection *connection, unsigned song_pos);
+mpd_send_play_pos(struct mpd_connection *connection, unsigned song_pos);
 
 bool
-mpd_run_playpos(struct mpd_connection *connection, unsigned song_pos);
+mpd_run_play_pos(struct mpd_connection *connection, unsigned song_pos);
 
 /**
  * Starts playing the specified song from the beginning.
@@ -87,10 +87,10 @@ mpd_run_playpos(struct mpd_connection *connection, unsigned song_pos);
  * @return true on success, false on error
  */
 bool
-mpd_send_playid(struct mpd_connection *connection, unsigned id);
+mpd_send_play_id(struct mpd_connection *connection, unsigned id);
 
 bool
-mpd_run_playid(struct mpd_connection *connection, unsigned song_id);
+mpd_run_play_id(struct mpd_connection *connection, unsigned song_id);
 
 bool
 mpd_send_stop(struct mpd_connection *connection);
@@ -136,12 +136,12 @@ mpd_run_previous(struct mpd_connection *connection);
  * @return true on success, false on error
  */
 bool
-mpd_send_seekpos(struct mpd_connection *connection,
-		 unsigned song_pos, unsigned t);
+mpd_send_seek_pos(struct mpd_connection *connection,
+		  unsigned song_pos, unsigned t);
 
 bool
-mpd_run_seekpos(struct mpd_connection *connection,
-		unsigned song_pos, unsigned t);
+mpd_run_seek_pos(struct mpd_connection *connection,
+		 unsigned song_pos, unsigned t);
 
 /**
  * Seeks the specified song.
@@ -152,11 +152,11 @@ mpd_run_seekpos(struct mpd_connection *connection,
  * @return true on success, false on error
  */
 bool
-mpd_send_seekid(struct mpd_connection *connection, unsigned id, unsigned t);
+mpd_send_seek_id(struct mpd_connection *connection, unsigned id, unsigned t);
 
 bool
-mpd_run_seekid(struct mpd_connection *connection,
-	       unsigned song_id, unsigned t);
+mpd_run_seek_id(struct mpd_connection *connection,
+		unsigned song_id, unsigned t);
 
 bool
 mpd_send_repeat(struct mpd_connection *connection, bool mode);

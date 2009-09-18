@@ -194,11 +194,7 @@ test_currentsong(struct mpd_connection *conn)
 {
 	struct mpd_song *song;
 
-	mpd_send_currentsong(conn);
-
-	CHECK_CONNECTION(conn);
-
-	song = mpd_recv_song(conn);
+	song = mpd_run_current_song(conn);
 	if (song != NULL) {
 		print_song(song);
 
@@ -223,7 +219,7 @@ test_list_status_currentsong(struct mpd_connection *conn)
 
 	mpd_command_list_begin(conn, true);
 	mpd_send_status(conn);
-	mpd_send_currentsong(conn);
+	mpd_send_current_song(conn);
 	mpd_command_list_end(conn);
 
 	CHECK_CONNECTION(conn);
