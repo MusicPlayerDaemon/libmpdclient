@@ -47,6 +47,16 @@ extern "C" {
 bool
 mpd_send_set_volume(struct mpd_connection *connection, unsigned volume);
 
+/**
+ * Shortcut for mpd_send_set_volume() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param volume the volume, an integer between 0 and 100
+ * @return true on success, false on error
+ */
+bool
+mpd_run_set_volume(struct mpd_connection *connection, unsigned volume);
+
 #ifdef __cplusplus
 }
 #endif

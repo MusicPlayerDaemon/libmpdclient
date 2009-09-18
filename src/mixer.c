@@ -28,10 +28,21 @@
 
 #include <mpd/mixer.h>
 #include <mpd/send.h>
+#include <mpd/response.h>
 #include "isend.h"
+#include "run.h"
 
 bool
 mpd_send_set_volume(struct mpd_connection *connection, unsigned volume)
 {
 	return mpd_send_int_command(connection, "setvol", volume);
 }
+
+bool
+mpd_run_set_volume(struct mpd_connection *connection, unsigned volume)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_set_volume(connection, volume) &&
+		mpd_response_finish(connection);
+}
+
