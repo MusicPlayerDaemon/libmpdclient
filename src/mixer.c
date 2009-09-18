@@ -31,7 +31,7 @@
 #include "isend.h"
 
 bool
-mpd_send_setvol(struct mpd_connection *connection, int change)
+mpd_send_set_volume(struct mpd_connection *connection, unsigned volume)
 {
-	return mpd_send_int_command(connection, "setvol", change);
+	return mpd_send_int_command(connection, "setvol", volume);
 }

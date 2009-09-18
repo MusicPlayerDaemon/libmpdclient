@@ -38,7 +38,7 @@ extern "C" {
 #endif
 
 bool
-mpd_send_setvol(struct mpd_connection *connection, int change);
+mpd_send_set_volume(struct mpd_connection *connection, unsigned volume);
 
 #ifdef __cplusplus
 }
