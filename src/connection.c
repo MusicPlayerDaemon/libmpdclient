@@ -131,6 +131,21 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 
 	mpd_connection_set_timeout(connection, timeout_ms);
 
+	if (host == NULL) {
+		host = getenv("MPD_HOST");
+		if (host == NULL)
+		host = "localhost";
+	}
+
+	if (port == 0) {
+		const char *env_port = getenv("MPD_PORT");
+		if (env_port != NULL)
+			port = atoi(env_port);
+
+		if (port == 0)
+			port = 6600;
+	}
+
 	fd = mpd_socket_connect(host, port, &connection->timeout,
 				&connection->error);
 	if (fd < 0)

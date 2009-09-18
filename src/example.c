@@ -54,15 +54,8 @@ print_tag(const struct mpd_song *song, enum mpd_tag_type type,
 
 int main(int argc, char ** argv) {
 	struct mpd_connection *conn;
-	const char *hostname = getenv("MPD_HOST");
-	const char *port = getenv("MPD_PORT");
 
-	if(hostname == NULL)
-		hostname = "localhost";
-	if(port == NULL)
-		port = "6600";
-
-	conn = mpd_connection_new(hostname, atoi(port), 30000);
+	conn = mpd_connection_new(NULL, 0, 30000);
 
 	if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
 		fprintf(stderr,"%s\n", mpd_get_error_message(conn));
