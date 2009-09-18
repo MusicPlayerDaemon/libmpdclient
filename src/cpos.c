@@ -47,15 +47,22 @@ mpd_recv_cpos(struct mpd_connection *connection, struct mpd_cpos *cpos)
 	cpos->position = atoi(pair->value);
 	mpd_return_pair(connection, pair);
 
-	while ((pair = mpd_recv_pair(connection)) != NULL) {
-		if (strcmp(pair->name, "Id") == 0) {
-			cpos->id = atoi(pair->value);
-			mpd_return_pair(connection, pair);
-		} else {
-			mpd_enqueue_pair(connection, pair);
-			break;
+	pair = mpd_recv_pair_named(connection, "Id");
+	if (pair == NULL) {
+		mpd_return_pair(connection, pair);
+
+		if (!mpd_error_is_defined(&connection->error)) {
+			mpd_error_code(&connection->error,
+				       MPD_ERROR_MALFORMED);
+			mpd_error_message(&connection->error,
+					  "No id received");
 		}
+
+		return false;
 	}
+
+	cpos->id = atoi(pair->value);
+	mpd_return_pair(connection, pair);
 
 	return !mpd_error_is_defined(&connection->error);
 }
