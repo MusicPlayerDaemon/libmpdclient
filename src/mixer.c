@@ -26,36 +26,12 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <mpd/command.h>
+#include <mpd/mixer.h>
 #include <mpd/send.h>
-
-#include <stddef.h>
-
-/*
- * Connection commands
- *
- */
+#include "isend.h"
 
 bool
-mpd_send_commands(struct mpd_connection *connection)
+mpd_send_setvol(struct mpd_connection *connection, int change)
 {
-	return mpd_send_command(connection, "commands", NULL);
-}
-
-bool
-mpd_send_notcommands(struct mpd_connection *connection)
-{
-	return mpd_send_command(connection, "notcommands", NULL);
-}
-
-bool
-mpd_send_urlhandlers(struct mpd_connection *connection)
-{
-	return mpd_send_command(connection, "urlhandlers", NULL);
-}
-
-bool
-mpd_send_tagtypes(struct mpd_connection *connection)
-{
-	return mpd_send_command(connection, "tagtypes", NULL);
+	return mpd_send_int_command(connection, "setvol", change);
 }

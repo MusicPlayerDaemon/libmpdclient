@@ -15,6 +15,7 @@ mpdinclude_HEADERS = \
 	include/mpd/error.h \
 	include/mpd/idle.h \
 	include/mpd/list.h \
+	include/mpd/mixer.h \
 	include/mpd/parser.h \
 	include/mpd/password.h \
 	include/mpd/player.h \
@@ -56,6 +57,7 @@ src_libmpdclient_la_SOURCES = \
 	src/iso8601.h \
 	src/iso8601.c \
 	src/list.c \
+	src/mixer.c \
 	src/parser.c \
 	src/password.c \
 	src/player.c \

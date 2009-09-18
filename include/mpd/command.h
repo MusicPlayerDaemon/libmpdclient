@@ -38,15 +38,6 @@ extern "C" {
 #endif
 
 /*
- * Mixer commands
- *
- */
-
-bool
-mpd_send_setvol(struct mpd_connection *connection, int change);
-
-
-/*
  * Connection commands
  *
  */
