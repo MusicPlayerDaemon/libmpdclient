@@ -45,12 +45,6 @@ extern "C" {
 bool
 mpd_send_setvol(struct mpd_connection *connection, int change);
 
-/**
- * WARNING: don't use volume command, its deprecated
- */
-bool
-mpd_send_volume(struct mpd_connection *connection, int change);
-
 
 /*
  * Connection commands

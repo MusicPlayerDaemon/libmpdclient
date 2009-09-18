@@ -43,12 +43,6 @@ mpd_send_setvol(struct mpd_connection *connection, int change)
 	return mpd_send_int_command(connection, "setvol", change);
 }
 
-bool
-mpd_send_volume(struct mpd_connection *connection, int change)
-{
-	return mpd_send_int_command(connection, "volume", change);
-}
-
 
 /*
  * Connection commands
