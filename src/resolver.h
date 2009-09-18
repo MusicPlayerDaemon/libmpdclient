@@ -41,7 +41,7 @@ struct resolver_address {
 };
 
 struct resolver *
-resolver_new(const char *host, int port);
+resolver_new(const char *host, unsigned port);
 
 void
 resolver_free(struct resolver *resolver);

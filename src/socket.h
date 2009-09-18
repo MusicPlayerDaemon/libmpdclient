@@ -52,7 +52,7 @@ mpd_socket_global_init(struct mpd_error_info *error)
  * @return the socket file descriptor, or -1 on failure
  */
 int
-mpd_socket_connect(const char *host, int port, const struct timeval *tv,
+mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv,
 		   struct mpd_error_info *error);
 
 /**

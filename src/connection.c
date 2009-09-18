@@ -109,7 +109,7 @@ mpd_connection_sync_error(struct mpd_connection *connection)
 }
 
 struct mpd_connection *
-mpd_connection_new(const char *host, int port, unsigned timeout_ms)
+mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 {
 	const char *line;
 	struct mpd_connection *connection = malloc(sizeof(*connection));

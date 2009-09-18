@@ -84,7 +84,7 @@ extern "C" {
  * or NULL on out-of-memory
  */
 struct mpd_connection *
-mpd_connection_new(const char *host, int port, unsigned timeout_ms);
+mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms);
 
 /**
  * Creates a #mpd_connection object based on an existing asynchronous

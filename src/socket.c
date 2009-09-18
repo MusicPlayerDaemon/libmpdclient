@@ -161,7 +161,7 @@ mpd_socket_wait_connected(int fd, struct timeval *tv)
 }
 
 int
-mpd_socket_connect(const char *host, int port, const struct timeval *tv0,
+mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 		   struct mpd_error_info *error)
 {
 	struct timeval tv = *tv0;
