@@ -36,7 +36,6 @@
 #include <mpd/recv.h>
 #include "internal.h"
 
-#include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -122,8 +121,7 @@ mpd_search_db_tags(struct mpd_connection *connection, enum mpd_tag_type type)
 		return false;
 	}
 
-	snprintf(connection->request, len, "list %c%s",
-		 tolower(strtype[0]), strtype+1);
+	snprintf(connection->request, len, "list %s", strtype);
 
 	return true;
 }
@@ -223,8 +221,8 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 	}
 
 	connection->request = request;
-	snprintf(connection->request + old_length, len, " %c%s \"%s\"",
-		 tolower(strtype[0]), strtype+1, arg);
+	snprintf(connection->request + old_length, len, " %s \"%s\"",
+		 strtype, arg);
 
 	free(arg);
 	return true;
