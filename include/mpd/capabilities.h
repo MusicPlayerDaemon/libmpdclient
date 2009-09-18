@@ -38,24 +38,44 @@ extern "C" {
 #endif
 
 /**
- * @param connection a #mpd_connection
+ * Requests a list of supported and allowed.  Use
+ * mpd_recv_pair_named() to obtain the list of "command" pairs.
  *
- * Queries mpd for the allowed commands
+ * @param connection the connection to MPD
+ * @return true on success, false on error
  */
 bool
 mpd_send_commands(struct mpd_connection *connection);
 
 /**
- * @param connection a #mpd_connection
+ * Requests a list of supported commands which are not allowed for
+ * this connection.  Use mpd_recv_pair_named() to obtain the list of
+ * "command" pairs.
  *
- * Queries mpd for the not allowed commands
+ * @param connection the connection to MPD
+ * @return true on success, false on error
  */
 bool
 mpd_send_notcommands(struct mpd_connection *connection);
 
+/**
+ * Requests a list of supported URL handlers in the form "scheme://",
+ * example: "http://".  Use mpd_recv_pair_named() to obtain the list
+ * of "handler" pairs.
+ *
+ * @param connection the connection to MPD
+ * @return true on success, false on error
+ */
 bool
 mpd_send_urlhandlers(struct mpd_connection *connection);
 
+/**
+ * Requests a list of supported tag types.  Use mpd_recv_pair_named()
+ * to obtain the list of "tagtype" pairs.
+ *
+ * @param connection the connection to MPD
+ * @return true on success, false on error
+ */
 bool
 mpd_send_tagtypes(struct mpd_connection *connection);
 
