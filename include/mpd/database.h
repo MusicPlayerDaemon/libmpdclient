@@ -62,6 +62,8 @@ mpd_send_list_all(struct mpd_connection *connection, const char *path);
  * larger than a configurable server-side limit, MPD may disconnect
  * you.
  *
+ * To read the response, you may use mpd_recv_entity().
+ *
  * @param connection the connection to MPD
  * @param path an optional base path for the query
  * @return true on success, false on error
@@ -73,6 +75,8 @@ mpd_send_list_all_meta(struct mpd_connection *connection, const char *path);
 /**
  * Get a list of all directories, songs and playlist in a directory
  * from MPD, including metadata.
+ *
+ * To read the response, you may use mpd_recv_entity().
  *
  * @param connection the connection to MPD
  * @param path the directory to be listed
