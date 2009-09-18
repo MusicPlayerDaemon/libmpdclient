@@ -32,25 +32,25 @@
 #include <stddef.h>
 
 bool
-mpd_send_commands(struct mpd_connection *connection)
+mpd_send_allowed_commands(struct mpd_connection *connection)
 {
 	return mpd_send_command(connection, "commands", NULL);
 }
 
 bool
-mpd_send_notcommands(struct mpd_connection *connection)
+mpd_send_disallowed_commands(struct mpd_connection *connection)
 {
 	return mpd_send_command(connection, "notcommands", NULL);
 }
 
 bool
-mpd_send_urlhandlers(struct mpd_connection *connection)
+mpd_send_list_url_schemes(struct mpd_connection *connection)
 {
 	return mpd_send_command(connection, "urlhandlers", NULL);
 }
 
 bool
-mpd_send_tagtypes(struct mpd_connection *connection)
+mpd_send_list_tag_types(struct mpd_connection *connection)
 {
 	return mpd_send_command(connection, "tagtypes", NULL);
 }

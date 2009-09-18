@@ -45,7 +45,7 @@ extern "C" {
  * @return true on success, false on error
  */
 bool
-mpd_send_commands(struct mpd_connection *connection);
+mpd_send_allowed_commands(struct mpd_connection *connection);
 
 /**
  * Requests a list of supported commands which are not allowed for
@@ -56,7 +56,7 @@ mpd_send_commands(struct mpd_connection *connection);
  * @return true on success, false on error
  */
 bool
-mpd_send_notcommands(struct mpd_connection *connection);
+mpd_send_disallowed_commands(struct mpd_connection *connection);
 
 /**
  * Requests a list of supported URL handlers in the form "scheme://",
@@ -67,7 +67,7 @@ mpd_send_notcommands(struct mpd_connection *connection);
  * @return true on success, false on error
  */
 bool
-mpd_send_urlhandlers(struct mpd_connection *connection);
+mpd_send_list_url_schemes(struct mpd_connection *connection);
 
 /**
  * Requests a list of supported tag types.  Use mpd_recv_pair_named()
@@ -77,7 +77,7 @@ mpd_send_urlhandlers(struct mpd_connection *connection);
  * @return true on success, false on error
  */
 bool
-mpd_send_tagtypes(struct mpd_connection *connection);
+mpd_send_list_tag_types(struct mpd_connection *connection);
 
 #ifdef __cplusplus
 }
