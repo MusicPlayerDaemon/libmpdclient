@@ -37,6 +37,13 @@ struct mpd_connection;
 extern "C" {
 #endif
 
+/**
+ * Sets the volume of all output devices.
+ *
+ * @param connection the connection to MPD
+ * @param volume the volume, an integer between 0 and 100
+ * @return true on success, false on error
+ */
 bool
 mpd_send_set_volume(struct mpd_connection *connection, unsigned volume);
 
