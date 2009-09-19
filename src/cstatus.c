@@ -35,6 +35,7 @@
 #include <mpd/send.h>
 #include <mpd/recv.h>
 #include "internal.h"
+#include "run.h"
 
 bool
 mpd_send_status(struct mpd_connection * connection)
