@@ -38,7 +38,7 @@ enum mpd_error {
 
 	/** a function was called with an unrecognized or invalid
 	    argument */
-	MPD_ERROR_ARG,
+	MPD_ERROR_ARGUMENT,
 
 	/** a function was called which is not available in the
 	    current state of libmpdclient */
@@ -51,7 +51,7 @@ enum mpd_error {
 	MPD_ERROR_SYSTEM,
 
 	/** unknown host */
-	MPD_ERROR_UNKHOST,
+	MPD_ERROR_RESOLVER,
 
 	/** error sending command */
 	MPD_ERROR_SENDING,
@@ -60,7 +60,7 @@ enum mpd_error {
 	MPD_ERROR_MALFORMED,
 
 	/** connection closed by mpd */
-	MPD_ERROR_CONNCLOSED,
+	MPD_ERROR_CLOSED,
 
 	/** ACK returned! */
 	MPD_ERROR_ACK,

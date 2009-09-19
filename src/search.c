@@ -108,7 +108,7 @@ mpd_search_db_tags(struct mpd_connection *connection, enum mpd_tag_type type)
 
 	strtype = mpd_tag_name(type);
 	if (strtype == NULL) {
-		mpd_error_code(&connection->error, MPD_ERROR_ARG);
+		mpd_error_code(&connection->error, MPD_ERROR_ARGUMENT);
 		mpd_error_message(&connection->error,
 				  "invalid type specified");
 		return false;
@@ -200,7 +200,7 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 
 	strtype = mpd_tag_name(type);
 	if (strtype == NULL) {
-		mpd_error_code(&connection->error, MPD_ERROR_ARG);
+		mpd_error_code(&connection->error, MPD_ERROR_ARGUMENT);
 		mpd_error_message(&connection->error,
 				  "invalid type specified");
 		return false;

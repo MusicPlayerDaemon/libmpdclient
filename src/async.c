@@ -208,7 +208,7 @@ mpd_async_read(struct mpd_async *async)
 	}
 
 	if (nbytes == 0) {
-		mpd_error_code(&async->error, MPD_ERROR_CONNCLOSED);
+		mpd_error_code(&async->error, MPD_ERROR_CLOSED);
 		mpd_error_message(&async->error,
 				  "Connection closed by the server");
 		async->alive = false;
@@ -261,7 +261,7 @@ mpd_async_io(struct mpd_async *async, unsigned events)
 		return false;
 
 	if ((events & (MPD_ASYNC_EVENT_HUP|MPD_ASYNC_EVENT_ERROR)) != 0) {
-		mpd_error_code(&async->error, MPD_ERROR_CONNCLOSED);
+		mpd_error_code(&async->error, MPD_ERROR_CLOSED);
 		mpd_error_message(&async->error, "Socket connection aborted");
 		async->alive = false;
 		return false;

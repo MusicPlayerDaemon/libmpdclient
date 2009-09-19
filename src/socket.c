@@ -171,7 +171,7 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 
 	resolver = resolver_new(host, port);
 	if (resolver == NULL) {
-		mpd_error_code(error, MPD_ERROR_UNKHOST);
+		mpd_error_code(error, MPD_ERROR_RESOLVER);
 		mpd_error_printf(error, "host \"%s\" not found", host);
 		return -1;
 	}

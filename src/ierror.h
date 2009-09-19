@@ -111,7 +111,7 @@ static inline bool
 mpd_error_is_fatal(const struct mpd_error_info *error)
 {
 	return error->code != MPD_ERROR_SUCCESS &&
-		error->code != MPD_ERROR_ARG &&
+		error->code != MPD_ERROR_ARGUMENT &&
 		error->code != MPD_ERROR_STATE &&
 		error->code != MPD_ERROR_ACK;
 }

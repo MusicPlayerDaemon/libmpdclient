@@ -53,8 +53,8 @@ struct mpd_async;
  * mpd_get_server_error().
  *
  * Some errors can be cleared by calling mpd_clear_error(), like
- * #MPD_ERROR_ACK, #MPD_ERROR_ARG.  Most others are fatal, and cannot
- * be recovered, like #MPD_ERROR_CONNCLOSED - mpd_clear_error()
+ * #MPD_ERROR_ACK, #MPD_ERROR_ARGUMENT.  Most others are fatal, and
+ * cannot be recovered, like #MPD_ERROR_CLOSED - mpd_clear_error()
  * returns false.
  *
  * Some functions like mpd_recv_pair() cannot differentiate between
