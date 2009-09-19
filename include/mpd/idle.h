@@ -73,6 +73,24 @@ extern "C" {
 #endif
 
 /**
+ * Returns the name of the specified idle event.
+ *
+ * @param idle an idle event id
+ * @return the name, or NULL if that event is not known
+ */
+const char *
+mpd_idle_name(enum mpd_idle idle);
+
+/**
+ * Parses the name of an idle eveent.
+ *
+ * @param name an idle event name
+ * @return the id, or 0 if that event is not known
+ */
+enum mpd_idle
+mpd_idle_name_parse(const char *name);
+
+/**
  * Enters "idle" mode: MPD will stall the response until an event has
  * occured.  Call mpd_send_noidle() to abort the idle mode, or
  * mpd_recv_idle() to read the event mask (or synchronously wait for
