@@ -48,6 +48,7 @@ extern "C" {
  *
  * Note that there is no guarantee on atomicity.
  *
+ * @param connection the connection to MPD
  * @param discrete_ok tells MPD whether to acknowledge every list
  * command with an "list_OK" response
  * @return true on success
@@ -62,6 +63,7 @@ mpd_command_list_begin(struct mpd_connection *connection, bool discrete_ok);
  * Note: there is no way to cancel a command list once it is started.
  * You may however close the socket connection.
  *
+ * @param connection the connection to MPD
  * @return true on success
  */
 bool
