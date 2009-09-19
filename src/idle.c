@@ -109,8 +109,11 @@ mpd_recv_idle(struct mpd_connection *connection)
 		.tv_usec = 0,
 	};
 
-	while ((pair = mpd_recv_pair(connection)) != NULL)
+	while ((pair = mpd_recv_pair(connection)) != NULL) {
 		flags |= mpd_idle_parse_pair(pair);
+
+		mpd_return_pair(connection, pair);
+	}
 
 	/* reenable timeout */
 	connection->timeout = old_timeout;
