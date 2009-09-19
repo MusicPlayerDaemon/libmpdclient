@@ -46,7 +46,7 @@ struct mpd_parser {
 
 		struct {
 			enum mpd_ack ack;
-			int at;
+			unsigned at;
 			const char *message;
 		} error;
 
@@ -104,7 +104,7 @@ mpd_parser_feed(struct mpd_parser *parser, char *line)
 		char *p, *q;
 
 		parser->u.error.ack = MPD_ACK_ERROR_UNK;
-		parser->u.error.at = -1;
+		parser->u.error.at = 0;
 		parser->u.error.message = NULL;
 
 		/* parse [ACK@AT] */
@@ -174,7 +174,7 @@ mpd_parser_get_ack(const struct mpd_parser *parser)
 	return parser->u.error.ack;
 }
 
-int
+unsigned
 mpd_parser_get_at(const struct mpd_parser *parser)
 {
 	assert(parser->result == MPD_PARSER_ERROR);

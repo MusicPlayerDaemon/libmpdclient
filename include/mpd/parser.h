@@ -114,9 +114,9 @@ mpd_parser_get_ack(const struct mpd_parser *parser);
 
 /**
  * On #MPD_PARSER_ERROR, this returns the number of the list command
- * which failed, or -1 if that information is not available.
+ * which failed.  Don't call this outside of a command list.
  */
-int
+unsigned
 mpd_parser_get_at(const struct mpd_parser *parser);
 
 /**
