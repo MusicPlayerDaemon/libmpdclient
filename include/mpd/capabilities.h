@@ -59,6 +59,19 @@ bool
 mpd_send_disallowed_commands(struct mpd_connection *connection);
 
 /**
+ * Receives the next supported command.  Call this in a loop after
+ * mpd_send_commands() or mpd_send_notcommands().
+ *
+ * Free the return value with mpd_value_free().
+ *
+ * @param connection a #mpd_connection
+ * @returns a command name, or NULL on error or if the end of the
+ * response is reached
+ */
+char *
+mpd_recv_command_name(struct mpd_connection *connection);
+
+/**
  * Requests a list of supported URL handlers in the form "scheme://",
  * example: "http://".  Use mpd_recv_pair_named() to obtain the list
  * of "handler" pairs.
@@ -70,6 +83,12 @@ bool
 mpd_send_list_url_schemes(struct mpd_connection *connection);
 
 /**
+ * Receives one line of the mpd_send_urlhandlers() response.
+ */
+char *
+mpd_recv_handler(struct mpd_connection *connection);
+
+/**
  * Requests a list of supported tag types.  Use mpd_recv_pair_named()
  * to obtain the list of "tagtype" pairs.
  *
@@ -78,6 +97,13 @@ mpd_send_list_url_schemes(struct mpd_connection *connection);
  */
 bool
 mpd_send_list_tag_types(struct mpd_connection *connection);
+
+/**
+ * Receives the next tag type name.  Call this in a loop after
+ * mpd_send_tagtypes().
+ */
+char *
+mpd_recv_tag_type_name(struct mpd_connection *connection);
 
 #ifdef __cplusplus
 }

@@ -105,21 +105,3 @@ mpd_response_next(struct mpd_connection *connection)
 	connection->discrete_finished = false;
 	return true;
 }
-
-char *
-mpd_recv_command_name(struct mpd_connection *connection)
-{
-	return mpd_recv_value_named(connection, "command");
-}
-
-char *
-mpd_recv_handler(struct mpd_connection *connection)
-{
-	return mpd_recv_value_named(connection, "handler");
-}
-
-char *
-mpd_recv_tag_type_name(struct mpd_connection *connection)
-{
-	return mpd_recv_value_named(connection, "tagtype");
-}

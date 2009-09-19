@@ -59,29 +59,6 @@ mpd_response_finish(struct mpd_connection *connection);
 bool
 mpd_response_next(struct mpd_connection *connection);
 
-/**
- * Receives the next supported command.  Call this in a loop after
- * mpd_send_commands() or mpd_send_notcommands().
- *
- * @param connection a #mpd_connection
- * @returns a string, needs to be free'ed
- */
-char *
-mpd_recv_command_name(struct mpd_connection *connection);
-
-/**
- * Receives one line of the mpd_send_urlhandlers() response.
- */
-char *
-mpd_recv_handler(struct mpd_connection *connection);
-
-/**
- * Receives the next tag type name.  Call this in a loop after
- * mpd_send_tagtypes().
- */
-char *
-mpd_recv_tag_type_name(struct mpd_connection *connection);
-
 #ifdef __cplusplus
 }
 #endif
