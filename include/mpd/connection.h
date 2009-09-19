@@ -135,6 +135,11 @@ mpd_get_error(const struct mpd_connection *connection);
  * Returns the human-readable (English) libmpdclient error message.
  * Calling this function is only valid if an error really occured.
  * Check with mpd_get_error().
+ *
+ * For #MPD_ERROR_ACK, the error message is encoded in UTF-8.
+ * #MPD_ERROR_SYSTEM obtains its error message from the operating
+ * system, and thus the locale's character set (and probably language)
+ * is used.  Keep that in mind when you print error messages.
  */
 const char *
 mpd_get_error_message(const struct mpd_connection *connection);

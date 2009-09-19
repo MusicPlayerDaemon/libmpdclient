@@ -111,6 +111,11 @@ mpd_async_get_error(const struct mpd_async *async);
  * human readable error message which caused this.  This message is
  * optional, and may be NULL.  The pointer is invalidated by
  * mpd_async_free().
+ *
+ * For #MPD_ERROR_ACK, the error message is encoded in UTF-8.
+ * #MPD_ERROR_SYSTEM obtains its error message from the operating
+ * system, and thus the locale's character set (and probably language)
+ * is used.  Keep that in mind when you print error messages.
  */
 const char *
 mpd_async_get_error_message(const struct mpd_async *async);
