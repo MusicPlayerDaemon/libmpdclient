@@ -57,6 +57,12 @@ mpd_sync_send_command(struct mpd_async *async, const struct timeval *tv,
 		      const char *command, ...);
 
 /**
+ * Sends all pending data from the output buffer to MPD.
+ */
+bool
+mpd_sync_flush(struct mpd_async *async, const struct timeval *tv);
+
+/**
  * Synchronous wrapper for mpd_async_recv_line().
  */
 char *

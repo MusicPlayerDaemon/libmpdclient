@@ -146,6 +146,29 @@ mpd_sync_send_command(struct mpd_async *async, const struct timeval *tv,
 	return success;
 }
 
+bool
+mpd_sync_flush(struct mpd_async *async, const struct timeval *tv0)
+{
+	struct timeval tv, *tvp;
+
+	if (tv0 != NULL) {
+		tv = *tv0;
+		tvp = &tv;
+	} else
+		tvp = NULL;
+
+	while (true) {
+		enum mpd_async_event events = mpd_async_events(async);
+		if ((events & MPD_ASYNC_EVENT_WRITE) == 0)
+			/* no more pending writes */
+			return true;
+
+		if (mpd_async_get_error(async) != MPD_ERROR_SUCCESS ||
+		    !mpd_sync_io(async, tvp))
+			return false;
+	}
+}
+
 char *
 mpd_sync_recv_line(struct mpd_async *async, const struct timeval *tv0)
 {
