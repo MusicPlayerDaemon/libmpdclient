@@ -88,7 +88,7 @@ mpd_sync_poll(struct mpd_async *async, struct timeval *tv)
 			return events;
 		}
 
-		if (ret == 0 || ignore_errno(errno))
+		if (ret == 0 || !ignore_errno(errno))
 			return 0;
 	}
 }
