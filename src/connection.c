@@ -84,7 +84,7 @@ static void
 mpd_copy_async_error(struct mpd_error_info *error,
 		     const struct mpd_async *async)
 {
-	assert(!mpd_async_is_alive(async));
+	assert(mpd_async_get_error(async) != MPD_ERROR_SUCCESS);
 
 	mpd_error_code(error, mpd_async_get_error(async));
 	mpd_error_message(error, mpd_async_get_error_message(async));
@@ -99,7 +99,7 @@ mpd_connection_async_error(struct mpd_connection *connection)
 void
 mpd_connection_sync_error(struct mpd_connection *connection)
 {
-	if (mpd_async_is_alive(connection->async)) {
+	if (mpd_async_get_error(connection->async) == MPD_ERROR_SUCCESS) {
 		/* no error noticed by async: must be a timeout in the
 		   sync.c code */
 		mpd_error_code(&connection->error, MPD_ERROR_TIMEOUT);

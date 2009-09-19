@@ -92,16 +92,8 @@ void
 mpd_async_free(struct mpd_async *async);
 
 /**
- * Determines whether this #mpd_async object is still connected and
- * valid.  If not, you may use mpd_async_get_error() and
- * mpd_async_get_error_message() to inspect the cause.
- */
-bool
-mpd_async_is_alive(const struct mpd_async *async);
-
-/**
- * If mpd_async_is_alive() returns false, this function returns the
- * error code which caused this.
+ * After an error has occured, this function returns the error code.
+ * If no error has occured, it returns #MPD_ERROR_SUCCESS.
  */
 enum mpd_error
 mpd_async_get_error(const struct mpd_async *async);
