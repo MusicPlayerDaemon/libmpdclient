@@ -37,7 +37,7 @@
 
 static const char *const mpd_tag_type_names[MPD_TAG_COUNT] =
 {
-	"Any",
+	[MPD_TAG_ANY] = "any",
 	"Filename",
 	"Artist",
 	"Album",
