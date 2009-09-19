@@ -82,7 +82,7 @@ mpd_recv_pair(struct mpd_connection *connection)
 		connection->receiving = false;
 		connection->sending_command_list = false;
 
-		mpd_async_copy_error(connection->async, &connection->error);
+		mpd_connection_sync_error(connection);
 		return NULL;
 	}
 
