@@ -300,7 +300,7 @@ test_lsinfo(struct mpd_connection *conn, const char *path)
 static int
 test_list_artists(struct mpd_connection *conn)
 {
-	char *artist;
+	struct mpd_pair *pair;
 	int first = 1;
 
         mpd_search_db_tags(conn, MPD_TAG_ARTIST);
@@ -308,14 +308,14 @@ test_list_artists(struct mpd_connection *conn)
 	CHECK_CONNECTION(conn);
 
 	LOG_INFO("%s: ", "Artists list");
-	while ((artist = mpd_get_next_tag(conn, MPD_TAG_ARTIST))) {
+	while ((pair = mpd_recv_pair_tag(conn, MPD_TAG_ARTIST)) != NULL) {
 		if (first) {
-			printf("    %s", artist);
+			printf("    %s", pair->value);
 			first = 0;
 		} else {
-			printf(", %s", artist);
+			printf(", %s", pair->value);
 		}
-		free(artist);
+		mpd_return_pair(conn, pair);
 	}
 	printf("\n");
 

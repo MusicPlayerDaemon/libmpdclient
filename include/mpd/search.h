@@ -105,14 +105,17 @@ bool
 mpd_search_commit(struct mpd_connection *connection);
 
 /**
- * @param connection a #mpd_connection
- * @param type The type of the tag to get
+ * Same as mpd_recv_pair_named(), but the pair name is specified as
+ * #mpd_tag_type.
  *
- * Use this function to get the next tag of o given type.
- * NULL means there are no more.
+ * @param connection the connection to MPD
+ * @param type one of the "real" tag types; #MPD_TAG_UNKNOWN and
+ * #MPD_TAG_ANY are not allowed, while #MPD_TAG_FILE is
+ * @return a pair, or NULL on error or if there are no more matching
+ * pairs in this response
  */
-char *mpd_get_next_tag(struct mpd_connection *connection,
-		       enum mpd_tag_type type);
+struct mpd_pair *
+mpd_recv_pair_tag(struct mpd_connection *connection, enum mpd_tag_type type);
 
 #ifdef __cplusplus
 }

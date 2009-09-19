@@ -250,17 +250,14 @@ mpd_search_commit(struct mpd_connection *connection)
 	return success;
 }
 
-char *mpd_get_next_tag(struct mpd_connection *connection,
-		       enum mpd_tag_type type)
+struct mpd_pair *
+mpd_recv_pair_tag(struct mpd_connection *connection, enum mpd_tag_type type)
 {
 	const char *name;
-
-	if (type == MPD_TAG_ANY)
-		return NULL;
 
 	name = mpd_tag_name(type);
 	if (name == NULL)
 		return NULL;
 
-	return mpd_recv_value_named(connection, name);
+	return mpd_recv_pair_named(connection, name);
 }

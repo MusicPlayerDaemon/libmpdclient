@@ -208,7 +208,7 @@ int main(int argc, char ** argv) {
 		}
 	}
 	else if(argc==2 && strcmp(argv[1],"artists")==0) {
-		char * artist;
+		struct mpd_pair *pair;
 	
 		mpd_search_db_tags(conn, MPD_TAG_ARTIST);
 		mpd_search_commit(conn);
@@ -218,9 +218,10 @@ int main(int argc, char ** argv) {
 			return -1;
 		}
 
-		while((artist = mpd_get_next_tag(conn, MPD_TAG_ARTIST))) {
-			printf("%s\n",artist);
-			free(artist);
+		while ((pair = mpd_recv_pair_tag(conn,
+						 MPD_TAG_ARTIST)) != NULL) {
+			printf("%s\n", pair->value);
+			mpd_return_pair(conn, pair);
 		}
 
 		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
