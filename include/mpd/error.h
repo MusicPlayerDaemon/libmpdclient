@@ -45,22 +45,13 @@ enum mpd_error {
 	MPD_ERROR_STATE,
 
 	/** timeout trying to talk to mpd */
-	MPD_ERROR_TIMEOUT = 10,
+	MPD_ERROR_TIMEOUT,
 
 	/** system error */
 	MPD_ERROR_SYSTEM,
 
 	/** unknown host */
 	MPD_ERROR_UNKHOST,
-
-	/** problems connecting to port on host */
-	MPD_ERROR_CONNPORT,
-
-	/** mpd not running on port at host */
-	MPD_ERROR_NOTMPD,
-
-	/** no response on attempting to connect */
-	MPD_ERROR_NORESPONSE,
 
 	/** error sending command */
 	MPD_ERROR_SENDING,

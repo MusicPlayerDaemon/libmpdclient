@@ -192,7 +192,7 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 		ret = do_connect_fail(fd, address->addr, address->addrlen);
 		if (ret != 0) {
 			mpd_error_clear(error);
-			mpd_error_code(error, MPD_ERROR_CONNPORT);
+			mpd_error_code(error, MPD_ERROR_SYSTEM);
 			mpd_error_printf(error,
 					 "problems connecting to \"%s\" on port %i: %s",
 					 host, port, strerror(errno));
@@ -210,13 +210,13 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 
 		if (ret == 0) {
 			mpd_error_clear(error);
-			mpd_error_code(error, MPD_ERROR_NORESPONSE);
+			mpd_error_code(error, MPD_ERROR_TIMEOUT);
 			mpd_error_printf(error,
 					 "timeout in attempting to get a response from \"%s\" on port %i",
 					 host, port);
 		} else if (ret < 0) {
 			mpd_error_clear(error);
-			mpd_error_code(error, MPD_ERROR_CONNPORT);
+			mpd_error_code(error, MPD_ERROR_SYSTEM);
 			mpd_error_printf(error,
 					 "problems connecting to \"%s\" on port %i: %s",
 					 host, port, strerror(-ret));

@@ -51,7 +51,7 @@ mpd_parse_welcome(struct mpd_connection *connection, const char *output)
 	char * test;
 
 	if (strncmp(output,MPD_WELCOME_MESSAGE,strlen(MPD_WELCOME_MESSAGE))) {
-		mpd_error_code(&connection->error, MPD_ERROR_NOTMPD);
+		mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);
 		mpd_error_message(&connection->error,
 				  "Malformed connect message received");
 		return false;
@@ -60,7 +60,7 @@ mpd_parse_welcome(struct mpd_connection *connection, const char *output)
 	tmp = &output[strlen(MPD_WELCOME_MESSAGE)];
 	connection->version[0] = strtol(tmp, &test, 10);
 	if (test == tmp) {
-		mpd_error_code(&connection->error, MPD_ERROR_NOTMPD);
+		mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);
 		mpd_error_message(&connection->error,
 				  "Malformed version number in connect message");
 		return false;
