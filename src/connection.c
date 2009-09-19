@@ -37,6 +37,7 @@
 #include "sync.h"
 #include "socket.h"
 #include "internal.h"
+#include "iasync.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -80,32 +81,15 @@ mpd_parse_welcome(struct mpd_connection *connection, const char *output)
 	return true;
 }
 
-static void
-mpd_copy_async_error(struct mpd_error_info *error,
-		     const struct mpd_async *async)
-{
-	assert(mpd_async_get_error(async) != MPD_ERROR_SUCCESS);
-
-	mpd_error_code(error, mpd_async_get_error(async));
-	mpd_error_message(error, mpd_async_get_error_message(async));
-}
-
-static void
-mpd_connection_async_error(struct mpd_connection *connection)
-{
-	mpd_copy_async_error(&connection->error, connection->async);
-}
-
 void
 mpd_connection_sync_error(struct mpd_connection *connection)
 {
-	if (mpd_async_get_error(connection->async) == MPD_ERROR_SUCCESS) {
+	if (mpd_async_copy_error(connection->async, &connection->error)) {
 		/* no error noticed by async: must be a timeout in the
 		   sync.c code */
 		mpd_error_code(&connection->error, MPD_ERROR_TIMEOUT);
 		mpd_error_message(&connection->error, "Timeout");
-	} else
-		mpd_connection_async_error(connection);
+	}
 }
 
 struct mpd_connection *
