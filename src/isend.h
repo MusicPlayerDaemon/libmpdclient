@@ -55,4 +55,10 @@ bool
 mpd_send_ll_command(struct mpd_connection *connection, const char *command,
 		    long long arg);
 
+/**
+ * Sends all pending data from the output buffer to MPD.
+ */
+bool
+mpd_flush(struct mpd_connection *connection);
+
 #endif

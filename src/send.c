@@ -154,3 +154,15 @@ mpd_send_ll_command(struct mpd_connection *connection, const char *command,
 	snprintf(arg_string, sizeof(arg_string), "%lld", arg);
 	return mpd_send_command(connection, command, arg_string, NULL);
 }
+
+bool
+mpd_flush(struct mpd_connection *connection)
+{
+	if (!mpd_sync_flush(connection->async,
+			    mpd_connection_timeout(connection))) {
+		mpd_connection_sync_error(connection);
+		return false;
+	}
+
+	return true;
+}
