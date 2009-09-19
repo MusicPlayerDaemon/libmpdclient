@@ -147,4 +147,13 @@ struct mpd_connection {
 void
 mpd_connection_sync_error(struct mpd_connection *connection);
 
+static inline const struct timeval *
+mpd_connection_timeout(const struct mpd_connection *connection)
+{
+	return connection->timeout.tv_sec != 0 ||
+		connection->timeout.tv_usec != 0
+		? &connection->timeout
+		: NULL;
+}
+
 #endif

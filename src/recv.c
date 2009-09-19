@@ -77,7 +77,8 @@ mpd_recv_pair(struct mpd_connection *connection)
 		return NULL;
 	}
 
-	line = mpd_sync_recv_line(connection->async, &connection->timeout);
+	line = mpd_sync_recv_line(connection->async,
+				  mpd_connection_timeout(connection));
 	if (line == NULL) {
 		connection->receiving = false;
 		connection->sending_command_list = false;

@@ -76,7 +76,7 @@ mpd_send_command(struct mpd_connection *connection, const char *command, ...)
 	va_start(ap, command);
 
 	success = mpd_sync_send_command_v(connection->async,
-					  &connection->timeout,
+					  mpd_connection_timeout(connection),
 					  command, ap);
 
 	va_end(ap);
@@ -103,7 +103,7 @@ mpd_send_command2(struct mpd_connection *connection, const char *command)
 		return false;
 
 	success = mpd_sync_send_command(connection->async,
-					&connection->timeout,
+					mpd_connection_timeout(connection),
 					command, NULL);
 	if (!success) {
 		mpd_connection_sync_error(connection);
