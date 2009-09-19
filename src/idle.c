@@ -89,6 +89,38 @@ mpd_send_idle(struct mpd_connection *connection)
 }
 
 bool
+mpd_send_idle_mask(struct mpd_connection *connection, enum mpd_idle mask)
+{
+	/* this buffer is large enough even for the full mask */
+	char buffer[128] = "idle";
+
+	assert(mask != 0);
+
+	if (mpd_error_is_defined(&connection->error))
+		return false;
+
+	for (unsigned i = 0; idle_names[i] != NULL; ++i) {
+		if (mask & (1 << i)) {
+			mask &= ~(1 << i);
+			strcat(buffer, " ");
+			strcat(buffer, idle_names[i]);
+		}
+	}
+
+	if (mask != 0) {
+		/* the client expects that all flags are supported,
+		   because he might block forever if an event is not
+		   delivered as expected */
+		mpd_error_code(&connection->error, MPD_ERROR_ARGUMENT);
+		mpd_error_printf(&connection->error,
+				 "Unsupported idle flags: 0x%x", mask);
+		return false;
+	}
+
+	return mpd_send_command(connection, buffer);
+}
+
+bool
 mpd_send_noidle(struct mpd_connection *connection)
 {
 	return mpd_send_command(connection, "noidle", NULL);
@@ -100,6 +132,22 @@ mpd_run_idle(struct mpd_connection *connection)
 	enum mpd_idle flags;
 
 	if (!mpd_run_check(connection) || !mpd_send_idle(connection))
+		return 0;
+
+	flags = mpd_recv_idle(connection);
+	if (!mpd_response_finish(connection))
+		return 0;
+
+	return flags;
+}
+
+enum mpd_idle
+mpd_run_idle_mask(struct mpd_connection *connection, enum mpd_idle mask)
+{
+	enum mpd_idle flags;
+
+	if (!mpd_run_check(connection) ||
+	    !mpd_send_idle_mask(connection, mask))
 		return 0;
 
 	flags = mpd_recv_idle(connection);

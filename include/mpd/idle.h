@@ -82,6 +82,16 @@ bool
 mpd_send_idle(struct mpd_connection *connection);
 
 /**
+ * Same as mpd_send_idle(), but listen only on specific events.
+ *
+ * @param connection the connection to MPD
+ * @param mask a bit mask of idle events; must not be 0
+ * @return a positive job id on success, 0 on error
+ */
+bool
+mpd_send_idle_mask(struct mpd_connection *connection, enum mpd_idle mask);
+
+/**
  * Tells MPD to leave the "idle" mode.  MPD will then respond with a
  * list of events which have occured (which may be empty).  Call
  * mpd_recv_idle() after that.
@@ -113,6 +123,16 @@ mpd_recv_idle(struct mpd_connection *connection);
  */
 enum mpd_idle
 mpd_run_idle(struct mpd_connection *connection);
+
+/**
+ * Shortcut for mpd_send_idle_mask() and mpd_recv_idle().
+ *
+ * @param connection the connection to MPD
+ * @param mask a bit mask of idle events; must not be 0
+ * @return the event bit mask, or 0 on error
+ */
+enum mpd_idle
+mpd_run_idle_mask(struct mpd_connection *connection, enum mpd_idle mask);
 
 #ifdef __cplusplus
 }
