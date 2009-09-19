@@ -37,6 +37,7 @@
 #include <mpd/recv.h>
 #include <mpd/response.h>
 #include "internal.h"
+#include "isend.h"
 #include "run.h"
 
 #include <string.h>
@@ -73,11 +74,28 @@ mpd_recv_idle(struct mpd_connection *connection)
 {
 	enum mpd_idle flags = 0;
 	struct mpd_pair *pair;
+	struct timeval old_timeout;
 
 	assert(connection != NULL);
 
+	/* make sure that the output buffer is empty before we turn
+	   off the timeout - this is important because we want to
+	   detect a send failure more quickly */
+	if (!mpd_flush(connection))
+		return 0;
+
+	/* temporarily disable the connection timeout */
+	old_timeout = connection->timeout;
+	connection->timeout = (struct timeval){
+		.tv_sec = 0,
+		.tv_usec = 0,
+	};
+
 	while ((pair = mpd_recv_pair(connection)) != NULL)
 		flags |= mpd_idle_parse_pair(pair);
+
+	/* reenable timeout */
+	connection->timeout = old_timeout;
 
 	return flags;
 }

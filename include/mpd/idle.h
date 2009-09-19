@@ -111,6 +111,10 @@ mpd_idle_parse_pair(const struct mpd_pair *pair);
 /**
  * Waits until MPD sends the list of idle events and returns it in a
  * bit mask.
+ *
+ * During this function, the configured timeout (see
+ * mpd_connection_set_timeout()) is disabled.  This function blcoks
+ * forever, until either MPD sends a response, or an error occurs.
  */
 enum mpd_idle
 mpd_recv_idle(struct mpd_connection *connection);
