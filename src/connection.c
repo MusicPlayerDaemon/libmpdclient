@@ -113,6 +113,10 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 	if (!mpd_socket_global_init(&connection->error))
 		return connection;
 
+	if (timeout_ms == 0)
+		/* 30s is the default */
+		timeout_ms = 30000;
+
 	mpd_connection_set_timeout(connection, timeout_ms);
 
 	if (host == NULL) {
@@ -253,6 +257,8 @@ void
 mpd_connection_set_timeout(struct mpd_connection *connection,
 			   unsigned timeout_ms)
 {
+	assert(timeout_ms > 0);
+
 	connection->timeout.tv_sec = timeout_ms / 1000;
 	connection->timeout.tv_usec = timeout_ms % 1000;
 }

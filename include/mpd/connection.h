@@ -79,8 +79,8 @@ extern "C" {
  * NULL is allowed here, which will connect to the default host.
  * @param port the TCP port to connect to, 0 for default port.  If
  * "host" is a Unix socket path, this parameter is ignored.
- * @param timeout_ms the timeout in milliseconds; you may modify it later
- * with mpd_connection_set_timeout()
+ * @param timeout_ms the timeout in milliseconds, 0 for the default
+ * timeout; you may modify it later with mpd_connection_set_timeout()
  * @return a mpd_connection object (which may have failed to connect),
  * or NULL on out-of-memory
  */
@@ -119,7 +119,7 @@ void mpd_connection_free(struct mpd_connection *connection);
  * 30 seconds.
  *
  * @param connection the connection to MPD
- * @param timeout_ms the desired timeout in milliseconds
+ * @param timeout_ms the desired timeout in milliseconds; must not be 0
  */
 void mpd_connection_set_timeout(struct mpd_connection *connection,
 				unsigned timeout_ms);
