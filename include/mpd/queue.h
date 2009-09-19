@@ -81,23 +81,33 @@ bool
 mpd_send_get_queue_song_id(struct mpd_connection *connection, unsigned id);
 
 /**
- * Request the queue changes from MPD since the specified version.
+ * Request the queue changes from MPD since the specified version,
+ * including tags.  The MPD command is called "plchanges".
+ *
+ * @param connection the connection to MPD
+ * @param version The playlist version you want the diff with.
+ * @return true on success, false on error
  */
 bool
-mpd_send_plchanges(struct mpd_connection *connection, unsigned version);
+mpd_send_queue_changes_meta(struct mpd_connection *connection,
+			    unsigned version);
 
 /**
- * A more bandwidth efficient version of the mpd_send_plchanges.
- * It only returns the pos+id of the changes song.
+ * A more bandwidth efficient version of the
+ * mpd_send_queue_changes_meta().  It only returns the position and id
+ * of changed songs.  The MPD command is called "plchangesposid".
  *
  * @param connection A valid and connected mpd_connection.
  * @param version The playlist version you want the diff with.
+ * @return true on success, false on error
  */
 bool
-mpd_send_plchangesposid(struct mpd_connection *connection, unsigned version);
+mpd_send_queue_changes_brief(struct mpd_connection *connection,
+			     unsigned version);
 
 bool
-mpd_recv_cpos(struct mpd_connection *connection, struct mpd_cpos *cpos);
+mpd_recv_queue_change_brief(struct mpd_connection *connection,
+			    struct mpd_cpos *cpos);
 
 /**
  * Appends a song to the playlist.

@@ -58,19 +58,22 @@ mpd_send_get_queue_song_id(struct mpd_connection *connection, unsigned id)
 }
 
 bool
-mpd_send_plchanges(struct mpd_connection *connection, unsigned version)
+mpd_send_queue_changes_meta(struct mpd_connection *connection,
+			    unsigned version)
 {
 	return mpd_send_ll_command(connection, "plchanges", version);
 }
 
 bool
-mpd_send_plchangesposid(struct mpd_connection *connection, unsigned version)
+mpd_send_queue_changes_brief(struct mpd_connection *connection,
+			     unsigned version)
 {
 	return mpd_send_ll_command(connection, "plchangesposid", version);
 }
 
 bool
-mpd_recv_cpos(struct mpd_connection *connection, struct mpd_cpos *cpos)
+mpd_recv_queue_change_brief(struct mpd_connection *connection,
+			    struct mpd_cpos *cpos)
 {
 	struct mpd_pair *pair;
 
