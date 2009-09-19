@@ -35,7 +35,9 @@
 #include <mpd/connection.h>
 #include <mpd/pair.h>
 #include <mpd/recv.h>
+#include <mpd/response.h>
 #include "internal.h"
+#include "run.h"
 
 #include <string.h>
 
@@ -90,4 +92,19 @@ bool
 mpd_send_noidle(struct mpd_connection *connection)
 {
 	return mpd_send_command(connection, "noidle", NULL);
+}
+
+enum mpd_idle
+mpd_run_idle(struct mpd_connection *connection)
+{
+	enum mpd_idle flags;
+
+	if (!mpd_run_check(connection) || !mpd_send_idle(connection))
+		return 0;
+
+	flags = mpd_recv_idle(connection);
+	if (!mpd_response_finish(connection))
+		return 0;
+
+	return flags;
 }

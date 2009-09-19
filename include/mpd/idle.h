@@ -105,6 +105,15 @@ mpd_idle_parse_pair(const struct mpd_pair *pair);
 enum mpd_idle
 mpd_recv_idle(struct mpd_connection *connection);
 
+/**
+ * Shortcut for mpd_send_idle() and mpd_recv_idle().
+ *
+ * @param connection the connection to MPD
+ * @return the event bit mask, or 0 on error
+ */
+enum mpd_idle
+mpd_run_idle(struct mpd_connection *connection);
+
 #ifdef __cplusplus
 }
 #endif
