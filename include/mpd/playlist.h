@@ -129,21 +129,21 @@ struct mpd_playlist *
 mpd_recv_playlist(struct mpd_connection *connection);
 
 /**
- * @param connection a #mpd_connection
- * @param path	the path to the playlist.
- *
  * List the content of a stored playlist.
  *
+ * @param connection the connection to MPD
+ * @param name the name of the playlist
+ * @return true on success, false on error
  */
 bool
 mpd_send_list_playlist(struct mpd_connection *connection, const char *name);
 
 /**
- * @param connection a #mpd_connection
- * @param path	the path to the playlist.
- *
  * List the content, with full metadata, of a stored playlist.
  *
+ * @param connection the connection to MPD
+ * @param name the name of the playlist
+ * @return true on success, false on error
  */
 bool
 mpd_send_list_playlist_meta(struct mpd_connection *connection, const char *name);
