@@ -108,9 +108,15 @@ bool
 mpd_sync_send_command_v(struct mpd_async *async, const struct timeval *tv0,
 			const char *command, va_list args)
 {
-	struct timeval tv = *tv0;
+	struct timeval tv, *tvp;
 	va_list copy;
 	bool success;
+
+	if (tv0 != NULL) {
+		tv = *tv0;
+		tvp = &tv;
+	} else
+		tvp = NULL;
 
 	while (true) {
 		va_copy(copy, args);
@@ -121,7 +127,7 @@ mpd_sync_send_command_v(struct mpd_async *async, const struct timeval *tv0,
 			return true;
 
 		if (mpd_async_get_error(async) != MPD_ERROR_SUCCESS ||
-		    !mpd_sync_io(async, &tv))
+		    !mpd_sync_io(async, tvp))
 			return false;
 	}
 }
@@ -143,8 +149,14 @@ mpd_sync_send_command(struct mpd_async *async, const struct timeval *tv,
 char *
 mpd_sync_recv_line(struct mpd_async *async, const struct timeval *tv0)
 {
-	struct timeval tv = *tv0;
+	struct timeval tv, *tvp;
 	char *line;
+
+	if (tv0 != NULL) {
+		tv = *tv0;
+		tvp = &tv;
+	} else
+		tvp = NULL;
 
 	while (true) {
 		line = mpd_async_recv_line(async);
@@ -152,7 +164,7 @@ mpd_sync_recv_line(struct mpd_async *async, const struct timeval *tv0)
 			return line;
 
 		if (mpd_async_get_error(async) != MPD_ERROR_SUCCESS ||
-		    !mpd_sync_io(async, &tv))
+		    !mpd_sync_io(async, tvp))
 			return NULL;
 	}
 }
