@@ -73,7 +73,7 @@ mpd_send_queue_changes_brief(struct mpd_connection *connection,
 
 bool
 mpd_recv_queue_change_brief(struct mpd_connection *connection,
-			    struct mpd_cpos *cpos)
+			    unsigned *position_r, unsigned *id_r)
 {
 	struct mpd_pair *pair;
 
@@ -81,7 +81,7 @@ mpd_recv_queue_change_brief(struct mpd_connection *connection,
 	if (pair == NULL)
 		return false;
 
-	cpos->position = atoi(pair->value);
+	*position_r = atoi(pair->value);
 	mpd_return_pair(connection, pair);
 
 	pair = mpd_recv_pair_named(connection, "Id");
@@ -98,7 +98,7 @@ mpd_recv_queue_change_brief(struct mpd_connection *connection,
 		return false;
 	}
 
-	cpos->id = atoi(pair->value);
+	*id_r = atoi(pair->value);
 	mpd_return_pair(connection, pair);
 
 	return !mpd_error_is_defined(&connection->error);

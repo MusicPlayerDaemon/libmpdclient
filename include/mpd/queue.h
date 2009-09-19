@@ -33,22 +33,6 @@
 
 struct mpd_connection;
 
-/**
- * Information about a moved song in the playlist.  This is one item
- * in the "plchangesposid" response.
- */
-struct mpd_cpos {
-	/**
-	 * The position in the playlist.
-	 */
-	unsigned position;
-
-	/**
-	 * The id of the song.
-	 */
-	unsigned id;
-};
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -105,9 +89,18 @@ bool
 mpd_send_queue_changes_brief(struct mpd_connection *connection,
 			     unsigned version);
 
+/**
+ * Receives a response element of mpd_send_queue_changes_brief().
+ *
+ * @param connection A valid and connected mpd_connection.
+ * @param position_r reference to the position of the changed song
+ * @param id_r reference to the id of the changed song
+ * @return true on success, false on error or if there are no more
+ * changes in this response
+ */
 bool
 mpd_recv_queue_change_brief(struct mpd_connection *connection,
-			    struct mpd_cpos *cpos);
+			    unsigned *position_r, unsigned *id_r);
 
 /**
  * Appends a song to the playlist.
