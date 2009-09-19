@@ -257,8 +257,6 @@ char *mpd_get_next_tag(struct mpd_connection *connection,
 
 	if (type == MPD_TAG_ANY)
 		return NULL;
-	if (type == MPD_TAG_FILENAME)
-		return mpd_recv_value_named(connection, "file");
 
 	name = mpd_tag_name(type);
 	if (name == NULL)

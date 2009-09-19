@@ -93,7 +93,7 @@ mpd_song_new(const char *uri)
 	song->pos = 0;
 	song->id = 0;
 
-	success = mpd_song_add_tag(song, MPD_TAG_FILENAME, uri);
+	success = mpd_song_add_tag(song, MPD_TAG_FILE, uri);
 	if (!success) {
 		free(song);
 		return NULL;
@@ -136,7 +136,7 @@ mpd_song_dup(const struct mpd_song *song)
 
 	assert(song != NULL);
 
-	ret = mpd_song_new(mpd_song_get_tag(song, MPD_TAG_FILENAME, 0));
+	ret = mpd_song_new(mpd_song_get_tag(song, MPD_TAG_FILE, 0));
 	if (ret == NULL)
 		/* out of memory */
 		return NULL;
@@ -168,7 +168,7 @@ mpd_song_dup(const struct mpd_song *song)
 const char *
 mpd_song_get_uri(const struct mpd_song *song)
 {
-	return mpd_song_get_tag(song, MPD_TAG_FILENAME, 0);
+	return mpd_song_get_tag(song, MPD_TAG_FILE, 0);
 }
 
 bool

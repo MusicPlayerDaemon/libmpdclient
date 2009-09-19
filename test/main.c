@@ -147,7 +147,7 @@ print_tag(const struct mpd_song *song, enum mpd_tag_type type,
 static void
 print_song(const struct mpd_song *song)
 {
-	print_tag(song, MPD_TAG_FILENAME, "file");
+	print_tag(song, MPD_TAG_FILE, "file");
 	print_tag(song, MPD_TAG_ARTIST, "artist");
 	print_tag(song, MPD_TAG_ALBUM, "album");
 	print_tag(song, MPD_TAG_TITLE, "title");
