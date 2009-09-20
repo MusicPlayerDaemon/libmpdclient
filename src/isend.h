@@ -29,6 +29,8 @@
 #ifndef MPD_ISEND_H
 #define MPD_ISEND_H
 
+#include <stdbool.h>
+
 struct mpd_connection;
 
 /**
