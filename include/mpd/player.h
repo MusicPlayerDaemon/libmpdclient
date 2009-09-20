@@ -29,6 +29,8 @@
 #ifndef MPD_PLAYER_H
 #define MPD_PLAYER_H
 
+#include <mpd/compiler.h>
+
 #include <stdbool.h>
 
 struct mpd_connection;
@@ -52,6 +54,7 @@ mpd_send_current_song(struct mpd_connection *connection);
  * @return the current song, or NULL on error or if there is no
  * current song
  */
+mpd_malloc
 struct mpd_song *
 mpd_run_current_song(struct mpd_connection *connection);
 

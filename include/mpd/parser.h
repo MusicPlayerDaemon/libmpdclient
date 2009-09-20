@@ -30,6 +30,7 @@
 #define LIBMPDCLIENT_PARSER_H
 
 #include <mpd/protocol.h>
+#include <mpd/compiler.h>
 
 #include <stdbool.h>
 
@@ -72,6 +73,7 @@ extern "C" {
  * Allocates a new mpd_parser object.  Returns NULL on error (out of
  * memory).
  */
+mpd_malloc
 struct mpd_parser *
 mpd_parser_new(void);
 
@@ -106,6 +108,7 @@ mpd_parser_feed(struct mpd_parser *parser, char *line);
  *
  * @param parser the parser object
  */
+mpd_pure
 bool
 mpd_parser_is_discrete(const struct mpd_parser *parser);
 
@@ -115,6 +118,7 @@ mpd_parser_is_discrete(const struct mpd_parser *parser);
  *
  * @param parser the parser object
  */
+mpd_pure
 enum mpd_ack
 mpd_parser_get_ack(const struct mpd_parser *parser);
 
@@ -124,6 +128,7 @@ mpd_parser_get_ack(const struct mpd_parser *parser);
  *
  * @param parser the parser object
  */
+mpd_pure
 unsigned
 mpd_parser_get_at(const struct mpd_parser *parser);
 
@@ -137,6 +142,7 @@ mpd_parser_get_at(const struct mpd_parser *parser);
  *
  * @param parser the parser object
  */
+mpd_pure
 const char *
 mpd_parser_get_message(const struct mpd_parser *parser);
 
@@ -149,6 +155,7 @@ mpd_parser_get_message(const struct mpd_parser *parser);
  *
  * @param parser the parser object
  */
+mpd_pure
 const char *
 mpd_parser_get_name(const struct mpd_parser *parser);
 
@@ -161,6 +168,7 @@ mpd_parser_get_name(const struct mpd_parser *parser);
  *
  * @param parser the parser object
  */
+mpd_pure
 const char *
 mpd_parser_get_value(const struct mpd_parser *parser);
 

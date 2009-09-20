@@ -33,6 +33,8 @@
 #ifndef MPD_OUTPUT_H
 #define MPD_OUTPUT_H
 
+#include <mpd/compiler.h>
+
 #include <stdbool.h>
 
 struct mpd_connection;
@@ -56,6 +58,7 @@ extern "C" {
  * @return the new #mpd_output object, or NULL on error (out of
  * memory, or wrong pair name)
  */
+mpd_malloc
 struct mpd_output *
 mpd_output_begin(const struct mpd_pair *pair);
 
@@ -79,18 +82,21 @@ mpd_output_free(struct mpd_output *output);
 /**
  * @return the id of the specified #mpd_output object
  */
+mpd_pure
 unsigned
 mpd_output_get_id(const struct mpd_output *output);
 
 /**
  * @return the configured name of the specified #mpd_output object
  */
+mpd_pure
 const char *
 mpd_output_get_name(const struct mpd_output *output);
 
 /**
  * @return true if this output is enabled
  */
+mpd_pure
 bool
 mpd_output_get_enabled(const struct mpd_output *output);
 
@@ -111,6 +117,7 @@ mpd_send_outputs(struct mpd_connection *connection);
  * @return a mpd_output object on success, NULL on error or
  * end-of-response
  */
+mpd_malloc
 struct mpd_output *
 mpd_recv_output(struct mpd_connection *connection);
 

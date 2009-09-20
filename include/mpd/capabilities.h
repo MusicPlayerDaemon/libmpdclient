@@ -29,6 +29,8 @@
 #ifndef MPD_CAPABILITIES_H
 #define MPD_CAPABILITIES_H
 
+#include <mpd/compiler.h>
+
 #include <stdbool.h>
 
 struct mpd_connection;
@@ -68,6 +70,7 @@ mpd_send_disallowed_commands(struct mpd_connection *connection);
  * @returns a command name, or NULL on error or if the end of the
  * response is reached
  */
+mpd_malloc
 char *
 mpd_recv_command_name(struct mpd_connection *connection);
 
@@ -85,6 +88,7 @@ mpd_send_list_url_schemes(struct mpd_connection *connection);
 /**
  * Receives one line of the mpd_send_urlhandlers() response.
  */
+mpd_malloc
 char *
 mpd_recv_handler(struct mpd_connection *connection);
 
@@ -102,6 +106,7 @@ mpd_send_list_tag_types(struct mpd_connection *connection);
  * Receives the next tag type name.  Call this in a loop after
  * mpd_send_tagtypes().
  */
+mpd_malloc
 char *
 mpd_recv_tag_type_name(struct mpd_connection *connection);
 

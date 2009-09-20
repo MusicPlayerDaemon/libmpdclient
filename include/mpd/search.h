@@ -35,6 +35,7 @@
 
 #include <mpd/connection.h>
 #include <mpd/tag.h>
+#include <mpd/compiler.h>
 
 #include <stdbool.h>
 
@@ -114,6 +115,7 @@ mpd_search_commit(struct mpd_connection *connection);
  * @return a pair, or NULL on error or if there are no more matching
  * pairs in this response
  */
+mpd_malloc
 struct mpd_pair *
 mpd_recv_pair_tag(struct mpd_connection *connection, enum mpd_tag_type type);
 

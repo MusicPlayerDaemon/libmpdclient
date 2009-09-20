@@ -33,6 +33,8 @@
 #ifndef MPD_STATUS_H
 #define MPD_STATUS_H
 
+#include <mpd/compiler.h>
+
 #include <stdbool.h>
 
 /**
@@ -77,6 +79,7 @@ extern "C" {
  * @return the newly allocated #mpd_status object, or NULL if out of
  * memory
  */
+mpd_malloc
 struct mpd_status *
 mpd_status_new(void);
 
@@ -101,6 +104,7 @@ mpd_send_status(struct mpd_connection *connection);
  *
  * @return the received #mpd_status object, or NULL on error
  */
+mpd_malloc
 struct mpd_status *
 mpd_recv_status(struct mpd_connection *connection);
 
@@ -110,6 +114,7 @@ mpd_recv_status(struct mpd_connection *connection);
  * @return the #mpd_status object returned by the server, or NULL on
  * error
  */
+mpd_malloc
 struct mpd_status *
 mpd_run_status(struct mpd_connection *connection);
 
@@ -122,29 +127,34 @@ void mpd_status_free(struct mpd_status * status);
  * Returns the current volume: 0-100, or MPD_STATUS_NO_VOLUME when there is no
  * volume support
  */
+mpd_pure
 int mpd_status_get_volume(const struct mpd_status *status);
 
 /**
  * Returns true if repeat mode is on.
  */
+mpd_pure
 bool
 mpd_status_get_repeat(const struct mpd_status *status);
 
 /**
  * Returns true if random mode is on.
  */
+mpd_pure
 bool
 mpd_status_get_random(const struct mpd_status *status);
 
 /**
  * Returns true if single mode is on.
  */
+mpd_pure
 bool
 mpd_status_get_single(const struct mpd_status *status);
 
 /**
  * Returns true if consume mode is on.
  */
+mpd_pure
 bool
 mpd_status_get_consume(const struct mpd_status *status);
 
@@ -152,6 +162,7 @@ mpd_status_get_consume(const struct mpd_status *status);
  * Returns the number of songs in the queue.  If MPD did not
  * specify that, this function returns 0.
  */
+mpd_pure
 unsigned
 mpd_status_get_queue_length(const struct mpd_status *status);
 
@@ -159,12 +170,14 @@ mpd_status_get_queue_length(const struct mpd_status *status);
  * Returns queue version number.  You may use this to determine
  * when the queue has changed since you have last queried it.
  */
+mpd_pure
 unsigned
 mpd_status_get_queue_version(const struct mpd_status *status);
 
 /**
  * Returns the state of the player: either stopped, playing or paused.
  */
+mpd_pure
 enum mpd_state
 mpd_status_get_state(const struct mpd_status *status);
 
@@ -172,6 +185,7 @@ mpd_status_get_state(const struct mpd_status *status);
  * Returns crossfade setting in seconds.  0 means crossfading is
  * disabled.
  */
+mpd_pure
 unsigned
 mpd_status_get_crossfade(const struct mpd_status *status);
 
@@ -180,6 +194,7 @@ mpd_status_get_crossfade(const struct mpd_status *status);
  * (beginning with 0) if a song is currently selected (always the case when
  * state is PLAY or PAUSE).  If there is no current song, -1 is returned.
  */
+mpd_pure
 int
 mpd_status_get_song_pos(const struct mpd_status *status);
 
@@ -194,18 +209,21 @@ mpd_status_get_song_id(const struct mpd_status *status);
  * Returns time in seconds that have elapsed in the currently playing/paused
  * song
  */
+mpd_pure
 unsigned
 mpd_status_get_elapsed_time(const struct mpd_status *status);
 
 /**
  * Returns the length in seconds of the currently playing/paused song
  */
+mpd_pure
 unsigned
 mpd_status_get_total_time(const struct mpd_status *status);
 
 /**
  * Returns current bit rate in kbps.  0 means unknown.
  */
+mpd_pure
 unsigned
 mpd_status_get_kbit_rate(const struct mpd_status *status);
 
@@ -213,18 +231,21 @@ mpd_status_get_kbit_rate(const struct mpd_status *status);
  * Returns audio format which MPD is currently playing.  May return
  * NULL if MPD is not playing or if the audio format is unknown.
  */
+mpd_pure
 const struct mpd_audio_format *
 mpd_status_get_audio_format(const struct mpd_status *status);
 
 /**
  * Returns 1 if mpd is updating, 0 otherwise
  */
+mpd_pure
 unsigned
 mpd_status_get_update_id(const struct mpd_status *status);
 
 /**
  * Returns the error message
  */
+mpd_pure
 const char *
 mpd_status_get_error(const struct mpd_status *status);
 

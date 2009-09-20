@@ -31,6 +31,7 @@
 
 #include <mpd/error.h>
 #include <mpd/protocol.h>
+#include <mpd/compiler.h>
 
 #include <assert.h>
 #include <stdbool.h>
@@ -158,6 +159,7 @@ mpd_error_message_n(struct mpd_error_info *error,
  * Sets an error message (printf() like format).  Prior to that, an
  * error code must have been set.
  */
+mpd_printf(2, 3)
 void
 mpd_error_printf(struct mpd_error_info *error, const char *fmt, ...);
 

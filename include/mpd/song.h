@@ -34,6 +34,7 @@
 #define MPD_SONG_H
 
 #include <mpd/tag.h>
+#include <mpd/compiler.h>
 
 #include <stdbool.h>
 #include <time.h>
@@ -61,6 +62,7 @@ extern "C" {
  * @param uri the song URI
  * @returns the new object, or NULL if out of memory
  */
+mpd_malloc
 struct mpd_song *
 mpd_song_new(const char *uri);
 
@@ -74,6 +76,7 @@ void mpd_song_free(struct mpd_song *song);
  *
  * @returns the copy, or NULL if out of memory
  */
+mpd_malloc
 struct mpd_song *
 mpd_song_dup(const struct mpd_song *song);
 
@@ -81,6 +84,7 @@ mpd_song_dup(const struct mpd_song *song);
  * Returns the URI of the song.  It always returns a value, because a
  * song cannot exist without an URI.
  */
+mpd_pure
 const char *
 mpd_song_get_uri(const struct mpd_song *song);
 
@@ -112,6 +116,7 @@ mpd_song_clear_tag(struct mpd_song *song, enum mpd_tag_type type);
  * @return the tag value, or NULL if this tag type (or this index)
  * does not exist
  */
+mpd_pure
 const char *
 mpd_song_get_tag(const struct mpd_song *song,
 		 enum mpd_tag_type type, unsigned idx);
@@ -126,6 +131,7 @@ mpd_song_set_duration(struct mpd_song *song, unsigned duration);
  * Returns the duration of this song in seconds.  0 means the duration
  * is unknown.
  */
+mpd_pure
 unsigned
 mpd_song_get_duration(const struct mpd_song *song);
 
@@ -139,6 +145,7 @@ mpd_song_set_last_modified(struct mpd_song *song, time_t mtime);
  * @return the POSIX UTC time stamp of the last modification, or 0 if
  * that is unknown
  */
+mpd_pure
 time_t
 mpd_song_get_last_modified(const struct mpd_song *song);
 
@@ -153,6 +160,7 @@ mpd_song_set_pos(struct mpd_song *song, unsigned pos);
  * Returns the position of this song in the queue.  The value is
  * undefined if you did not obtain this song from the queue.
  */
+mpd_pure
 unsigned
 mpd_song_get_pos(const struct mpd_song *song);
 
@@ -167,6 +175,7 @@ mpd_song_set_id(struct mpd_song *song, unsigned id);
  * Returns the id of this song in the playlist.  The value is
  * undefined if you did not obtain this song from the queue.
  */
+mpd_pure
 unsigned
 mpd_song_get_id(const struct mpd_song *song);
 
@@ -177,6 +186,7 @@ mpd_song_get_id(const struct mpd_song *song);
  * @return the new #mpd_entity object, or NULL on error (out of
  * memory, or pair name is not "file")
  */
+mpd_malloc
 struct mpd_song *
 mpd_song_begin(const struct mpd_pair *pair);
 
@@ -197,6 +207,7 @@ mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair);
  * @return a #mpd_song object, or NULL on error or if the song list is
  * finished
  */
+mpd_malloc
 struct mpd_song *
 mpd_recv_song(struct mpd_connection *connection);
 

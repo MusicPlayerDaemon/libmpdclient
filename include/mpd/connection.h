@@ -35,6 +35,7 @@
 
 #include <mpd/protocol.h>
 #include <mpd/error.h>
+#include <mpd/compiler.h>
 
 #include <stdbool.h>
 
@@ -84,6 +85,7 @@ extern "C" {
  * @return a mpd_connection object (which may have failed to connect),
  * or NULL on out-of-memory
  */
+mpd_malloc
 struct mpd_connection *
 mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms);
 
@@ -99,6 +101,7 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms);
  * @param welcome the first line sent by MPD (the welcome message)
  * @return a mpd_connection object, or NULL on out-of-memory
  */
+mpd_malloc
 struct mpd_connection *
 mpd_connection_new_async(struct mpd_async *async, const char *welcome);
 
@@ -128,6 +131,7 @@ void mpd_connection_set_timeout(struct mpd_connection *connection,
  * Returns the libmpdclient error code.  MPD_ERROR_SUCCESS means no
  * error occured.
  */
+mpd_pure
 enum mpd_error
 mpd_get_error(const struct mpd_connection *connection);
 
@@ -141,6 +145,7 @@ mpd_get_error(const struct mpd_connection *connection);
  * system, and thus the locale's character set (and probably language)
  * is used.  Keep that in mind when you print error messages.
  */
+mpd_pure
 const char *
 mpd_get_error_message(const struct mpd_connection *connection);
 
@@ -148,6 +153,7 @@ mpd_get_error_message(const struct mpd_connection *connection);
  * Returns the error code returned from the server.  Calling this
  * function is only valid if mpd_get_error() returned MPD_ERROR_ACK.
  */
+mpd_pure
 enum mpd_ack
 mpd_get_server_error(const struct mpd_connection *connection);
 
@@ -166,6 +172,7 @@ mpd_clear_error(struct mpd_connection *connection);
  * Returns a three-tuple containing the major, minor and patch version
  * of the MPD protocol.
  */
+mpd_pure
 const unsigned *
 mpd_get_server_version(const struct mpd_connection *connection);
 
@@ -175,6 +182,7 @@ mpd_get_server_version(const struct mpd_connection *connection);
  * @return -1 if the server is older, 1 if it is newer, 0 if it is
  * equal
  */
+mpd_pure
 int
 mpd_cmp_server_version(const struct mpd_connection *connection, unsigned major,
 		       unsigned minor, unsigned patch);

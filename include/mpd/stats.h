@@ -33,6 +33,8 @@
 #ifndef MPD_STATS_H
 #define MPD_STATS_H
 
+#include <mpd/compiler.h>
+
 #include <stdbool.h>
 
 struct mpd_connection;
@@ -65,6 +67,7 @@ mpd_send_stats(struct mpd_connection *connection);
  * @return the newly allocated #mpd_stats object, or NULL if out of
  * memory
  */
+mpd_malloc
 struct mpd_stats *
 mpd_stats_new(void);
 
@@ -80,12 +83,14 @@ mpd_stats_feed(struct mpd_stats *status, const struct mpd_pair *pair);
  *
  * @return a #mpd_stats object, or NULL on error
  */
+mpd_malloc
 struct mpd_stats *
 mpd_recv_stats(struct mpd_connection *connection);
 
 /**
  * Shortcut for mpd_send_stats() and mpd_recv_stats().
  */
+mpd_malloc
 struct mpd_stats *
 mpd_run_stats(struct mpd_connection *connection);
 
@@ -98,6 +103,7 @@ void mpd_stats_free(struct mpd_stats * stats);
  * @return the number of distinct artists in MPD's database, or 0 if
  * unknown
  */
+mpd_pure
 unsigned
 mpd_stats_get_number_of_artists(struct mpd_stats * stats);
 
@@ -105,6 +111,7 @@ mpd_stats_get_number_of_artists(struct mpd_stats * stats);
  * @return the number of distinct album names in MPD's database, or 0
  * if unknown
  */
+mpd_pure
 unsigned
 mpd_stats_get_number_of_albums(struct mpd_stats * stats);
 
@@ -112,30 +119,35 @@ mpd_stats_get_number_of_albums(struct mpd_stats * stats);
  * @return the total number of song files in MPD's database, or 0 if
  * unknown
  */
+mpd_pure
 unsigned
 mpd_stats_get_number_of_songs(struct mpd_stats * stats);
 
 /**
  * @return the uptime of MPD in seconds, or 0 if unknown
  */
+mpd_pure
 unsigned long mpd_stats_get_uptime(struct mpd_stats * stats);
 
 /**
  * @return the UNIX time stamp of the last database update, or 0 if
  * unknown
  */
+mpd_pure
 unsigned long mpd_stats_get_db_update_time(struct mpd_stats * stats);
 
 /**
  * @return the accumulated time MPD was playing music since the
  * process was started, or 0 if unknown
  */
+mpd_pure
 unsigned long mpd_stats_get_play_time(struct mpd_stats * stats);
 
 /**
  * @return the accumulated duration of all songs in the database, or 0
  * if unknown
  */
+mpd_pure
 unsigned long mpd_stats_get_db_play_time(struct mpd_stats * stats);
 
 #ifdef __cplusplus

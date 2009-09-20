@@ -26,33 +26,37 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef LIBMPDCLIENT_SEND_H
-#define LIBMPDCLIENT_SEND_H
-
-#include <mpd/compiler.h>
-
-#include <stdbool.h>
-
-struct mpd_connection;
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/**
- * Sends a command with arguments to the MPD server.  The argument
- * list must be terminated with a NULL.
+/*! \file
+ * \brief Compiler specific definitions
  *
- * @param connection the connection to the MPD server
- * @param command the command to be sent
- * @return true on success
+ * This file is not part of the official libmpdclient2 API.  It
+ * provides access to gcc specific extensions.
+ *
  */
-mpd_sentinel
-bool
-mpd_send_command(struct mpd_connection *connection, const char *command, ...);
 
-#ifdef __cplusplus
-}
+#ifndef MPD_COMPILER_H
+#define MPD_COMPILER_H
+
+#if !defined(SPARSE) && defined(__GNUC__) && __GNUC__ >= 3
+
+/* GCC 4.x */
+
+#define mpd_malloc __attribute__((malloc))
+#define mpd_pure __attribute__((pure))
+#define mpd_const __attribute__((const))
+#define mpd_sentinel __attribute__((const))
+#define mpd_printf(a,b) __attribute__((format(printf, a, b)))
+
+#else
+
+/* generic C compiler */
+
+#define mpd_malloc
+#define mpd_pure
+#define mpd_const
+#define mpd_sentinel
+#define mpd_printf(a,b)
+
 #endif
 
 #endif

@@ -29,6 +29,8 @@
 #ifndef MPD_RECV_H
 #define MPD_RECV_H
 
+#include <mpd/compiler.h>
+
 struct mpd_pair;
 struct mpd_connection;
 
@@ -43,6 +45,7 @@ extern "C" {
  * The caller must dispose the pair with either mpd_return_pair() or
  * mpd_enqueue_pair().
  */
+mpd_malloc
 struct mpd_pair *
 mpd_recv_pair(struct mpd_connection *connection);
 
@@ -50,6 +53,7 @@ mpd_recv_pair(struct mpd_connection *connection);
  * Same as mpd_recv_pair(), but discards all pairs not matching the
  * specified name.
  */
+mpd_malloc
 struct mpd_pair *
 mpd_recv_pair_named(struct mpd_connection *connection, const char *name);
 
@@ -58,6 +62,7 @@ mpd_recv_pair_named(struct mpd_connection *connection, const char *name);
  * frees the #mpd_pair object.  The caller has to free the return
  * value with mpd_value_free().
  */
+mpd_malloc
 char *
 mpd_recv_value_named(struct mpd_connection *connection, const char *name);
 

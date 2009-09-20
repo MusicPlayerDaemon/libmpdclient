@@ -33,6 +33,8 @@
 #ifndef LIBMPDCLIENT_PLAYLIST_H
 #define LIBMPDCLIENT_PLAYLIST_H
 
+#include <mpd/compiler.h>
+
 #include <stdbool.h>
 #include <time.h>
 
@@ -60,6 +62,7 @@ extern "C" {
  * playlist directory.  It must not begin or end with a slash
  * @returns the new object, or NULL if out of memory
  */
+mpd_malloc
 struct mpd_playlist *
 mpd_playlist_new(const char *path);
 
@@ -74,6 +77,7 @@ mpd_playlist_free(struct mpd_playlist *playlist);
  *
  * @return the new object, or NULL on out of memory
  */
+mpd_malloc
 struct mpd_playlist *
 mpd_playlist_dup(const struct mpd_playlist *playlist);
 
@@ -81,6 +85,7 @@ mpd_playlist_dup(const struct mpd_playlist *playlist);
  * Returns the path name of this playlist file.  It does not begin
  * with a slash.
  */
+mpd_pure
 const char *
 mpd_playlist_get_path(const struct mpd_playlist *playlist);
 
@@ -94,6 +99,7 @@ mpd_playlist_set_last_modified(struct mpd_playlist *playlist, time_t mtime);
  * @return the POSIX UTC time stamp of the last modification, or 0 if
  * that is unknown
  */
+mpd_pure
 time_t
 mpd_playlist_get_last_modified(const struct mpd_playlist *playlist);
 
@@ -105,6 +111,7 @@ mpd_playlist_get_last_modified(const struct mpd_playlist *playlist);
  * @return the new #mpd_entity object, or NULL on error (out of
  * memory, or pair name is not "playlist")
  */
+mpd_malloc
 struct mpd_playlist *
 mpd_playlist_begin(const struct mpd_pair *pair);
 
@@ -125,6 +132,7 @@ mpd_playlist_feed(struct mpd_playlist *playlist, const struct mpd_pair *pair);
  * @return a #mpd_playlist object, or NULL on error or if the playlist list is
  * finished
  */
+mpd_malloc
 struct mpd_playlist *
 mpd_recv_playlist(struct mpd_connection *connection);
 

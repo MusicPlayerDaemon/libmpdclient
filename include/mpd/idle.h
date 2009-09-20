@@ -33,6 +33,8 @@
 #ifndef MPD_IDLE_H
 #define MPD_IDLE_H
 
+#include <mpd/compiler.h>
+
 #include <stdbool.h>
 
 struct mpd_pair;
@@ -78,6 +80,7 @@ extern "C" {
  * @param idle an idle event id
  * @return the name, or NULL if that event is not known
  */
+mpd_const
 const char *
 mpd_idle_name(enum mpd_idle idle);
 
@@ -87,6 +90,7 @@ mpd_idle_name(enum mpd_idle idle);
  * @param name an idle event name
  * @return the id, or 0 if that event is not known
  */
+mpd_pure
 enum mpd_idle
 mpd_idle_name_parse(const char *name);
 
@@ -123,6 +127,7 @@ mpd_send_noidle(struct mpd_connection *connection);
  *
  * @return an idle code, or 0 if the pair was not understood
  */
+mpd_pure
 enum mpd_idle
 mpd_idle_parse_pair(const struct mpd_pair *pair);
 

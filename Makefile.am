@@ -7,6 +7,7 @@ mpdinclude_HEADERS = \
 	include/mpd/audio_format.h \
 	include/mpd/client.h \
 	include/mpd/capabilities.h \
+	include/mpd/compiler.h \
 	include/mpd/connection.h \
 	include/mpd/database.h \
 	include/mpd/directory.h \
