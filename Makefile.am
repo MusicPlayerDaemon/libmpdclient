@@ -126,6 +126,12 @@ install-data-local: doc/api/html/index.html
 		doc/api/html/*.png doc/api/html/*.gif \
 		$(DESTDIR)$(docdir)/html
 
+uninstall-local:
+	rm -f $(DESTDIR)$(docdir)/html/index.html \
+	$(DESTDIR)$(docdir)/html/*.css \
+	$(DESTDIR)$(docdir)/html/*.gif \
+	$(DESTDIR)$(docdir)/html/*.png
+
 endif
 
 #
