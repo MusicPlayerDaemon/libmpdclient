@@ -236,7 +236,7 @@ mpd_async_write(struct mpd_async *async)
 }
 
 bool
-mpd_async_io(struct mpd_async *async, unsigned events)
+mpd_async_io(struct mpd_async *async, enum mpd_async_event events)
 {
 	bool success;
 
