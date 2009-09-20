@@ -90,8 +90,8 @@ int main(int argc, char ** argv) {
 
 		printf("volume: %i\n", mpd_status_get_volume(status));
 		printf("repeat: %i\n", mpd_status_get_repeat(status));
-		printf("playlist: %u\n", mpd_status_get_playlist_version(status));
-		printf("playlistLength: %i\n", mpd_status_get_playlist_length(status));
+		printf("queue version: %u\n", mpd_status_get_queue_version(status));
+		printf("queue length: %i\n", mpd_status_get_queue_length(status));
 		if (mpd_status_get_error(status) != NULL)
 			printf("error: %s\n", mpd_status_get_error(status));
 

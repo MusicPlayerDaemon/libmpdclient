@@ -149,18 +149,18 @@ bool
 mpd_status_get_consume(const struct mpd_status *status);
 
 /**
- * Returns the number of songs in the playlist.  If MPD did not
+ * Returns the number of songs in the queue.  If MPD did not
  * specify that, this function returns 0.
  */
 unsigned
-mpd_status_get_playlist_length(const struct mpd_status *status);
+mpd_status_get_queue_length(const struct mpd_status *status);
 
 /**
- * Returns playlist version number.  You may use this to determine
- * when the playlist has changed since you have last queried it.
+ * Returns queue version number.  You may use this to determine
+ * when the queue has changed since you have last queried it.
  */
 unsigned
-mpd_status_get_playlist_version(const struct mpd_status *status);
+mpd_status_get_queue_version(const struct mpd_status *status);
 
 /**
  * Returns the state of the player: either stopped, playing or paused.
@@ -176,7 +176,7 @@ unsigned
 mpd_status_get_crossfade(const struct mpd_status *status);
 
 /**
- * Returns the position of the currently playing song in the playlist
+ * Returns the position of the currently playing song in the queue
  * (beginning with 0) if a song is currently selected (always the case when
  * state is PLAY or PAUSE).  If there is no current song, -1 is returned.
  */

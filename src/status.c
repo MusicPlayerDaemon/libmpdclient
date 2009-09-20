@@ -44,7 +44,7 @@ struct mpd_status {
 	/** 0-100, or MPD_STATUS_NO_VOLUME when there is no volume support */
 	int volume;
 
-	/** Playlist repeat mode enabled? */
+	/** Queue repeat mode enabled? */
 	bool repeat;
 
 	/** Random mode enabled? */
@@ -56,11 +56,14 @@ struct mpd_status {
 	/** Song consume mode enabled? */
 	bool consume;
 
-	/** Number of songs in the playlist */
-	unsigned playlist_length;
+	/** Number of songs in the queue */
+	unsigned queue_length;
 
-	/** playlist, use this to determine when the playlist has changed */
-	unsigned playlist_version;
+	/**
+	 * Queue version, use this to determine when the playlist has
+	 * changed.
+	 */
+	unsigned queue_version;
 
 	/** MPD's current playback state */
 	enum mpd_state state;
@@ -71,7 +74,7 @@ struct mpd_status {
 	/**
 	 * If a song is currently selected (always the case when state
 	 * is PLAY or PAUSE), this is the position of the currently
-	 * playing song in the playlist, beginning with 0.
+	 * playing song in the queue, beginning with 0.
 	 */
 	int song_pos;
 
@@ -112,8 +115,8 @@ mpd_status_new(void)
 	status->random = false;
 	status->single = false;
 	status->consume = false;
-	status->playlist_version = 0;
-	status->playlist_length = 0;
+	status->queue_version = 0;
+	status->queue_length = 0;
 	status->state = MPD_STATE_UNKNOWN;
 	status->song_pos = -1;
 	status->song_id = -1;
@@ -172,9 +175,9 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 	else if (strcmp(pair->name, "consume") == 0)
 		status->consume = !!atoi(pair->value);
 	else if (strcmp(pair->name, "playlist") == 0)
-		status->playlist_version = strtol(pair->value, NULL, 10);
+		status->queue_version = strtol(pair->value, NULL, 10);
 	else if (strcmp(pair->name, "playlistlength") == 0)
-		status->playlist_length = atoi(pair->value);
+		status->queue_length = atoi(pair->value);
 	else if (strcmp(pair->name, "bitrate") == 0)
 		status->kbit_rate = atoi(pair->value);
 	else if (strcmp(pair->name, "state") == 0)
@@ -237,15 +240,15 @@ mpd_status_get_consume(const struct mpd_status *status)
 }
 
 unsigned
-mpd_status_get_playlist_length(const struct mpd_status *status)
+mpd_status_get_queue_length(const struct mpd_status *status)
 {
-	return status->playlist_length;
+	return status->queue_length;
 }
 
 unsigned
-mpd_status_get_playlist_version(const struct mpd_status *status)
+mpd_status_get_queue_version(const struct mpd_status *status)
 {
-	return status->playlist_version;
+	return status->queue_version;
 }
 
 enum mpd_state
