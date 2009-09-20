@@ -97,6 +97,7 @@ test_test_LDADD = src/libmpdclient.la
 SPARSE = sparse
 SPARSE_FLAGS =
 SPARSE_CPPFLAGS = $(DEFAULT_INCLUDES) \
+	-D__CHAR_BIT__=8
 	-I$(shell $(CC) -print-file-name=include) \
 	-I$(shell $(CC) -print-file-name=include-fixed)
 sparse-check:
