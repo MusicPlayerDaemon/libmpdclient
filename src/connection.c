@@ -92,6 +92,41 @@ mpd_connection_sync_error(struct mpd_connection *connection)
 	}
 }
 
+static int
+mpd_connect(const char *host, unsigned port, const struct timeval *timeout,
+	    struct mpd_error_info *error)
+{
+	int fd;
+
+	if (host == NULL && port == 0) {
+		/* XXX that path should be configurable at compile
+		   time */
+		fd = mpd_socket_connect("/var/run/mpd/socket", 0,
+					timeout, error);
+		if (fd >= 0)
+			return fd;
+
+		mpd_error_clear(error);
+	}
+
+	if (host == NULL) {
+		host = getenv("MPD_HOST");
+		if (host == NULL)
+			host = "localhost";
+	}
+
+	if (port == 0) {
+		const char *env_port = getenv("MPD_PORT");
+		if (env_port != NULL)
+			port = atoi(env_port);
+
+		if (port == 0)
+			port = 6600;
+	}
+
+	return mpd_socket_connect(host, port, timeout, error);
+}
+
 struct mpd_connection *
 mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 {
@@ -119,39 +154,9 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 
 	mpd_connection_set_timeout(connection, timeout_ms);
 
-
-	if (host == NULL && port == 0) {
-		fd = mpd_socket_connect("/var/run/mpd/socket", 0,
-					&connection->timeout,
-					&connection->error);
-		if (fd < 0) {
-			mpd_error_clear(&connection->error);
-			host = NULL;
-		}
-	} else
-		fd = -1;
-
-	if (fd < 0) {
-		if (host == NULL) {
-			host = getenv("MPD_HOST");
-			if (host == NULL)
-				host = "localhost";
-		}
-
-		if (port == 0) {
-			const char *env_port = getenv("MPD_PORT");
-			if (env_port != NULL)
-				port = atoi(env_port);
-
-			if (port == 0)
-				port = 6600;
-		}
-
-		fd = mpd_socket_connect(host, port, &connection->timeout,
-					&connection->error);
-		if (fd < 0)
-			return connection;
-	}
+	fd = mpd_connect(host, port, &connection->timeout, &connection->error);
+	if (fd < 0)
+		return connection;
 
 	connection->async = mpd_async_new(fd);
 	if (connection->async == NULL) {
