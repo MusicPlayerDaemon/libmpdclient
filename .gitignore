@@ -26,3 +26,5 @@ test/test
 /*.pc
 doc/doxygen.conf
 doc/api
+*.exe
+*.tar.*
