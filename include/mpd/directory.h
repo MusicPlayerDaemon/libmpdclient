@@ -53,18 +53,6 @@ extern "C" {
 #endif
 
 /**
- * Allocates a new directory object.  Call mpd_directory_free() to
- * dispose it.
- *
- * @param path the path of the directory relative to the MPD music
- * directory.  It must not begin or end with a slash
- * @return the new object, or NULL on out of memory
- */
-mpd_malloc
-struct mpd_directory *
-mpd_directory_new(const char *path);
-
-/**
  * Duplicates a #mpd_directory object.
  *
  * @return the new object, or NULL on out of memory

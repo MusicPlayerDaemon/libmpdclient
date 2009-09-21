@@ -136,7 +136,7 @@ mpd_entity_feed_first(struct mpd_entity *entity, const struct mpd_pair *pair)
 			return false;
 	} else if (strcmp(pair->name, "directory") == 0) {
 		entity->type = MPD_ENTITY_TYPE_DIRECTORY;
-		entity->info.directory = mpd_directory_new(pair->value);
+		entity->info.directory = mpd_directory_begin(pair);
 		if (entity->info.directory == NULL)
 			return false;
 	} else if (strcmp(pair->name, "playlist") == 0) {

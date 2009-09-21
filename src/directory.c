@@ -45,7 +45,8 @@ struct mpd_directory {
 	char *path;
 };
 
-struct mpd_directory *
+mpd_malloc
+static struct mpd_directory *
 mpd_directory_new(const char *path)
 {
 	struct mpd_directory *directory;
