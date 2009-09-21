@@ -104,7 +104,7 @@ struct mpd_status {
 };
 
 struct mpd_status *
-mpd_status_new(void)
+mpd_status_begin(void)
 {
 	struct mpd_status *status = malloc(sizeof(*status));
 	if (status == NULL)

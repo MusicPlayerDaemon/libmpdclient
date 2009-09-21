@@ -52,7 +52,7 @@ mpd_recv_status(struct mpd_connection * connection)
 	if (mpd_error_is_defined(&connection->error))
 		return NULL;
 
-	status = mpd_status_new();
+	status = mpd_status_begin();
 	if (status == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
 		return NULL;

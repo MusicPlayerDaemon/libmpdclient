@@ -73,15 +73,15 @@ extern "C" {
 #endif
 
 /**
- * Creates a new empty #mpd_status object.  Free it with
- * mpd_status_free().
+ * Begins parsing the server status: creates a new empty #mpd_status
+ * object.  Free it with mpd_status_free().
  *
  * @return the newly allocated #mpd_status object, or NULL if out of
  * memory
  */
 mpd_malloc
 struct mpd_status *
-mpd_status_new(void);
+mpd_status_begin(void);
 
 /**
  * Parses the pair, adding its information to the specified
