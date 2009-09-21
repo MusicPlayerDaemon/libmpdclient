@@ -124,7 +124,7 @@ mpd_async_copy_error(const struct mpd_async *async,
 }
 
 int
-mpd_async_fd(const struct mpd_async *async)
+mpd_async_get_fd(const struct mpd_async *async)
 {
 	assert(async != NULL);
 	assert(async->fd >= 0);

@@ -124,7 +124,7 @@ mpd_async_get_error_message(const struct mpd_async *async);
  */
 mpd_pure
 int
-mpd_async_fd(const struct mpd_async *async);
+mpd_async_get_fd(const struct mpd_async *async);
 
 /**
  * Returns a bit mask of events which should be polled for.

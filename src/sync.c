@@ -62,7 +62,7 @@ mpd_sync_poll(struct mpd_async *async, struct timeval *tv)
 	if (mpd_async_get_error(async) != MPD_ERROR_SUCCESS)
 		return 0;
 
-	fd = mpd_async_fd(async);
+	fd = mpd_async_get_fd(async);
 
 	while (1) {
 		events = mpd_async_events(async);

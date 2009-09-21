@@ -5,7 +5,7 @@ global:
 	mpd_async_free;
 	mpd_async_get_error;
 	mpd_async_get_error_message;
-	mpd_async_fd;
+	mpd_async_get_fd;
 	mpd_async_events;
 	mpd_async_io;
 	mpd_async_send_command_v;
