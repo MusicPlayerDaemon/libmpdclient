@@ -154,7 +154,7 @@ int main(int argc, char ** argv) {
 	else if(argc==3 && strcmp(argv[1],"lsinfo")==0) {
 		struct mpd_entity * entity;
 
-		mpd_send_ls_meta(conn,argv[2]);
+		mpd_send_list_meta(conn,argv[2]);
 		if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) {
 			fprintf(stderr,"%s\n", mpd_get_error_message(conn));
 			mpd_connection_free(conn);

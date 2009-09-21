@@ -259,7 +259,7 @@ test_lsinfo(struct mpd_connection *conn, const char *path)
 {
 	struct mpd_entity *entity;
 
-	mpd_send_ls_meta(conn, path);
+	mpd_send_list_meta(conn, path);
 	CHECK_CONNECTION(conn);
 
 	while ((entity = mpd_recv_entity(conn)) != NULL) {

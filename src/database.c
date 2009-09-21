@@ -49,7 +49,7 @@ mpd_send_list_all_meta(struct mpd_connection *connection, const char *dir)
 }
 
 bool
-mpd_send_ls_meta(struct mpd_connection *connection, const char *dir)
+mpd_send_list_meta(struct mpd_connection *connection, const char *dir)
 {
 	return mpd_send_command(connection, "lsinfo", dir, NULL);
 }
