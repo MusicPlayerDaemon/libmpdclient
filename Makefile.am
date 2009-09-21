@@ -132,6 +132,11 @@ uninstall-local:
 	$(DESTDIR)$(docdir)/html/*.gif \
 	$(DESTDIR)$(docdir)/html/*.png
 
+upload: doc/api/html/index.html
+	rsync -vpruz --delete doc/api/html/ \
+		cirrus@www.musicpd.org:/var/www/musicpd.org/www/doc/libmpdclient/ \
+		--chmod=Dug+rwx,Do+rx,Fug+rw,Fo+r
+
 endif
 
 #
