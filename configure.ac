@@ -118,7 +118,7 @@ AC_ARG_WITH([default-host],
 	AC_HELP_STRING([--with-default-host=ARG],
 		[default MPD host @<:@localhost@:>@]),,
 	[with_default_host=localhost])
-AC_DEFINE_UNQUOTED([DEFAULT_HOST], ["$$with_default_host"], [Default MPD host])
+AC_DEFINE_UNQUOTED([DEFAULT_HOST], ["$with_default_host"], [Default MPD host])
 
 AC_ARG_WITH([default-port],
 	AC_HELP_STRING([--with-default-port=ARG],
