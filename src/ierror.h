@@ -52,7 +52,7 @@ struct mpd_error_info {
 	 * An ACK code returned by MPD.  This field is only valid if
 	 * #code is MPD_ERROR_SERVER.
 	 */
-	enum mpd_ack ack;
+	enum mpd_server_error server;
 
 	/**
 	 * The command list index of the command which emitted this
@@ -133,10 +133,11 @@ mpd_error_code(struct mpd_error_info *error, enum mpd_error code)
  * Sets an ACK error code.
  */
 static inline void
-mpd_error_ack(struct mpd_error_info *error, enum mpd_ack ack, int at)
+mpd_error_server(struct mpd_error_info *error,
+		 enum mpd_server_error server, int at)
 {
 	mpd_error_code(error, MPD_ERROR_SERVER);
-	error->ack = ack;
+	error->server = server;
 	error->at = at;
 }
 

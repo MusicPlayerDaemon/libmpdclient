@@ -48,7 +48,7 @@ enum mpd_parser_result {
 
 	/**
 	 * MPD has returned "ACK" with an error code.  Call
-	 * mpd_parser_get_reason() to get the error code.
+	 * mpd_parser_get_server_error() to get the error code.
 	 */
 	MPD_PARSER_ERROR,
 
@@ -119,8 +119,8 @@ mpd_parser_is_discrete(const struct mpd_parser *parser);
  * @param parser the parser object
  */
 mpd_pure
-enum mpd_ack
-mpd_parser_get_ack(const struct mpd_parser *parser);
+enum mpd_server_error
+mpd_parser_get_server_error(const struct mpd_parser *parser);
 
 /**
  * On #MPD_PARSER_ERROR, this returns the number of the list command

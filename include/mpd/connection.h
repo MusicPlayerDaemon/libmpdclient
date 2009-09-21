@@ -164,7 +164,7 @@ mpd_connection_get_error_message(const struct mpd_connection *connection);
  * function is only valid if mpd_get_error() returned #MPD_ERROR_SERVER.
  */
 mpd_pure
-enum mpd_ack
+enum mpd_server_error
 mpd_connection_get_server_error(const struct mpd_connection *connection);
 
 /**

@@ -127,9 +127,9 @@ mpd_recv_pair(struct mpd_connection *connection)
 	case MPD_PARSER_ERROR:
 		connection->receiving = false;
 		connection->sending_command_list = false;
-		mpd_error_ack(&connection->error,
-			      mpd_parser_get_ack(connection->parser),
-			      mpd_parser_get_at(connection->parser));
+		mpd_error_server(&connection->error,
+				 mpd_parser_get_server_error(connection->parser),
+				 mpd_parser_get_at(connection->parser));
 		msg = mpd_parser_get_message(connection->parser);
 		if (msg == NULL)
 			msg = "Unspecified MPD error";

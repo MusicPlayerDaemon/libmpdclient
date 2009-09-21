@@ -50,12 +50,12 @@ mpd_connection_get_error_message(const struct mpd_connection *connection)
 	return connection->error.message;
 }
 
-enum mpd_ack
+enum mpd_server_error
 mpd_connection_get_server_error(const struct mpd_connection *connection)
 {
 	assert(connection->error.code == MPD_ERROR_SERVER);
 
-	return connection->error.ack;
+	return connection->error.server;
 }
 
 bool

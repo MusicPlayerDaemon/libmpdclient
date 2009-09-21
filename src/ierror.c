@@ -109,7 +109,7 @@ mpd_error_copy(struct mpd_error_info *dest, const struct mpd_error_info *src)
 		return true;
 
 	if (src->code == MPD_ERROR_SERVER) {
-		dest->ack = src->ack;
+		dest->server = src->server;
 		dest->at = src->at;
 	}
 
