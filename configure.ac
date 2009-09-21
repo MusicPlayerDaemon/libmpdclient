@@ -31,6 +31,19 @@ set -- $CFLAGS
 
 
 dnl
+dnl OS specific defaults
+dnl
+
+AC_CANONICAL_HOST
+
+case "$host_os" in
+mingw32* | windows*)
+	LIBS="$LIBS -lws2_32"
+	;;
+esac
+
+
+dnl
 dnl Check for libraries
 dnl
 
