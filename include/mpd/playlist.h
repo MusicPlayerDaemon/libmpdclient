@@ -55,18 +55,6 @@ extern "C" {
 #endif
 
 /**
- * Allocate a new #mpd_playlist object.  Use mpd_playlist_free() to
- * release it when you don't need it anymore.
- *
- * @param path the path of the playlist fle relative to the MPD
- * playlist directory.  It must not begin or end with a slash
- * @returns the new object, or NULL if out of memory
- */
-mpd_malloc
-struct mpd_playlist *
-mpd_playlist_new(const char *path);
-
-/**
  * Free memory allocated by the #mpd_playlist object.
  */
 void

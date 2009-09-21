@@ -141,7 +141,7 @@ mpd_entity_feed_first(struct mpd_entity *entity, const struct mpd_pair *pair)
 			return false;
 	} else if (strcmp(pair->name, "playlist") == 0) {
 		entity->type = MPD_ENTITY_TYPE_PLAYLIST;
-		entity->info.playlistFile = mpd_playlist_new(pair->value);
+		entity->info.playlistFile = mpd_playlist_begin(pair);
 		if (entity->info.playlistFile == NULL)
 			return false;
 	} else {

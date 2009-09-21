@@ -48,7 +48,7 @@ struct mpd_playlist {
 	time_t last_modified;
 };
 
-struct mpd_playlist *
+static struct mpd_playlist *
 mpd_playlist_new(const char *path)
 {
 	struct mpd_playlist *playlist;
