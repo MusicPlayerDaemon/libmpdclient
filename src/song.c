@@ -213,7 +213,7 @@ mpd_song_clear_tag(struct mpd_song *song, enum mpd_tag_type type)
 {
 	struct mpd_tag_value *tag = &song->tags[type];
 
-	if (type == MPD_TAG_FILE)
+	if ((int)type < 0 || type == MPD_TAG_FILE || type >= MPD_TAG_COUNT)
 		return;
 
 	if (tag->value == NULL)
