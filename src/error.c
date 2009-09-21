@@ -53,7 +53,7 @@ mpd_connection_get_error_message(const struct mpd_connection *connection)
 enum mpd_ack
 mpd_connection_get_server_error(const struct mpd_connection *connection)
 {
-	assert(connection->error.code == MPD_ERROR_ACK);
+	assert(connection->error.code == MPD_ERROR_SERVER);
 
 	return connection->error.ack;
 }

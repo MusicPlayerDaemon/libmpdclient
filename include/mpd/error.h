@@ -59,8 +59,11 @@ enum mpd_error {
 	/** connection closed by mpd */
 	MPD_ERROR_CLOSED,
 
-	/** ACK returned! */
-	MPD_ERROR_ACK,
+	/**
+	 * The server has returned an error code, which can be queried
+	 * with mpd_connection_get_server_error().
+	 */
+	MPD_ERROR_SERVER,
 };
 
 #endif

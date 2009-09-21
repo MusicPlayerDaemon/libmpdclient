@@ -54,7 +54,7 @@ struct mpd_async;
  * mpd_get_server_error().
  *
  * Some errors can be cleared by calling mpd_clear_error(), like
- * #MPD_ERROR_ACK, #MPD_ERROR_ARGUMENT.  Most others are fatal, and
+ * #MPD_ERROR_SERVER, #MPD_ERROR_ARGUMENT.  Most others are fatal, and
  * cannot be recovered, like #MPD_ERROR_CLOSED - mpd_clear_error()
  * returns false.
  *
@@ -150,7 +150,7 @@ mpd_connection_get_error(const struct mpd_connection *connection);
  * Calling this function is only valid if an error really occured.
  * Check with mpd_get_error().
  *
- * For #MPD_ERROR_ACK, the error message is encoded in UTF-8.
+ * For #MPD_ERROR_SERVER, the error message is encoded in UTF-8.
  * #MPD_ERROR_SYSTEM obtains its error message from the operating
  * system, and thus the locale's character set (and probably language)
  * is used.  Keep that in mind when you print error messages.
@@ -161,7 +161,7 @@ mpd_connection_get_error_message(const struct mpd_connection *connection);
 
 /**
  * Returns the error code returned from the server.  Calling this
- * function is only valid if mpd_get_error() returned MPD_ERROR_ACK.
+ * function is only valid if mpd_get_error() returned #MPD_ERROR_SERVER.
  */
 mpd_pure
 enum mpd_ack

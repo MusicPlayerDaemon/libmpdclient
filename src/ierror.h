@@ -50,7 +50,7 @@ struct mpd_error_info {
 
 	/**
 	 * An ACK code returned by MPD.  This field is only valid if
-	 * #code is MPD_ERROR_ACK.
+	 * #code is MPD_ERROR_SERVER.
 	 */
 	enum mpd_ack ack;
 
@@ -114,7 +114,7 @@ mpd_error_is_fatal(const struct mpd_error_info *error)
 	return error->code != MPD_ERROR_SUCCESS &&
 		error->code != MPD_ERROR_ARGUMENT &&
 		error->code != MPD_ERROR_STATE &&
-		error->code != MPD_ERROR_ACK;
+		error->code != MPD_ERROR_SERVER;
 }
 
 /**
@@ -135,7 +135,7 @@ mpd_error_code(struct mpd_error_info *error, enum mpd_error code)
 static inline void
 mpd_error_ack(struct mpd_error_info *error, enum mpd_ack ack, int at)
 {
-	mpd_error_code(error, MPD_ERROR_ACK);
+	mpd_error_code(error, MPD_ERROR_SERVER);
 	error->ack = ack;
 	error->at = at;
 }
