@@ -72,7 +72,7 @@ struct mpd_song {
 	unsigned id;
 };
 
-struct mpd_song *
+static struct mpd_song *
 mpd_song_new(const char *uri)
 {
 	struct mpd_song *song;

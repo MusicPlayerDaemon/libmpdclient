@@ -56,17 +56,6 @@ extern "C" {
 #endif
 
 /**
- * Allocate a new #mpd_song object.  Use mpd_song_free() to release
- * it when you don't need it anymore.
- *
- * @param uri the song URI
- * @returns the new object, or NULL if out of memory
- */
-mpd_malloc
-struct mpd_song *
-mpd_song_new(const char *uri);
-
-/**
  * Free memory allocated by the #mpd_song object.
  */
 void mpd_song_free(struct mpd_song *song);
