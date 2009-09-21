@@ -41,7 +41,6 @@ src_libmpdclient_la_SOURCES = \
 	src/async.c src/iasync.h \
 	src/buffer.h \
 	src/internal.h \
-	src/str_pool.c src/str_pool.h \
 	src/ierror.c src/ierror.h \
 	src/resolver.c src/resolver.h \
 	src/capabilities.c \

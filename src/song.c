@@ -33,7 +33,6 @@
 #include <mpd/song.h>
 #include <mpd/pair.h>
 #include <mpd/recv.h>
-#include "str_pool.h"
 #include "internal.h"
 #include "iso8601.h"
 
@@ -93,7 +92,7 @@ mpd_song_new(const char *uri)
 	song->id = 0;
 
 	song->tags[MPD_TAG_FILE].next = NULL;
-	song->tags[MPD_TAG_FILE].value = str_pool_get(uri);
+	song->tags[MPD_TAG_FILE].value = strdup(uri);
 	if (song->tags[MPD_TAG_FILE].value == NULL) {
 		free(song);
 		return NULL;
@@ -111,13 +110,13 @@ void mpd_song_free(struct mpd_song *song) {
 		if (tag->value == NULL)
 			continue;
 
-		str_pool_put(tag->value);
+		free(tag->value);
 
 		tag = tag->next;
 
 		while (tag != NULL) {
 			assert(tag->value != NULL);
-			str_pool_put(tag->value);
+			free(tag->value);
 
 			next = tag->next;
 			free(tag);
@@ -183,7 +182,7 @@ mpd_song_add_tag(struct mpd_song *song,
 
 	if (tag->value == NULL) {
 		tag->next = NULL;
-		tag->value = str_pool_get(value);
+		tag->value = strdup(value);
 		if (tag->value == NULL)
 			return false;
 	} else {
@@ -195,7 +194,7 @@ mpd_song_add_tag(struct mpd_song *song,
 		if (tag == NULL)
 			return NULL;
 
-		tag->value = str_pool_get(value);
+		tag->value = strdup(value);
 		if (tag->value == NULL) {
 			free(tag);
 			return false;
