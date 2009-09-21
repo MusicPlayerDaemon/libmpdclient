@@ -30,6 +30,18 @@
 
 #include <stdio.h>
 
+#ifdef WIN32
+static inline struct tm *
+gmtime_r(const time_t *timep, struct tm *result)
+{
+	(void)result;
+
+	/* Windows does not have thread-safe functions.  That
+	   sucks. */
+	return gmtime(timep);
+}
+#endif /* WIN32 */
+
 /**
  * @return the current time zone offset in seconds
  */
