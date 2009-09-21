@@ -106,13 +106,6 @@ mpd_playlist_get_last_modified(const struct mpd_playlist *playlist)
 	return playlist->last_modified;
 }
 
-void
-mpd_playlist_set_last_modified(struct mpd_playlist *playlist,
-			       time_t mtime)
-{
-	playlist->last_modified = mtime;
-}
-
 struct mpd_playlist *
 mpd_playlist_begin(const struct mpd_pair *pair)
 {

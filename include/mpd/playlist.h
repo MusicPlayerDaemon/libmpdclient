@@ -78,12 +78,6 @@ const char *
 mpd_playlist_get_path(const struct mpd_playlist *playlist);
 
 /**
- * Sets the POSIX UTC time stamp of the last modification.
- */
-void
-mpd_playlist_set_last_modified(struct mpd_playlist *playlist, time_t mtime);
-
-/**
  * @return the POSIX UTC time stamp of the last modification, or 0 if
  * that is unknown
  */
