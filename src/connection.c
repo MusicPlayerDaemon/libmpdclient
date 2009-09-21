@@ -38,6 +38,7 @@
 #include "socket.h"
 #include "internal.h"
 #include "iasync.h"
+#include "config.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -96,23 +97,20 @@ static int
 mpd_connect(const char *host, unsigned port, const struct timeval *timeout,
 	    struct mpd_error_info *error)
 {
-	int fd;
-
+#ifdef DEFAULT_SOCKET
 	if (host == NULL && port == 0) {
-		/* XXX that path should be configurable at compile
-		   time */
-		fd = mpd_socket_connect("/var/run/mpd/socket", 0,
-					timeout, error);
+		int fd = mpd_socket_connect(DEFAULT_SOCKET, 0, timeout, error);
 		if (fd >= 0)
 			return fd;
 
 		mpd_error_clear(error);
 	}
+#endif
 
 	if (host == NULL) {
 		host = getenv("MPD_HOST");
 		if (host == NULL)
-			host = "localhost";
+			host = DEFAULT_HOST;
 	}
 
 	if (port == 0) {
@@ -121,7 +119,7 @@ mpd_connect(const char *host, unsigned port, const struct timeval *timeout,
 			port = atoi(env_port);
 
 		if (port == 0)
-			port = 6600;
+			port = DEFAULT_PORT;
 	}
 
 	return mpd_socket_connect(host, port, timeout, error);

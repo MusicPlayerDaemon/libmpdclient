@@ -92,26 +92,39 @@ dnl
 dnl Compile-time options
 dnl
 
-dnl Default host
-AC_MSG_CHECKING([for default MPD host])
+AC_ARG_WITH([default-socket],
+	AC_HELP_STRING([--with-default-socket=PATH],
+		[default path of the socket file @<:@/var/run/mpd/socket@:>@]),,
+	[with_default_socket=auto])
+
+if test x$with_default_socket = xauto; then
+	case "$host_os" in
+	mingw32* | windows*)
+		# no UNIX domain sockets on WIN32
+		with_default_socket=no
+		;;
+	*)
+		with_default_socket=/var/run/mpd/socket
+		;;
+	esac
+fi
+
+if test x$with_default_socket != xno; then
+	AC_DEFINE_UNQUOTED([DEFAULT_SOCKET], ["$with_default_socket"],
+		[Default UNIX socket path])
+fi
+
 AC_ARG_WITH([default-host],
 	AC_HELP_STRING([--with-default-host=ARG],
-		[Default MPD host @<:@localhost@:>@]),
-	[DEFAULT_HOST="$withval"],
-	[DEFAULT_HOST="localhost"])
-AC_MSG_RESULT([$DEFAULT_HOST])
-AC_DEFINE_UNQUOTED([DEFAULT_HOST], ["$DEFAULT_HOST"], [Default MPD host])
+		[default MPD host @<:@localhost@:>@]),,
+	[with_default_host=localhost])
+AC_DEFINE_UNQUOTED([DEFAULT_HOST], ["$$with_default_host"], [Default MPD host])
 
-dnl Default port
-AC_MSG_CHECKING([for default MPD port])
 AC_ARG_WITH([default-port],
 	AC_HELP_STRING([--with-default-port=ARG],
-		[Default port @<:@6600@:>@]),
-	[DEFAULT_PORT="$withval"],
-	[DEFAULT_PORT="6600"])
-AC_MSG_RESULT([$DEFAULT_PORT])
-AC_DEFINE_UNQUOTED([DEFAULT_PORT], [$DEFAULT_PORT], [Default MPD port])
-AC_DEFINE_UNQUOTED([DEFAULT_PORT_STR], ["$DEFAULT_PORT"], [Default MPD port])
+		[default MPD port @<:@6600@:>@]),,
+	[with_default_port=6600])
+AC_DEFINE_UNQUOTED([DEFAULT_PORT], [$with_default_port], [Default MPD port])
 
 
 dnl
