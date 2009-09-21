@@ -24,12 +24,12 @@ global:
 	mpd_connection_free;
 	mpd_connection_set_timeout;
 	mpd_connection_get_fd;
-	mpd_get_error;
-	mpd_get_error_message;
-	mpd_get_server_error;
-	mpd_clear_error;
-	mpd_get_server_version;
-	mpd_cmp_server_version;
+	mpd_connection_get_error;
+	mpd_connection_get_error_message;
+	mpd_connection_get_server_error;
+	mpd_connection_clear_error;
+	mpd_connection_get_server_version;
+	mpd_connection_cmp_server_version;
 
 	/* mpd/database.h */
 	mpd_send_list_all;

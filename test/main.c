@@ -73,8 +73,8 @@
 }
 
 #define CHECK_CONNECTION(conn) \
-	if (mpd_get_error(conn) != MPD_ERROR_SUCCESS) { \
-		LOG_ERROR("%s", mpd_get_error_message(conn)); \
+	if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) { \
+		LOG_ERROR("%s", mpd_connection_get_error_message(conn)); \
 		return -1; \
 	}
 
@@ -83,8 +83,8 @@ test_new_connection(struct mpd_connection **conn)
 {
 	*conn = mpd_connection_new(NULL, 0, 30000);
 
-	if (!*conn || mpd_get_error(*conn) != MPD_ERROR_SUCCESS) {
-		LOG_ERROR("%s", mpd_get_error_message(*conn));
+	if (!*conn || mpd_connection_get_error(*conn) != MPD_ERROR_SUCCESS) {
+		LOG_ERROR("%s", mpd_connection_get_error_message(*conn));
 		mpd_connection_free(*conn);
 		*conn = NULL;
 		return -1;
@@ -97,8 +97,9 @@ test_version(struct mpd_connection *conn)
 {
 	int i, total = -1;
 	for (i=0; i<3; ++i) {
-		LOG_INFO("version[%i]: %i", i, mpd_get_server_version(conn)[i]);
-		total += mpd_get_server_version(conn)[i];
+		LOG_INFO("version[%i]: %i", i,
+			 mpd_connection_get_server_version(conn)[i]);
+		total += mpd_connection_get_server_version(conn)[i];
 	}
 	/* Check if at least one of the three number is positive */
 	return total;
@@ -168,7 +169,7 @@ test_status(struct mpd_connection *conn)
 
 	status = mpd_run_status(conn);
 	if (!status) {
-		LOG_ERROR("%s", mpd_get_error_message(conn));
+		LOG_ERROR("%s", mpd_connection_get_error_message(conn));
 		return -1;
 	}
 
@@ -218,7 +219,7 @@ test_list_status_currentsong(struct mpd_connection *conn)
 
 	status = mpd_recv_status(conn);
 	if (!status) {
-		LOG_ERROR("%s", mpd_get_error_message(conn));
+		LOG_ERROR("%s", mpd_connection_get_error_message(conn));
 		return -1;
 	}
 	if (mpd_status_get_error(status)) {

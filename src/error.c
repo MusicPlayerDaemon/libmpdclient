@@ -32,13 +32,13 @@
 #include <assert.h>
 
 enum mpd_error
-mpd_get_error(const struct mpd_connection *connection)
+mpd_connection_get_error(const struct mpd_connection *connection)
 {
 	return connection->error.code;
 }
 
 const char *
-mpd_get_error_message(const struct mpd_connection *connection)
+mpd_connection_get_error_message(const struct mpd_connection *connection)
 {
 	assert(connection->error.code != MPD_ERROR_SUCCESS);
 	assert(connection->error.message != NULL ||
@@ -51,7 +51,7 @@ mpd_get_error_message(const struct mpd_connection *connection)
 }
 
 enum mpd_ack
-mpd_get_server_error(const struct mpd_connection *connection)
+mpd_connection_get_server_error(const struct mpd_connection *connection)
 {
 	assert(connection->error.code == MPD_ERROR_ACK);
 
@@ -59,7 +59,7 @@ mpd_get_server_error(const struct mpd_connection *connection)
 }
 
 bool
-mpd_clear_error(struct mpd_connection *connection)
+mpd_connection_clear_error(struct mpd_connection *connection)
 {
 	if (mpd_error_is_fatal(&connection->error))
 		/* impossible to recover */

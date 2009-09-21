@@ -143,7 +143,7 @@ mpd_connection_get_fd(const struct mpd_connection *connection);
  */
 mpd_pure
 enum mpd_error
-mpd_get_error(const struct mpd_connection *connection);
+mpd_connection_get_error(const struct mpd_connection *connection);
 
 /**
  * Returns the human-readable (English) libmpdclient error message.
@@ -157,7 +157,7 @@ mpd_get_error(const struct mpd_connection *connection);
  */
 mpd_pure
 const char *
-mpd_get_error_message(const struct mpd_connection *connection);
+mpd_connection_get_error_message(const struct mpd_connection *connection);
 
 /**
  * Returns the error code returned from the server.  Calling this
@@ -165,7 +165,7 @@ mpd_get_error_message(const struct mpd_connection *connection);
  */
 mpd_pure
 enum mpd_ack
-mpd_get_server_error(const struct mpd_connection *connection);
+mpd_connection_get_server_error(const struct mpd_connection *connection);
 
 /**
  * Attempts to recover from an error condition.  This function must be
@@ -176,7 +176,7 @@ mpd_get_server_error(const struct mpd_connection *connection);
  * recovered
  */
 bool
-mpd_clear_error(struct mpd_connection *connection);
+mpd_connection_clear_error(struct mpd_connection *connection);
 
 /**
  * Returns a three-tuple containing the major, minor and patch version
@@ -184,7 +184,7 @@ mpd_clear_error(struct mpd_connection *connection);
  */
 mpd_pure
 const unsigned *
-mpd_get_server_version(const struct mpd_connection *connection);
+mpd_connection_get_server_version(const struct mpd_connection *connection);
 
 /**
  * Compares the MPD protocol version with the specified triple.
@@ -194,8 +194,9 @@ mpd_get_server_version(const struct mpd_connection *connection);
  */
 mpd_pure
 int
-mpd_cmp_server_version(const struct mpd_connection *connection, unsigned major,
-		       unsigned minor, unsigned patch);
+mpd_connection_cmp_server_version(const struct mpd_connection *connection,
+				  unsigned major, unsigned minor,
+				  unsigned patch);
 
 #ifdef __cplusplus
 }

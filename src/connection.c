@@ -249,14 +249,15 @@ mpd_connection_get_fd(const struct mpd_connection *connection)
 }
 
 const unsigned *
-mpd_get_server_version(const struct mpd_connection *connection)
+mpd_connection_get_server_version(const struct mpd_connection *connection)
 {
 	return connection->version;
 }
 
 int
-mpd_cmp_server_version(const struct mpd_connection *connection, unsigned major,
-		       unsigned minor, unsigned patch)
+mpd_connection_cmp_server_version(const struct mpd_connection *connection,
+				  unsigned major, unsigned minor,
+				  unsigned patch)
 {
 	const unsigned *v = connection->version;
 
