@@ -76,7 +76,6 @@ static struct mpd_song *
 mpd_song_new(const char *uri)
 {
 	struct mpd_song *song;
-	bool success;
 
 	assert(uri != NULL);
 
@@ -93,8 +92,9 @@ mpd_song_new(const char *uri)
 	song->pos = 0;
 	song->id = 0;
 
-	success = mpd_song_add_tag(song, MPD_TAG_FILE, uri);
-	if (!success) {
+	song->tags[MPD_TAG_FILE].next = NULL;
+	song->tags[MPD_TAG_FILE].value = str_pool_get(uri);
+	if (song->tags[MPD_TAG_FILE].value == NULL) {
 		free(song);
 		return NULL;
 	}
@@ -144,7 +144,7 @@ mpd_song_dup(const struct mpd_song *song)
 	for (unsigned i = 0; i < MPD_TAG_COUNT; ++i) {
 		const struct mpd_tag_value *src_tag = &song->tags[i];
 
-		if (src_tag->value == NULL)
+		if (i == MPD_TAG_FILE || src_tag->value == NULL)
 			continue;
 
 		do {
@@ -177,7 +177,8 @@ mpd_song_add_tag(struct mpd_song *song,
 {
 	struct mpd_tag_value *tag = &song->tags[type], *prev;
 
-	if ((int)type < 0 || type == MPD_TAG_ANY || type >= MPD_TAG_COUNT)
+	if ((int)type < 0 || type == MPD_TAG_ANY || type == MPD_TAG_FILE ||
+	    type >= MPD_TAG_COUNT)
 		return false;
 
 	if (tag->value == NULL) {
@@ -211,6 +212,9 @@ void
 mpd_song_clear_tag(struct mpd_song *song, enum mpd_tag_type type)
 {
 	struct mpd_tag_value *tag = &song->tags[type];
+
+	if (type == MPD_TAG_FILE)
+		return;
 
 	if (tag->value == NULL)
 		/* this tag type is empty */
