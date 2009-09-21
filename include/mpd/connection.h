@@ -128,6 +128,16 @@ void mpd_connection_set_timeout(struct mpd_connection *connection,
 				unsigned timeout_ms);
 
 /**
+ * Returns the file descriptor which should be polled by the caller.
+ * Do not use the file descriptor for anything except polling!  The
+ * file descriptor never changes during the lifetime of this
+ * #mpd_connection object.
+ */
+mpd_pure
+int
+mpd_connection_get_fd(const struct mpd_connection *connection);
+
+/**
  * Returns the libmpdclient error code.  MPD_ERROR_SUCCESS means no
  * error occured.
  */
