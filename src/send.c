@@ -86,9 +86,14 @@ mpd_send_command(struct mpd_connection *connection, const char *command, ...)
 		return false;
 	}
 
-	if (!connection->sending_command_list)
+	if (!connection->sending_command_list) {
+		/* the caller might expect that we have flushed the
+		   output buffer when this function returns */
+		if (!mpd_flush(connection))
+			return false;
+
 		connection->receiving = true;
-	else if (connection->sending_command_list_ok)
+	} else if (connection->sending_command_list_ok)
 		++connection->command_list_remaining;
 
 	return true;
