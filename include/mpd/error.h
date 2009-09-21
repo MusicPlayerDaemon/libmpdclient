@@ -53,9 +53,6 @@ enum mpd_error {
 	/** unknown host */
 	MPD_ERROR_RESOLVER,
 
-	/** error sending command */
-	MPD_ERROR_SENDING,
-
 	/** malformed response received from MPD */
 	MPD_ERROR_MALFORMED,
 
