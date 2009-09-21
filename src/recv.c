@@ -165,31 +165,6 @@ mpd_recv_pair_named(struct mpd_connection *connection, const char *name)
 	return NULL;
 }
 
-char *
-mpd_recv_value_named(struct mpd_connection *connection, const char *name)
-{
-	struct mpd_pair *pair;
-	char *value;
-
-	pair = mpd_recv_pair_named(connection, name);
-	if (pair == NULL)
-		return NULL;
-
-	value = strdup(pair->value);
-	mpd_return_pair(connection, pair);
-
-	if (value == NULL)
-		mpd_error_code(&connection->error, MPD_ERROR_OOM);
-
-	return value;
-}
-
-void
-mpd_value_free(char *value)
-{
-	free(value);
-}
-
 void
 mpd_return_pair(struct mpd_connection *connection, struct mpd_pair *pair)
 {
