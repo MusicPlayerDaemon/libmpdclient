@@ -36,6 +36,11 @@
 #include <unistd.h>
 #include <errno.h>
 
+#ifdef WIN32
+#include <ws2tcpip.h>
+#include <winsock.h>
+#endif
+
 static bool
 ignore_errno(int e)
 {
