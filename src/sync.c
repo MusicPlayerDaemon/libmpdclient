@@ -49,7 +49,7 @@ ignore_errno(int e)
 static enum mpd_async_event
 mpd_sync_poll(struct mpd_async *async, struct timeval *tv)
 {
-	int fd;
+	unsigned fd;
 	fd_set rfds, wfds, efds;
 	int ret;
 	enum mpd_async_event events;

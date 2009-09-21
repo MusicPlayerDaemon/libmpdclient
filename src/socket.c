@@ -114,12 +114,10 @@ static int do_connect_fail(int fd,
  * Wait for the socket to become readable.
  */
 static int
-mpd_socket_wait(int fd, struct timeval *tv)
+mpd_socket_wait(unsigned fd, struct timeval *tv)
 {
 	fd_set fds;
 	int ret;
-
-	assert(fd >= 0);
 
 	while (1) {
 		FD_ZERO(&fds);
