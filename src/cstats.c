@@ -57,7 +57,7 @@ mpd_recv_stats(struct mpd_connection *connection)
 		   state is not clean */
 		return NULL;
 
-	stats = mpd_stats_new();
+	stats = mpd_stats_begin();
 	if (stats == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
 		return NULL;

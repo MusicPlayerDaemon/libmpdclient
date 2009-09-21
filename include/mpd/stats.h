@@ -61,15 +61,15 @@ bool
 mpd_send_stats(struct mpd_connection *connection);
 
 /**
- * Creates a new empty #mpd_stats object.  Free it with
- * mpd_stats_free().
+ * Begins parsing server stats: creates a new empty #mpd_stats object.
+ * Free it with mpd_stats_free().
  *
  * @return the newly allocated #mpd_stats object, or NULL if out of
  * memory
  */
 mpd_malloc
 struct mpd_stats *
-mpd_stats_new(void);
+mpd_stats_begin(void);
 
 /**
  * Parses the pair, adding its information to the specified #mpd_stats

@@ -48,7 +48,7 @@ struct mpd_stats {
 };
 
 struct mpd_stats *
-mpd_stats_new(void)
+mpd_stats_begin(void)
 {
 	struct mpd_stats *stats = malloc(sizeof(struct mpd_stats));
 	if (stats == NULL)
