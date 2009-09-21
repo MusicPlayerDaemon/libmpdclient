@@ -33,7 +33,7 @@
 
 #include "ierror.h"
 
-#include <sys/select.h>
+#include <sys/time.h>
 
 /**
  * This opaque object represents a connection to a MPD server.  Call
