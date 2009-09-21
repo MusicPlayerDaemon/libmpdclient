@@ -85,13 +85,13 @@ mpd_socket_global_init(struct mpd_error_info *error)
 
 #ifdef WIN32
 
-static int do_connect_fail(struct mpd_socket *s,
+static int do_connect_fail(int fd,
                            const struct sockaddr *serv_addr, int addrlen)
 {
 	int iMode = 1; /* 0 = blocking, else non-blocking */
-	if (connect(s->fd, serv_addr, addrlen) == SOCKET_ERROR)
+	if (connect(fd, serv_addr, addrlen) == SOCKET_ERROR)
 		return 1;
-	ioctlsocket(s->fd, FIONBIO, (u_long FAR*) &iMode);
+	ioctlsocket(fd, FIONBIO, (u_long FAR*) &iMode);
 	return 0;
 }
 
