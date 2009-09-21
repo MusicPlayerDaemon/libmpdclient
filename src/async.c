@@ -361,7 +361,7 @@ mpd_async_recv_line(struct mpd_async *async)
 		if (mpd_buffer_full(&async->input)) {
 			/* .. but the buffer is full - line is too
 			   long, abort connection and bail out */
-			mpd_error_code(&async->error, MPD_ERROR_BUFFEROVERRUN);
+			mpd_error_code(&async->error, MPD_ERROR_MALFORMED);
 			mpd_error_message(&async->error,
 					  "Response line too large");
 		}

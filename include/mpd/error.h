@@ -61,9 +61,6 @@ enum mpd_error {
 
 	/** ACK returned! */
 	MPD_ERROR_ACK,
-
-	/** Buffer was overrun! */
-	MPD_ERROR_BUFFEROVERRUN,
 };
 
 #endif
