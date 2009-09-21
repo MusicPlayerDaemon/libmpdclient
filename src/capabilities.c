@@ -44,32 +44,14 @@ mpd_send_disallowed_commands(struct mpd_connection *connection)
 	return mpd_send_command(connection, "notcommands", NULL);
 }
 
-char *
-mpd_recv_command_name(struct mpd_connection *connection)
-{
-	return mpd_recv_value_named(connection, "command");
-}
-
 bool
 mpd_send_list_url_schemes(struct mpd_connection *connection)
 {
 	return mpd_send_command(connection, "urlhandlers", NULL);
 }
 
-char *
-mpd_recv_handler(struct mpd_connection *connection)
-{
-	return mpd_recv_value_named(connection, "handler");
-}
-
 bool
 mpd_send_list_tag_types(struct mpd_connection *connection)
 {
 	return mpd_send_command(connection, "tagtypes", NULL);
-}
-
-char *
-mpd_recv_tag_type_name(struct mpd_connection *connection)
-{
-	return mpd_recv_value_named(connection, "tagtype");
 }

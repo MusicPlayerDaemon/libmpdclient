@@ -29,6 +29,7 @@
 #ifndef MPD_CAPABILITIES_H
 #define MPD_CAPABILITIES_H
 
+#include <mpd/recv.h>
 #include <mpd/compiler.h>
 
 #include <stdbool.h>
@@ -64,15 +65,18 @@ mpd_send_disallowed_commands(struct mpd_connection *connection);
  * Receives the next supported command.  Call this in a loop after
  * mpd_send_commands() or mpd_send_notcommands().
  *
- * Free the return value with mpd_value_free().
+ * Free the return value with mpd_return_pair().
  *
  * @param connection a #mpd_connection
- * @returns a command name, or NULL on error or if the end of the
+ * @returns a "command" pair, or NULL on error or if the end of the
  * response is reached
  */
 mpd_malloc
-char *
-mpd_recv_command_name(struct mpd_connection *connection);
+static inline struct mpd_pair *
+mpd_recv_command_pair(struct mpd_connection *connection)
+{
+	return mpd_recv_pair_named(connection, "command");
+}
 
 /**
  * Requests a list of supported URL handlers in the form "scheme://",
@@ -87,10 +91,19 @@ mpd_send_list_url_schemes(struct mpd_connection *connection);
 
 /**
  * Receives one line of the mpd_send_urlhandlers() response.
+ *
+ * Free the return value with mpd_return_pair().
+ *
+ * @param connection a #mpd_connection
+ * @returns a "handler" pair, or NULL on error or if the end of the
+ * response is reached
  */
 mpd_malloc
-char *
-mpd_recv_handler(struct mpd_connection *connection);
+static inline struct mpd_pair *
+mpd_recv_url_scheme_pair(struct mpd_connection *connection)
+{
+	return mpd_recv_pair_named(connection, "handler");
+}
 
 /**
  * Requests a list of supported tag types.  Use mpd_recv_pair_named()
@@ -105,10 +118,19 @@ mpd_send_list_tag_types(struct mpd_connection *connection);
 /**
  * Receives the next tag type name.  Call this in a loop after
  * mpd_send_tagtypes().
+ *
+ * Free the return value with mpd_return_pair().
+ *
+ * @param connection a #mpd_connection
+ * @returns a "handler" pair, or NULL on error or if the end of the
+ * response is reached
  */
 mpd_malloc
-char *
-mpd_recv_tag_type_name(struct mpd_connection *connection);
+static inline struct mpd_pair *
+mpd_recv_tag_type_pair(struct mpd_connection *connection)
+{
+	return mpd_recv_pair_named(connection, "tagtype");
+}
 
 #ifdef __cplusplus
 }
