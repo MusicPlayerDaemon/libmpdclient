@@ -77,8 +77,8 @@ resolver_new(const char *host, unsigned port)
 	if (resolver == NULL)
 		return NULL;
 
-#ifndef WIN32
 	if (host[0] == '/') {
+#ifndef WIN32
 		size_t path_length = strlen(host);
 		if (path_length >= sizeof(resolver->saun.sun_path)) {
 			free(resolver);
@@ -93,8 +93,12 @@ resolver_new(const char *host, unsigned port)
 		resolver->current.addrlen = sizeof(resolver->saun);
 		resolver->current.addr = (const struct sockaddr *)&resolver->saun;
 		resolver->type = TYPE_ONE;
+#else /* WIN32 */
+		/* there are no unix domain sockets on Windows */
+		free(resolver);
+		return NULL;
+#endif /* WIN32 */
 	} else {
-#endif
 #ifdef MPD_HAVE_GAI
 		struct addrinfo hints;
 		char service[20];
@@ -144,9 +148,7 @@ resolver_new(const char *host, unsigned port)
 
 		resolver->type = TYPE_ONE;
 #endif
-#ifndef WIN32
 	}
-#endif
 
 	return resolver;
 }
