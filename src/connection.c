@@ -217,44 +217,6 @@ mpd_connection_new_async(struct mpd_async *async, const char *welcome)
 	return connection;
 }
 
-enum mpd_error
-mpd_get_error(const struct mpd_connection *connection)
-{
-	return connection->error.code;
-}
-
-const char *
-mpd_get_error_message(const struct mpd_connection *connection)
-{
-	assert(connection->error.code != MPD_ERROR_SUCCESS);
-	assert(connection->error.message != NULL ||
-	       connection->error.code == MPD_ERROR_OOM);
-
-	if (connection->error.message == NULL)
-		return "Out of memory";
-
-	return connection->error.message;
-}
-
-enum mpd_ack
-mpd_get_server_error(const struct mpd_connection *connection)
-{
-	assert(connection->error.code == MPD_ERROR_ACK);
-
-	return connection->error.ack;
-}
-
-bool
-mpd_clear_error(struct mpd_connection *connection)
-{
-	if (mpd_error_is_fatal(&connection->error))
-		/* impossible to recover */
-		return false;
-
-	mpd_error_clear(&connection->error);
-	return true;
-}
-
 void mpd_connection_free(struct mpd_connection *connection)
 {
 	assert(connection->pair_state != PAIR_STATE_FLOATING);

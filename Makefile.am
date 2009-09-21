@@ -48,6 +48,7 @@ src_libmpdclient_la_SOURCES = \
 	src/database.c \
 	src/directory.c \
 	src/rdirectory.c \
+	src/error.c \
 	src/output.c \
 	src/coutput.c \
 	src/entity.c \
