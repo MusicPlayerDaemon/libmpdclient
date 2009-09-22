@@ -36,7 +36,7 @@
 
 /* (bits+1)/3 (plus the sign character) */
 enum {
-	INTLEN = (sizeof(int) * CHAR_BIT + 1) / 3 + 1,
+	UNSIGNEDLEN = (sizeof(unsigned) * CHAR_BIT + 1) / 3 + 1,
 };
 
 bool
@@ -83,12 +83,12 @@ mpd_run_playlist_add(struct mpd_connection *connection,
 
 bool
 mpd_send_playlist_move(struct mpd_connection *connection, const char *name,
-		       int from, int to)
+		       unsigned from, unsigned to)
 {
-	char from_string[INTLEN], to_string[INTLEN];
+	char from_string[UNSIGNEDLEN], to_string[UNSIGNEDLEN];
 
-	snprintf(from_string, sizeof(from_string), "%i", from);
-	snprintf(to_string, sizeof(to_string), "%i", to);
+	snprintf(from_string, sizeof(from_string), "%u", from);
+	snprintf(to_string, sizeof(to_string), "%u", to);
 
 	return mpd_send_command(connection, "playlistmove", name,
 				from_string, to_string, NULL);
@@ -96,18 +96,18 @@ mpd_send_playlist_move(struct mpd_connection *connection, const char *name,
 
 bool
 mpd_send_playlist_delete(struct mpd_connection *connection, const char *name,
-			 int pos)
+			 unsigned pos)
 {
-	char pos_string[INTLEN];
+	char pos_string[UNSIGNEDLEN];
 
-	snprintf(pos_string, sizeof(pos_string), "%i", pos);
+	snprintf(pos_string, sizeof(pos_string), "%u", pos);
 
 	return mpd_send_command(connection, "playlistdelete", name, pos_string, NULL);
 }
 
 bool
 mpd_run_playlist_delete(struct mpd_connection *connection,
-			const char *name, int pos)
+			const char *name, unsigned pos)
 {
 	return mpd_run_check(connection) &&
 		mpd_send_playlist_delete(connection, name, pos) &&

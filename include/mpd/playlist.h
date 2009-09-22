@@ -154,15 +154,15 @@ mpd_run_playlist_add(struct mpd_connection *connection,
 
 bool
 mpd_send_playlist_move(struct mpd_connection *connection, const char *name,
-		       int from, int to);
+		       unsigned from, unsigned to);
 
 bool
 mpd_send_playlist_delete(struct mpd_connection *connection, const char *name,
-			 int pos);
+			 unsigned pos);
 
 bool
 mpd_run_playlist_delete(struct mpd_connection *connection,
-			const char *name, int pos);
+			const char *name, unsigned pos);
 
 bool
 mpd_send_save(struct mpd_connection *connection, const char *name);
