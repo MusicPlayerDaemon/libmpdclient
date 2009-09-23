@@ -205,7 +205,7 @@ global:
 
 	/* mpd/search.h */
 	mpd_search_db_songs;
-	mpd_search_playlist_songs;
+	mpd_search_queue_songs;
 	mpd_search_db_tags;
 	mpd_count_db_songs;
 	mpd_search_add_constraint;

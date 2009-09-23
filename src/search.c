@@ -66,7 +66,7 @@ mpd_search_db_songs(struct mpd_connection *connection, bool exact)
 }
 
 bool
-mpd_search_playlist_songs(struct mpd_connection *connection, bool exact)
+mpd_search_queue_songs(struct mpd_connection *connection, bool exact)
 {
 	if (mpd_error_is_defined(&connection->error))
 		return false;

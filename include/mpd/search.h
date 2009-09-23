@@ -66,12 +66,12 @@ mpd_search_db_songs(struct mpd_connection *connection, bool exact);
  * @param connection a #mpd_connection
  * @param exact if to match exact
  *
- * Search for songs in the playlist given certain constraints
+ * Search for songs in the queue given certain constraints.
  * Use this method with mpd_search_add_constraint and mpd_search_commit
  * Use mpd_recv_entity to get results of this method
  */
 bool
-mpd_search_playlist_songs(struct mpd_connection *connection, bool exact);
+mpd_search_queue_songs(struct mpd_connection *connection, bool exact);
 
 /**
  * @param connection a #mpd_connection
