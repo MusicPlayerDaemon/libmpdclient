@@ -219,8 +219,6 @@ global:
 	mpd_song_free;
 	mpd_song_dup;
 	mpd_song_get_uri;
-	mpd_song_add_tag;
-	mpd_song_clear_tag;
 	mpd_song_get_tag;
 	mpd_song_get_duration;
 	mpd_song_get_last_modified;
