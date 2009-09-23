@@ -127,6 +127,10 @@ void mpd_song_free(struct mpd_song *song) {
 	free(song);
 }
 
+static bool
+mpd_song_add_tag(struct mpd_song *song,
+		 enum mpd_tag_type type, const char *value);
+
 struct mpd_song *
 mpd_song_dup(const struct mpd_song *song)
 {
@@ -170,7 +174,14 @@ mpd_song_get_uri(const struct mpd_song *song)
 	return mpd_song_get_tag(song, MPD_TAG_FILE, 0);
 }
 
-bool
+
+/**
+ * Adds a tag value to the song.
+ *
+ * @return true on success, false if the tag is not supported or if no
+ * memory could be allocated
+ */
+static bool
 mpd_song_add_tag(struct mpd_song *song,
 		 enum mpd_tag_type type, const char *value)
 {
@@ -207,7 +218,11 @@ mpd_song_add_tag(struct mpd_song *song,
 	return true;
 }
 
-void
+#ifdef UNUSED_CODE
+/**
+ * Removes all values of the specified tag.
+ */
+static void
 mpd_song_clear_tag(struct mpd_song *song, enum mpd_tag_type type)
 {
 	struct mpd_tag_value *tag = &song->tags[type];
@@ -228,6 +243,7 @@ mpd_song_clear_tag(struct mpd_song *song, enum mpd_tag_type type)
 	while ((tag = tag->next) != NULL)
 		free(tag->value);
 }
+#endif
 
 const char *
 mpd_song_get_tag(const struct mpd_song *song,

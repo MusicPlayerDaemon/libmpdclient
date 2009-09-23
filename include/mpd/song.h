@@ -78,22 +78,6 @@ const char *
 mpd_song_get_uri(const struct mpd_song *song);
 
 /**
- * Adds a tag value to the song.
- *
- * @return true on success, false if the tag is not supported or if no
- * memory could be allocated
- */
-bool
-mpd_song_add_tag(struct mpd_song *song,
-		 enum mpd_tag_type type, const char *value);
-
-/**
- * Removes all values of the specified tag.
- */
-void
-mpd_song_clear_tag(struct mpd_song *song, enum mpd_tag_type type);
-
-/**
  * Queries a tag value.
  *
  * @param song the song object
