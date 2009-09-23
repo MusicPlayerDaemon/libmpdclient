@@ -41,6 +41,7 @@
 
 /* GCC 4.x */
 
+#define mpd_unused __attribute__((unused))
 #define mpd_malloc __attribute__((malloc))
 #define mpd_pure __attribute__((pure))
 #define mpd_const __attribute__((const))
@@ -51,6 +52,7 @@
 
 /* generic C compiler */
 
+#define mpd_unused
 #define mpd_malloc
 #define mpd_pure
 #define mpd_const
