@@ -69,6 +69,15 @@ struct mpd_song {
 	 * The id of this song within the queue.
 	 */
 	unsigned id;
+
+#ifndef NDEBUG
+	/**
+	 * This flag is used in an assertion: when it is set, you must
+	 * not call mpd_song_feed() again.  It is a safeguard for
+	 * buggy callers.
+	 */
+	bool finished;
+#endif
 };
 
 static struct mpd_song *
@@ -97,6 +106,10 @@ mpd_song_new(const char *uri)
 		free(song);
 		return NULL;
 	}
+
+#ifndef NDEBUG
+	song->finished = false;
+#endif
 
 	return song;
 }
@@ -164,6 +177,10 @@ mpd_song_dup(const struct mpd_song *song)
 	ret->duration = song->duration;
 	ret->pos = song->pos;
 	ret->id = song->id;
+
+#ifndef NDEBUG
+	ret->finished = true;
+#endif
 
 	return ret;
 }
@@ -332,12 +349,18 @@ mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair)
 {
 	enum mpd_tag_type tag_type;
 
+	assert(song != NULL);
+	assert(!song->finished);
 	assert(pair != NULL);
 	assert(pair->name != NULL);
 	assert(pair->value != NULL);
 
-	if (strcmp(pair->name, "file") == 0)
+	if (strcmp(pair->name, "file") == 0) {
+#ifndef NDEBUG
+		song->finished = true;
+#endif
 		return false;
+	}
 
 	if (*pair->value == 0)
 		return true;
