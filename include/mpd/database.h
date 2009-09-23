@@ -31,6 +31,8 @@
  *
  * This file declares functions which query or update MPD's music
  * database.
+ *
+ * Do not include this header directly.  Use mpd/client.h instead.
  */
 
 #ifndef MPD_DATABASE_H

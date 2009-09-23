@@ -30,6 +30,14 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*! \file
+ * \brief MPD client library
+ *
+ * Manipulate stored playlists.
+ *
+ * Do not include this header directly.  Use mpd/client.h instead.
+ */
+
 #ifndef LIBMPDCLIENT_PLAYLIST_H
 #define LIBMPDCLIENT_PLAYLIST_H
 

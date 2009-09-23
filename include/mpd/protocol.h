@@ -26,6 +26,13 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*! \file
+ * \brief MPD client library
+ *
+ * Do not include this header directly.  Use mpd/client.h or
+ * mpd/parser.h instead.
+ */
+
 #ifndef MPD_PROTOCOL_H
 #define MPD_PROTOCOL_H
 
