@@ -111,24 +111,12 @@ mpd_song_get_tag(const struct mpd_song *song,
 		 enum mpd_tag_type type, unsigned idx);
 
 /**
- * Sets the song duration in seconds.
- */
-void
-mpd_song_set_duration(struct mpd_song *song, unsigned duration);
-
-/**
  * Returns the duration of this song in seconds.  0 means the duration
  * is unknown.
  */
 mpd_pure
 unsigned
 mpd_song_get_duration(const struct mpd_song *song);
-
-/**
- * Sets the POSIX UTC time stamp of the last modification.
- */
-void
-mpd_song_set_last_modified(struct mpd_song *song, time_t mtime);
 
 /**
  * @return the POSIX UTC time stamp of the last modification, or 0 if
@@ -141,6 +129,9 @@ mpd_song_get_last_modified(const struct mpd_song *song);
 /**
  * Sets the position within the queue.  This value is not used for
  * songs which are not in the queue.
+ *
+ * This function is useful when applying the values returned by
+ * mpd_recv_queue_change_brief().
  */
 void
 mpd_song_set_pos(struct mpd_song *song, unsigned pos);
@@ -152,13 +143,6 @@ mpd_song_set_pos(struct mpd_song *song, unsigned pos);
 mpd_pure
 unsigned
 mpd_song_get_pos(const struct mpd_song *song);
-
-/**
- * Sets the id within the queue.  This value is not used for songs
- * which are not in the queue.
- */
-void
-mpd_song_set_id(struct mpd_song *song, unsigned id);
 
 /**
  * Returns the id of this song in the playlist.  The value is

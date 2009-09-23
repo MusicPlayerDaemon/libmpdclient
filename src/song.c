@@ -250,7 +250,7 @@ mpd_song_get_tag(const struct mpd_song *song,
 	return tag->value;
 }
 
-void
+static void
 mpd_song_set_duration(struct mpd_song *song, unsigned duration)
 {
 	song->duration = duration;
@@ -262,7 +262,7 @@ mpd_song_get_duration(const struct mpd_song *song)
 	return song->duration;
 }
 
-void
+static void
 mpd_song_set_last_modified(struct mpd_song *song, time_t mtime)
 {
 	song->last_modified = mtime;
@@ -286,7 +286,7 @@ mpd_song_get_pos(const struct mpd_song *song)
 	return song->pos;
 }
 
-void
+static void
 mpd_song_set_id(struct mpd_song *song, unsigned id)
 {
 	song->id = id;

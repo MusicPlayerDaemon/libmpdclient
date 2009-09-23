@@ -222,13 +222,10 @@ global:
 	mpd_song_add_tag;
 	mpd_song_clear_tag;
 	mpd_song_get_tag;
-	mpd_song_set_duration;
 	mpd_song_get_duration;
-	mpd_song_set_last_modified;
 	mpd_song_get_last_modified;
 	mpd_song_set_pos;
 	mpd_song_get_pos;
-	mpd_song_set_id;
 	mpd_song_get_id;
 	mpd_song_begin;
 	mpd_song_feed;
