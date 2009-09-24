@@ -47,6 +47,20 @@
 
 #include <stdbool.h>
 
+/**
+ * This type is not yet used, it is reserved for a future protocol
+ * extension which will allow us to specify a comparison operator for
+ * constraints.
+ */
+enum mpd_operator {
+	/**
+	 * The default search operator.  If "exact" was passed as
+	 * "true", then it means "full string comparison"; ir false,
+	 * then it means "search for substring".
+	 */
+	MPD_OPERATOR_DEFAULT,
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -105,34 +119,41 @@ bool mpd_count_db_songs(struct mpd_connection *connection);
  * Add a constraint on the song's URI.
  *
  * @param connection a #mpd_connection
+ * @param operator reserved
  * @param value The value of the constaint
  * @return true on success, false on error
  */
 bool
 mpd_search_add_uri_constraint(struct mpd_connection *connection,
+			      enum mpd_operator operator,
 			      const char *value);
 
 /**
  * Add a constraint to a search limiting the value of a tag.
  *
  * @param connection a #mpd_connection
+ * @param operator reserved
  * @param type The tag type of the constraint
  * @param value The value of the constaint
  * @return true on success, false on error
  */
 bool
 mpd_search_add_tag_constraint(struct mpd_connection *connection,
-			      enum mpd_tag_type type, const char *value);
+			      enum mpd_operator operator,
+			      enum mpd_tag_type type,
+			      const char *value);
 
 /**
  * Add a constraint to a search, search for a value in any tag.
  *
  * @param connection a #mpd_connection
+ * @param operator reserved
  * @param value The value of the constaint
  * @return true on success, false on error
  */
 bool
 mpd_search_add_any_tag_constraint(struct mpd_connection *connection,
+				  enum mpd_operator operator,
 				  const char *value);
 
 /**
