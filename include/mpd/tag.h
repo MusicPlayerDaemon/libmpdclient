@@ -41,8 +41,6 @@ enum mpd_tag_type
 	 */
 	MPD_TAG_UNKNOWN = -1,
 
-	MPD_TAG_ANY,
-	MPD_TAG_FILE,
 	MPD_TAG_ARTIST,
 	MPD_TAG_ALBUM,
 	MPD_TAG_ALBUM_ARTIST,

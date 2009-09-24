@@ -171,8 +171,7 @@ mpd_search_commit(struct mpd_connection *connection);
  * #mpd_tag_type.
  *
  * @param connection the connection to MPD
- * @param type one of the "real" tag types; #MPD_TAG_UNKNOWN and
- * #MPD_TAG_ANY are not allowed, while #MPD_TAG_FILE is
+ * @param type the tag type you are looking for
  * @return a pair, or NULL on error or if there are no more matching
  * pairs in this response
  */

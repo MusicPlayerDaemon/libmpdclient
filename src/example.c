@@ -119,7 +119,7 @@ int main(int argc, char ** argv) {
 		mpd_response_next(conn);
 
 		while ((song = mpd_recv_song(conn)) != NULL) {
-			print_tag(song, MPD_TAG_FILE, "file");
+			printf("uri: %s\n", mpd_song_get_uri(song));
 			print_tag(song, MPD_TAG_ARTIST, "artist");
 			print_tag(song, MPD_TAG_ALBUM, "album");
 			print_tag(song, MPD_TAG_TITLE, "title");
@@ -172,7 +172,7 @@ int main(int argc, char ** argv) {
 
 			case MPD_ENTITY_TYPE_SONG:
 				song = mpd_entity_get_song(entity);
-				print_tag(song, MPD_TAG_FILE, "file");
+				printf("uri: %s\n", mpd_song_get_uri(song));
 				print_tag(song, MPD_TAG_ARTIST, "artist");
 				print_tag(song, MPD_TAG_ALBUM, "album");
 				print_tag(song, MPD_TAG_TITLE, "title");

@@ -87,8 +87,7 @@ mpd_song_get_uri(const struct mpd_song *song);
  * Queries a tag value.
  *
  * @param song the song object
- * @param type the tag type; MPD_TAG_ANY and MPD_TAG_COUNT are invalid
- * values
+ * @param type the tag type
  * @param idx pass 0 to get the first value for this tag type.  This
  * argument may be used to iterate all values, until this function
  * returns NULL
