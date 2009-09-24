@@ -175,16 +175,15 @@ mpd_sanitize_arg(const char * arg)
 	return ret;
 }
 
-bool
+static bool
 mpd_search_add_constraint(struct mpd_connection *connection,
-			  enum mpd_tag_type type, const char *name)
+			  const char *name, const char *value)
 {
-	size_t old_length;
-	const char *strtype;
+	size_t old_length, add_length;
 	char *arg, *request;
-	int len;
 
 	assert(name != NULL);
+	assert(value != NULL);
 
 	if (mpd_error_is_defined(&connection->error))
 		return false;
@@ -198,6 +197,43 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 
 	old_length = strlen(connection->request);
 
+	arg = mpd_sanitize_arg(value);
+	if (arg == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return false;
+	}
+
+	add_length = 1 + strlen(name) + 2 + strlen(arg) + 2;
+	request = realloc(connection->request, old_length + add_length);
+	if (request == NULL) {
+		free(arg);
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return false;
+	}
+
+	connection->request = request;
+	snprintf(connection->request + old_length, add_length,
+		 " %s \"%s\"", name, arg);
+
+	free(arg);
+	return true;
+}
+
+bool
+mpd_search_add_uri_constraint(struct mpd_connection *connection,
+			      const char *value)
+{
+	return mpd_search_add_constraint(connection, "file", value);
+}
+
+bool
+mpd_search_add_tag_constraint(struct mpd_connection *connection,
+			      enum mpd_tag_type type, const char *value)
+{
+	const char *strtype;
+
+	assert(value != NULL);
+
 	strtype = mpd_tag_name(type);
 	if (strtype == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_ARGUMENT);
@@ -206,26 +242,14 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 		return false;
 	}
 
-	arg = mpd_sanitize_arg(name);
-	if (arg == NULL) {
-		mpd_error_code(&connection->error, MPD_ERROR_OOM);
-		return false;
-	}
+	return mpd_search_add_constraint(connection, strtype, value);
+}
 
-	len = 1 + strlen(strtype) + 2 + strlen(arg) + 2;
-	request = realloc(connection->request, old_length + len);
-	if (request == NULL) {
-		free(arg);
-		mpd_error_code(&connection->error, MPD_ERROR_OOM);
-		return false;
-	}
-
-	connection->request = request;
-	snprintf(connection->request + old_length, len, " %s \"%s\"",
-		 strtype, arg);
-
-	free(arg);
-	return true;
+bool
+mpd_search_add_any_tag_constraint(struct mpd_connection *connection,
+				  const char *value)
+{
+	return mpd_search_add_constraint(connection, "any", value);
 }
 
 bool

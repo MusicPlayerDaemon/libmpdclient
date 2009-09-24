@@ -53,7 +53,7 @@ extern "C" {
 
 /**
  * Search for songs in the database.
- * Constraints may be specified with mpd_search_add_constraint().
+ * Constraints may be specified with mpd_search_add_tag_constraint().
  * Send the search command with mpd_search_commit(), and read the
  * response items with mpd_recv_song().
  *
@@ -66,7 +66,7 @@ mpd_search_db_songs(struct mpd_connection *connection, bool exact);
 
 /**
  * Search for songs in the queue.
- * Constraints may be specified with mpd_search_add_constraint().
+ * Constraints may be specified with mpd_search_add_tag_constraint().
  * Send the search command with mpd_search_commit(), and read the
  * response items with mpd_recv_song().
  *
@@ -79,7 +79,7 @@ mpd_search_queue_songs(struct mpd_connection *connection, bool exact);
 
 /**
  * Obtains a list of unique tag values from the database.
- * Constraints may be specified with mpd_search_add_constraint().
+ * Constraints may be specified with mpd_search_add_tag_constraint().
  * Send the search command with mpd_search_commit(), and read the
  * response items with mpd_recv_pair_tag().
  *
@@ -92,7 +92,7 @@ mpd_search_db_tags(struct mpd_connection *connection, enum mpd_tag_type type);
 
 /**
  * Gathers statistics on a set of songs in the database.
- * Constraints may be specified with mpd_search_add_constraint().
+ * Constraints may be specified with mpd_search_add_tag_constraint().
  * Send the command with mpd_search_commit(), and read the response
  * with mpd_recv_stats().
  *
@@ -102,7 +102,18 @@ mpd_search_db_tags(struct mpd_connection *connection, enum mpd_tag_type type);
 bool mpd_count_db_songs(struct mpd_connection *connection);
 
 /**
- * Add a constraint to a search.
+ * Add a constraint on the song's URI.
+ *
+ * @param connection a #mpd_connection
+ * @param value The value of the constaint
+ * @return true on success, false on error
+ */
+bool
+mpd_search_add_uri_constraint(struct mpd_connection *connection,
+			      const char *value);
+
+/**
+ * Add a constraint to a search limiting the value of a tag.
  *
  * @param connection a #mpd_connection
  * @param type The tag type of the constraint
@@ -110,8 +121,19 @@ bool mpd_count_db_songs(struct mpd_connection *connection);
  * @return true on success, false on error
  */
 bool
-mpd_search_add_constraint(struct mpd_connection *connection,
-			  enum mpd_tag_type type, const char *value);
+mpd_search_add_tag_constraint(struct mpd_connection *connection,
+			      enum mpd_tag_type type, const char *value);
+
+/**
+ * Add a constraint to a search, search for a value in any tag.
+ *
+ * @param connection a #mpd_connection
+ * @param value The value of the constaint
+ * @return true on success, false on error
+ */
+bool
+mpd_search_add_any_tag_constraint(struct mpd_connection *connection,
+				  const char *value);
 
 /**
  * Starts the real search with constraints added with
