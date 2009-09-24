@@ -2,7 +2,7 @@ AC_PREREQ(2.60)
 AC_INIT(MPD client library for C, 2.0~git, max@duempel.org, libmpdclient)
 AC_CONFIG_SRCDIR([src/connection.c])
 AC_CONFIG_AUX_DIR(build)
-AM_INIT_AUTOMAKE([foreign 1.9 dist-bzip2])
+AM_INIT_AUTOMAKE([foreign 1.10 dist-bzip2])
 AM_CONFIG_HEADER([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
