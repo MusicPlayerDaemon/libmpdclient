@@ -52,63 +52,73 @@ extern "C" {
 #endif
 
 /**
- * @param connection a #mpd_connection
- * @param exact if to match exact
+ * Search for songs in the database.
+ * Constraints may be specified with mpd_search_add_constraint().
+ * Send the search command with mpd_search_commit(), and read the
+ * response items with mpd_recv_song().
  *
- * Search for songs in the db given certain constraints
- * Use this method with mpd_search_add_constraint and mpd_search_commit
- * Use mpd_recv_entity to get results of this method
+ * @param connection the connection to MPD
+ * @param exact if to match exact
+ * @return true on success, false on error
  */
 bool
 mpd_search_db_songs(struct mpd_connection *connection, bool exact);
 
 /**
- * @param connection a #mpd_connection
- * @param exact if to match exact
+ * Search for songs in the queue.
+ * Constraints may be specified with mpd_search_add_constraint().
+ * Send the search command with mpd_search_commit(), and read the
+ * response items with mpd_recv_song().
  *
- * Search for songs in the queue given certain constraints.
- * Use this method with mpd_search_add_constraint and mpd_search_commit
- * Use mpd_recv_entity to get results of this method
+ * @param connection the connection to MPD
+ * @param exact if to match exact
+ * @return true on success, false on error
  */
 bool
 mpd_search_queue_songs(struct mpd_connection *connection, bool exact);
 
 /**
- * @param connection a #mpd_connection
- * @param type The type of the tags to search for
+ * Obtains a list of unique tag values from the database.
+ * Constraints may be specified with mpd_search_add_constraint().
+ * Send the search command with mpd_search_commit(), and read the
+ * response items with mpd_recv_pair_tag().
  *
- * Search for tags in the db given certain constraints
- * Use this method with mpd_search_add_constraint and mpd_search_commit
- * Use mpd_get_next_tag to get results of this method
+ * @param connection the connection to MPD
+ * @param type The type of the tags to search for
+ * @return true on success, false on error
  */
 bool
 mpd_search_db_tags(struct mpd_connection *connection, enum mpd_tag_type type);
 
 /**
- * @param connection a #mpd_connection
+ * Gathers statistics on a set of songs in the database.
+ * Constraints may be specified with mpd_search_add_constraint().
+ * Send the command with mpd_search_commit(), and read the response
+ * with mpd_recv_stats().
  *
- * Counts the number of songs and the total playtime given certain constraints
- * Use this method with mpd_search_add_constraint and mpd_search_commit
- * Use mpd_get_stats to get results of this method
+ * @param connection the connection to MPD
+ * @return true on success, false on error
  */
 bool mpd_count_db_songs(struct mpd_connection *connection);
 
 /**
+ * Add a constraint to a search.
+ *
  * @param connection a #mpd_connection
  * @param type The tag type of the constraint
  * @param value The value of the constaint
- *
- * Add a constraint to a search.
+ * @return true on success, false on error
  */
 bool
 mpd_search_add_constraint(struct mpd_connection *connection,
 			  enum mpd_tag_type type, const char *value);
 
 /**
- * @param connection a #mpd_connection
- *
  * Starts the real search with constraints added with
- * mpd_search_add_constraint.
+ * mpd_search_add_constraint().
+ *
+ * @param connection the connection to MPD
+ * @return true on success, false on error
  */
 bool
 mpd_search_commit(struct mpd_connection *connection);
