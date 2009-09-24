@@ -47,6 +47,8 @@ struct mpd_tag_value {
 };
 
 struct mpd_song {
+	const char *uri;
+
 	struct mpd_tag_value tags[MPD_TAG_COUNT];
 
 	/**
@@ -92,6 +94,12 @@ mpd_song_new(const char *uri)
 		/* out of memory */
 		return NULL;
 
+	song->uri = strdup(uri);
+	if (song->uri == NULL) {
+		free(song);
+		return NULL;
+	}
+
 	for (unsigned i = 0; i < MPD_TAG_COUNT; ++i)
 		song->tags[i].value = NULL;
 
@@ -99,13 +107,6 @@ mpd_song_new(const char *uri)
 	song->last_modified = 0;
 	song->pos = 0;
 	song->id = 0;
-
-	song->tags[MPD_TAG_FILE].next = NULL;
-	song->tags[MPD_TAG_FILE].value = strdup(uri);
-	if (song->tags[MPD_TAG_FILE].value == NULL) {
-		free(song);
-		return NULL;
-	}
 
 #ifndef NDEBUG
 	song->finished = false;
@@ -152,7 +153,7 @@ mpd_song_dup(const struct mpd_song *song)
 
 	assert(song != NULL);
 
-	ret = mpd_song_new(mpd_song_get_tag(song, MPD_TAG_FILE, 0));
+	ret = mpd_song_new(song->uri);
 	if (ret == NULL)
 		/* out of memory */
 		return NULL;
@@ -160,7 +161,7 @@ mpd_song_dup(const struct mpd_song *song)
 	for (unsigned i = 0; i < MPD_TAG_COUNT; ++i) {
 		const struct mpd_tag_value *src_tag = &song->tags[i];
 
-		if (i == MPD_TAG_FILE || src_tag->value == NULL)
+		if (src_tag->value == NULL)
 			continue;
 
 		do {
@@ -188,7 +189,7 @@ mpd_song_dup(const struct mpd_song *song)
 const char *
 mpd_song_get_uri(const struct mpd_song *song)
 {
-	return mpd_song_get_tag(song, MPD_TAG_FILE, 0);
+	return song->uri;
 }
 
 
