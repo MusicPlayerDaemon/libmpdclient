@@ -79,4 +79,13 @@ mpd_tag_name(enum mpd_tag_type type);
 enum mpd_tag_type
 mpd_tag_name_parse(const char *name);
 
+/**
+ * Same as mpd_tag_name_parse(), but ignores case.
+ *
+ * @return a #mpd_tag_type value, or MPD_TAG_UNKNOWN if the name was
+ * not recognized
+ */
+enum mpd_tag_type
+mpd_tag_name_iparse(const char *name);
+
 #endif

@@ -274,6 +274,7 @@ global:
 	/* mpd/tag.h */
 	mpd_tag_name;
 	mpd_tag_name_parse;
+	mpd_tag_name_iparse;
 
 local:
 	*;
