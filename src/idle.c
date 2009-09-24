@@ -156,7 +156,7 @@ mpd_send_idle_mask(struct mpd_connection *connection, enum mpd_idle mask)
 		return false;
 	}
 
-	return mpd_send_command(connection, buffer);
+	return mpd_send_command(connection, buffer, NULL);
 }
 
 bool
