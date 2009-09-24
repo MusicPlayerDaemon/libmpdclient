@@ -88,10 +88,10 @@ mpd_socket_global_init(struct mpd_error_info *error)
 static int do_connect_fail(int fd,
                            const struct sockaddr *serv_addr, int addrlen)
 {
-	int iMode = 1; /* 0 = blocking, else non-blocking */
+	u_long iMode = 1; /* 0 = blocking, else non-blocking */
 	if (connect(fd, serv_addr, addrlen) == SOCKET_ERROR)
 		return 1;
-	ioctlsocket(fd, FIONBIO, (u_long FAR*) &iMode);
+	ioctlsocket(fd, FIONBIO, &iMode);
 	return 0;
 }
 
