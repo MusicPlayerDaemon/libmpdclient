@@ -93,6 +93,35 @@ mpd_connection_sync_error(struct mpd_connection *connection)
 	}
 }
 
+/**
+ * Parses the host specification.  If not specified, it attempts to
+ * load it from the environment variable MPD_HOST.
+ */
+static const char *
+mpd_check_host(const char *host)
+{
+	if (host == NULL)
+		host = getenv("MPD_HOST");
+
+	return host;
+}
+
+/**
+ * Parses the port specification.  If not specified (0), it attempts
+ * to load it from the environment variable MPD_PORT.
+ */
+static unsigned
+mpd_check_port(unsigned port)
+{
+	if (port == 0) {
+		const char *env_port = getenv("MPD_PORT");
+		if (env_port != NULL)
+			port = atoi(env_port);
+	}
+
+	return port;
+}
+
 static int
 mpd_connect(const char *host, unsigned port, const struct timeval *timeout,
 	    struct mpd_error_info *error)
@@ -107,20 +136,11 @@ mpd_connect(const char *host, unsigned port, const struct timeval *timeout,
 	}
 #endif
 
-	if (host == NULL) {
-		host = getenv("MPD_HOST");
-		if (host == NULL)
-			host = DEFAULT_HOST;
-	}
+	if (host == NULL)
+		host = DEFAULT_HOST;
 
-	if (port == 0) {
-		const char *env_port = getenv("MPD_PORT");
-		if (env_port != NULL)
-			port = atoi(env_port);
-
-		if (port == 0)
-			port = DEFAULT_PORT;
-	}
+	if (port == 0)
+		port = DEFAULT_PORT;
 
 	return mpd_socket_connect(host, port, timeout, error);
 }
@@ -151,6 +171,9 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 		timeout_ms = 30000;
 
 	mpd_connection_set_timeout(connection, timeout_ms);
+
+	host = mpd_check_host(host);
+	port = mpd_check_port(port);
 
 	fd = mpd_connect(host, port, &connection->timeout, &connection->error);
 	if (fd < 0)
