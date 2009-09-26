@@ -36,6 +36,8 @@
 #ifndef MPD_SYNC_H
 #define MPD_SYNC_H
 
+#include <mpd/compiler.h>
+
 #include <stdbool.h>
 #include <stdarg.h>
 
@@ -52,6 +54,7 @@ mpd_sync_send_command_v(struct mpd_async *async, const struct timeval *tv,
 /**
  * Synchronous wrapper for mpd_async_send_command().
  */
+mpd_sentinel
 bool
 mpd_sync_send_command(struct mpd_async *async, const struct timeval *tv,
 		      const char *command, ...);
