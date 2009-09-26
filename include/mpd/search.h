@@ -125,7 +125,7 @@ bool mpd_count_db_songs(struct mpd_connection *connection);
  */
 bool
 mpd_search_add_uri_constraint(struct mpd_connection *connection,
-			      enum mpd_operator operator,
+			      enum mpd_operator oper,
 			      const char *value);
 
 /**
@@ -139,7 +139,7 @@ mpd_search_add_uri_constraint(struct mpd_connection *connection,
  */
 bool
 mpd_search_add_tag_constraint(struct mpd_connection *connection,
-			      enum mpd_operator operator,
+			      enum mpd_operator oper,
 			      enum mpd_tag_type type,
 			      const char *value);
 
@@ -153,7 +153,7 @@ mpd_search_add_tag_constraint(struct mpd_connection *connection,
  */
 bool
 mpd_search_add_any_tag_constraint(struct mpd_connection *connection,
-				  enum mpd_operator operator,
+				  enum mpd_operator oper,
 				  const char *value);
 
 /**

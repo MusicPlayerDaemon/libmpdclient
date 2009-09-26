@@ -177,7 +177,7 @@ mpd_sanitize_arg(const char * arg)
 
 static bool
 mpd_search_add_constraint(struct mpd_connection *connection,
-			  mpd_unused enum mpd_operator operator,
+			  mpd_unused enum mpd_operator oper,
 			  const char *name,
 			  const char *value)
 {
@@ -223,15 +223,15 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 
 bool
 mpd_search_add_uri_constraint(struct mpd_connection *connection,
-			      enum mpd_operator operator,
+			      enum mpd_operator oper,
 			      const char *value)
 {
-	return mpd_search_add_constraint(connection, operator, "file", value);
+	return mpd_search_add_constraint(connection, oper, "file", value);
 }
 
 bool
 mpd_search_add_tag_constraint(struct mpd_connection *connection,
-			      enum mpd_operator operator,
+			      enum mpd_operator oper,
 			      enum mpd_tag_type type, const char *value)
 {
 	const char *strtype;
@@ -246,15 +246,15 @@ mpd_search_add_tag_constraint(struct mpd_connection *connection,
 		return false;
 	}
 
-	return mpd_search_add_constraint(connection, operator, strtype, value);
+	return mpd_search_add_constraint(connection, oper, strtype, value);
 }
 
 bool
 mpd_search_add_any_tag_constraint(struct mpd_connection *connection,
-				  enum mpd_operator operator,
+				  enum mpd_operator oper,
 				  const char *value)
 {
-	return mpd_search_add_constraint(connection, operator, "any", value);
+	return mpd_search_add_constraint(connection, oper, "any", value);
 }
 
 bool
