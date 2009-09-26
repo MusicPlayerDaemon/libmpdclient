@@ -119,7 +119,7 @@ bool mpd_count_db_songs(struct mpd_connection *connection);
  * Add a constraint on the song's URI.
  *
  * @param connection a #mpd_connection
- * @param operator reserved
+ * @param oper reserved, pass #MPD_OPERATOR_DEFAULT
  * @param value The value of the constaint
  * @return true on success, false on error
  */
@@ -132,7 +132,7 @@ mpd_search_add_uri_constraint(struct mpd_connection *connection,
  * Add a constraint to a search limiting the value of a tag.
  *
  * @param connection a #mpd_connection
- * @param operator reserved
+ * @param oper reserved, pass #MPD_OPERATOR_DEFAULT
  * @param type The tag type of the constraint
  * @param value The value of the constaint
  * @return true on success, false on error
@@ -147,7 +147,7 @@ mpd_search_add_tag_constraint(struct mpd_connection *connection,
  * Add a constraint to a search, search for a value in any tag.
  *
  * @param connection a #mpd_connection
- * @param operator reserved
+ * @param oper reserved, pass #MPD_OPERATOR_DEFAULT
  * @param value The value of the constaint
  * @return true on success, false on error
  */
