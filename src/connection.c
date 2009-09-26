@@ -33,6 +33,7 @@
 #include <mpd/connection.h>
 #include <mpd/async.h>
 #include <mpd/parser.h>
+#include <mpd/password.h>
 #include "resolver.h"
 #include "sync.h"
 #include "socket.h"
@@ -94,14 +95,56 @@ mpd_connection_sync_error(struct mpd_connection *connection)
 }
 
 /**
+ * Parses the password from the host specification in the form
+ * "password@hostname".
+ *
+ * @param host_p a pointer to the "host" variable, which may be
+ * modified by this function
+ * @return an allocated password string, or NULL if there was no
+ * password
+ */
+static const char *
+mpd_parse_host_password(const char *host, char **password_r)
+{
+	const char *at;
+	char *password;
+
+	assert(password_r != NULL);
+	assert(*password_r == NULL);
+
+	if (host == NULL)
+		return host;
+
+	at = strchr(host, '@');
+	if (at == NULL)
+		return host;
+
+	password = malloc(at - host + 1);
+	if (password != NULL) {
+		/* silently ignoring out-of-memory */
+		memcpy(password, host, at - host);
+		password[at - host] = 0;
+		*password_r = password;
+	}
+
+	return at + 1;
+}
+
+/**
  * Parses the host specification.  If not specified, it attempts to
  * load it from the environment variable MPD_HOST.
  */
 static const char *
-mpd_check_host(const char *host)
+mpd_check_host(const char *host, char **password_r)
 {
+	assert(password_r != NULL);
+	assert(*password_r == NULL);
+
 	if (host == NULL)
 		host = getenv("MPD_HOST");
+
+	if (host != NULL)
+		host = mpd_parse_host_password(host, password_r);
 
 	return host;
 }
@@ -148,9 +191,12 @@ mpd_connect(const char *host, unsigned port, const struct timeval *timeout,
 struct mpd_connection *
 mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 {
-	const char *line;
 	struct mpd_connection *connection = malloc(sizeof(*connection));
+	bool success;
 	int fd;
+	const char *line;
+	char *password = NULL;
+
 
 	if (connection == NULL)
 		return NULL;
@@ -172,15 +218,18 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 
 	mpd_connection_set_timeout(connection, timeout_ms);
 
-	host = mpd_check_host(host);
+	host = mpd_check_host(host, &password);
 	port = mpd_check_port(port);
 
 	fd = mpd_connect(host, port, &connection->timeout, &connection->error);
-	if (fd < 0)
+	if (fd < 0) {
+		free(password);
 		return connection;
+	}
 
 	connection->async = mpd_async_new(fd);
 	if (connection->async == NULL) {
+		free(password);
 		mpd_socket_close(fd);
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
 		return connection;
@@ -188,17 +237,25 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 
 	connection->parser = mpd_parser_new();
 	if (connection->parser == NULL) {
+		free(password);
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
 		return connection;
 	}
 
 	line = mpd_sync_recv_line(connection->async, &connection->timeout);
 	if (line == NULL) {
+		free(password);
 		mpd_connection_sync_error(connection);
 		return connection;
 	}
 
-	mpd_parse_welcome(connection, line);
+	success = mpd_parse_welcome(connection, line);
+
+	if (password != NULL) {
+		if (success)
+			mpd_run_password(connection, password);
+		free(password);
+	}
 
 	return connection;
 }
