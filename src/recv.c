@@ -93,6 +93,7 @@ mpd_recv_pair(struct mpd_connection *connection)
 		mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);
 		mpd_error_printf(&connection->error,
 				 "Failed to parse MPD response");
+		connection->receiving = false;
 		return NULL;
 
 	case MPD_PARSER_SUCCESS:
