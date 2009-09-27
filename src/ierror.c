@@ -94,7 +94,7 @@ mpd_error_errno(struct mpd_error_info *error)
 {
 	assert(error != NULL);
 
-	mpd_error_code(error, MPD_ERROR_SYSTEM);
+	mpd_error_system(error, errno);
 	mpd_error_message(error, strerror(errno));
 }
 

@@ -114,6 +114,15 @@ mpd_async_get_error_message(const struct mpd_async *async)
 	return async->error.message;
 }
 
+int
+mpd_async_get_system_error(const struct mpd_async *async)
+{
+	assert(async != NULL);
+	assert(async->error.code == MPD_ERROR_SYSTEM);
+
+	return async->error.system;
+}
+
 bool
 mpd_async_copy_error(const struct mpd_async *async,
 		     struct mpd_error_info *dest)

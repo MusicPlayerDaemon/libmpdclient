@@ -61,6 +61,11 @@ struct mpd_error_info {
 	int at;
 
 	/**
+	 * The operating system's error code (i.e. errno).
+	 */
+	int system;
+
+	/**
 	 * Human readable error message; may be NULL if not available.
 	 * This pointer is allocated on the heap, and must be freed by
 	 * calling mpd_error_clear() or mpd_error_deinit().
@@ -139,6 +144,16 @@ mpd_error_server(struct mpd_error_info *error,
 	mpd_error_code(error, MPD_ERROR_SERVER);
 	error->server = server;
 	error->at = at;
+}
+
+/**
+ * Sets an system error code.
+ */
+static inline void
+mpd_error_system(struct mpd_error_info *error, int system)
+{
+	mpd_error_code(error, MPD_ERROR_SYSTEM);
+	error->system = system;
 }
 
 /**

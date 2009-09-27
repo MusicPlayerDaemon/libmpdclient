@@ -174,6 +174,17 @@ enum mpd_server_error
 mpd_connection_get_server_error(const struct mpd_connection *connection);
 
 /**
+ * Returns the error code from the operating system; on most operating
+ * systems, this is the errno value.  Calling this function is only
+ * valid if mpd_connection_get_error() returned #MPD_ERROR_SYSTEM.
+ *
+ * May be 0 if the operating system did not specify an error code.
+ */
+mpd_pure
+int
+mpd_connection_get_system_error(const struct mpd_connection *connection);
+
+/**
  * Attempts to recover from an error condition.  This function must be
  * called after a non-fatal error before you can continue using this
  * object.

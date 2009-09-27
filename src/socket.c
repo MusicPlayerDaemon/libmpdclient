@@ -72,7 +72,7 @@ mpd_socket_global_init(struct mpd_error_info *error)
 	if ((WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0 ||
 			LOBYTE(wsaData.wVersion) != 2 ||
 			HIBYTE(wsaData.wVersion) != 2 ) {
-		mpd_error_code(error, MPD_ERROR_SYSTEM);
+		mpd_error_system(error, 0);
 		mpd_error_message(error,
 				  "Could not find usable WinSock DLL");
 		return false;

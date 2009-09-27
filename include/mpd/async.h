@@ -117,6 +117,17 @@ const char *
 mpd_async_get_error_message(const struct mpd_async *async);
 
 /**
+ * Returns the error code from the operating system; on most operating
+ * systems, this is the errno value.  Calling this function is only
+ * valid if mpd_async_get_error() returned #MPD_ERROR_SYSTEM.
+ *
+ * May be 0 if the operating system did not specify an error code.
+ */
+mpd_pure
+int
+mpd_async_get_system_error(const struct mpd_async *async);
+
+/**
  * Returns the file descriptor which should be polled by the caller.
  * Do not use the file descriptor for anything except polling!  The
  * file descriptor never changes during the lifetime of this
