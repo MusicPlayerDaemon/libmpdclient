@@ -180,20 +180,14 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 		fd = socket(address->family, SOCK_STREAM, address->protocol);
 		if (fd < 0) {
 			mpd_error_clear(error);
-			mpd_error_code(error, MPD_ERROR_SYSTEM);
-			mpd_error_printf(error,
-					 "problems creating socket: %s",
-					 strerror(errno));
+			mpd_error_errno(error);
 			continue;
 		}
 
 		ret = do_connect_fail(fd, address->addr, address->addrlen);
 		if (ret != 0) {
 			mpd_error_clear(error);
-			mpd_error_code(error, MPD_ERROR_SYSTEM);
-			mpd_error_printf(error,
-					 "problems connecting to \"%s\" on port %i: %s",
-					 host, port, strerror(errno));
+			mpd_error_errno(error);
 
 			mpd_socket_close(fd);
 			continue;
@@ -214,10 +208,7 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 					 host, port);
 		} else if (ret < 0) {
 			mpd_error_clear(error);
-			mpd_error_code(error, MPD_ERROR_SYSTEM);
-			mpd_error_printf(error,
-					 "problems connecting to \"%s\" on port %i: %s",
-					 host, port, strerror(-ret));
+			mpd_error_errno(error);
 		}
 
 		mpd_socket_close(fd);
