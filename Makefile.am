@@ -109,7 +109,7 @@ sparse-check:
 # Documentation
 #
 
-doc_DATA = README COPYING
+doc_DATA = README COPYING NEWS
 
 if DOXYGEN
 
