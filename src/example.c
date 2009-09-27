@@ -142,8 +142,7 @@ int main(int argc, char ** argv) {
 			return -1;
 		}
 
-		mpd_response_finish(conn);
-		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
+		if (!mpd_response_finish(conn)) {
 			fprintf(stderr,"%s\n", mpd_connection_get_error_message(conn));
 			mpd_connection_free(conn);
 			return -1;
@@ -154,8 +153,7 @@ int main(int argc, char ** argv) {
 	else if(argc==3 && strcmp(argv[1],"lsinfo")==0) {
 		struct mpd_entity * entity;
 
-		mpd_send_list_meta(conn,argv[2]);
-		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
+		if (!mpd_send_list_meta(conn,argv[2])) {
 			fprintf(stderr,"%s\n", mpd_connection_get_error_message(conn));
 			mpd_connection_free(conn);
 			return -1;
@@ -201,8 +199,7 @@ int main(int argc, char ** argv) {
 			return -1;
 		}
 
-		mpd_response_finish(conn);
-		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
+		if (!mpd_response_finish(conn)) {
 			fprintf(stderr, "%s\n", mpd_connection_get_error_message(conn));
 			mpd_connection_free(conn);
 			return -1;
@@ -211,9 +208,8 @@ int main(int argc, char ** argv) {
 	else if(argc==2 && strcmp(argv[1],"artists")==0) {
 		struct mpd_pair *pair;
 	
-		mpd_search_db_tags(conn, MPD_TAG_ARTIST);
-		mpd_search_commit(conn);
-		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
+		if (!mpd_search_db_tags(conn, MPD_TAG_ARTIST) ||
+		    !mpd_search_commit(conn)) {
 			fprintf(stderr,"%s\n", mpd_connection_get_error_message(conn));
 			mpd_connection_free(conn);
 			return -1;
@@ -231,8 +227,7 @@ int main(int argc, char ** argv) {
 			return -1;
 		}
 
-		mpd_response_finish(conn);
-		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
+		if (!mpd_response_finish(conn)) {
 			fprintf(stderr,"%s\n", mpd_connection_get_error_message(conn));
 			mpd_connection_free(conn);
 			return -1;

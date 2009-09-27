@@ -82,8 +82,12 @@ static int
 test_new_connection(struct mpd_connection **conn)
 {
 	*conn = mpd_connection_new(NULL, 0, 30000);
+	if (*conn == NULL) {
+		LOG_ERROR("%s", "Out of memory");
+		return -1;
+	}
 
-	if (!*conn || mpd_connection_get_error(*conn) != MPD_ERROR_SUCCESS) {
+	if (mpd_connection_get_error(*conn) != MPD_ERROR_SUCCESS) {
 		LOG_ERROR("%s", mpd_connection_get_error_message(*conn));
 		mpd_connection_free(*conn);
 		*conn = NULL;
@@ -208,8 +212,6 @@ test_list_status_currentsong(struct mpd_connection *conn)
 	const struct mpd_song *song;
 	struct mpd_entity *entity;
 
-	CHECK_CONNECTION(conn);
-
 	mpd_command_list_begin(conn, true);
 	mpd_send_status(conn);
 	mpd_send_current_song(conn);
@@ -228,8 +230,6 @@ test_list_status_currentsong(struct mpd_connection *conn)
 
 	print_status(status);
 	mpd_status_free(status);
-
-	CHECK_CONNECTION(conn);
 
 	mpd_response_next(conn);
 
