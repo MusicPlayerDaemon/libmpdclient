@@ -154,4 +154,5 @@ pkgconfig_DATA = libmpdclient.pc
 EXTRA_DIST = \
 	libmpdclient.ld \
 	libmpdclient.pc.in \
+	autogen.sh \
 	$(doc_DATA)
