@@ -97,8 +97,9 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms);
 
 /**
  * Creates a #mpd_connection object based on an existing asynchronous
- * MPD connection.  You may continue to use the #mpd_async object.
- * Note that mpd_connection_free() also frees your #mpd_async object!
+ * MPD connection.  You should not continue to use the #mpd_async
+ * object.  Note that mpd_connection_free() also frees your #mpd_async
+ * object!
  *
  * This function does not block at all, which is why you have to pass
  * the welcome message to it.
@@ -142,6 +143,19 @@ void mpd_connection_set_timeout(struct mpd_connection *connection,
 mpd_pure
 int
 mpd_connection_get_fd(const struct mpd_connection *connection);
+
+/**
+ * Returns the underlying #mpd_async object.  This can be used to send
+ * commands asynchronously.  During an asynchronous command, you must
+ * not use synchronous #mpd_connection functions until the
+ * asynchronous response has been finished.
+ *
+ * If an error occurs while using #mpd_async, you must close the
+ * #mpd_connection.
+ */
+mpd_pure
+struct mpd_async *
+mpd_connection_get_async(struct mpd_connection *connection);
 
 /**
  * Returns the libmpdclient error code.  MPD_ERROR_SUCCESS means no

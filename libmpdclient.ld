@@ -25,6 +25,7 @@ global:
 	mpd_connection_free;
 	mpd_connection_set_timeout;
 	mpd_connection_get_fd;
+	mpd_connection_get_async;
 	mpd_connection_get_error;
 	mpd_connection_get_error_message;
 	mpd_connection_get_server_error;

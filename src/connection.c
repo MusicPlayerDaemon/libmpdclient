@@ -328,6 +328,12 @@ mpd_connection_get_fd(const struct mpd_connection *connection)
 	return mpd_async_get_fd(connection->async);
 }
 
+struct mpd_async *
+mpd_connection_get_async(struct mpd_connection *connection)
+{
+	return connection->async;
+}
+
 const unsigned *
 mpd_connection_get_server_version(const struct mpd_connection *connection)
 {
