@@ -170,7 +170,7 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 	resolver = resolver_new(host, port);
 	if (resolver == NULL) {
 		mpd_error_code(error, MPD_ERROR_RESOLVER);
-		mpd_error_printf(error, "host \"%s\" not found", host);
+		mpd_error_message(error, "Failed to resolve host name");
 		return -1;
 	}
 
@@ -203,9 +203,7 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 		if (ret == 0) {
 			mpd_error_clear(error);
 			mpd_error_code(error, MPD_ERROR_TIMEOUT);
-			mpd_error_printf(error,
-					 "timeout in attempting to get a response from \"%s\" on port %i",
-					 host, port);
+			mpd_error_message(error, "Timeout while connecting");
 		} else if (ret < 0) {
 			mpd_error_clear(error);
 			mpd_error_errno(error);

@@ -91,8 +91,8 @@ mpd_recv_pair(struct mpd_connection *connection)
 	switch (result) {
 	case MPD_PARSER_MALFORMED:
 		mpd_error_code(&connection->error, MPD_ERROR_MALFORMED);
-		mpd_error_printf(&connection->error,
-				 "Failed to parse MPD response");
+		mpd_error_message(&connection->error,
+				  "Failed to parse MPD response");
 		connection->receiving = false;
 		return NULL;
 
