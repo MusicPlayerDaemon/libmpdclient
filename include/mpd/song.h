@@ -76,8 +76,9 @@ struct mpd_song *
 mpd_song_dup(const struct mpd_song *song);
 
 /**
- * Returns the URI of the song.  It always returns a value, because a
- * song cannot exist without an URI.
+ * Returns the URI of the song.  This is either a path relative to the
+ * MPD music directory (without leading slash), or an URL with a
+ * scheme, e.g. a HTTP URL for a radio stream.
  */
 mpd_pure
 const char *
