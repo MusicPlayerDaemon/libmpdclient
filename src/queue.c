@@ -31,6 +31,7 @@
 #include <mpd/recv.h>
 #include <mpd/pair.h>
 #include <mpd/response.h>
+#include <mpd/song.h>
 #include "internal.h"
 #include "isend.h"
 #include "run.h"
@@ -51,10 +52,48 @@ mpd_send_get_queue_song_pos(struct mpd_connection *connection, unsigned pos)
 	return mpd_send_int_command(connection, "playlistinfo", pos);
 }
 
+struct mpd_song *
+mpd_run_get_queue_song_pos(struct mpd_connection *connection, unsigned pos)
+{
+	struct mpd_song *song;
+
+	if (!mpd_run_check(connection) ||
+	    !mpd_send_get_queue_song_pos(connection, pos))
+		return NULL;
+
+	song = mpd_recv_song(connection);
+	if (!mpd_response_finish(connection) && song != NULL) {
+		mpd_song_free(song);
+		return NULL;
+	}
+
+	return song;
+
+}
+
 bool
 mpd_send_get_queue_song_id(struct mpd_connection *connection, unsigned id)
 {
 	return mpd_send_int_command(connection, "playlistid", id);
+}
+
+struct mpd_song *
+mpd_run_get_queue_song_id(struct mpd_connection *connection, unsigned id)
+{
+	struct mpd_song *song;
+
+	if (!mpd_run_check(connection) ||
+	    !mpd_send_get_queue_song_id(connection, id))
+		return NULL;
+
+	song = mpd_recv_song(connection);
+	if (!mpd_response_finish(connection) && song != NULL) {
+		mpd_song_free(song);
+		return NULL;
+	}
+
+	return song;
+
 }
 
 bool

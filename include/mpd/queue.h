@@ -37,6 +37,8 @@
 #ifndef MPD_QUEUE_H
 #define MPD_QUEUE_H
 
+#include <mpd/compiler.h>
+
 #include <stdbool.h>
 
 struct mpd_connection;
@@ -63,6 +65,17 @@ bool
 mpd_send_get_queue_song_pos(struct mpd_connection *connection, unsigned pos);
 
 /**
+ * Shortcut for mpd_send_get_queue_song_pos() and mpd_recv_song().
+ *
+ * @param connection the connection to MPD
+ * @param pos the position of the requested song
+ * @return the song at the specified position, or NULL on error
+ */
+mpd_malloc
+struct mpd_song *
+mpd_run_get_queue_song_pos(struct mpd_connection *connection, unsigned pos);
+
+/**
  * Requests information (including tags) about one song in the
  * playlist (command "playlistid").
  *
@@ -71,6 +84,17 @@ mpd_send_get_queue_song_pos(struct mpd_connection *connection, unsigned pos);
  */
 bool
 mpd_send_get_queue_song_id(struct mpd_connection *connection, unsigned id);
+
+/**
+ * Shortcut for mpd_send_get_queue_song_id() and mpd_recv_song().
+ *
+ * @param connection the connection to MPD
+ * @param id the id of the requested song
+ * @return the song at the specified id, or NULL on error
+ */
+mpd_malloc
+struct mpd_song *
+mpd_run_get_queue_song_id(struct mpd_connection *connection, unsigned id);
 
 /**
  * Request the queue changes from MPD since the specified version,
