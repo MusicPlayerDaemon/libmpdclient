@@ -47,7 +47,7 @@ struct mpd_tag_value {
 };
 
 struct mpd_song {
-	const char *uri;
+	char *uri;
 
 	struct mpd_tag_value tags[MPD_TAG_COUNT];
 
@@ -117,6 +117,8 @@ mpd_song_new(const char *uri)
 
 void mpd_song_free(struct mpd_song *song) {
 	assert(song != NULL);
+
+	free(song->uri);
 
 	for (unsigned i = 0; i < MPD_TAG_COUNT; ++i) {
 		struct mpd_tag_value *tag = &song->tags[i], *next;
