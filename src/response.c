@@ -73,6 +73,9 @@ mpd_response_next(struct mpd_connection *connection)
 {
 	struct mpd_pair *pair;
 
+	if (mpd_error_is_defined(&connection->error))
+		return false;
+
 	if (!connection->receiving) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
 		mpd_error_message(&connection->error,
