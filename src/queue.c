@@ -280,6 +280,22 @@ mpd_run_move_id(struct mpd_connection *connection, unsigned from, unsigned to)
 }
 
 bool
+mpd_send_move_range(struct mpd_connection *connection,
+		    unsigned start, unsigned end, unsigned to)
+{
+	return mpd_send_range_u_command(connection, "move", start, end, to);
+}
+
+bool
+mpd_run_move_range(struct mpd_connection *connection,
+		   unsigned start, unsigned end, unsigned to)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_move_range(connection, start, end, to) &&
+		mpd_response_finish(connection);
+}
+
+bool
 mpd_send_swap(struct mpd_connection *connection, unsigned pos1, unsigned pos2)
 {
 	return mpd_send_int2_command(connection, "swap", pos1, pos2);

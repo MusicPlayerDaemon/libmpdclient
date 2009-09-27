@@ -54,6 +54,11 @@ mpd_send_range_command(struct mpd_connection *connection, const char *command,
 		       unsigned arg1, unsigned arg2);
 
 bool
+mpd_send_range_u_command(struct mpd_connection *connection,
+			 const char *command,
+			 unsigned start, unsigned end, unsigned arg2);
+
+bool
 mpd_send_ll_command(struct mpd_connection *connection, const char *command,
 		    long long arg);
 

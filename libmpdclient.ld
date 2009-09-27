@@ -194,6 +194,8 @@ global:
 	mpd_run_move;
 	mpd_send_move_id;
 	mpd_run_move_id;
+	mpd_send_move_range;
+	mpd_run_move_range;
 	mpd_send_swap;
 	mpd_run_swap;
 	mpd_send_swap_id;

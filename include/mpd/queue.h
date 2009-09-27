@@ -287,6 +287,32 @@ bool
 mpd_run_move_id(struct mpd_connection *connection, unsigned from, unsigned to);
 
 /**
+ * Moves a range of songs within the queue.
+ *
+ * @param connection the connection to MPD
+ * @param start the start position of the range (including)
+ * @param end the end position of the range (excluding)
+ * @param to the new position of the song range
+ * @return true on success, false on error
+ */
+bool
+mpd_send_move_range(struct mpd_connection *connection,
+		    unsigned start, unsigned end, unsigned to);
+
+/**
+ * Shortcut for mpd_send_move_id() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param start the start position of the range (including)
+ * @param end the end position of the range (excluding)
+ * @param to the new position of the song range
+ * @return true on success, false on error
+ */
+bool
+mpd_run_move_range(struct mpd_connection *connection,
+		    unsigned start, unsigned end, unsigned to);
+
+/**
  * Swap the position of two songs in the queue.
  *
  * @param connection the connection to MPD
