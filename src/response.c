@@ -100,6 +100,8 @@ mpd_response_next(struct mpd_connection *connection)
 		pair = mpd_recv_pair(connection);
 		if (pair != NULL)
 			mpd_return_pair(connection, pair);
+		else if (mpd_error_is_defined(&connection->error))
+			return false;
 	}
 
 	connection->discrete_finished = false;
