@@ -46,7 +46,7 @@ struct mpd_connection {
 	unsigned version[3];
 
 	/**
-	 * The last error which occured.  This attribute must be
+	 * The last error which occurred.  This attribute must be
 	 * cleared with mpd_clear_error() before another command may
 	 * be executed.
 	 */

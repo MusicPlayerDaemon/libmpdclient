@@ -102,7 +102,7 @@ mpd_error_clear(struct mpd_error_info *error)
 }
 
 /**
- * Returns true if an error has occured.
+ * Returns true if an error has occurred.
  */
 static inline bool
 mpd_error_is_defined(const struct mpd_error_info *error)

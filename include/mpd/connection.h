@@ -159,7 +159,7 @@ mpd_connection_get_async(struct mpd_connection *connection);
 
 /**
  * Returns the libmpdclient error code.  MPD_ERROR_SUCCESS means no
- * error occured.
+ * error occurred.
  */
 mpd_pure
 enum mpd_error
@@ -167,7 +167,7 @@ mpd_connection_get_error(const struct mpd_connection *connection);
 
 /**
  * Returns the human-readable (English) libmpdclient error message.
- * Calling this function is only valid if an error really occured.
+ * Calling this function is only valid if an error really occurred.
  * Check with mpd_get_error().
  *
  * For #MPD_ERROR_SERVER, the error message is encoded in UTF-8.

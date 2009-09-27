@@ -94,7 +94,7 @@ resolver_new(const char *host, unsigned port)
 		resolver->current.addr = (const struct sockaddr *)&resolver->saun;
 		resolver->type = TYPE_ONE;
 #else /* WIN32 */
-		/* there are no unix domain sockets on Windows */
+		/* there are no UNIX domain sockets on Windows */
 		free(resolver);
 		return NULL;
 #endif /* WIN32 */

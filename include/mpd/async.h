@@ -94,8 +94,8 @@ void
 mpd_async_free(struct mpd_async *async);
 
 /**
- * After an error has occured, this function returns the error code.
- * If no error has occured, it returns #MPD_ERROR_SUCCESS.
+ * After an error has occurred, this function returns the error code.
+ * If no error has occurred, it returns #MPD_ERROR_SUCCESS.
  */
 mpd_pure
 enum mpd_error

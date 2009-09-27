@@ -115,7 +115,7 @@ mpd_recv_idle(struct mpd_connection *connection)
 		mpd_return_pair(connection, pair);
 	}
 
-	/* reenable timeout */
+	/* re-enable timeout */
 	connection->timeout = old_timeout;
 
 	return flags;

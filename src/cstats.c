@@ -70,7 +70,7 @@ mpd_recv_stats(struct mpd_connection *connection)
 	}
 
 	if (mpd_error_is_defined(&connection->error)) {
-		/* an error has occured; roll back */
+		/* an error has occurred; roll back */
 		mpd_stats_free(stats);
 		return NULL;
 	}

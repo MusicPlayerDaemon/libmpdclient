@@ -55,7 +55,7 @@
 enum mpd_operator {
 	/**
 	 * The default search operator.  If "exact" was passed as
-	 * "true", then it means "full string comparison"; ir false,
+	 * "true", then it means "full string comparison"; if false,
 	 * then it means "search for substring".
 	 */
 	MPD_OPERATOR_DEFAULT,
@@ -120,7 +120,7 @@ bool mpd_count_db_songs(struct mpd_connection *connection);
  *
  * @param connection a #mpd_connection
  * @param oper reserved, pass #MPD_OPERATOR_DEFAULT
- * @param value The value of the constaint
+ * @param value The value of the constraint
  * @return true on success, false on error
  */
 bool
@@ -134,7 +134,7 @@ mpd_search_add_uri_constraint(struct mpd_connection *connection,
  * @param connection a #mpd_connection
  * @param oper reserved, pass #MPD_OPERATOR_DEFAULT
  * @param type The tag type of the constraint
- * @param value The value of the constaint
+ * @param value The value of the constraint
  * @return true on success, false on error
  */
 bool
@@ -148,7 +148,7 @@ mpd_search_add_tag_constraint(struct mpd_connection *connection,
  *
  * @param connection a #mpd_connection
  * @param oper reserved, pass #MPD_OPERATOR_DEFAULT
- * @param value The value of the constaint
+ * @param value The value of the constraint
  * @return true on success, false on error
  */
 bool

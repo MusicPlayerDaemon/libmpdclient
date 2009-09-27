@@ -91,7 +91,7 @@ const char *
 mpd_idle_name(enum mpd_idle idle);
 
 /**
- * Parses the name of an idle eveent.
+ * Parses the name of an idle event.
  *
  * @param name an idle event name
  * @return the id, or 0 if that event is not known
@@ -102,7 +102,7 @@ mpd_idle_name_parse(const char *name);
 
 /**
  * Enters "idle" mode: MPD will stall the response until an event has
- * occured.  Call mpd_send_noidle() to abort the idle mode, or
+ * occurred.  Call mpd_send_noidle() to abort the idle mode, or
  * mpd_recv_idle() to read the event mask (or synchronously wait for
  * events).
  */
@@ -121,7 +121,7 @@ mpd_send_idle_mask(struct mpd_connection *connection, enum mpd_idle mask);
 
 /**
  * Tells MPD to leave the "idle" mode.  MPD will then respond with a
- * list of events which have occured (which may be empty).  Call
+ * list of events which have occurred (which may be empty).  Call
  * mpd_recv_idle() after that.
  */
 bool
@@ -142,7 +142,7 @@ mpd_idle_parse_pair(const struct mpd_pair *pair);
  * bit mask.
  *
  * During this function, the configured timeout (see
- * mpd_connection_set_timeout()) is disabled.  This function blcoks
+ * mpd_connection_set_timeout()) is disabled.  This function blocks
  * forever, until either MPD sends a response, or an error occurs.
  */
 enum mpd_idle
