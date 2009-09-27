@@ -55,6 +55,18 @@ bool
 mpd_send_list_queue_meta(struct mpd_connection *connection);
 
 /**
+ * Like mpd_send_list_queue_meta(), but specifies a (position) range.
+ *
+ * @param connection the connection to MPD
+ * @param start the start position of the range (including)
+ * @param end the end position of the range (excluding)
+ * @return true on success, false on error
+ */
+bool
+mpd_send_list_queue_range_meta(struct mpd_connection *connection,
+			       unsigned start, unsigned end);
+
+/**
  * Requests information (including tags) about one song in the
  * playlist (command "playlistid").
  *

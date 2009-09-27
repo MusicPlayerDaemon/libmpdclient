@@ -170,6 +170,7 @@ global:
 
 	/* mpd/queue.h */
 	mpd_send_list_queue_meta;
+	mpd_send_list_queue_range_meta;
 	mpd_send_get_queue_song_pos;
 	mpd_run_get_queue_song_pos;
 	mpd_send_get_queue_song_id;

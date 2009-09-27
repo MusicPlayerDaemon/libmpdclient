@@ -47,6 +47,13 @@ mpd_send_list_queue_meta(struct mpd_connection *connection)
 }
 
 bool
+mpd_send_list_queue_range_meta(struct mpd_connection *connection,
+			       unsigned start, unsigned end)
+{
+	return mpd_send_range_command(connection, "playlistinfo", start, end);
+}
+
+bool
 mpd_send_get_queue_song_pos(struct mpd_connection *connection, unsigned pos)
 {
 	return mpd_send_int_command(connection, "playlistinfo", pos);
