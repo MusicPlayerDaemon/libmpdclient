@@ -111,7 +111,8 @@ mpd_error_copy(struct mpd_error_info *dest, const struct mpd_error_info *src)
 	if (src->code == MPD_ERROR_SERVER) {
 		dest->server = src->server;
 		dest->at = src->at;
-	}
+	} else if (src->code == MPD_ERROR_SYSTEM)
+		dest->system = src->system;
 
 	dest->message = src->message != NULL ? strdup(src->message) : NULL;
 	return false;
