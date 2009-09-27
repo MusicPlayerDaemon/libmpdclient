@@ -40,14 +40,7 @@ mpd_connection_get_error(const struct mpd_connection *connection)
 const char *
 mpd_connection_get_error_message(const struct mpd_connection *connection)
 {
-	assert(connection->error.code != MPD_ERROR_SUCCESS);
-	assert(connection->error.message != NULL ||
-	       connection->error.code == MPD_ERROR_OOM);
-
-	if (connection->error.message == NULL)
-		return "Out of memory";
-
-	return connection->error.message;
+	return mpd_error_get_message(&connection->error);
 }
 
 enum mpd_server_error

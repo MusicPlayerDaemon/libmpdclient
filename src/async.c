@@ -109,9 +109,8 @@ const char *
 mpd_async_get_error_message(const struct mpd_async *async)
 {
 	assert(async != NULL);
-	assert(mpd_error_is_defined(&async->error));
 
-	return async->error.message;
+	return mpd_error_get_message(&async->error);
 }
 
 int

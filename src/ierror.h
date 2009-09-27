@@ -122,6 +122,19 @@ mpd_error_is_fatal(const struct mpd_error_info *error)
 		error->code != MPD_ERROR_SERVER;
 }
 
+static inline const char *
+mpd_error_get_message(const struct mpd_error_info *error)
+{
+	assert(error != NULL);
+	assert(error->code != MPD_ERROR_SUCCESS);
+	assert(error->message != NULL || error->code == MPD_ERROR_OOM);
+
+	if (error->message == NULL)
+		return "Out of memory";
+
+	return error->message;
+}
+
 /**
  * Sets an error code.
  */
