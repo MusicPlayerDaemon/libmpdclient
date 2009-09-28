@@ -162,6 +162,10 @@ mpd_send_idle_mask(struct mpd_connection *connection, enum mpd_idle mask)
 bool
 mpd_send_noidle(struct mpd_connection *connection)
 {
+	/* we need this workaround, because "noidle" may be sent while
+	   the "idle" response is being received */
+	connection->receiving = false;
+
 	return mpd_send_command(connection, "noidle", NULL);
 }
 
