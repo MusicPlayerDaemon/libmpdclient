@@ -56,6 +56,8 @@ mpd_response_finish(struct mpd_connection *connection)
 
 		pair = mpd_recv_pair(connection);
 		assert(pair != NULL || !connection->receiving ||
+		       (connection->sending_command_list &&
+			connection->discrete_finished) ||
 		       mpd_error_is_defined(&connection->error));
 
 		if (pair != NULL)
