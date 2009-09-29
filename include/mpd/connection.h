@@ -56,8 +56,9 @@ struct mpd_async;
  *
  * Error handling: most functions return a "bool" indicating success
  * or failure.  In this case, you may query the nature of the error
- * with the functions mpd_get_error(), mpd_error_get_message(),
- * mpd_get_server_error().
+ * with the functions mpd_connection_get_error(),
+ * mpd_connection_get_error_message(),
+ * mpd_connection_get_server_error().
  *
  * Some errors can be cleared by calling mpd_clear_error(), like
  * #MPD_ERROR_SERVER, #MPD_ERROR_ARGUMENT.  Most others are fatal, and
@@ -66,7 +67,7 @@ struct mpd_async;
  *
  * Some functions like mpd_recv_pair() cannot differentiate between
  * "end of response" and "error".  If this function returns NULL, you
- * have to check mpd_get_error().
+ * have to check mpd_connection_get_error().
  */
 struct mpd_connection;
 
@@ -78,7 +79,7 @@ extern "C" {
  * Opens a new connection to a MPD server.  Both the name server
  * lookup and the connect() call are done synchronously.  After this
  * function has returned, you should check if the connection was
- * successful with mpd_get_error().
+ * successful with mpd_connection_get_error().
  *
  * @param host the server's host name, IP address or Unix socket path.
  * If the resolver returns more than one IP address for a host name,
@@ -168,7 +169,7 @@ mpd_connection_get_error(const struct mpd_connection *connection);
 /**
  * Returns the human-readable (English) libmpdclient error message.
  * Calling this function is only valid if an error really occurred.
- * Check with mpd_get_error().
+ * Check with mpd_connection_get_error().
  *
  * For #MPD_ERROR_SERVER, the error message is encoded in UTF-8.
  * #MPD_ERROR_SYSTEM obtains its error message from the operating
@@ -181,7 +182,8 @@ mpd_connection_get_error_message(const struct mpd_connection *connection);
 
 /**
  * Returns the error code returned from the server.  Calling this
- * function is only valid if mpd_get_error() returned #MPD_ERROR_SERVER.
+ * function is only valid if mpd_connection_get_error() returned
+ * #MPD_ERROR_SERVER.
  */
 mpd_pure
 enum mpd_server_error
