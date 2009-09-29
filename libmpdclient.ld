@@ -99,7 +99,7 @@ global:
 	mpd_parser_free;
 	mpd_parser_feed;
 	mpd_parser_is_discrete;
-	mpd_parser_get_ack;
+	mpd_parser_get_server_error;
 	mpd_parser_get_at;
 	mpd_parser_get_message;
 	mpd_parser_get_name;
