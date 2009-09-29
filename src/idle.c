@@ -199,3 +199,18 @@ mpd_run_idle_mask(struct mpd_connection *connection, enum mpd_idle mask)
 
 	return flags;
 }
+
+enum mpd_idle
+mpd_run_noidle(struct mpd_connection *connection)
+{
+	enum mpd_idle flags;
+
+	if (!mpd_run_check(connection) || !mpd_send_noidle(connection))
+		return 0;
+
+	flags = mpd_recv_idle(connection);
+	if (!mpd_response_finish(connection))
+		return 0;
+
+	return flags;
+}

@@ -167,6 +167,16 @@ mpd_run_idle(struct mpd_connection *connection);
 enum mpd_idle
 mpd_run_idle_mask(struct mpd_connection *connection, enum mpd_idle mask);
 
+/**
+ * Shortcut for mpd_send_noidle() and mpd_recv_idle().
+ *
+ * @param connection the connection to MPD
+ * @return the event bit mask, or 0 on error or if there were no
+ * events
+ */
+enum mpd_idle
+mpd_run_noidle(struct mpd_connection *connection);
+
 #ifdef __cplusplus
 }
 #endif

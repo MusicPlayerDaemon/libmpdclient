@@ -70,6 +70,7 @@ global:
 	mpd_recv_idle;
 	mpd_run_idle;
 	mpd_run_idle_mask;
+	mpd_run_noidle;
 
 	/* mpd/list.h */
 	mpd_command_list_begin;
