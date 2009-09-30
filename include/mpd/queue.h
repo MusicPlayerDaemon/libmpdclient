@@ -153,6 +153,16 @@ bool
 mpd_send_add(struct mpd_connection *connection, const char *file);
 
 /**
+ * Shortcut for mpd_send_add() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param uri the URI of the song to be added
+ * @return true on success, false on error
+ */
+bool
+mpd_run_add(struct mpd_connection *connection, const char *uri);
+
+/**
  * Appends a song to the playlist, and returns its id.
  */
 bool
@@ -185,6 +195,16 @@ bool
 mpd_send_delete(struct mpd_connection *connection, unsigned pos);
 
 /**
+ * Shortcut for mpd_send_delete() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param pos the position of the song to be deleted
+ * @return true on success, false on error
+ */
+bool
+mpd_run_delete(struct mpd_connection *connection, unsigned pos);
+
+/**
  * Deletes a song from the queue.
  *
  * @param connection the connection to MPD
@@ -192,6 +212,16 @@ mpd_send_delete(struct mpd_connection *connection, unsigned pos);
  */
 bool
 mpd_send_delete_id(struct mpd_connection *connection, unsigned id);
+
+/**
+ * Shortcut for mpd_send_delete_id() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param id the id of the song to be deleted
+ * @return true on success, false on error
+ */
+bool
+mpd_run_delete_id(struct mpd_connection *connection, unsigned id);
 
 /**
  * Shuffles the queue.

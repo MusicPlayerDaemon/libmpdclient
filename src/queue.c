@@ -157,6 +157,14 @@ mpd_send_add(struct mpd_connection *connection, const char *file)
 }
 
 bool
+mpd_run_add(struct mpd_connection *connection, const char *uri)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_add(connection, uri) &&
+		mpd_response_finish(connection);
+}
+
+bool
 mpd_send_add_id(struct mpd_connection *connection, const char *file)
 {
 	return mpd_send_command(connection, "addid", file, NULL);
@@ -203,9 +211,25 @@ mpd_send_delete(struct mpd_connection *connection, unsigned pos)
 }
 
 bool
+mpd_run_delete(struct mpd_connection *connection, unsigned pos)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_delete(connection, pos) &&
+		mpd_response_finish(connection);
+}
+
+bool
 mpd_send_delete_id(struct mpd_connection *connection, unsigned id)
 {
 	return mpd_send_int_command(connection, "deleteid", id);
+}
+
+bool
+mpd_run_delete_id(struct mpd_connection *connection, unsigned id)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_delete_id(connection, id) &&
+		mpd_response_finish(connection);
 }
 
 bool
