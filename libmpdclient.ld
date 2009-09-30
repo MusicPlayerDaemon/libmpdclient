@@ -186,6 +186,8 @@ global:
 	mpd_run_add_id;
 	mpd_send_delete;
 	mpd_run_delete;
+	mpd_send_delete_range;
+	mpd_run_delete_range;
 	mpd_send_delete_id;
 	mpd_run_delete_id;
 	mpd_send_shuffle;

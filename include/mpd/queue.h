@@ -205,6 +205,30 @@ bool
 mpd_run_delete(struct mpd_connection *connection, unsigned pos);
 
 /**
+ * Deletes songs from the queue.
+ *
+ * @param connection the connection to MPD
+ * @param start the start position of the range (including)
+ * @param end the end position of the range (excluding)
+ * @return true on success, false on error
+ */
+bool
+mpd_send_delete_range(struct mpd_connection *connection,
+		      unsigned start, unsigned end);
+
+/**
+ * Shortcut for mpd_send_delete_range() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param start the start position of the range (including)
+ * @param end the end position of the range (excluding)
+ * @return true on success, false on error
+ */
+bool
+mpd_run_delete_range(struct mpd_connection *connection,
+		      unsigned start, unsigned end);
+
+/**
  * Deletes a song from the queue.
  *
  * @param connection the connection to MPD

@@ -219,6 +219,22 @@ mpd_run_delete(struct mpd_connection *connection, unsigned pos)
 }
 
 bool
+mpd_send_delete_range(struct mpd_connection *connection,
+		      unsigned start, unsigned end)
+{
+	return mpd_send_range_command(connection, "delete", start, end);
+}
+
+bool
+mpd_run_delete_range(struct mpd_connection *connection,
+		     unsigned start, unsigned end)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_delete_range(connection, start, end) &&
+		mpd_response_finish(connection);
+}
+
+bool
 mpd_send_delete_id(struct mpd_connection *connection, unsigned id)
 {
 	return mpd_send_int_command(connection, "deleteid", id);
