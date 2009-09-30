@@ -60,9 +60,6 @@ enum mpd_state {
 	MPD_STATE_PAUSE = 3,
 };
 
-/* us this with status.volume to determine if mpd has volume support */
-#define MPD_STATUS_NO_VOLUME		-1
-
 struct mpd_connection;
 struct mpd_pair;
 struct mpd_audio_format;
@@ -130,8 +127,8 @@ mpd_run_status(struct mpd_connection *connection);
 void mpd_status_free(struct mpd_status * status);
 
 /**
- * Returns the current volume: 0-100, or MPD_STATUS_NO_VOLUME when there is no
- * volume support
+ * Returns the current volume: 0-100, or -1 when there is no volume
+ * support.
  */
 mpd_pure
 int mpd_status_get_volume(const struct mpd_status *status);
