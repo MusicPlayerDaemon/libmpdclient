@@ -73,7 +73,7 @@ enum mpd_idle {
 	MPD_IDLE_OPTIONS = 0x40,
 
 	/** a database update has started or finished. */
-	MPD_IDLE_UPDATE = 0x100,
+	MPD_IDLE_UPDATE = 0x80,
 };
 
 #ifdef __cplusplus
