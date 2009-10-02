@@ -169,6 +169,18 @@ bool
 mpd_send_add_id(struct mpd_connection *connection, const char *file);
 
 /**
+ * Inserts a song into the playlist, and returns its id.
+ *
+ * @param connection the connection to MPD
+ * @param uri the URI of the song to be added
+ * @param to the desired position of the song
+ * @return true on success, false on error
+ */
+bool
+mpd_send_add_id_to(struct mpd_connection *connection, const char *uri,
+		   unsigned to);
+
+/**
  * Returns the id of the new song in the playlist.  To be called after
  * mpd_send_add_id().
  *
@@ -184,6 +196,18 @@ mpd_recv_song_id(struct mpd_connection *connection);
  */
 int
 mpd_run_add_id(struct mpd_connection *connection, const char *file);
+
+/**
+ * Executes the "addid" command and reads the response.
+ *
+ * @param connection the connection to MPD
+ * @param uri the URI of the song to be added
+ * @param to the desired position of the song
+ * @return the new song id, -1 on error or if MPD did not send an id
+ */
+int
+mpd_run_add_id_to(struct mpd_connection *connection, const char *uri,
+		  unsigned to);
 
 /**
  * Deletes a song from the queue.

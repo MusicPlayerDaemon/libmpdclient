@@ -170,6 +170,13 @@ mpd_send_add_id(struct mpd_connection *connection, const char *file)
 	return mpd_send_command(connection, "addid", file, NULL);
 }
 
+bool
+mpd_send_add_id_to(struct mpd_connection *connection, const char *uri,
+		   unsigned to)
+{
+	return mpd_send_s_u_command(connection, "addid", uri, to);
+}
+
 int
 mpd_recv_song_id(struct mpd_connection *connection)
 {
@@ -190,10 +197,26 @@ mpd_run_add_id(struct mpd_connection *connection, const char *file)
 {
 	int id;
 
-	if (!mpd_run_check(connection))
+	if (!mpd_run_check(connection) ||
+	    !mpd_send_add_id(connection, file))
 		return -1;
 
-	if (!mpd_send_add_id(connection, file))
+	id = mpd_recv_song_id(connection);
+
+	if (!mpd_response_finish(connection))
+		id = -1;
+
+	return id;
+}
+
+int
+mpd_run_add_id_to(struct mpd_connection *connection, const char *uri,
+		  unsigned to)
+{
+	int id;
+
+	if (!mpd_run_check(connection) ||
+	    !mpd_send_add_id_to(connection, uri, to))
 		return -1;
 
 	id = mpd_recv_song_id(connection);

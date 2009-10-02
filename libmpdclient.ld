@@ -184,8 +184,10 @@ global:
 	mpd_send_add;
 	mpd_run_add;
 	mpd_send_add_id;
+	mpd_send_add_id_to;
 	mpd_recv_song_id;
 	mpd_run_add_id;
+	mpd_run_add_id_to;
 	mpd_send_delete;
 	mpd_run_delete;
 	mpd_send_delete_range;
