@@ -88,7 +88,7 @@ mpd_idle_parse_pair(const struct mpd_pair *pair)
 }
 
 enum mpd_idle
-mpd_recv_idle(struct mpd_connection *connection)
+mpd_recv_idle(struct mpd_connection *connection, bool disable_timeout)
 {
 	enum mpd_idle flags = 0;
 	struct mpd_pair *pair;
@@ -103,11 +103,13 @@ mpd_recv_idle(struct mpd_connection *connection)
 		return 0;
 
 	/* temporarily disable the connection timeout */
-	old_timeout = connection->timeout;
-	connection->timeout = (struct timeval){
-		.tv_sec = 0,
-		.tv_usec = 0,
-	};
+	if (disable_timeout) {
+		old_timeout = connection->timeout;
+		connection->timeout = (struct timeval){
+			.tv_sec = 0,
+			.tv_usec = 0,
+		};
+	}
 
 	while ((pair = mpd_recv_pair(connection)) != NULL) {
 		flags |= mpd_idle_parse_pair(pair);
@@ -116,7 +118,8 @@ mpd_recv_idle(struct mpd_connection *connection)
 	}
 
 	/* re-enable timeout */
-	connection->timeout = old_timeout;
+	if (disable_timeout)
+		connection->timeout = old_timeout;
 
 	return flags;
 }
@@ -177,7 +180,7 @@ mpd_run_idle(struct mpd_connection *connection)
 	if (!mpd_run_check(connection) || !mpd_send_idle(connection))
 		return 0;
 
-	flags = mpd_recv_idle(connection);
+	flags = mpd_recv_idle(connection, true);
 	if (!mpd_response_finish(connection))
 		return 0;
 
@@ -193,7 +196,7 @@ mpd_run_idle_mask(struct mpd_connection *connection, enum mpd_idle mask)
 	    !mpd_send_idle_mask(connection, mask))
 		return 0;
 
-	flags = mpd_recv_idle(connection);
+	flags = mpd_recv_idle(connection, true);
 	if (!mpd_response_finish(connection))
 		return 0;
 
@@ -208,7 +211,7 @@ mpd_run_noidle(struct mpd_connection *connection)
 	if (!mpd_run_check(connection) || !mpd_send_noidle(connection))
 		return 0;
 
-	flags = mpd_recv_idle(connection);
+	flags = mpd_recv_idle(connection, false);
 	if (!mpd_response_finish(connection))
 		return 0;
 

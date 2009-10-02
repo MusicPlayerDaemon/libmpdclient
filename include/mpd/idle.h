@@ -144,15 +144,20 @@ mpd_idle_parse_pair(const struct mpd_pair *pair);
  * Waits until MPD sends the list of idle events and returns it in a
  * bit mask.
  *
- * During this function, the configured timeout (see
- * mpd_connection_set_timeout()) is disabled.  This function blocks
- * forever, until either MPD sends a response, or an error occurs.
+ * @param connection the connection to MPD
+ * @param disable_timeout if true, then libmpdclients temporarily
+ * disables the configured timeout (see mpd_connection_set_timeout()):
+ * this function blocks forever, until either MPD sends a response, or
+ * an error occurs.
+ * @return the event bit mask, or 0 on error or if there were no
+ * events
  */
 enum mpd_idle
-mpd_recv_idle(struct mpd_connection *connection);
+mpd_recv_idle(struct mpd_connection *connection, bool disable_timeout);
 
 /**
- * Shortcut for mpd_send_idle() and mpd_recv_idle().
+ * Shortcut for mpd_send_idle() and mpd_recv_idle().  During
+ * mpd_recv_idle(), the configured timeout is disabled.
  *
  * @param connection the connection to MPD
  * @return the event bit mask, or 0 on error
@@ -161,7 +166,8 @@ enum mpd_idle
 mpd_run_idle(struct mpd_connection *connection);
 
 /**
- * Shortcut for mpd_send_idle_mask() and mpd_recv_idle().
+ * Shortcut for mpd_send_idle_mask() and mpd_recv_idle().  During
+ * mpd_recv_idle(), the configured timeout is disabled.
  *
  * @param connection the connection to MPD
  * @param mask a bit mask of idle events; must not be 0
@@ -171,7 +177,8 @@ enum mpd_idle
 mpd_run_idle_mask(struct mpd_connection *connection, enum mpd_idle mask);
 
 /**
- * Shortcut for mpd_send_noidle() and mpd_recv_idle().
+ * Shortcut for mpd_send_noidle() and mpd_recv_idle().  During
+ * mpd_recv_idle(), the configured timeout is not disabled.
  *
  * @param connection the connection to MPD
  * @return the event bit mask, or 0 on error or if there were no
