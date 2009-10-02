@@ -39,8 +39,10 @@ global:
 	mpd_send_list_all_meta;
 	mpd_send_list_meta;
 	mpd_send_update;
+	mpd_send_rescan;
 	mpd_recv_update_id;
 	mpd_run_update;
+	mpd_run_rescan;
 
 	/* mpd/directory.h */
 	mpd_directory_dup;

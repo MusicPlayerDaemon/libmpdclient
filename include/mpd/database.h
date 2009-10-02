@@ -100,6 +100,17 @@ bool
 mpd_send_update(struct mpd_connection *connection, const char *path);
 
 /**
+ * Like mpd_send_update(), but also rescans unmodified files.
+ *
+ * @param connection the connection to MPD
+ * @param path optional path to update; if NULL, then all of the music
+ * directory is updated
+ * @return true on success, false on error
+ */
+bool
+mpd_send_rescan(struct mpd_connection *connection, const char *path);
+
+/**
  * Receives the id the of the update job which was submitted by
  * mpd_send_update().
  *
@@ -119,6 +130,17 @@ mpd_recv_update_id(struct mpd_connection *connection);
  */
 unsigned
 mpd_run_update(struct mpd_connection *connection, const char *path);
+
+/**
+ * Like mpd_run_update(), but also rescans unmodified files.
+ *
+ * @param connection the connection to MPD
+ * @param path optional path to update; if NULL, then all of the music
+ * directory is updated
+ * @return a positive job id on success, 0 on error
+ */
+unsigned
+mpd_run_rescan(struct mpd_connection *connection, const char *path);
 
 #ifdef __cplusplus
 }

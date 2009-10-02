@@ -60,6 +60,12 @@ mpd_send_update(struct mpd_connection *connection, const char *path)
 	return mpd_send_command(connection, "update", path, NULL);
 }
 
+bool
+mpd_send_rescan(struct mpd_connection *connection, const char *path)
+{
+	return mpd_send_command(connection, "rescan", path, NULL);
+}
+
 unsigned
 mpd_recv_update_id(struct mpd_connection *connection)
 {
@@ -81,6 +87,19 @@ mpd_run_update(struct mpd_connection *connection, const char *path)
 	unsigned id;
 
 	if (!mpd_run_check(connection) || !mpd_send_update(connection, path))
+		return 0;
+
+	id = mpd_recv_update_id(connection);
+	return id != 0 && mpd_response_finish(connection)
+		? id : 0;
+}
+
+unsigned
+mpd_run_rescan(struct mpd_connection *connection, const char *path)
+{
+	unsigned id;
+
+	if (!mpd_run_check(connection) || !mpd_send_rescan(connection, path))
 		return 0;
 
 	id = mpd_recv_update_id(connection);
