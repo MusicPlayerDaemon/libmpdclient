@@ -226,6 +226,7 @@ global:
 	mpd_search_add_tag_constraint;
 	mpd_search_add_any_tag_constraint;
 	mpd_search_commit;
+	mpd_search_cancel;
 	mpd_recv_pair_tag;
 
 	/* mpd/send.h */

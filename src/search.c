@@ -262,8 +262,10 @@ mpd_search_commit(struct mpd_connection *connection)
 {
 	bool success;
 
-	if (mpd_error_is_defined(&connection->error))
+	if (mpd_error_is_defined(&connection->error)) {
+		mpd_search_cancel(connection);
 		return false;
+	}
 
 	if (connection->request == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_STATE);
@@ -277,6 +279,15 @@ mpd_search_commit(struct mpd_connection *connection)
 	connection->request = NULL;
 
 	return success;
+}
+
+void
+mpd_search_cancel(struct mpd_connection *connection)
+{
+	if (connection->request != NULL) {
+		free(connection->request);
+		connection->request = NULL;
+	}
 }
 
 struct mpd_pair *

@@ -167,6 +167,16 @@ bool
 mpd_search_commit(struct mpd_connection *connection);
 
 /**
+ * Cancels the search request before you have called
+ * mpd_search_commit().  Call this to clear the current search
+ * request.
+ *
+ * @param connection the connection to MPD
+ */
+void
+mpd_search_cancel(struct mpd_connection *connection);
+
+/**
  * Same as mpd_recv_pair_named(), but the pair name is specified as
  * #mpd_tag_type.
  *
