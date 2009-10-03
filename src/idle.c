@@ -109,6 +109,14 @@ mpd_recv_idle(struct mpd_connection *connection, bool disable_timeout)
 			.tv_sec = 0,
 			.tv_usec = 0,
 		};
+	} else {
+		/* work around bogus gcc warning "may be used
+		   uninitialized"; gcc is too dumb to see that we're
+		   accessing old_timeout only if it was initialized */
+		old_timeout = (struct timeval){
+			.tv_sec = 0,
+			.tv_usec = 0,
+		};
 	}
 
 	while ((pair = mpd_recv_pair(connection)) != NULL) {
