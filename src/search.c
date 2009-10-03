@@ -40,8 +40,8 @@
 #include <stdio.h>
 #include <string.h>
 
-bool
-mpd_search_db_songs(struct mpd_connection *connection, bool exact)
+static bool
+mpd_search_init(struct mpd_connection *connection, const char *cmd)
 {
 	if (mpd_error_is_defined(&connection->error))
 		return false;
@@ -53,10 +53,7 @@ mpd_search_db_songs(struct mpd_connection *connection, bool exact)
 		return false;
 	}
 
-	if (exact)
-		connection->request = strdup("find");
-	else
-		connection->request = strdup("search");
+	connection->request = strdup(cmd);
 	if (connection->request == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
 		return false;
@@ -66,28 +63,17 @@ mpd_search_db_songs(struct mpd_connection *connection, bool exact)
 }
 
 bool
+mpd_search_db_songs(struct mpd_connection *connection, bool exact)
+{
+	return mpd_search_init(connection,
+			       exact ? "find" : "search");
+}
+
+bool
 mpd_search_queue_songs(struct mpd_connection *connection, bool exact)
 {
-	if (mpd_error_is_defined(&connection->error))
-		return false;
-
-	if (connection->request) {
-		mpd_error_code(&connection->error, MPD_ERROR_STATE);
-		mpd_error_message(&connection->error,
-				  "search already in progress");
-		return false;
-	}
-
-	if (exact)
-		connection->request = strdup("playlistfind");
-	else
-		connection->request = strdup("playlistsearch");
-	if (connection->request == NULL) {
-		mpd_error_code(&connection->error, MPD_ERROR_OOM);
-		return false;
-	}
-
-	return true;
+	return mpd_search_init(connection,
+			       exact ? "playlistfind" : "playlistsearch");
 }
 
 bool
