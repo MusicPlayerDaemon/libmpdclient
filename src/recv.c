@@ -167,7 +167,8 @@ mpd_recv_pair_named(struct mpd_connection *connection, const char *name)
 }
 
 void
-mpd_return_pair(struct mpd_connection *connection, struct mpd_pair *pair)
+mpd_return_pair(struct mpd_connection *connection,
+		mpd_unused struct mpd_pair *pair)
 {
 	assert(connection != NULL);
 	assert(pair != NULL);
