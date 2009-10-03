@@ -70,6 +70,13 @@ mpd_search_db_songs(struct mpd_connection *connection, bool exact)
 }
 
 bool
+mpd_search_add_db_songs(struct mpd_connection *connection, bool exact)
+{
+	return mpd_search_init(connection,
+			       exact ? "findadd" : "searchadd");
+}
+
+bool
 mpd_search_queue_songs(struct mpd_connection *connection, bool exact)
 {
 	return mpd_search_init(connection,

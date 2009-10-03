@@ -79,6 +79,18 @@ bool
 mpd_search_db_songs(struct mpd_connection *connection, bool exact);
 
 /**
+ * Search for songs in the database and adds the result to the queue.
+ * Constraints may be specified with mpd_search_add_tag_constraint().
+ * Send the search command with mpd_search_commit().
+ *
+ * @param connection the connection to MPD
+ * @param exact if to match exact (only "true" supported by MPD 0.16)
+ * @return true on success, false on error
+ */
+bool
+mpd_search_add_db_songs(struct mpd_connection *connection, bool exact);
+
+/**
  * Search for songs in the queue.
  * Constraints may be specified with mpd_search_add_tag_constraint().
  * Send the search command with mpd_search_commit(), and read the
