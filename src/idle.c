@@ -96,14 +96,14 @@ mpd_recv_idle(struct mpd_connection *connection, bool disable_timeout)
 
 	assert(connection != NULL);
 
-	/* make sure that the output buffer is empty before we turn
-	   off the timeout - this is important because we want to
-	   detect a send failure more quickly */
-	if (!mpd_flush(connection))
-		return 0;
-
 	/* temporarily disable the connection timeout */
 	if (disable_timeout) {
+		/* make sure that the output buffer is empty before we
+		   turn off the timeout - this is important because we
+		   want to detect a send failure more quickly */
+		if (!mpd_flush(connection))
+			return 0;
+
 		old_timeout = connection->timeout;
 		connection->timeout = (struct timeval){
 			.tv_sec = 0,
