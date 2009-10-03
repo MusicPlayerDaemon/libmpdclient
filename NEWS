@@ -1,4 +1,4 @@
-libmpdclient 2.0 (2009/??/??)
+libmpdclient 2.0 (2009/10/03)
 * complete rewrite and API redesign
 * shared library with a documented stable API
 * asynchronous API
