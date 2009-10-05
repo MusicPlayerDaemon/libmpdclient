@@ -217,6 +217,14 @@ unsigned
 mpd_status_get_elapsed_time(const struct mpd_status *status);
 
 /**
+ * Returns time in milliseconds that have elapsed in the currently
+ * playing/paused song.
+ */
+mpd_pure
+unsigned
+mpd_status_get_elapsed_ms(const struct mpd_status *status);
+
+/**
  * Returns the length in seconds of the currently playing/paused song
  */
 mpd_pure

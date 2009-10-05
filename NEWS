@@ -1,4 +1,5 @@
 libmpdclient 2.1 (2009/??/??)
+* status: added mpd_status_get_elapsed_ms()
 
 
 libmpdclient 2.0 (2009/10/03)

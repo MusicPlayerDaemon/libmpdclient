@@ -87,6 +87,12 @@ struct mpd_status {
 	 */
 	unsigned elapsed_time;
 
+	/**
+	 * Time in milliseconds that have elapsed in the currently
+	 * playing/paused song.
+	 */
+	unsigned elapsed_ms;
+
 	/** length in seconds of the currently playing/paused song */
 	unsigned total_time;
 
@@ -121,6 +127,7 @@ mpd_status_begin(void)
 	status->song_pos = -1;
 	status->song_id = -1;
 	status->elapsed_time = 0;
+	status->elapsed_ms = 0;
 	status->total_time = 0;
 	status->kbit_rate = 0;
 	memset(&status->audio_format, 0, sizeof(status->audio_format));
@@ -129,6 +136,31 @@ mpd_status_begin(void)
 	status->update_id = 0;
 
 	return status;
+}
+
+/**
+ * Parses the fractional part of the "elapsed" response line.  Up to
+ * three digits are parsed.
+ */
+static unsigned
+parse_ms(const char *p)
+{
+	unsigned ms;
+
+	if (*p >= '0' && *p <= '9')
+		ms = 100 * (*p++ - '0');
+	else
+		return 0;
+
+	if (*p >= '0' && *p <= '9')
+		ms += 10 * (*p - '0');
+	else
+		return ms;
+
+	if (*p >= '0' && *p <= '9')
+		ms += *p - '0';
+
+	return ms;
 }
 
 static enum mpd_state
@@ -192,6 +224,18 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 		status->elapsed_time = strtol(pair->value, &endptr, 10);
 		if (*endptr == ':')
 			status->total_time = strtol(endptr + 1, NULL, 10);
+
+		if (status->elapsed_ms == 0)
+			status->elapsed_ms = status->elapsed_time * 1000;
+	} else if (strcmp(pair->name, "elapsed") == 0) {
+		char *endptr;
+
+		status->elapsed_ms = strtol(pair->value, &endptr, 10) * 1000;
+		if (*endptr == '.')
+			status->elapsed_ms += parse_ms(endptr + 1);
+
+		if (status->elapsed_time == 0)
+			status->elapsed_time = status->elapsed_ms / 1000;
 	} else if (strcmp(pair->name, "error") == 0) {
 		if (status->error != NULL)
 			free(status->error);
@@ -279,6 +323,12 @@ unsigned
 mpd_status_get_elapsed_time(const struct mpd_status *status)
 {
 	return status->elapsed_time;
+}
+
+unsigned
+mpd_status_get_elapsed_ms(const struct mpd_status *status)
+{
+	return status->elapsed_ms;
 }
 
 unsigned

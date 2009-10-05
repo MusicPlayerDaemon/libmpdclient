@@ -126,6 +126,7 @@ print_status(struct mpd_status *status)
 	    mpd_status_get_state(status) == MPD_STATE_PAUSE) {
 		LOG_INFO("song: %i", mpd_status_get_song_pos(status));
 		LOG_INFO("elaspedTime: %i", mpd_status_get_elapsed_time(status));
+		LOG_INFO("elasped_ms: %u\n", mpd_status_get_elapsed_ms(status));
 		LOG_INFO("totalTime: %i", mpd_status_get_total_time(status));
 		LOG_INFO("bitRate: %i", mpd_status_get_kbit_rate(status));
 	}

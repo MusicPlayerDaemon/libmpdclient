@@ -99,6 +99,7 @@ int main(int argc, char ** argv) {
 		    mpd_status_get_state(status) == MPD_STATE_PAUSE) {
 			printf("song: %i\n", mpd_status_get_song_pos(status));
 			printf("elaspedTime: %i\n",mpd_status_get_elapsed_time(status));
+			printf("elasped_ms: %u\n", mpd_status_get_elapsed_ms(status));
 			printf("totalTime: %i\n", mpd_status_get_total_time(status));
 			printf("bitRate: %i\n", mpd_status_get_kbit_rate(status));
 		}
