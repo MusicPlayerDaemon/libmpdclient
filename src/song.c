@@ -178,6 +178,7 @@ mpd_song_dup(const struct mpd_song *song)
 	}
 
 	ret->duration = song->duration;
+	ret->last_modified = song->last_modified;
 	ret->pos = song->pos;
 	ret->id = song->id;
 
