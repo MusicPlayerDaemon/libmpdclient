@@ -1,6 +1,7 @@
 libmpdclient 2.1 (2009/??/??)
 * status: added mpd_status_get_elapsed_ms()
 * song: copy last_modified value in mpd_song_dup()
+* Makefile.am: use --version-script only with GNU ld
 
 
 libmpdclient 2.0 (2009/10/03)

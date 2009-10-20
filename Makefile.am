@@ -80,8 +80,11 @@ src_libmpdclient_la_SOURCES = \
 	src/tag.c
 
 src_libmpdclient_la_LDFLAGS = -version-info @LIBMPDCLIENT_LIBTOOL_VERSION@ \
-	-no-undefined \
-	-Wl,--version-script=$(srcdir)/libmpdclient.ld
+	-no-undefined
+
+if HAVE_GNU_LD
+src_libmpdclient_la_LDFLAGS += -Wl,--version-script=$(srcdir)/libmpdclient.ld
+endif
 
 noinst_PROGRAMS = src/example test/test
 

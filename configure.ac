@@ -16,6 +16,10 @@ m4_defun([_LT_AC_LANG_F77_CONFIG], [:])
 dnl Check for programs
 AC_PROG_CC_C99
 AC_PROG_INSTALL
+
+AC_PROG_LD
+AM_CONDITIONAL(HAVE_GNU_LD, test x$with_gnu_ld = xyes)
+
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
