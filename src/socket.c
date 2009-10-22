@@ -54,12 +54,8 @@
 
 #ifdef WIN32
 #  define SELECT_ERRNO_IGNORE   (errno == WSAEINTR || errno == WSAEINPROGRESS)
-#  define SENDRECV_ERRNO_IGNORE SELECT_ERRNO_IGNORE
 #else
 #  define SELECT_ERRNO_IGNORE   (errno == EINTR)
-#  define SENDRECV_ERRNO_IGNORE (errno == EINTR || errno == EAGAIN)
-#  define winsock_dll_error(c)  0
-#  define WSACleanup()          do { /* nothing */ } while (0)
 #endif
 
 #ifdef WIN32
