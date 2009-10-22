@@ -59,9 +59,6 @@ mpd_sync_poll(struct mpd_async *async, struct timeval *tv)
 	int ret;
 	enum mpd_async_event events;
 
-	if (mpd_async_get_error(async) != MPD_ERROR_SUCCESS)
-		return 0;
-
 	fd = mpd_async_get_fd(async);
 
 	while (1) {
@@ -131,8 +128,7 @@ mpd_sync_send_command_v(struct mpd_async *async, const struct timeval *tv0,
 		if (success)
 			return true;
 
-		if (mpd_async_get_error(async) != MPD_ERROR_SUCCESS ||
-		    !mpd_sync_io(async, tvp))
+		if (!mpd_sync_io(async, tvp))
 			return false;
 	}
 }
@@ -168,8 +164,7 @@ mpd_sync_flush(struct mpd_async *async, const struct timeval *tv0)
 			/* no more pending writes */
 			return true;
 
-		if (mpd_async_get_error(async) != MPD_ERROR_SUCCESS ||
-		    !mpd_sync_io(async, tvp))
+		if (!mpd_sync_io(async, tvp))
 			return false;
 	}
 }
@@ -191,8 +186,7 @@ mpd_sync_recv_line(struct mpd_async *async, const struct timeval *tv0)
 		if (line != NULL)
 			return line;
 
-		if (mpd_async_get_error(async) != MPD_ERROR_SUCCESS ||
-		    !mpd_sync_io(async, tvp))
+		if (!mpd_sync_io(async, tvp))
 			return NULL;
 	}
 }
