@@ -52,11 +52,15 @@
 #  define MSG_DONTWAIT 0
 #endif
 
+static bool
+ignore_errno(int e)
+{
 #ifdef WIN32
-#  define SELECT_ERRNO_IGNORE   (errno == WSAEINTR || errno == WSAEINPROGRESS)
+	return e == WSAEINTR || e == WSAEINPROGRESS;
 #else
-#  define SELECT_ERRNO_IGNORE   (errno == EINTR)
+	return e == EINTR || e == EAGAIN;
 #endif
+}
 
 #ifdef WIN32
 
@@ -123,7 +127,7 @@ mpd_socket_wait(unsigned fd, struct timeval *tv)
 		if (ret > 0)
 			return 0;
 
-		if (ret == 0 || !SELECT_ERRNO_IGNORE)
+		if (ret == 0 || !ignore_errno(errno))
 			return -1;
 	}
 }
