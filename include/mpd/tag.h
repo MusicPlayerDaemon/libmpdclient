@@ -62,6 +62,10 @@ enum mpd_tag_type
 	MPD_TAG_COUNT
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * Looks up the name of the specified tag.
  *
@@ -87,5 +91,9 @@ mpd_tag_name_parse(const char *name);
  */
 enum mpd_tag_type
 mpd_tag_name_iparse(const char *name);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
