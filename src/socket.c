@@ -58,7 +58,7 @@ ignore_errno(int e)
 #ifdef WIN32
 	return e == WSAEINTR || e == WSAEINPROGRESS;
 #else
-	return e == EINTR || e == EAGAIN;
+	return e == EINTR || e == EINPROGRESS;
 #endif
 }
 
