@@ -83,32 +83,20 @@ mpd_socket_global_init(struct mpd_error_info *error)
 
 #endif
 
+/**
+ * Put the socket into non-blocking mode.
+ */
+static void
+disable_blocking(int fd)
+{
 #ifdef WIN32
-
-static int do_connect_fail(int fd,
-                           const struct sockaddr *serv_addr, int addrlen)
-{
 	u_long iMode = 1; /* 0 = blocking, else non-blocking */
-	if (connect(fd, serv_addr, addrlen) == SOCKET_ERROR)
-		return 1;
 	ioctlsocket(fd, FIONBIO, &iMode);
-	return 0;
-}
-
-#else /* !WIN32 (sane operating systems) */
-
-static int do_connect_fail(int fd,
-                           const struct sockaddr *serv_addr, int addrlen)
-{
-	int flags;
-	if (connect(fd, serv_addr, addrlen) < 0)
-		return 1;
-	flags = fcntl(fd, F_GETFL, 0);
+#else /* !WIN32 */
+	int flags = fcntl(fd, F_GETFL, 0);
 	fcntl(fd, F_SETFL, flags | O_NONBLOCK);
-	return 0;
+#endif
 }
-
-#endif /* !WIN32 */
 
 /**
  * Wait for the socket to become readable.
@@ -184,14 +172,16 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 			continue;
 		}
 
-		ret = do_connect_fail(fd, address->addr, address->addrlen);
-		if (ret != 0) {
+		ret = connect(fd, address->addr, address->addrlen);
+		if (ret < 0) {
 			mpd_error_clear(error);
 			mpd_error_errno(error);
 
 			mpd_socket_close(fd);
 			continue;
 		}
+
+		disable_blocking(fd);
 
 		ret = mpd_socket_wait_connected(fd, &tv);
 		if (ret > 0) {
