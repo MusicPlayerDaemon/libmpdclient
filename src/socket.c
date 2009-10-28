@@ -56,7 +56,7 @@ static bool
 ignore_errno(int e)
 {
 #ifdef WIN32
-	return e == WSAEINTR || e == WSAEINPROGRESS;
+	return e == WSAEINTR || e == WSAEINPROGRESS || e == WSAEWOULDBLOCK;
 #else
 	return e == EINTR || e == EINPROGRESS;
 #endif
@@ -111,7 +111,7 @@ mpd_socket_wait(unsigned fd, struct timeval *tv)
 		FD_ZERO(&fds);
 		FD_SET(fd, &fds);
 
-		ret = select(fd + 1, &fds, NULL, NULL, tv);
+		ret = select(fd + 1, NULL, &fds, &fds, tv);
 		if (ret > 0)
 			return 0;
 
