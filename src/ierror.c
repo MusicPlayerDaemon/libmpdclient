@@ -27,12 +27,12 @@
 */
 
 #include "ierror.h"
+#include "socket.h"
 
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <errno.h>
 
 void
 mpd_error_deinit(struct mpd_error_info *error)
@@ -92,10 +92,24 @@ mpd_error_printf(struct mpd_error_info *error, const char *fmt, ...)
 void
 mpd_error_system_message(struct mpd_error_info *error, int code)
 {
+#ifdef WIN32
+	char buffer[1024];
+	DWORD nbytes;
+#endif
+
 	assert(error != NULL);
 
 	mpd_error_system(error, code);
+
+#ifdef WIN32
+	nbytes = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM |
+			       FORMAT_MESSAGE_IGNORE_INSERTS |
+			       FORMAT_MESSAGE_MAX_WIDTH_MASK, NULL, code, 0,
+			       (LPSTR)buffer, sizeof(buffer), NULL);
+	mpd_error_message(error, nbytes > 0 ? buffer : "Unknown error");
+#else
 	mpd_error_message(error, strerror(code));
+#endif
 }
 
 void
@@ -103,7 +117,7 @@ mpd_error_errno(struct mpd_error_info *error)
 {
 	assert(error != NULL);
 
-	mpd_error_system_message(error, errno);
+	mpd_error_system_message(error, mpd_socket_errno());
 }
 
 bool

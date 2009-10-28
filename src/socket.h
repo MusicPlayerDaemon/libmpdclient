@@ -31,6 +31,12 @@
 
 #include <stdbool.h>
 
+#ifdef WIN32
+#  include <winsock2.h>
+#else
+#  include <errno.h>
+#endif
+
 struct timeval;
 struct mpd_error_info;
 
@@ -45,6 +51,16 @@ mpd_socket_global_init(struct mpd_error_info *error)
 	return true;
 }
 #endif
+
+static inline int
+mpd_socket_errno(void)
+{
+#ifdef WIN32
+	return WSAGetLastError();
+#else
+	return errno;
+#endif
+}
 
 /**
  * Connects the socket to the specified host and port.

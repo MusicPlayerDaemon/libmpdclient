@@ -30,19 +30,17 @@
 #include "buffer.h"
 #include "ierror.h"
 #include "quote.h"
+#include "socket.h"
 
 #include <assert.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <errno.h>
 #include <sys/types.h>
 #include <string.h>
 #include <stdarg.h>
 
-#ifdef WIN32
-#include <winsock2.h>
-#else
+#ifndef WIN32
 #include <sys/socket.h>
 
 static inline int
@@ -194,7 +192,7 @@ mpd_async_read(struct mpd_async *async)
 	if (nbytes < 0) {
 		/* I/O error */
 
-		if (ignore_errno(errno))
+		if (ignore_errno(mpd_socket_errno()))
 			return true;
 
 		mpd_error_errno(&async->error);
@@ -231,7 +229,7 @@ mpd_async_write(struct mpd_async *async)
 	if (nbytes < 0) {
 		/* I/O error */
 
-		if (ignore_errno(errno))
+		if (ignore_errno(mpd_socket_errno()))
 			return true;
 
 		mpd_error_errno(&async->error);

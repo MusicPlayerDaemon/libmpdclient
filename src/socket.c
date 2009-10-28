@@ -35,7 +35,6 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <errno.h>
 
 #ifdef WIN32
 #  include <winsock2.h>
@@ -46,6 +45,7 @@
 #  include <sys/socket.h>
 #  include <netdb.h>
 #  include <sys/un.h>
+#  include <errno.h>
 #endif
 
 #ifndef MSG_DONTWAIT
@@ -127,7 +127,7 @@ mpd_socket_wait(unsigned fd, struct timeval *tv)
 		if (ret > 0)
 			return 0;
 
-		if (ret == 0 || !ignore_errno(errno))
+		if (ret == 0 || !ignore_errno(mpd_socket_errno()))
 			return -1;
 	}
 }
@@ -150,7 +150,7 @@ mpd_socket_wait_connected(int fd, struct timeval *tv)
 	ret = getsockopt(fd, SOL_SOCKET, SO_ERROR,
 			 (char*)&s_err, &s_err_size);
 	if (ret < 0)
-		return -errno;
+		return -mpd_socket_errno();
 
 	if (s_err != 0)
 		return -s_err;

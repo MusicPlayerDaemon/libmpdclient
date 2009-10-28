@@ -27,6 +27,7 @@
 */
 
 #include "sync.h"
+#include "socket.h"
 #include <mpd/async.h>
 
 #include <assert.h>
@@ -34,11 +35,6 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <errno.h>
-
-#ifdef WIN32
-#include <winsock2.h>
-#endif
 
 static bool
 ignore_errno(int e)
@@ -89,7 +85,7 @@ mpd_sync_poll(struct mpd_async *async, struct timeval *tv)
 			return events;
 		}
 
-		if (ret == 0 || !ignore_errno(errno))
+		if (ret == 0 || !ignore_errno(mpd_socket_errno()))
 			return 0;
 	}
 }

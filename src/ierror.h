@@ -61,7 +61,7 @@ struct mpd_error_info {
 	int at;
 
 	/**
-	 * The operating system's error code (i.e. errno).
+	 * The operating system's error code (i.e. errno or WSAGetLastError()).
 	 */
 	int system;
 
