@@ -193,6 +193,12 @@ void
 mpd_error_printf(struct mpd_error_info *error, const char *fmt, ...);
 
 /**
+ * Sets MPD_ERROR_SYSTEM and a message provided by the OS.
+ */
+void
+mpd_error_system_message(struct mpd_error_info *error, int code);
+
+/**
  * Sets MPD_ERROR_SYSTEM and strerror(errno).
  */
 void

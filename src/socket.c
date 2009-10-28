@@ -206,7 +206,7 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 			mpd_error_message(error, "Timeout while connecting");
 		} else if (ret < 0) {
 			mpd_error_clear(error);
-			mpd_error_errno(error);
+			mpd_error_system_message(error, -ret);
 		}
 
 		mpd_socket_close(fd);

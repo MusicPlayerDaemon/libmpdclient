@@ -90,12 +90,20 @@ mpd_error_printf(struct mpd_error_info *error, const char *fmt, ...)
 }
 
 void
+mpd_error_system_message(struct mpd_error_info *error, int code)
+{
+	assert(error != NULL);
+
+	mpd_error_system(error, code);
+	mpd_error_message(error, strerror(code));
+}
+
+void
 mpd_error_errno(struct mpd_error_info *error)
 {
 	assert(error != NULL);
 
-	mpd_error_system(error, errno);
-	mpd_error_message(error, strerror(errno));
+	mpd_error_system_message(error, errno);
 }
 
 bool
