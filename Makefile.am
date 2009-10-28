@@ -106,7 +106,7 @@ SPARSE_CPPFLAGS = $(DEFAULT_INCLUDES) \
 	-I$(shell $(CC) -print-file-name=include) \
 	-I$(shell $(CC) -print-file-name=include-fixed)
 sparse-check:
-	$(SPARSE) -I. $(CFLAGS) $(AM_CPPFLAGS) $(SPARSE_FLAGS) $(SPARSE_CPPFLAGS) $(src_libmpdclient_la_SOURCES)
+	$(SPARSE) -I. $(CFLAGS) $(AM_CPPFLAGS) $(SPARSE_FLAGS) $(SPARSE_CPPFLAGS) $(addprefix $(srcdir)/,$(src_libmpdclient_la_SOURCES))
 
 #
 # Documentation
