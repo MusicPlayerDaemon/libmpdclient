@@ -163,10 +163,10 @@ mpd_error_server(struct mpd_error_info *error,
  * Sets an system error code.
  */
 static inline void
-mpd_error_system(struct mpd_error_info *error, int system)
+mpd_error_system(struct mpd_error_info *error, int system_error_code)
 {
 	mpd_error_code(error, MPD_ERROR_SYSTEM);
-	error->system = system;
+	error->system = system_error_code;
 }
 
 /**
