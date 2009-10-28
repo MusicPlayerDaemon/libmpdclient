@@ -29,6 +29,7 @@
 #include "iso8601.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #ifdef WIN32
 static inline struct tm *
@@ -86,18 +87,39 @@ timegm_emulation(struct tm *tm)
 time_t
 iso8601_datetime_parse(const char *input)
 {
-	int ret;
+	char *endptr;
 	unsigned year, month, day, hour, minute, second;
 	struct tm tm;
 
-	ret = sscanf(input, "%u-%u-%uT%u:%u:%u",
-		     &year, &month, &day, &hour, &minute, &second);
-	if (ret != 6)
+	year = strtol(input, &endptr, 10);
+	if (year < 1970 || year >= 3000 || *endptr != '-')
+		/* beware of the Y3K problem! */
 		return 0;
 
-	if (year < 1970 || year >= 3000 || month < 1 || month > 12 ||
-	    day < 1 || day > 31 || hour >= 24 || minute >= 60 || second >= 60)
-		/* beware of the Y3K problem! */
+	input = endptr + 1;
+	month = strtol(input, &endptr, 10);
+	if (month < 1 || month > 12 || *endptr != '-')
+		return 0;
+
+	input = endptr + 1;
+	day = strtol(input, &endptr, 10);
+	if (day < 1 || day > 31 || *endptr != 'T')
+		return 0;
+
+	input = endptr + 1;
+	hour = strtol(input, &endptr, 10);
+	if (endptr == input || hour >= 24 || *endptr != ':')
+		return 0;
+
+	input = endptr + 1;
+	minute = strtol(input, &endptr, 10);
+	if (endptr == input || minute >= 60 || *endptr != ':')
+		return 0;
+
+	input = endptr + 1;
+	second = strtol(input, &endptr, 10);
+	if (endptr == input || second >= 60 ||
+	    (*endptr != 0 && *endptr != 'Z'))
 		return 0;
 
 	tm.tm_year = year - 1900;
