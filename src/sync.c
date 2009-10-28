@@ -153,6 +153,9 @@ mpd_sync_flush(struct mpd_async *async, const struct timeval *tv0)
 	} else
 		tvp = NULL;
 
+	if (!mpd_async_io(async, MPD_ASYNC_EVENT_WRITE))
+		return false;
+
 	while (true) {
 		enum mpd_async_event events = mpd_async_events(async);
 		if ((events & MPD_ASYNC_EVENT_WRITE) == 0)
