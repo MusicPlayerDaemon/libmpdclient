@@ -37,8 +37,7 @@
 #include <errno.h>
 
 #ifdef WIN32
-#include <ws2tcpip.h>
-#include <winsock.h>
+#include <winsock2.h>
 #endif
 
 static bool

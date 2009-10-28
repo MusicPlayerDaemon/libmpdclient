@@ -41,8 +41,7 @@
 #include <stdarg.h>
 
 #ifdef WIN32
-#include <ws2tcpip.h>
-#include <winsock.h>
+#include <winsock2.h>
 #else
 #include <sys/socket.h>
 

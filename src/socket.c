@@ -38,8 +38,8 @@
 #include <errno.h>
 
 #ifdef WIN32
+#  include <winsock2.h>
 #  include <ws2tcpip.h>
-#  include <winsock.h>
 #else
 #  include <netinet/in.h>
 #  include <arpa/inet.h>
