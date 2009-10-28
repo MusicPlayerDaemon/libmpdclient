@@ -172,16 +172,22 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 			continue;
 		}
 
+		disable_blocking(fd);
+
 		ret = connect(fd, address->addr, address->addrlen);
-		if (ret < 0) {
+		if (ret == 0) {
+			resolver_free(resolver);
+			mpd_error_clear(error);
+			return fd;
+		}
+
+		if (!ignore_errno(mpd_socket_errno())) {
 			mpd_error_clear(error);
 			mpd_error_errno(error);
 
 			mpd_socket_close(fd);
 			continue;
 		}
-
-		disable_blocking(fd);
 
 		ret = mpd_socket_wait_connected(fd, &tv);
 		if (ret > 0) {

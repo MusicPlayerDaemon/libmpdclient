@@ -2,6 +2,7 @@ libmpdclient 2.1 (2009/??/??)
 * status: added mpd_status_get_elapsed_ms()
 * song: copy last_modified value in mpd_song_dup()
 * socket, async: use WSAGetLastError() instead of errno on WIN32
+* socket: connect in non-blocking mode
 * Makefile.am: use --version-script only with GNU ld
 
 
