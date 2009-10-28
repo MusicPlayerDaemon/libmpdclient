@@ -96,6 +96,16 @@ test_test_LDADD = src/libmpdclient.la
 
 
 #
+# Test suite
+#
+
+TESTS = test/t_iso8601
+check_PROGRAMS = $(TESTS)
+
+test_t_iso8601_SOURCES = test/t_iso8601.c src/iso8601.c
+test_t_iso8601_CPPFLAGS = -I$(srcdir)/src $(AM_CPPFLAGS)
+
+#
 # sparse
 #
 
