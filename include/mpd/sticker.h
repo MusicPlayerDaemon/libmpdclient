@@ -48,19 +48,22 @@ extern "C" {
 #endif
 
 /** Describes a sticker on a file. */
-struct mpd_sticker {
-	struct mpd_sticker* next;  /** next sticker in linked list */
-
-	char* uri;                 /** uri of sticker */
-	char* name;                /** sticker key */
-	char* value;               /** sticker value */
-};
+struct mpd_sticker;
 
 /** Destroy a mpd_sticker.
  *
  * The next value is not destroyed and is returned.
  */
 struct mpd_sticker* mpd_sticker_free(struct mpd_sticker* sticker);
+
+/** Get uri from sticker. */
+const char* mpd_sticker_get_uri(const struct mpd_sticker* sticker);
+
+/** Get name from sticker. */
+const char* mpd_sticker_get_name(const struct mpd_sticker* sticker);
+
+/** Get value from sticker. */
+const char* mpd_sticker_get_value(const struct mpd_sticker* sticker);
 
 /** Set a sticker on a song.
  *

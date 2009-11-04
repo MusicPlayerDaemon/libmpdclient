@@ -31,10 +31,19 @@
 #include <mpd/send.h>
 #include <mpd/recv.h>
 #include <mpd/pair.h>
+#include "internal.h"
 
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
+
+struct mpd_sticker {
+	struct mpd_sticker* next;  /** next sticker in linked list */
+
+	char* uri;                 /** uri of sticker */
+	char* name;                /** sticker key */
+	char* value;               /** sticker value */
+};
 
 /** Create a new sticker object. */
 static struct mpd_sticker* mpd_sticker_new(const char* uri, const char* name, const char* value)
@@ -45,6 +54,21 @@ static struct mpd_sticker* mpd_sticker_new(const char* uri, const char* name, co
 	new->value = strdup(value);
 	new->next = NULL;
 	return new;
+}
+
+const char* mpd_sticker_get_uri(const struct mpd_sticker* sticker)
+{
+	return sticker->uri;
+}
+
+const char* mpd_sticker_get_name(const struct mpd_sticker* sticker)
+{
+	return sticker->name;
+}
+
+const char* mpd_sticker_get_value(const struct mpd_sticker* sticker)
+{
+	return sticker->value;
 }
 
 struct mpd_sticker* mpd_sticker_free(struct mpd_sticker* sticker)
@@ -101,6 +125,10 @@ static struct mpd_sticker* mpd_sticker_recv_list(struct mpd_connection* conn, st
 	}
 	mpd_enqueue_pair(conn, pair);
 
+	if (mpd_error_is_defined(&conn->error))
+		while(head)
+			head = mpd_sticker_free(head);
+
 	return head;
 }
 
@@ -132,6 +160,8 @@ struct mpd_sticker* mpd_sticker_song_find(struct mpd_connection* conn, const cha
 		mpd_return_pair(conn, pair);
 		sticker = mpd_sticker_recv_list(conn, sticker, uri);
 		free(uri);
+		if(!sticker)
+			return NULL;
 	}
 
 	return sticker;
