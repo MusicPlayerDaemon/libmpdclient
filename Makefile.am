@@ -31,7 +31,8 @@ mpdinclude_HEADERS = \
 	include/mpd/output.h \
 	include/mpd/pair.h \
 	include/mpd/search.h \
-	include/mpd/song.h
+	include/mpd/song.h \
+	include/mpd/sticker.h
 
 AM_CPPFLAGS += -I$(srcdir)/include
 
@@ -77,7 +78,8 @@ src_libmpdclient_la_SOURCES = \
 	src/stats.c \
 	src/cstats.c \
 	src/sync.c src/sync.h \
-	src/tag.c
+	src/tag.c \
+	src/sticker.c
 
 src_libmpdclient_la_LDFLAGS = -version-info @LIBMPDCLIENT_LIBTOOL_VERSION@ \
 	-no-undefined

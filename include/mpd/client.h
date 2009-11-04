@@ -67,5 +67,6 @@
 #include <mpd/song.h>
 #include <mpd/stats.h>
 #include <mpd/status.h>
+#include <mpd/sticker.h>
 
 #endif
