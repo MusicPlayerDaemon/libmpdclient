@@ -32,7 +32,8 @@ mpdinclude_HEADERS = \
 	include/mpd/pair.h \
 	include/mpd/search.h \
 	include/mpd/song.h \
-	include/mpd/sticker.h
+	include/mpd/sticker.h \
+	include/mpd/version.h
 
 AM_CPPFLAGS += -I$(srcdir)/include -Iinclude
 
