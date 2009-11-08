@@ -31,7 +31,9 @@
 #include <mpd/send.h>
 #include <mpd/recv.h>
 #include <mpd/pair.h>
+#include <mpd/response.h>
 #include "internal.h"
+#include "run.h"
 
 #include <stddef.h>
 #include <stdlib.h>
@@ -81,6 +83,23 @@ struct mpd_sticker* mpd_sticker_free(struct mpd_sticker* sticker)
 	free(sticker);
 
 	return next;
+}
+
+bool
+mpd_send_sticker_set(struct mpd_connection *connection, const char *type,
+		     const char *uri, const char *name, const char *value)
+{
+	return mpd_send_command(connection, "sticker", "set",
+				type, uri, name, value, NULL);
+}
+
+bool
+mpd_run_sticker_set(struct mpd_connection *connection, const char *type,
+		    const char *uri, const char *name, const char *value)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_sticker_set(connection, type, uri, name, value) &&
+		mpd_response_finish(connection);
 }
 
 bool mpd_sticker_song_set(struct mpd_connection* conn, const char* uri, const char* key, const char* value)

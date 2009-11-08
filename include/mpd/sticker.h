@@ -65,6 +65,34 @@ const char* mpd_sticker_get_name(const struct mpd_sticker* sticker);
 /** Get value from sticker. */
 const char* mpd_sticker_get_value(const struct mpd_sticker* sticker);
 
+/**
+ * Adds or replaces a sticker value.
+ *
+ * @param connection the connection to MPD
+ * @param type the object type, e.g. "song"
+ * @param uri the URI of the object
+ * @param name the name of the sticker
+ * @param value the value of the sticker
+ * @return true on success, false on error
+ */
+bool
+mpd_send_sticker_set(struct mpd_connection *connection, const char *type,
+		     const char *uri, const char *name, const char *value);
+
+/**
+ * Shortcut for mpd_send_sticker_set() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param type the object type, e.g. "song"
+ * @param uri the URI of the object
+ * @param name the name of the sticker
+ * @param value the value of the sticker
+ * @return true on success, false on error
+ */
+bool
+mpd_run_sticker_set(struct mpd_connection *connection, const char *type,
+		    const char *uri, const char *name, const char *value);
+
 /** Set a sticker on a song.
  *
  * @param conn  current connection to MPD.
@@ -118,3 +146,4 @@ struct mpd_sticker* mpd_sticker_song_find(struct mpd_connection* conn, const cha
 #endif
 
 #endif /* MPD_STICKER_H */
+
