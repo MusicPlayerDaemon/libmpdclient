@@ -27,6 +27,7 @@
 */
 
 #include "socket.h"
+#include "fd_util.h"
 #include "resolver.h"
 #include "ierror.h"
 
@@ -82,21 +83,6 @@ mpd_socket_global_init(struct mpd_error_info *error)
 }
 
 #endif
-
-/**
- * Put the socket into non-blocking mode.
- */
-static void
-disable_blocking(int fd)
-{
-#ifdef WIN32
-	u_long iMode = 1; /* 0 = blocking, else non-blocking */
-	ioctlsocket(fd, FIONBIO, &iMode);
-#else /* !WIN32 */
-	int flags = fcntl(fd, F_GETFL, 0);
-	fcntl(fd, F_SETFL, flags | O_NONBLOCK);
-#endif
-}
 
 /**
  * Wait for the socket to become readable.
@@ -165,14 +151,13 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 	assert(!mpd_error_is_defined(error));
 
 	while ((address = resolver_next(resolver)) != NULL) {
-		fd = socket(address->family, SOCK_STREAM, address->protocol);
+		fd = socket_cloexec_nonblock(address->family, SOCK_STREAM,
+					     address->protocol);
 		if (fd < 0) {
 			mpd_error_clear(error);
 			mpd_error_errno(error);
 			continue;
 		}
-
-		disable_blocking(fd);
 
 		ret = connect(fd, address->addr, address->addrlen);
 		if (ret == 0) {
