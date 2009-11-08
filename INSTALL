@@ -25,6 +25,14 @@ Compile and install:
  sudo make install
 
 
+Compiling with dietlibc
+-----------------------
+
+Use the "diet" wrapper as your C compiler:
+
+ CC="diet -Os gcc -nostdinc" ./configure --disable-shared
+
+
 Compiling for Windows
 ---------------------
 
