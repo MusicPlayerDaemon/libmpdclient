@@ -6,6 +6,10 @@ AM_INIT_AUTOMAKE([foreign 1.10 dist-bzip2 subdir-objects])
 AM_CONFIG_HEADER([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
+AC_SUBST(MAJOR_VERSION,2)
+AC_SUBST(MINOR_VERSION,1)
+AC_SUBST(PATCH_VERSION,0)
+
 LIBMPDCLIENT_LIBTOOL_VERSION=2:0:0
 AC_SUBST(LIBMPDCLIENT_LIBTOOL_VERSION)
 
@@ -136,4 +140,4 @@ dnl
 dnl Done
 dnl
 
-AC_OUTPUT([Makefile libmpdclient.pc doc/doxygen.conf])
+AC_OUTPUT([Makefile include/mpd/version.h libmpdclient.pc doc/doxygen.conf])

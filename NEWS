@@ -5,6 +5,7 @@ libmpdclient 2.1 (2009/??/??)
 * socket: connect in non-blocking mode
 * sync: optimistic write, reduce select() calls
 * Makefile.am: use --version-script only with GNU ld
+* added library version compile-time checks
 
 
 libmpdclient 2.0 (2009/10/03)

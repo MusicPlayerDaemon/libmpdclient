@@ -29,45 +29,30 @@
 /*! \file
  * \brief MPD client library
  *
- * This is a client library for the Music Player Daemon, written in C.
- *
- * You can choose one of several APIs, depending on your requirements:
- *
- * - struct mpd_async: a very low-level asynchronous API which knows
- *   the protocol syntax, but no specific commands
- *
- * - struct mpd_connection: a basic synchronous API which knows all
- *   MPD commands and parses all responses
- *
- * \author Max Kellermann (max@duempel.org)
+ * Do not include this header directly.  Use mpd/client.h instead.
  */
 
-#ifndef MPD_CLIENT_H
-#define MPD_CLIENT_H
+#ifndef MPD_VERSION_H
+#define MPD_VERSION_H
 
-#include <mpd/audio_format.h>
-#include <mpd/capabilities.h>
-#include <mpd/connection.h>
-#include <mpd/database.h>
-#include <mpd/directory.h>
-#include <mpd/entity.h>
-#include <mpd/idle.h>
-#include <mpd/list.h>
-#include <mpd/mixer.h>
-#include <mpd/output.h>
-#include <mpd/pair.h>
-#include <mpd/password.h>
-#include <mpd/player.h>
-#include <mpd/playlist.h>
-#include <mpd/queue.h>
-#include <mpd/recv.h>
-#include <mpd/response.h>
-#include <mpd/search.h>
-#include <mpd/send.h>
-#include <mpd/song.h>
-#include <mpd/stats.h>
-#include <mpd/status.h>
-#include <mpd/sticker.h>
-#include <mpd/version.h>
+#define LIBMPDCLIENT_MAJOR_VERSION @MAJOR_VERSION@
+#define LIBMPDCLIENT_MINOR_VERSION @MINOR_VERSION@
+#define LIBMPDCLIENT_PATCH_VERSION @PATCH_VERSION@
+
+/**
+ * Preprocessor macro which allows you to check which version of
+ * libmpdclient you are compiling with.  It can be used in
+ * preprocessor directives.
+ *
+ * @return true if this libmpdclient version equals or is newer than
+ * the specified version number
+ * @since libmpdclient 2.1
+ */
+#define LIBMPDCLIENT_CHECK_VERSION(major, minor, patch) \
+	((major) > LIBMPDCLIENT_MAJOR_VERSION || \
+	 ((major) == LIBMPDCLIENT_MAJOR_VERSION && \
+	  ((minor) > LIBMPDCLIENT_MINOR_VERSION || \
+	   ((minor) == LIBMPDCLIENT_MINOR_VERSION && \
+	    (patch) >= LIBMPDCLIENT_PATCH_VERSION))))
 
 #endif

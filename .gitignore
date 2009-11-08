@@ -28,5 +28,6 @@ doc/doxygen.conf
 doc/api
 *.exe
 *.tar.*
+include/mpd/version.h
 
 test/t_iso8601

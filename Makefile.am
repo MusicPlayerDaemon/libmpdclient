@@ -34,7 +34,7 @@ mpdinclude_HEADERS = \
 	include/mpd/song.h \
 	include/mpd/sticker.h
 
-AM_CPPFLAGS += -I$(srcdir)/include
+AM_CPPFLAGS += -I$(srcdir)/include -Iinclude
 
 lib_LTLIBRARIES = src/libmpdclient.la
 
@@ -143,7 +143,7 @@ install-data-local: doc/api/html/index.html
 		$(DESTDIR)$(docdir)/html
 
 uninstall-local:
-	rm -f $(DESTDIR)$(docdir)/html/index.html \
+	rm -f $(DESTDIR)$(docdir)/html/*.html \
 	$(DESTDIR)$(docdir)/html/*.css \
 	$(DESTDIR)$(docdir)/html/*.gif \
 	$(DESTDIR)$(docdir)/html/*.png
