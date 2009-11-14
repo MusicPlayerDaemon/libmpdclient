@@ -306,9 +306,10 @@ global:
 	mpd_run_sticker_set;
 	mpd_send_sticker_delete;
 	mpd_run_sticker_delete;
-	mpd_sticker_song_get;
-	mpd_sticker_song_list;
-	mpd_sticker_song_find;
+	mpd_send_sticker_get;
+	mpd_send_sticker_list;
+	mpd_send_sticker_find;
+	mpd_recv_sticker;
 
 local:
 	*;

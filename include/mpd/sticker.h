@@ -47,24 +47,6 @@ struct mpd_connection;
 extern "C" {
 #endif
 
-/** Describes a sticker on a file. */
-struct mpd_sticker;
-
-/** Destroy a mpd_sticker.
- *
- * The next value is not destroyed and is returned.
- */
-struct mpd_sticker* mpd_sticker_free(struct mpd_sticker* sticker);
-
-/** Get uri from sticker. */
-const char* mpd_sticker_get_uri(const struct mpd_sticker* sticker);
-
-/** Get name from sticker. */
-const char* mpd_sticker_get_name(const struct mpd_sticker* sticker);
-
-/** Get value from sticker. */
-const char* mpd_sticker_get_value(const struct mpd_sticker* sticker);
-
 /**
  * Adds or replaces a sticker value.
  *
@@ -119,34 +101,56 @@ bool
 mpd_run_sticker_delete(struct mpd_connection *connection, const char *type,
 		       const char *uri, const char *name);
 
-/** Get a specific song's sticker.
+/**
+ * Queries a sticker value.  Call mpd_recv_sticker() to receive the response.
  *
- * @param conn  current connection to MPD.
- * @param uri  uri of song.
- * @param key  sticker key.
- * @return  a mpd_sticker object. You need to destroy it yourself with \
- *          mpd_sticker_free().
+ * @param connection the connection to MPD
+ * @param type the object type, e.g. "song"
+ * @param uri the URI of the object
+ * @param name the name of the sticker
+ * @return true on success, false on error
  */
-struct mpd_sticker* mpd_sticker_song_get(struct mpd_connection* conn, const char* uri, const char* key);
+bool
+mpd_send_sticker_get(struct mpd_connection *connection, const char *type,
+		     const char *uri, const char *name);
 
-/** List every stickers on a song.
+/**
+ * Obtains a list of all stickers of the specified object.  Call
+ * mpd_recv_sticker() to receive each response item.
  *
- * @param conn  current connection to MPD.
- * @param uri  uri of song.
- * @return  a linked-list of mpd_sticker objects. You need to destroy them \
- *          yourself with mpd_sticker_free().
+ * @param connection the connection to MPD
+ * @param type the object type, e.g. "song"
+ * @param uri the URI of the object
+ * @return true on success, false on error
  */
-struct mpd_sticker* mpd_sticker_song_list(struct mpd_connection* conn, const char* uri);
+bool
+mpd_send_sticker_list(struct mpd_connection *connection, const char *type,
+		      const char *uri);
 
-/** Find every files in a directory with a specific stickey set.
+/**
+ * Searches for stickers with the specified name.
  *
- * @param conn  current connection to MPD.
- * @param dir  directory where to find.
- * @param key  key to find on songs.
- * @return  a linked-list of mpd_sticker objects. You need to destroy them \
- *          yourself with mpd_sticker_free().
+ * @param connection the connection to MPD
+ * @param type the object type, e.g. "song"
+ * @param base_uri the base URI to start the search, e.g. a directory;
+ * NULL to search for all objects of the specified type
+ * @param name the name of the sticker
+ * @return true on success, false on error
  */
-struct mpd_sticker* mpd_sticker_song_find(struct mpd_connection* conn, const char* dir, const char* key);
+bool
+mpd_send_sticker_find(struct mpd_connection *connection, const char *type,
+		      const char *base_uri, const char *name);
+
+/**
+ * Receives the next sticker.  You have to free the return value with
+ * mpd_return_pair(), but you cannot use mpd_enqueue_pair().
+ *
+ * @param connection the connection to MPD
+ * @return a #mpd_pair object on success, NULL on end of response or
+ * error
+ */
+struct mpd_pair *
+mpd_recv_sticker(struct mpd_connection *connection);
 
 #ifdef __cplusplus
 }
