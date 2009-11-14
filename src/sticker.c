@@ -35,6 +35,7 @@
 #include "internal.h"
 #include "run.h"
 
+#include <assert.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -102,6 +103,28 @@ mpd_run_sticker_set(struct mpd_connection *connection, const char *type,
 		mpd_response_finish(connection);
 }
 
+bool
+mpd_send_sticker_delete(struct mpd_connection *connection, const char *type,
+			const char *uri, const char *name)
+{
+	assert(connection != NULL);
+	assert(type != NULL);
+	assert(uri != NULL);
+	assert(name != NULL);
+
+	return mpd_send_command(connection, "sticker", "delete",
+				type, uri, name, NULL);
+}
+
+bool
+mpd_run_sticker_delete(struct mpd_connection *connection, const char *type,
+		       const char *uri, const char *name)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_sticker_delete(connection, type, uri, name) &&
+		mpd_response_finish(connection);
+}
+
 struct mpd_sticker* mpd_sticker_song_get(struct mpd_connection* conn, const char* uri, const char* key)
 {
 	struct mpd_pair *pair;
@@ -152,11 +175,6 @@ struct mpd_sticker* mpd_sticker_song_list(struct mpd_connection* conn, const cha
 		return NULL;
 
 	return mpd_sticker_recv_list(conn, NULL, uri);
-}
-
-bool mpd_sticker_song_delete(struct mpd_connection* conn, const char* uri, const char* key)
-{
-	return mpd_send_command(conn, "sticker", "delete", "song", uri, key, NULL);
 }
 
 struct mpd_sticker* mpd_sticker_song_find(struct mpd_connection* conn, const char* dir, const char* value)

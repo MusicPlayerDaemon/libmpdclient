@@ -93,14 +93,31 @@ bool
 mpd_run_sticker_set(struct mpd_connection *connection, const char *type,
 		    const char *uri, const char *name, const char *value);
 
-/** Delete a sticker on a song.
+/**
+ * Deletes a sticker value.
  *
- * @param conn  current connection to MPD.
- * @param uri  uri of song.
- * @param key  key to remove on song. If NULL, it removes every keys.
- * @return  true if command has correctly been sent to MPD.
+ * @param connection the connection to MPD
+ * @param type the object type, e.g. "song"
+ * @param uri the URI of the object
+ * @param name the name of the sticker
+ * @return true on success, false on error
  */
-bool mpd_sticker_song_delete(struct mpd_connection* conn, const char* uri, const char* key);
+bool
+mpd_send_sticker_delete(struct mpd_connection *connection, const char *type,
+			const char *uri, const char *name);
+
+/**
+ * Shortcut for mpd_send_sticker_delete() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param type the object type, e.g. "song"
+ * @param uri the URI of the object
+ * @param name the name of the sticker
+ * @return true on success, false on error
+ */
+bool
+mpd_run_sticker_delete(struct mpd_connection *connection, const char *type,
+		       const char *uri, const char *name);
 
 /** Get a specific song's sticker.
  *
