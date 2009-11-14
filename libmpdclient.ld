@@ -304,7 +304,6 @@ global:
 	mpd_sticker_free;
 	mpd_send_sticker_set;
 	mpd_run_sticker_set;
-	mpd_sticker_song_set;
 	mpd_sticker_song_get;
 	mpd_sticker_song_list;
 	mpd_sticker_song_delete;

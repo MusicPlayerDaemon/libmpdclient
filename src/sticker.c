@@ -102,11 +102,6 @@ mpd_run_sticker_set(struct mpd_connection *connection, const char *type,
 		mpd_response_finish(connection);
 }
 
-bool mpd_sticker_song_set(struct mpd_connection* conn, const char* uri, const char* key, const char* value)
-{
-	return mpd_send_command(conn, "sticker", "set", "song", uri, key, value, NULL);
-}
-
 struct mpd_sticker* mpd_sticker_song_get(struct mpd_connection* conn, const char* uri, const char* key)
 {
 	struct mpd_pair *pair;

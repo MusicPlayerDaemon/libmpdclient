@@ -93,16 +93,6 @@ bool
 mpd_run_sticker_set(struct mpd_connection *connection, const char *type,
 		    const char *uri, const char *name, const char *value);
 
-/** Set a sticker on a song.
- *
- * @param conn  current connection to MPD.
- * @param uri  uri of song.
- * @param key  sticker key.
- * @param value  value to set on sticker key.
- * @return  true if command has correctly been sent to MPD.
- */
-bool mpd_sticker_song_set(struct mpd_connection* conn, const char* uri, const char* key, const char* value);
-
 /** Delete a sticker on a song.
  *
  * @param conn  current connection to MPD.
