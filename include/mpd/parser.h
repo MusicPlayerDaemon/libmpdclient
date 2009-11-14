@@ -60,6 +60,8 @@ enum mpd_parser_result {
 };
 
 /**
+ * \struct mpd_parser
+ *
  * This opaque object is a low-level parser for the MPD protocol.  You
  * feed it with input lines, and it provides parsed representations.
  */
@@ -94,7 +96,7 @@ mpd_parser_free(struct mpd_parser *parser);
  * not modify or free it, until the name and value pointers are not
  * used anymore.
  *
- * @param parser the parser object
+ * @param parser the #mpd_parser object
  * @param line a line received from the MPD server
  * @return a result code indicating the type of line, or error
  */
@@ -106,7 +108,7 @@ mpd_parser_feed(struct mpd_parser *parser, char *line);
  * to find out whether this is an "OK" (false) or a "list_OK" (true)
  * response.
  *
- * @param parser the parser object
+ * @param parser the #mpd_parser object
  */
 mpd_pure
 bool
@@ -116,7 +118,7 @@ mpd_parser_is_discrete(const struct mpd_parser *parser);
  * Call this when mpd_parser_feed() has returned #MPD_PARSER_ERROR to
  * obtain the reason for the error.
  *
- * @param parser the parser object
+ * @param parser the #mpd_parser object
  */
 mpd_pure
 enum mpd_server_error
@@ -126,7 +128,7 @@ mpd_parser_get_server_error(const struct mpd_parser *parser);
  * On #MPD_PARSER_ERROR, this returns the number of the list command
  * which failed.  Don't call this outside of a command list.
  *
- * @param parser the parser object
+ * @param parser the #mpd_parser object
  */
 mpd_pure
 unsigned
@@ -140,7 +142,7 @@ mpd_parser_get_at(const struct mpd_parser *parser);
  * mpd_parser_feed().  It is valid as long as the buffer is not
  * freed/modified.
  *
- * @param parser the parser object
+ * @param parser the #mpd_parser object
  */
 mpd_pure
 const char *
@@ -153,7 +155,7 @@ mpd_parser_get_message(const struct mpd_parser *parser);
  * mpd_parser_feed().  It is valid as long as the buffer is not
  * freed/modified.
  *
- * @param parser the parser object
+ * @param parser the #mpd_parser object
  */
 mpd_pure
 const char *
@@ -166,7 +168,7 @@ mpd_parser_get_name(const struct mpd_parser *parser);
  * mpd_parser_feed().  It is valid as long as the buffer is not
  * freed/modified.
  *
- * @param parser the parser object
+ * @param parser the #mpd_parser object
  */
 mpd_pure
 const char *
