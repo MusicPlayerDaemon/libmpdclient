@@ -298,10 +298,6 @@ global:
 	mpd_tag_name_iparse;
 
 	/* mpd/sticker.h */
-	mpd_sticker_get_uri;
-	mpd_sticker_get_name;
-	mpd_sticker_get_value;
-	mpd_sticker_free;
 	mpd_send_sticker_set;
 	mpd_run_sticker_set;
 	mpd_send_sticker_delete;
