@@ -40,6 +40,7 @@
 #include <mpd/compiler.h>
 
 #include <stdbool.h>
+#include <stddef.h>
 
 struct mpd_connection;
 
@@ -140,6 +141,18 @@ mpd_send_sticker_list(struct mpd_connection *connection, const char *type,
 bool
 mpd_send_sticker_find(struct mpd_connection *connection, const char *type,
 		      const char *base_uri, const char *name);
+
+/**
+ * Parse a sticker input line in the form "name=value".
+ *
+ * @param input the input value, the value from a received pair named
+ * "sticker"
+ * @param name_length_r the length of the name (starting at the
+ * beginning of the input string) is returned here
+ * @return a pointer to the sticker value, or NULL on error
+ */
+const char *
+mpd_parse_sticker(const char *input, size_t *name_length_r);
 
 /**
  * Receives the next sticker.  You have to free the return value with

@@ -115,6 +115,19 @@ mpd_send_sticker_find(struct mpd_connection *connection, const char *type,
 				type, base_uri, name, NULL);
 }
 
+const char *
+mpd_parse_sticker(const char *input, size_t *name_length_r)
+{
+	const char *eq;
+
+	eq = strchr(input, '=');
+	if (eq == NULL || eq == input)
+		return NULL;
+
+	*name_length_r = eq - input;
+	return eq + 1;
+}
+
 struct mpd_pair *
 mpd_recv_sticker(struct mpd_connection *connection)
 {
