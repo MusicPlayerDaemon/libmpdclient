@@ -1,4 +1,4 @@
-libmpdclient 2.1 (2009/??/??)
+libmpdclient 2.1 (2009/12/06)
 * status: added mpd_status_get_elapsed_ms()
 * sticker: added sticker support
 * song: copy last_modified value in mpd_song_dup()
@@ -9,7 +9,6 @@ libmpdclient 2.1 (2009/??/??)
 * sync: optimistic write, reduce select() calls
 * Makefile.am: use --version-script only with GNU ld
 * added library version compile-time checks
-
 
 libmpdclient 2.0 (2009/10/03)
 * complete rewrite and API redesign
