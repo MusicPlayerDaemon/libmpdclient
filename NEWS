@@ -1,9 +1,11 @@
 libmpdclient 2.1 (2009/??/??)
 * status: added mpd_status_get_elapsed_ms()
+* sticker: added sticker support
 * song: copy last_modified value in mpd_song_dup()
 * socket, async: use WSAGetLastError() instead of errno on WIN32
 * socket: connect in non-blocking mode
 * socket: set the close-on-exec flag
+* tag: support C++
 * sync: optimistic write, reduce select() calls
 * Makefile.am: use --version-script only with GNU ld
 * added library version compile-time checks
