@@ -162,6 +162,7 @@ mpd_parse_sticker(const char *input, size_t *name_length_r);
  * @return a #mpd_pair object on success, NULL on end of response or
  * error
  */
+mpd_malloc
 struct mpd_pair *
 mpd_recv_sticker(struct mpd_connection *connection);
 
