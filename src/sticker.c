@@ -154,3 +154,9 @@ mpd_recv_sticker(struct mpd_connection *connection)
 
 	return pair;
 }
+
+void
+mpd_return_sticker(struct mpd_connection *connection, struct mpd_pair *pair)
+{
+	mpd_return_pair(connection, pair);
+}

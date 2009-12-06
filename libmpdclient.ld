@@ -307,6 +307,7 @@ global:
 	mpd_send_sticker_find;
 	mpd_parse_sticker;
 	mpd_recv_sticker;
+	mpd_return_sticker;
 
 local:
 	*;

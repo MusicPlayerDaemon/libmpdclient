@@ -156,7 +156,7 @@ mpd_parse_sticker(const char *input, size_t *name_length_r);
 
 /**
  * Receives the next sticker.  You have to free the return value with
- * mpd_return_pair(), but you cannot use mpd_enqueue_pair().
+ * mpd_return_sticker().
  *
  * @param connection the connection to MPD
  * @return a #mpd_pair object on success, NULL on end of response or
@@ -164,6 +164,12 @@ mpd_parse_sticker(const char *input, size_t *name_length_r);
  */
 struct mpd_pair *
 mpd_recv_sticker(struct mpd_connection *connection);
+
+/**
+ * Free the pair returned by mpd_recv_sticker().
+ */
+void
+mpd_return_sticker(struct mpd_connection *connection, struct mpd_pair *pair);
 
 #ifdef __cplusplus
 }
