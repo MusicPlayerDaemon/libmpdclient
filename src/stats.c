@@ -91,7 +91,7 @@ void mpd_stats_free(struct mpd_stats * stats) {
 }
 
 unsigned
-mpd_stats_get_number_of_artists(struct mpd_stats * stats)
+mpd_stats_get_number_of_artists(const struct mpd_stats * stats)
 {
 	assert(stats != NULL);
 
@@ -99,7 +99,7 @@ mpd_stats_get_number_of_artists(struct mpd_stats * stats)
 }
 
 unsigned
-mpd_stats_get_number_of_albums(struct mpd_stats * stats)
+mpd_stats_get_number_of_albums(const struct mpd_stats * stats)
 {
 	assert(stats != NULL);
 
@@ -107,35 +107,35 @@ mpd_stats_get_number_of_albums(struct mpd_stats * stats)
 }
 
 unsigned
-mpd_stats_get_number_of_songs(struct mpd_stats * stats)
+mpd_stats_get_number_of_songs(const struct mpd_stats * stats)
 {
 	assert(stats != NULL);
 
 	return stats->number_of_songs;
 }
 
-unsigned long mpd_stats_get_uptime(struct mpd_stats * stats)
+unsigned long mpd_stats_get_uptime(const struct mpd_stats * stats)
 {
 	assert(stats != NULL);
 
 	return stats->uptime;
 }
 
-unsigned long mpd_stats_get_db_update_time(struct mpd_stats * stats)
+unsigned long mpd_stats_get_db_update_time(const struct mpd_stats * stats)
 {
 	assert(stats != NULL);
 
 	return stats->db_update_time;
 }
 
-unsigned long mpd_stats_get_play_time(struct mpd_stats * stats)
+unsigned long mpd_stats_get_play_time(const struct mpd_stats * stats)
 {
 	assert(stats != NULL);
 
 	return stats->play_time;
 }
 
-unsigned long mpd_stats_get_db_play_time(struct mpd_stats * stats)
+unsigned long mpd_stats_get_db_play_time(const struct mpd_stats * stats)
 {
 	assert(stats != NULL);
 

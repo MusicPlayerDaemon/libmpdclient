@@ -111,7 +111,7 @@ void mpd_stats_free(struct mpd_stats * stats);
  */
 mpd_pure
 unsigned
-mpd_stats_get_number_of_artists(struct mpd_stats * stats);
+mpd_stats_get_number_of_artists(const struct mpd_stats * stats);
 
 /**
  * @return the number of distinct album names in MPD's database, or 0
@@ -119,7 +119,7 @@ mpd_stats_get_number_of_artists(struct mpd_stats * stats);
  */
 mpd_pure
 unsigned
-mpd_stats_get_number_of_albums(struct mpd_stats * stats);
+mpd_stats_get_number_of_albums(const struct mpd_stats * stats);
 
 /**
  * @return the total number of song files in MPD's database, or 0 if
@@ -127,34 +127,34 @@ mpd_stats_get_number_of_albums(struct mpd_stats * stats);
  */
 mpd_pure
 unsigned
-mpd_stats_get_number_of_songs(struct mpd_stats * stats);
+mpd_stats_get_number_of_songs(const struct mpd_stats * stats);
 
 /**
  * @return the uptime of MPD in seconds, or 0 if unknown
  */
 mpd_pure
-unsigned long mpd_stats_get_uptime(struct mpd_stats * stats);
+unsigned long mpd_stats_get_uptime(const struct mpd_stats * stats);
 
 /**
  * @return the UNIX time stamp of the last database update, or 0 if
  * unknown
  */
 mpd_pure
-unsigned long mpd_stats_get_db_update_time(struct mpd_stats * stats);
+unsigned long mpd_stats_get_db_update_time(const struct mpd_stats * stats);
 
 /**
  * @return the accumulated time MPD was playing music since the
  * process was started, or 0 if unknown
  */
 mpd_pure
-unsigned long mpd_stats_get_play_time(struct mpd_stats * stats);
+unsigned long mpd_stats_get_play_time(const struct mpd_stats * stats);
 
 /**
  * @return the accumulated duration of all songs in the database, or 0
  * if unknown
  */
 mpd_pure
-unsigned long mpd_stats_get_db_play_time(struct mpd_stats * stats);
+unsigned long mpd_stats_get_db_play_time(const struct mpd_stats * stats);
 
 #ifdef __cplusplus
 }
