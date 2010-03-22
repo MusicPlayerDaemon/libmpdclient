@@ -269,3 +269,31 @@ mpd_run_crossfade(struct mpd_connection *connection, unsigned seconds)
 		mpd_send_crossfade(connection, seconds) &&
 		mpd_response_finish(connection);
 }
+
+bool
+mpd_send_mixrampdb(struct mpd_connection *connection, float db)
+{
+	return mpd_send_float_command(connection, "mixrampdb", db);
+}
+
+bool
+mpd_run_mixrampdb(struct mpd_connection *connection, float db)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_mixrampdb(connection, db) &&
+		mpd_response_finish(connection);
+}
+
+bool
+mpd_send_mixrampdelay(struct mpd_connection *connection, float seconds)
+{
+	return mpd_send_float_command(connection, "mixrampdelay", seconds);
+}
+
+bool
+mpd_run_mixrampdelay(struct mpd_connection *connection, float seconds)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_mixrampdelay(connection, seconds) &&
+		mpd_response_finish(connection);
+}

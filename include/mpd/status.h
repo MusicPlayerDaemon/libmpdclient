@@ -193,6 +193,21 @@ unsigned
 mpd_status_get_crossfade(const struct mpd_status *status);
 
 /**
+ * Returns mixrampdb setting in db.
+ */
+mpd_pure
+float
+mpd_status_get_mixrampdb(const struct mpd_status *status);
+
+/**
+ * Returns mixrampdelay setting in seconds.  Negative means mixramp is
+ * disabled.
+ */
+mpd_pure
+float
+mpd_status_get_mixrampdelay(const struct mpd_status *status);
+
+/**
  * Returns the position of the currently playing song in the queue
  * (beginning with 0) if a song is currently selected (always the case when
  * state is PLAY or PAUSE).  If there is no current song, -1 is returned.

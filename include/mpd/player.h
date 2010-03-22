@@ -199,6 +199,18 @@ mpd_send_crossfade(struct mpd_connection *connection, unsigned seconds);
 bool
 mpd_run_crossfade(struct mpd_connection *connection, unsigned seconds);
 
+bool
+mpd_send_mixrampdb(struct mpd_connection *connection, float db);
+
+bool
+mpd_run_mixrampdb(struct mpd_connection *connection, float db);
+
+bool
+mpd_send_mixrampdelay(struct mpd_connection *connection, float seconds);
+
+bool
+mpd_run_mixrampdelay(struct mpd_connection *connection, float seconds);
+
 #ifdef __cplusplus
 }
 #endif

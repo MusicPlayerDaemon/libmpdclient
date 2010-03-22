@@ -144,6 +144,10 @@ global:
 	mpd_run_consume;
 	mpd_send_crossfade;
 	mpd_run_crossfade;
+	mpd_send_mixrampdb;
+	mpd_run_mixrampdb;
+	mpd_send_mixrampdelay;
+	mpd_run_mixrampdelay;
 
 	/* mpd/playlist.h */
 	mpd_playlist_free;
@@ -282,6 +286,8 @@ global:
 	mpd_status_get_queue_version;
 	mpd_status_get_state;
 	mpd_status_get_crossfade;
+	mpd_status_get_mixrampdb;
+	mpd_status_get_mixrampdelay;
 	mpd_status_get_song_pos;
 	mpd_status_get_song_id;
 	mpd_status_get_elapsed_time;

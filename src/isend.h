@@ -50,6 +50,10 @@ mpd_send_int2_command(struct mpd_connection *connection, const char *command,
 		      int arg1, int arg2);
 
 bool
+mpd_send_float_command(struct mpd_connection *connection, const char *command,
+		       float arg);
+
+bool
 mpd_send_s_u_command(struct mpd_connection *connection, const char *command,
 		     const char *arg1, unsigned arg2);
 

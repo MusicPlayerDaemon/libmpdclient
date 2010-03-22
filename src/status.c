@@ -71,6 +71,12 @@ struct mpd_status {
 	/** crossfade setting in seconds */
 	unsigned crossfade;
 
+	/** Mixramp threshold in dB */
+	float mixrampdb;
+
+	/** Mixramp extra delay in seconds */
+	float mixrampdelay;
+
 	/**
 	 * If a song is currently selected (always the case when state
 	 * is PLAY or PAUSE), this is the position of the currently
@@ -132,6 +138,8 @@ mpd_status_begin(void)
 	status->kbit_rate = 0;
 	memset(&status->audio_format, 0, sizeof(status->audio_format));
 	status->crossfade = 0;
+	status->mixrampdb = 100.0;
+	status->mixrampdelay = -1.0;
 	status->error = NULL;
 	status->update_id = 0;
 
@@ -243,6 +251,10 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 		status->error = strdup(pair->value);
 	} else if (strcmp(pair->name, "xfade") == 0)
 		status->crossfade = atoi(pair->value);
+	else if (strcmp(pair->name, "mixrampdb") == 0)
+		status->mixrampdb = atof(pair->value);
+	else if (strcmp(pair->name, "mixrampdelay") == 0)
+		status->mixrampdelay = atof(pair->value);
 	else if (strcmp(pair->name, "updating_db") == 0)
 		status->update_id = atoi(pair->value);
 	else if (strcmp(pair->name, "audio") == 0)
@@ -305,6 +317,18 @@ unsigned
 mpd_status_get_crossfade(const struct mpd_status *status)
 {
 	return status->crossfade;
+}
+
+float
+mpd_status_get_mixrampdb(const struct mpd_status *status)
+{
+	return status->mixrampdb;
+}
+
+float
+mpd_status_get_mixrampdelay(const struct mpd_status *status)
+{
+	return status->mixrampdelay;
 }
 
 int
