@@ -1,5 +1,6 @@
 libmpdclient 2.2 (2009/??/??)
 * MixRamp support
+* fix the LIBMPDCLIENT_CHECK_VERSION() macro
 
 libmpdclient 2.1 (2009/12/06)
 * status: added mpd_status_get_elapsed_ms()

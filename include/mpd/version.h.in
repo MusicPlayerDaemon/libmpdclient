@@ -49,10 +49,10 @@
  * @since libmpdclient 2.1
  */
 #define LIBMPDCLIENT_CHECK_VERSION(major, minor, patch) \
-	((major) > LIBMPDCLIENT_MAJOR_VERSION || \
+	((major) < LIBMPDCLIENT_MAJOR_VERSION || \
 	 ((major) == LIBMPDCLIENT_MAJOR_VERSION && \
-	  ((minor) > LIBMPDCLIENT_MINOR_VERSION || \
+	  ((minor) < LIBMPDCLIENT_MINOR_VERSION || \
 	   ((minor) == LIBMPDCLIENT_MINOR_VERSION && \
-	    (patch) >= LIBMPDCLIENT_PATCH_VERSION))))
+	    (patch) <= LIBMPDCLIENT_PATCH_VERSION))))
 
 #endif
