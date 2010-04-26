@@ -1,3 +1,6 @@
+libmpdclient 2.3 (2010/??/??)
+
+
 libmpdclient 2.2 (2010/04/25)
 * MixRamp support
 * fix the LIBMPDCLIENT_CHECK_VERSION() macro
