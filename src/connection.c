@@ -188,6 +188,13 @@ mpd_connect(const char *host, unsigned port, const struct timeval *timeout,
 	return mpd_socket_connect(host, port, timeout, error);
 }
 
+static unsigned
+mpd_default_timeout_ms(void)
+{
+	/* 30s is the default */
+	return 30000;
+}
+
 struct mpd_connection *
 mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 {
@@ -213,8 +220,7 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 		return connection;
 
 	if (timeout_ms == 0)
-		/* 30s is the default */
-		timeout_ms = 30000;
+		timeout_ms = mpd_default_timeout_ms();
 
 	mpd_connection_set_timeout(connection, timeout_ms);
 
