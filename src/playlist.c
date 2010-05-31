@@ -37,6 +37,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 struct mpd_playlist {
 	char *path;
@@ -113,8 +114,10 @@ mpd_playlist_begin(const struct mpd_pair *pair)
 	assert(pair->name != NULL);
 	assert(pair->value != NULL);
 
-	if (strcmp(pair->name, "playlist") != 0)
+	if (strcmp(pair->name, "playlist") != 0) {
+		errno = EINVAL;
 		return NULL;
+	}
 
 	return mpd_playlist_new(pair->value);
 }

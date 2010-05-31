@@ -39,6 +39,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 struct mpd_tag_value {
 	struct mpd_tag_value *next;
@@ -341,8 +342,10 @@ mpd_song_begin(const struct mpd_pair *pair)
 	assert(pair->name != NULL);
 	assert(pair->value != NULL);
 
-	if (strcmp(pair->name, "file") != 0)
+	if (strcmp(pair->name, "file") != 0) {
+		errno = EINVAL;
 		return NULL;
+	}
 
 	return mpd_song_new(pair->value);
 }
@@ -399,7 +402,7 @@ mpd_recv_song(struct mpd_connection *connection)
 	song = mpd_song_begin(pair);
 	mpd_return_pair(connection, pair);
 	if (song == NULL) {
-		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		mpd_error_entity(&connection->error);
 		return NULL;
 	}
 

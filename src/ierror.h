@@ -205,6 +205,13 @@ void
 mpd_error_errno(struct mpd_error_info *error);
 
 /**
+ * An entity parser has failed.  The error is set depending on the
+ * value of errno (ENOMEM or EINVAL).
+ */
+void
+mpd_error_entity(struct mpd_error_info *error);
+
+/**
  * Copies a #mpd_error_info onto another one.  Duplicates the error
  * message.
  *

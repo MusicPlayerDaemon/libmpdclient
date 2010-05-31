@@ -2,7 +2,7 @@
    (c) 2003-2010 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
-   Redistribution and use in source and binary forms, with or without
+   Redistribution and use in so and binary forms, with or without
    modification, are permitted provided that the following conditions
    are met:
 
@@ -33,6 +33,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 
 void
 mpd_error_deinit(struct mpd_error_info *error)
@@ -118,6 +119,16 @@ mpd_error_errno(struct mpd_error_info *error)
 	assert(error != NULL);
 
 	mpd_error_system_message(error, mpd_socket_errno());
+}
+
+void
+mpd_error_entity(struct mpd_error_info *error)
+{
+	if (errno == EINVAL) {
+		mpd_error_code(error, MPD_ERROR_MALFORMED);
+		mpd_error_message(error, "Malformed entity response line");
+	} else
+		mpd_error_code(error, MPD_ERROR_OOM);
 }
 
 bool

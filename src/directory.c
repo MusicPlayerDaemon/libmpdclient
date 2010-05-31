@@ -36,6 +36,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 struct mpd_directory {
 	/**
@@ -105,8 +106,10 @@ mpd_directory_begin(const struct mpd_pair *pair)
 	assert(pair->name != NULL);
 	assert(pair->value != NULL);
 
-	if (strcmp(pair->name, "directory") != 0)
+	if (strcmp(pair->name, "directory") != 0) {
+		errno = EINVAL;
 		return NULL;
+	}
 
 	return mpd_directory_new(pair->value);
 }

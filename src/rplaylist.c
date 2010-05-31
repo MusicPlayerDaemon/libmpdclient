@@ -30,6 +30,8 @@
 #include <mpd/recv.h>
 #include "internal.h"
 
+#include <errno.h>
+
 struct mpd_playlist *
 mpd_recv_playlist(struct mpd_connection *connection)
 {
@@ -43,7 +45,7 @@ mpd_recv_playlist(struct mpd_connection *connection)
 	playlist = mpd_playlist_begin(pair);
 	mpd_return_pair(connection, pair);
 	if (playlist == NULL) {
-		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		mpd_error_entity(&connection->error);
 		return NULL;
 	}
 

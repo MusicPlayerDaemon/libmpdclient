@@ -36,6 +36,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 struct mpd_entity {
 	/**
@@ -216,7 +217,7 @@ mpd_recv_entity(struct mpd_connection *connection)
 	entity = mpd_entity_begin(pair);
 	mpd_return_pair(connection, pair);
 	if (entity == NULL) {
-		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		mpd_error_entity(&connection->error);
 		return NULL;
 	}
 
