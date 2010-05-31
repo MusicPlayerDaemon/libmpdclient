@@ -113,7 +113,8 @@ mpd_playlist_begin(const struct mpd_pair *pair)
 	assert(pair->name != NULL);
 	assert(pair->value != NULL);
 
-	if (strcmp(pair->name, "playlist") != 0) {
+	if (strcmp(pair->name, "playlist") != 0 ||
+	    !mpd_verify_local_uri(pair->value)) {
 		errno = EINVAL;
 		return NULL;
 	}

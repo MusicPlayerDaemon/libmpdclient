@@ -35,6 +35,7 @@
 #include <mpd/recv.h>
 #include "internal.h"
 #include "iso8601.h"
+#include "uri.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -89,6 +90,7 @@ mpd_song_new(const char *uri)
 	struct mpd_song *song;
 
 	assert(uri != NULL);
+	assert(mpd_verify_uri(uri));
 
 	song = malloc(sizeof(*song));
 	if (song == NULL)
@@ -342,7 +344,7 @@ mpd_song_begin(const struct mpd_pair *pair)
 	assert(pair->name != NULL);
 	assert(pair->value != NULL);
 
-	if (strcmp(pair->name, "file") != 0) {
+	if (strcmp(pair->name, "file") != 0 || !mpd_verify_uri(pair->value)) {
 		errno = EINVAL;
 		return NULL;
 	}
