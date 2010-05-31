@@ -32,6 +32,7 @@
 
 #include <mpd/directory.h>
 #include <mpd/pair.h>
+#include "uri.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -53,9 +54,7 @@ mpd_directory_new(const char *path)
 	struct mpd_directory *directory;
 
 	assert(path != NULL);
-	assert(*path != '/');
-	assert(*path != 0);
-	assert(path[strlen(path) - 1] != '/');
+	assert(mpd_verify_local_uri(path));
 
 	directory = malloc(sizeof(*directory));
 	if (directory == NULL)

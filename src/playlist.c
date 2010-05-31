@@ -33,6 +33,7 @@
 #include <mpd/playlist.h>
 #include <mpd/pair.h>
 #include "iso8601.h"
+#include "uri.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -55,9 +56,7 @@ mpd_playlist_new(const char *path)
 	struct mpd_playlist *playlist;
 
 	assert(path != NULL);
-	assert(*path != '/');
-	assert(*path != 0);
-	assert(path[strlen(path) - 1] != '/');
+	assert(mpd_verify_local_uri(path));
 
 	playlist = malloc(sizeof(*playlist));
 	if (playlist == NULL)
