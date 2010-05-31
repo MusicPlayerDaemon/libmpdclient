@@ -84,9 +84,11 @@ extern "C" {
  * @param host the server's host name, IP address or Unix socket path.
  * If the resolver returns more than one IP address for a host name,
  * this functions tries all of them until one accepts the connection.
- * NULL is allowed here, which will connect to the default host.
- * @param port the TCP port to connect to, 0 for default port.  If
- * "host" is a Unix socket path, this parameter is ignored.
+ * NULL is allowed here, which will connect to the default host
+ * (using the MPD_HOST environment variable if present).
+ * @param port the TCP port to connect to, 0 for default port (using
+ * the MPD_PORT environment variable if present).  If "host" is a Unix
+ * socket path, this parameter is ignored.
  * @param timeout_ms the timeout in milliseconds, 0 for the default
  * timeout; you may modify it later with mpd_connection_set_timeout()
  * @return a mpd_connection object (which may have failed to connect),
