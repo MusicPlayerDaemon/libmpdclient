@@ -90,7 +90,9 @@ extern "C" {
  * the MPD_PORT environment variable if present).  If "host" is a Unix
  * socket path, this parameter is ignored.
  * @param timeout_ms the timeout in milliseconds, 0 for the default
- * timeout; you may modify it later with mpd_connection_set_timeout()
+ * timeout (the environment variable MPD_TIMEOUT may specify a timeout
+ * in seconds); you may modify it later with
+ * mpd_connection_set_timeout()
  * @return a mpd_connection object (which may have failed to connect),
  * or NULL on out-of-memory
  */

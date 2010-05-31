@@ -191,6 +191,13 @@ mpd_connect(const char *host, unsigned port, const struct timeval *timeout,
 static unsigned
 mpd_default_timeout_ms(void)
 {
+	const char *timeout_string = getenv("MPD_TIMEOUT");
+	if (timeout_string != NULL) {
+		int timeout_s = atoi(timeout_string);
+		if (timeout_s > 0)
+			return timeout_s * 1000;
+	}
+
 	/* 30s is the default */
 	return 30000;
 }
