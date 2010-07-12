@@ -140,15 +140,11 @@ mostlyclean-local:
 
 install-data-local: doc/api/html/index.html
 	$(mkinstalldirs) $(DESTDIR)$(docdir)/html
-	$(INSTALL_DATA) -c -m 644 doc/api/html/*.html doc/api/html/*.css \
-		doc/api/html/*.png doc/api/html/*.gif \
+	$(INSTALL_DATA) -c -m 644 doc/api/html/*.* \
 		$(DESTDIR)$(docdir)/html
 
 uninstall-local:
-	rm -f $(DESTDIR)$(docdir)/html/*.html \
-	$(DESTDIR)$(docdir)/html/*.css \
-	$(DESTDIR)$(docdir)/html/*.gif \
-	$(DESTDIR)$(docdir)/html/*.png
+	rm -f $(DESTDIR)$(docdir)/html/*.*
 
 upload: doc/api/html/index.html
 	rsync -vpruz --delete doc/api/html/ \
