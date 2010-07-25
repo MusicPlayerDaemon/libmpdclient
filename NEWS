@@ -1,4 +1,4 @@
-libmpdclient 2.3 (2010/??/??)
+libmpdclient 2.3 (2010/05/25)
 * get default timeout from environment variable MPD_TIMEOUT
 * fix assertion failures on malformed URI
 * song: support attribute "Range"
