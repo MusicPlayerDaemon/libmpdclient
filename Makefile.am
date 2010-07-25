@@ -81,7 +81,8 @@ src_libmpdclient_la_SOURCES = \
 	src/cstats.c \
 	src/sync.c src/sync.h \
 	src/tag.c \
-	src/sticker.c
+	src/sticker.c \
+	src/uri.h
 
 src_libmpdclient_la_LDFLAGS = -version-info @LIBMPDCLIENT_LIBTOOL_VERSION@ \
 	-no-undefined
