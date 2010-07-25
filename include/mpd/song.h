@@ -109,6 +109,23 @@ unsigned
 mpd_song_get_duration(const struct mpd_song *song);
 
 /**
+ * Returns the start of the virtual song within the physical file in
+ * seconds.
+ */
+mpd_pure
+unsigned
+mpd_song_get_start(const struct mpd_song *song);
+
+/**
+ * Returns the end of the virtual song within the physical file in
+ * seconds.  Zero means that the physical song file is played to the
+ * end.
+ */
+mpd_pure
+unsigned
+mpd_song_get_end(const struct mpd_song *song);
+
+/**
  * @return the POSIX UTC time stamp of the last modification, or 0 if
  * that is unknown
  */

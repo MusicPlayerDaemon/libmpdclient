@@ -59,6 +59,19 @@ struct mpd_song {
 	unsigned duration;
 
 	/**
+	 * Start of the virtual song within the physical file in
+	 * seconds.
+	 */
+	unsigned start;
+
+	/**
+	 * End of the virtual song within the physical file in
+	 * seconds.  Zero means that the physical song file is
+	 * played to the end.
+	 */
+	unsigned end;
+
+	/**
 	 * The POSIX UTC time stamp of the last modification, or 0 if
 	 * that is unknown.
 	 */
@@ -107,6 +120,8 @@ mpd_song_new(const char *uri)
 		song->tags[i].value = NULL;
 
 	song->duration = 0;
+	song->start = 0;
+	song->end = 0;
 	song->last_modified = 0;
 	song->pos = 0;
 	song->id = 0;
@@ -181,6 +196,8 @@ mpd_song_dup(const struct mpd_song *song)
 	}
 
 	ret->duration = song->duration;
+	ret->start = song->start;
+	ret->end = song->end;
 	ret->last_modified = song->last_modified;
 	ret->pos = song->pos;
 	ret->id = song->id;
@@ -301,6 +318,18 @@ mpd_song_get_duration(const struct mpd_song *song)
 	return song->duration;
 }
 
+unsigned
+mpd_song_get_start(const struct mpd_song *song)
+{
+	return song->start;
+}
+
+unsigned
+mpd_song_get_end(const struct mpd_song *song)
+{
+	return song->end;
+}
+
 static void
 mpd_song_set_last_modified(struct mpd_song *song, time_t mtime)
 {
@@ -352,6 +381,38 @@ mpd_song_begin(const struct mpd_pair *pair)
 	return mpd_song_new(pair->value);
 }
 
+static void
+mpd_song_parse_range(struct mpd_song *song, const char *value)
+{
+	assert(song != NULL);
+	assert(value != NULL);
+
+	char *endptr;
+	double start, end;
+
+	if (*value == '-') {
+		start = 0.0;
+		end = strtod(value + 1, NULL);
+	} else {
+		start = strtod(value, &endptr);
+		if (*endptr != '-')
+			return;
+
+		end = strtod(endptr + 1, NULL);
+	}
+
+	song->start = start > 0.0 ? (unsigned)start : 0;
+
+	if (end > 0.0) {
+		song->end = (unsigned)end;
+		if (song->end == 0)
+			/* round up, because the caller must sees that
+			   there's an upper limit */
+			song->end = 1;
+	} else
+		song->end = 0;
+}
+
 bool
 mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair)
 {
@@ -381,6 +442,8 @@ mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair)
 
 	if (strcmp(pair->name, "Time") == 0)
 		mpd_song_set_duration(song, atoi(pair->value));
+	else if (strcmp(pair->name, "Range") == 0)
+		mpd_song_parse_range(song, pair->value);
 	else if (strcmp(pair->name, "Last-Modified") == 0)
 		mpd_song_set_last_modified(song, iso8601_datetime_parse(pair->value));
 	else if (strcmp(pair->name, "Pos") == 0)

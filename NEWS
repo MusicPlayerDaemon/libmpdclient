@@ -1,6 +1,7 @@
 libmpdclient 2.3 (2010/??/??)
 * get default timeout from environment variable MPD_TIMEOUT
 * fix assertion failures on malformed URI
+* song: support attribute "Range"
 
 libmpdclient 2.2 (2010/04/25)
 * MixRamp support
