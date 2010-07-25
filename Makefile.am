@@ -130,8 +130,10 @@ doc_DATA = README COPYING NEWS
 
 if DOXYGEN
 
-doc/api/html/index.html: doc/doxygen.conf $(wildcard include/mpd/*.h)
-	$(DOXYGEN) $<
+doc/api/html/index.html: doc/doxygen.conf
+	@mkdir -p $(@D)
+	[ "$(srcdir)" = "." ] || sed '/INPUT *=/ s/\([^ ]\+\/\)/$(subst /,\/,$(srcdir))\/\1/g' $(srcdir)/doc/doxygen.conf >doc/doxygen.conf
+	$(DOXYGEN) doc/doxygen.conf
 
 all-local: doc/api/html/index.html
 
