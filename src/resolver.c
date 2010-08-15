@@ -27,6 +27,7 @@
 */
 
 #include "resolver.h"
+#include "config.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,14 +37,16 @@
 #  include <winsock2.h>
 #  include <ws2tcpip.h>
 #else
-#  include <netinet/in.h>
-#  include <arpa/inet.h>
 #  include <sys/socket.h>
 #  include <sys/un.h>
+#ifdef ENABLE_TCP
+#  include <netinet/in.h>
+#  include <arpa/inet.h>
 #  include <netdb.h>
 #endif
+#endif
 
-#ifndef MPD_NO_GAI
+#if defined(ENABLE_TCP) && !defined(MPD_NO_GAI)
 #  ifdef AI_ADDRCONFIG
 #    define MPD_HAVE_GAI
 #  endif
@@ -54,11 +57,13 @@ struct resolver {
 		TYPE_ZERO, TYPE_ONE, TYPE_ANY
 	} type;
 
+#ifdef ENABLE_TCP
 #ifdef MPD_HAVE_GAI
 	struct addrinfo *ai;
 	const struct addrinfo *next;
 #else
 	struct sockaddr_in sin;
+#endif
 #endif
 
 	struct resolver_address current;
@@ -99,6 +104,7 @@ resolver_new(const char *host, unsigned port)
 		return NULL;
 #endif /* WIN32 */
 	} else {
+#ifdef ENABLE_TCP
 #ifdef MPD_HAVE_GAI
 		struct addrinfo hints;
 		char service[20];
@@ -147,6 +153,11 @@ resolver_new(const char *host, unsigned port)
 		resolver->current.addr = (const struct sockaddr *)&resolver->sin;
 
 		resolver->type = TYPE_ONE;
+#endif
+#else /* !ENABLE_TCP */
+		(void)port;
+		free(resolver);
+		return NULL;
 #endif
 	}
 

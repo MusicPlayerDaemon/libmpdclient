@@ -64,6 +64,14 @@ dnl
 dnl build options
 dnl
 
+AC_ARG_ENABLE(tcp,
+	AS_HELP_STRING([--disable-tcp],
+		[Disable TCP support (default: enabled)]),,
+	[enable_tcp=yes])
+if test "x$enable_tcp" = xyes; then
+	AC_DEFINE([ENABLE_TCP], 1, [Define to enable TCP support])
+fi
+
 AC_ARG_ENABLE(werror,
 	AS_HELP_STRING([--enable-werror],
 		[Treat warnings as errors (default: disabled)]),
