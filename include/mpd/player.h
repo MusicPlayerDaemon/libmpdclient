@@ -211,6 +211,12 @@ mpd_send_mixrampdelay(struct mpd_connection *connection, float seconds);
 bool
 mpd_run_mixrampdelay(struct mpd_connection *connection, float seconds);
 
+bool
+mpd_send_clearerror(struct mpd_connection *connection);
+
+bool
+mpd_run_clearerror(struct mpd_connection *connection);
+
 #ifdef __cplusplus
 }
 #endif

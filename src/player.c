@@ -297,3 +297,16 @@ mpd_run_mixrampdelay(struct mpd_connection *connection, float seconds)
 		mpd_send_mixrampdelay(connection, seconds) &&
 		mpd_response_finish(connection);
 }
+
+bool
+mpd_send_clearerror(struct mpd_connection *connection)
+{
+	return mpd_send_command(connection, "clearerror", NULL);
+}
+
+bool
+mpd_run_clearerror(struct mpd_connection *connection)
+{
+	return mpd_run_check(connection) && mpd_send_clearerror(connection) &&
+		mpd_response_finish(connection);
+}

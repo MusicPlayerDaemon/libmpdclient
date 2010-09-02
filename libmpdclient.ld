@@ -148,6 +148,8 @@ global:
 	mpd_run_mixrampdb;
 	mpd_send_mixrampdelay;
 	mpd_run_mixrampdelay;
+	mpd_send_clearerror;
+	mpd_run_clearerror;
 
 	/* mpd/playlist.h */
 	mpd_playlist_free;
