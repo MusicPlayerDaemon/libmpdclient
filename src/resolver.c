@@ -111,7 +111,6 @@ resolver_new(const char *host, unsigned port)
 		int ret;
 
 		memset(&hints, 0, sizeof(hints));
-		hints.ai_flags = AI_ADDRCONFIG;
 		hints.ai_family = PF_UNSPEC;
 		hints.ai_socktype = SOCK_STREAM;
 		hints.ai_protocol = IPPROTO_TCP;
