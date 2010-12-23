@@ -145,6 +145,10 @@ iso8601_datetime_format(char *buffer, size_t size, time_t t)
 	if (tm == NULL)
 		return false;
 
+#ifdef WIN32
+	strftime(buffer, size, "%Y-%m-%dT%H:%M:%SZ", tm);
+#else
 	strftime(buffer, size, "%FT%TZ", tm);
+#endif
 	return true;
 }
