@@ -33,7 +33,7 @@ WARN_NO_PARAMDOC = NO
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 
-INPUT = include/mpd
+INPUT = @top_srcdir@/include/mpd
 FILE_PATTERNS = *.h
 
 #---------------------------------------------------------------------------
