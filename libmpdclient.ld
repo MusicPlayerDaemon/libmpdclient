@@ -23,6 +23,7 @@ global:
 	mpd_connection_new;
 	mpd_connection_new_async;
 	mpd_connection_free;
+	mpd_connection_get_settings;
 	mpd_connection_set_timeout;
 	mpd_connection_get_fd;
 	mpd_connection_get_async;
@@ -319,6 +320,14 @@ global:
 	mpd_parse_sticker;
 	mpd_recv_sticker;
 	mpd_return_sticker;
+
+	/* mpd/settings.h */
+	mpd_settings_new;
+	mpd_settings_free;
+	mpd_settings_get_host;
+	mpd_settings_get_port;
+	mpd_settings_get_timeout_ms;
+	mpd_settings_get_password;
 
 local:
 	*;

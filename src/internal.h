@@ -41,6 +41,11 @@
  */
 struct mpd_connection {
 	/**
+	 * The connection settings.
+	 */
+	struct mpd_settings *settings;
+
+	/**
 	 * The version number received by the MPD server.
 	 */
 	unsigned version[3];

@@ -64,6 +64,7 @@
 #include <mpd/response.h>
 #include <mpd/search.h>
 #include <mpd/send.h>
+#include <mpd/settings.h>
 #include <mpd/song.h>
 #include <mpd/stats.h>
 #include <mpd/status.h>

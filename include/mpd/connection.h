@@ -125,6 +125,13 @@ mpd_connection_new_async(struct mpd_async *async, const char *welcome);
 void mpd_connection_free(struct mpd_connection *connection);
 
 /**
+ * Returns the settings which were used to connect to the server.  May
+ * be NULL if the settings are not known.
+ */
+const struct mpd_settings *
+mpd_connection_get_settings(const struct mpd_connection *connection);
+
+/**
  * Sets the timeout for synchronous operations.  If the MPD server
  * does not send a response during this time span, the operation is
  * aborted by libmpdclient.
