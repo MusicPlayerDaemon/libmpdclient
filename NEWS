@@ -1,5 +1,6 @@
 libmpdclient 2.4 (2010/??/??)
 * configure.ac, resolver: implement flag --disable-tcp
+* resolver: fix IPv4/IPv6 on the loopback device
 
 
 libmpdclient 2.3 (2010/05/25)
