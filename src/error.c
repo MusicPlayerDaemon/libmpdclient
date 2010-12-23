@@ -51,6 +51,14 @@ mpd_connection_get_server_error(const struct mpd_connection *connection)
 	return connection->error.server;
 }
 
+unsigned
+mpd_connection_get_server_error_location(const struct mpd_connection *connection)
+{
+	assert(connection->error.code == MPD_ERROR_SERVER);
+
+	return connection->error.at;
+}
+
 int
 mpd_connection_get_system_error(const struct mpd_connection *connection)
 {

@@ -2,6 +2,7 @@ libmpdclient 2.4 (2010/??/??)
 * configure.ac, resolver: implement flag --disable-tcp
 * resolver: fix IPv4/IPv6 on the loopback device
 * player: support the command "clearerror"
+* connection: add function mpd_connection_get_server_error_location()
 
 
 libmpdclient 2.3 (2010/05/25)

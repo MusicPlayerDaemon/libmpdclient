@@ -194,6 +194,16 @@ enum mpd_server_error
 mpd_connection_get_server_error(const struct mpd_connection *connection);
 
 /**
+ * Returns the location of the server error, i.e. an index within the
+ * command list.  Calling this function is only valid in a command
+ * list response, and if mpd_connection_get_error() returned
+ * #MPD_ERROR_SERVER.
+ */
+mpd_pure
+unsigned
+mpd_connection_get_server_error_location(const struct mpd_connection *connection);
+
+/**
  * Returns the error code from the operating system; on most operating
  * systems, this is the errno value.  Calling this function is only
  * valid if mpd_connection_get_error() returned #MPD_ERROR_SYSTEM.

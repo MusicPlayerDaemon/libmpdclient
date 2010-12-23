@@ -29,6 +29,7 @@ global:
 	mpd_connection_get_error;
 	mpd_connection_get_error_message;
 	mpd_connection_get_server_error;
+	mpd_connection_get_server_error_location;
 	mpd_connection_get_system_error;
 	mpd_connection_clear_error;
 	mpd_connection_get_server_version;
