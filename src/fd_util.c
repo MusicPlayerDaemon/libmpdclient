@@ -71,6 +71,7 @@ fd_set_cloexec(int fd, bool enable)
 #else
 	(void)fd;
 	(void)enable;
+	return 0;
 #endif
 }
 
