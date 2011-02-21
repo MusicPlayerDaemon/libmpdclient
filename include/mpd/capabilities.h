@@ -128,7 +128,7 @@ mpd_send_list_tag_types(struct mpd_connection *connection);
  * Free the return value with mpd_return_pair().
  *
  * @param connection a #mpd_connection
- * @returns a "handler" pair, or NULL on error or if the end of the
+ * @returns a "tagtype" pair, or NULL on error or if the end of the
  * response is reached
  */
 mpd_malloc
