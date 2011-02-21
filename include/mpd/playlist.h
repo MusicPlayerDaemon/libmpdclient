@@ -117,6 +117,15 @@ bool
 mpd_playlist_feed(struct mpd_playlist *playlist, const struct mpd_pair *pair);
 
 /**
+ * Obtain a list of stored playlists.
+ *
+ * @param connection the connection to MPD
+ * @return true on success, false on error
+ */
+bool
+mpd_send_list_playlists(struct mpd_connection *connection);
+
+/**
  * Receives the next playlist from the MPD server.
  *
  * @return a #mpd_playlist object, or NULL on error or if the playlist list is

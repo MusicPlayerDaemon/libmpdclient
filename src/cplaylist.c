@@ -40,6 +40,12 @@ enum {
 };
 
 bool
+mpd_send_list_playlists(struct mpd_connection *connection)
+{
+	return mpd_send_command(connection, "listplaylists", NULL);
+}
+
+bool
 mpd_send_list_playlist(struct mpd_connection *connection, const char *name)
 {
 	return mpd_send_command(connection, "listplaylist", name, NULL);

@@ -160,6 +160,7 @@ global:
 	mpd_playlist_get_last_modified;
 	mpd_playlist_begin;
 	mpd_playlist_feed;
+	mpd_send_list_playlists;
 	mpd_recv_playlist;
 	mpd_send_list_playlist;
 	mpd_send_list_playlist_meta;

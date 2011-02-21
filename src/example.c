@@ -233,6 +233,34 @@ int main(int argc, char ** argv) {
 			mpd_connection_free(conn);
 			return -1;
 		}
+	} else if (argc == 2 && strcmp(argv[1], "playlists") == 0) {
+		if (!mpd_send_list_playlists(conn)) {
+			fprintf(stderr, "%s\n",
+				mpd_connection_get_error_message(conn));
+			mpd_connection_free(conn);
+			return -1;
+		}
+
+		struct mpd_playlist *playlist;
+		while ((playlist = mpd_recv_playlist(conn)) != NULL) {
+			printf("%s\n",
+			       mpd_playlist_get_path(playlist));
+			mpd_playlist_free(playlist);
+		}
+
+		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
+			fprintf(stderr, "%s\n",
+				mpd_connection_get_error_message(conn));
+			mpd_connection_free(conn);
+			return -1;
+		}
+
+		if (!mpd_response_finish(conn)) {
+			fprintf(stderr, "%s\n",
+				mpd_connection_get_error_message(conn));
+			mpd_connection_free(conn);
+			return -1;
+		}
 	}
 
 	mpd_connection_free(conn);
