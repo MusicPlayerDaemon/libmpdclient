@@ -77,6 +77,9 @@ enum mpd_idle {
 
 	/** a database update has started or finished. */
 	MPD_IDLE_UPDATE = 0x80,
+
+	/** a sticker has been modified. */
+	MPD_IDLE_STICKER = 0x100,
 };
 
 #ifdef __cplusplus
