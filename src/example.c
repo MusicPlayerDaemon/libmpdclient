@@ -35,6 +35,7 @@
 #include <mpd/entity.h>
 #include <mpd/search.h>
 #include <mpd/tag.h>
+#include <mpd/message.h>
 
 #include <assert.h>
 #include <stdio.h>
@@ -234,6 +235,48 @@ int main(int argc, char ** argv) {
 			if (idle & i)
 				printf("%s\n", name);
 		}
+	} else if (argc == 3 && strcmp(argv[1], "subscribe") == 0) {
+		/* subscribe to a channel and print all messages */
+
+		if (!mpd_run_subscribe(conn, argv[2]))
+			return handle_error(conn);
+
+		while (mpd_run_idle_mask(conn, MPD_IDLE_MESSAGE) != 0) {
+			if (!mpd_send_read_messages(conn))
+				return handle_error(conn);
+
+			struct mpd_message *msg;
+			while ((msg = mpd_recv_message(conn)) != NULL) {
+				printf("%s\n", mpd_message_get_text(msg));
+				mpd_message_free(msg);
+			}
+
+			if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS ||
+			    !mpd_response_finish(conn))
+				return handle_error(conn);
+		}
+
+		return handle_error(conn);
+	} else if (argc == 2 && strcmp(argv[1], "channels") == 0) {
+		/* print a list of channels */
+
+		if (!mpd_send_channels(conn))
+			return handle_error(conn);
+
+		struct mpd_pair *pair;
+		while ((pair = mpd_recv_channel_pair(conn)) != NULL) {
+			printf("%s\n", pair->value);
+			mpd_return_pair(conn, pair);
+		}
+
+		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS ||
+		    !mpd_response_finish(conn))
+			return handle_error(conn);
+	} else if (argc == 4 && strcmp(argv[1], "message") == 0) {
+		/* send a message to a channel */
+
+		if (!mpd_run_send_message(conn, argv[2], argv[3]))
+			return handle_error(conn);
 	}
 
 	mpd_connection_free(conn);

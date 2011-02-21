@@ -34,6 +34,7 @@ mpdinclude_HEADERS = \
 	include/mpd/song.h \
 	include/mpd/sticker.h \
 	include/mpd/settings.h \
+	include/mpd/message.h \
 	include/mpd/version.h
 
 AM_CPPFLAGS += -I$(srcdir)/include -Iinclude
@@ -84,6 +85,8 @@ src_libmpdclient_la_SOURCES = \
 	src/tag.c \
 	src/sticker.c \
 	src/settings.c \
+	src/message.c \
+	src/cmessage.c \
 	src/uri.h
 
 src_libmpdclient_la_LDFLAGS = -version-info @LIBMPDCLIENT_LIBTOOL_VERSION@ \

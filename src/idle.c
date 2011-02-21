@@ -52,6 +52,8 @@ static const char *const idle_names[] = {
 	"options",
 	"update",
 	"sticker",
+	"subscription",
+	"message",
 	NULL
 };
 

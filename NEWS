@@ -1,6 +1,7 @@
 libmpdclient 2.5 (2010/??/??)
 * playlist: implement the command "listplaylists"
 * idle: support event "sticker"
+* support the client-to-client protocol (MPD 0.17)
 
 
 libmpdclient 2.4 (2011/01/03)

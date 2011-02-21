@@ -80,6 +80,22 @@ global:
 	mpd_command_list_begin;
 	mpd_command_list_end;
 
+	/* mpd/message.h */
+	mpd_message_begin;
+	mpd_message_feed;
+	mpd_message_free;
+	mpd_message_get_channel;
+	mpd_message_get_text;
+	mpd_send_subscribe;
+	mpd_run_subscribe;
+	mpd_send_unsubscribe;
+	mpd_run_unsubscribe;
+	mpd_send_send_message;
+	mpd_run_send_message;
+	mpd_send_read_messages;
+	mpd_recv_message;
+	mpd_send_channels;
+
 	/* mpd/mixer.h */
 	mpd_send_set_volume;
 	mpd_run_set_volume;
