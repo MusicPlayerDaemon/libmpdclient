@@ -261,6 +261,26 @@ int main(int argc, char ** argv) {
 			mpd_connection_free(conn);
 			return -1;
 		}
+	} else if (argc == 2 && strcmp(argv[1], "idle") == 0) {
+		enum mpd_idle idle = mpd_run_idle(conn);
+		if (idle == 0 &&
+		    mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
+			fprintf(stderr, "%s\n",
+				mpd_connection_get_error_message(conn));
+			mpd_connection_free(conn);
+			return -1;
+		}
+
+		for (unsigned j = 0;; ++j) {
+			enum mpd_idle i = 1 << j;
+			const char *name = mpd_idle_name(i);
+
+			if (name == NULL)
+				break;
+
+			if (idle & i)
+				printf("%s\n", name);
+		}
 	}
 
 	mpd_connection_free(conn);
