@@ -36,10 +36,21 @@
 #include <mpd/search.h>
 #include <mpd/tag.h>
 
+#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+
+static int
+handle_error(struct mpd_connection *c)
+{
+	assert(mpd_connection_get_error(c) != MPD_ERROR_SUCCESS);
+
+	fprintf(stderr, "%s\n", mpd_connection_get_error_message(c));
+	mpd_connection_free(c);
+	return EXIT_FAILURE;
+}
 
 static void
 print_tag(const struct mpd_song *song, enum mpd_tag_type type,
@@ -57,11 +68,8 @@ int main(int argc, char ** argv) {
 
 	conn = mpd_connection_new(NULL, 0, 30000);
 
-	if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
-		fprintf(stderr,"%s\n", mpd_connection_get_error_message(conn));
-		mpd_connection_free(conn);
-		return -1;
-	}
+	if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS)
+		return handle_error(conn);
 
 	{
 		int i;
@@ -82,11 +90,8 @@ int main(int argc, char ** argv) {
 		mpd_command_list_end(conn);
 
 		status = mpd_recv_status(conn);
-		if (status == NULL) {
-			fprintf(stderr,"%s\n", mpd_connection_get_error_message(conn));
-			mpd_connection_free(conn);
-			return -1;
-		}
+		if (status == NULL)
+			return handle_error(conn);
 
 		printf("volume: %i\n", mpd_status_get_volume(status));
 		printf("repeat: %i\n", mpd_status_get_repeat(status));
@@ -111,11 +116,10 @@ int main(int argc, char ** argv) {
 			printf("channels: %i\n", audio_format->channels);
 		}
 
-		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
-			fprintf(stderr,"%s\n", mpd_connection_get_error_message(conn));
-			mpd_connection_free(conn);
-			return -1;
-		}
+		mpd_status_free(status);
+
+		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS)
+			return handle_error(conn);
 
 		mpd_response_next(conn);
 
@@ -137,28 +141,15 @@ int main(int argc, char ** argv) {
 			mpd_song_free(song);
 		}
 
-		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
-			fprintf(stderr,"%s\n", mpd_connection_get_error_message(conn));
-			mpd_connection_free(conn);
-			return -1;
-		}
-
-		if (!mpd_response_finish(conn)) {
-			fprintf(stderr,"%s\n", mpd_connection_get_error_message(conn));
-			mpd_connection_free(conn);
-			return -1;
-		}
-	
-		mpd_status_free(status);
+		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS ||
+		    !mpd_response_finish(conn))
+			return handle_error(conn);
 	}
 	else if(argc==3 && strcmp(argv[1],"lsinfo")==0) {
 		struct mpd_entity * entity;
 
-		if (!mpd_send_list_meta(conn,argv[2])) {
-			fprintf(stderr,"%s\n", mpd_connection_get_error_message(conn));
-			mpd_connection_free(conn);
-			return -1;
-		}
+		if (!mpd_send_list_meta(conn, argv[2]))
+			return handle_error(conn);
 
 		while ((entity = mpd_recv_entity(conn)) != NULL) {
 			const struct mpd_song *song;
@@ -193,28 +184,16 @@ int main(int argc, char ** argv) {
 			mpd_entity_free(entity);
 		}
 
-		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
-			fprintf(stderr, "%s\n",
-				mpd_connection_get_error_message(conn));
-			mpd_connection_free(conn);
-			return -1;
-		}
-
-		if (!mpd_response_finish(conn)) {
-			fprintf(stderr, "%s\n", mpd_connection_get_error_message(conn));
-			mpd_connection_free(conn);
-			return -1;
-		}
+		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS ||
+		    !mpd_response_finish(conn))
+			return handle_error(conn);
 	}
 	else if(argc==2 && strcmp(argv[1],"artists")==0) {
 		struct mpd_pair *pair;
-	
+
 		if (!mpd_search_db_tags(conn, MPD_TAG_ARTIST) ||
-		    !mpd_search_commit(conn)) {
-			fprintf(stderr,"%s\n", mpd_connection_get_error_message(conn));
-			mpd_connection_free(conn);
-			return -1;
-		}
+		    !mpd_search_commit(conn))
+			return handle_error(conn);
 
 		while ((pair = mpd_recv_pair_tag(conn,
 						 MPD_TAG_ARTIST)) != NULL) {
@@ -222,24 +201,12 @@ int main(int argc, char ** argv) {
 			mpd_return_pair(conn, pair);
 		}
 
-		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
-			fprintf(stderr,"%s\n", mpd_connection_get_error_message(conn));
-			mpd_connection_free(conn);
-			return -1;
-		}
-
-		if (!mpd_response_finish(conn)) {
-			fprintf(stderr,"%s\n", mpd_connection_get_error_message(conn));
-			mpd_connection_free(conn);
-			return -1;
-		}
+		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS ||
+		    !mpd_response_finish(conn))
+			return handle_error(conn);
 	} else if (argc == 2 && strcmp(argv[1], "playlists") == 0) {
-		if (!mpd_send_list_playlists(conn)) {
-			fprintf(stderr, "%s\n",
-				mpd_connection_get_error_message(conn));
-			mpd_connection_free(conn);
-			return -1;
-		}
+		if (!mpd_send_list_playlists(conn))
+			return handle_error(conn);
 
 		struct mpd_playlist *playlist;
 		while ((playlist = mpd_recv_playlist(conn)) != NULL) {
@@ -248,28 +215,14 @@ int main(int argc, char ** argv) {
 			mpd_playlist_free(playlist);
 		}
 
-		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
-			fprintf(stderr, "%s\n",
-				mpd_connection_get_error_message(conn));
-			mpd_connection_free(conn);
-			return -1;
-		}
-
-		if (!mpd_response_finish(conn)) {
-			fprintf(stderr, "%s\n",
-				mpd_connection_get_error_message(conn));
-			mpd_connection_free(conn);
-			return -1;
-		}
+		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS ||
+		    !mpd_response_finish(conn))
+			return handle_error(conn);
 	} else if (argc == 2 && strcmp(argv[1], "idle") == 0) {
 		enum mpd_idle idle = mpd_run_idle(conn);
 		if (idle == 0 &&
-		    mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
-			fprintf(stderr, "%s\n",
-				mpd_connection_get_error_message(conn));
-			mpd_connection_free(conn);
-			return -1;
-		}
+		    mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS)
+			return handle_error(conn);
 
 		for (unsigned j = 0;; ++j) {
 			enum mpd_idle i = 1 << j;
