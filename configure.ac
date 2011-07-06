@@ -27,10 +27,6 @@ AM_CONDITIONAL(HAVE_GNU_LD, test x$with_gnu_ld = xyes)
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
-AC_PATH_PROG(DOXYGEN, doxygen)
-AM_CONDITIONAL(DOXYGEN, test x$DOXYGEN != x)
-AC_SUBST(DOXYGEN)
-
 
 dnl
 dnl initialize variables
@@ -63,6 +59,16 @@ AC_CHECK_LIB(nsl, gethostbyname, LIBS="$LIBS -lnsl",)
 dnl
 dnl build options
 dnl
+
+AC_ARG_ENABLE(documentation,
+	AS_HELP_STRING([--disable-documentation],
+		[Disable API doc generation (default: enabled)]),,
+	[enable_documentation=yes])
+if test "x$enable_documentation" = xyes; then
+	AC_PATH_PROG(DOXYGEN, doxygen)
+	AM_CONDITIONAL(DOXYGEN, test x$DOXYGEN != x)
+	AC_SUBST(DOXYGEN)
+fi
 
 AC_ARG_ENABLE(tcp,
 	AS_HELP_STRING([--disable-tcp],
