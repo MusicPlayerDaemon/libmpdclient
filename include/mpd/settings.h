@@ -41,6 +41,8 @@
 #include <stdbool.h>
 
 /**
+ * \struct mpd_settings
+ *
  * An object which describes configurable connection settings.
  */
 struct mpd_settings;

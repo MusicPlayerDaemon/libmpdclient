@@ -41,6 +41,9 @@
 #include <stdbool.h>
 
 struct mpd_pair;
+/**
+ * \struct mpd_message
+ */
 struct mpd_message;
 struct mpd_connection;
 
@@ -159,8 +162,6 @@ mpd_run_send_message(struct mpd_connection *connection,
  * Sends the "readmessages" command: send a message to a channel.
  *
  * @param connection the connection to MPD
- * @param channel the channel name
- * @param message the message text
  * @return true on success
  */
 bool

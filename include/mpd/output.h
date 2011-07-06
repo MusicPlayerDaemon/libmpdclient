@@ -80,7 +80,7 @@ bool
 mpd_output_feed(struct mpd_output *output, const struct mpd_pair *pair);
 
 /**
- * Frees a mpd_output object returned from mpd_output_get_next().
+ * Frees a mpd_output object returned from mpd_recv_output().
  */
 void
 mpd_output_free(struct mpd_output *output);
@@ -107,7 +107,7 @@ bool
 mpd_output_get_enabled(const struct mpd_output *output);
 
 /**
- * Sends the "outputs" command to MPD.  Call mpd_output_get_next() to
+ * Sends the "outputs" command to MPD.  Call mpd_recv_output() to
  * read the response.
  *
  * @param connection A valid and connected mpd_connection.
@@ -132,7 +132,7 @@ mpd_recv_output(struct mpd_connection *connection);
  *
  * @param connection A valid and connected mpd_connection.
  * @param output_id an identifier for the output device (see
- * mpd_output_get_next())
+ * mpd_recv_output())
  * @return true on success
  */
 bool
@@ -143,7 +143,7 @@ mpd_send_enable_output(struct mpd_connection *connection, unsigned output_id);
  *
  * @param connection A valid and connected mpd_connection.
  * @param output_id an identifier for the output device (see
- * mpd_output_get_next())
+ * mpd_recv_output())
  * @return true on success
  */
 bool
@@ -154,7 +154,7 @@ mpd_run_enable_output(struct mpd_connection *connection, unsigned output_id);
  *
  * @param connection A valid and connected mpd_connection.
  * @param output_id an identifier for the output device (see
- * mpd_output_get_next())
+ * mpd_recv_output())
  * @return true on success
  */
 bool
@@ -165,7 +165,7 @@ mpd_send_disable_output(struct mpd_connection *connection, unsigned output_id);
  *
  * @param connection A valid and connected mpd_connection.
  * @param output_id an identifier for the output device (see
- * mpd_output_get_next())
+ * mpd_recv_output())
  * @return true on success
  */
 bool
