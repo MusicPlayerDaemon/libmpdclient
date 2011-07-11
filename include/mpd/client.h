@@ -53,6 +53,7 @@
 #include <mpd/entity.h>
 #include <mpd/idle.h>
 #include <mpd/list.h>
+#include <mpd/message.h>
 #include <mpd/mixer.h>
 #include <mpd/output.h>
 #include <mpd/pair.h>
