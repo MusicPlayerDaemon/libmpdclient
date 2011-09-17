@@ -84,7 +84,7 @@ enum mpd_idle {
 	/** a client has subscribed or unsubscribed to/from a channel */
 	MPD_IDLE_SUBSCRIPTION = 0x200,
 
-	/** a message on the subscribed channel was receivedd */
+	/** a message on the subscribed channel was received */
 	MPD_IDLE_MESSAGE = 0x400,
 };
 
