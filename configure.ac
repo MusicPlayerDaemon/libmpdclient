@@ -52,8 +52,8 @@ dnl
 dnl Check for libraries
 dnl
 
-AC_CHECK_LIB(socket, socket, LIBS="$LIBS -lsocket",)
-AC_CHECK_LIB(nsl, gethostbyname, LIBS="$LIBS -lnsl",)
+AC_SEARCH_LIBS([socket], [socket])
+AC_SEARCH_LIBS([gethostbyname], [nsl])
 
 
 dnl
