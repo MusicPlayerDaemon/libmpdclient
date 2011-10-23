@@ -430,6 +430,73 @@ mpd_send_swap_id(struct mpd_connection *connection, unsigned id1, unsigned id2);
 bool
 mpd_run_swap_id(struct mpd_connection *connection, unsigned id1, unsigned id2);
 
+/**
+ * Change the priority of the specified song.
+ *
+ * @param connection the connection to MPD
+ * @param priority a number between 0 and 255
+ * @param position the position of the song
+ */
+bool
+mpd_send_prio(struct mpd_connection *connection, int priority,
+	      unsigned position);
+
+/**
+ * Shortcut for mpd_send_prio() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param priority a number between 0 and 255
+ * @param start the start position of the range (including)
+ * @param end the end position of the range (excluding)
+ */
+bool
+mpd_run_prio(struct mpd_connection *connection, int priority,
+	     unsigned position);
+
+/**
+ * Change the priority of a song range.
+ *
+ * @param connection the connection to MPD
+ * @param priority a number between 0 and 255
+ * @param position the position of the song
+ */
+bool
+mpd_send_prio_range(struct mpd_connection *connection, int priority,
+		    unsigned start, unsigned end);
+
+/**
+ * Shortcut for mpd_send_prio_range() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param priority a number between 0 and 255
+ * @param position the position of the song
+ */
+bool
+mpd_run_prio_range(struct mpd_connection *connection, int priority,
+		   unsigned start, unsigned end);
+
+/**
+ * Change the priority of the specified song.
+ *
+ * @param connection the connection to MPD
+ * @param priority a number between 0 and 255
+ * @param id the id of the song
+ */
+bool
+mpd_send_prio_id(struct mpd_connection *connection, int priority,
+		 unsigned id);
+
+/**
+ * Shortcut for mpd_send_prio_id() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param priority a number between 0 and 255
+ * @param id the id of the song
+ */
+bool
+mpd_run_prio_id(struct mpd_connection *connection, int priority,
+		unsigned id);
+
 #ifdef __cplusplus
 }
 #endif

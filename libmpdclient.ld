@@ -235,6 +235,12 @@ global:
 	mpd_run_swap;
 	mpd_send_swap_id;
 	mpd_run_swap_id;
+	mpd_send_prio;
+	mpd_run_prio;
+	mpd_send_prio_range;
+	mpd_run_prio_range;
+	mpd_send_prio_id;
+	mpd_run_prio_id;
 
 	/* mpd/recv.h */
 	mpd_recv_pair;

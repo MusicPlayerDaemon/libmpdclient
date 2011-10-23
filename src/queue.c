@@ -385,3 +385,51 @@ mpd_run_swap_id(struct mpd_connection *connection, unsigned id1, unsigned id2)
 		mpd_send_swap_id(connection, id1, id2) &&
 		mpd_response_finish(connection);
 }
+
+bool
+mpd_send_prio(struct mpd_connection *connection, int priority,
+	      unsigned position)
+{
+	return mpd_send_int2_command(connection, "prio", priority, position);
+}
+
+bool
+mpd_run_prio(struct mpd_connection *connection, int priority,
+	     unsigned position)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_prio(connection, priority, position) &&
+		mpd_response_finish(connection);
+}
+
+bool
+mpd_send_prio_range(struct mpd_connection *connection, int priority,
+		    unsigned start, unsigned end)
+{
+	return mpd_send_int3_command(connection, "prio", priority, start, end);
+}
+
+bool
+mpd_run_prio_range(struct mpd_connection *connection, int priority,
+		   unsigned start, unsigned end)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_prio_range(connection, priority, start, end) &&
+		mpd_response_finish(connection);
+}
+
+bool
+mpd_send_prio_id(struct mpd_connection *connection, int priority,
+		 unsigned id)
+{
+	return mpd_send_int2_command(connection, "prioid", priority, id);
+}
+
+bool
+mpd_run_prio_id(struct mpd_connection *connection, int priority,
+		unsigned id)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_prio_id(connection, priority, id) &&
+		mpd_response_finish(connection);
+}

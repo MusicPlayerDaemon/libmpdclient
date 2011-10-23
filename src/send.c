@@ -141,6 +141,19 @@ mpd_send_int2_command(struct mpd_connection *connection, const char *command,
 }
 
 bool
+mpd_send_int3_command(struct mpd_connection *connection, const char *command,
+		      int arg1, int arg2, int arg3)
+{
+	char arg1_string[INTLEN], arg2_string[INTLEN], arg3_string[INTLEN];
+
+	snprintf(arg1_string, sizeof(arg1_string), "%i", arg1);
+	snprintf(arg2_string, sizeof(arg2_string), "%i", arg2);
+	snprintf(arg3_string, sizeof(arg3_string), "%i", arg3);
+	return mpd_send_command(connection, command,
+				arg1_string, arg2_string, arg3_string, NULL);
+}
+
+bool
 mpd_send_float_command(struct mpd_connection *connection, const char *command,
 		       float arg)
 {
