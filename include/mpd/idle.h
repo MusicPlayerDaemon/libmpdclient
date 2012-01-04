@@ -81,10 +81,10 @@ enum mpd_idle {
 	/** a sticker has been modified. */
 	MPD_IDLE_STICKER = 0x100,
 
-	/** a client has subscribed or unsubscribed to/from a channel */
+	/** a client has subscribed to or unsubscribed from a channel */
 	MPD_IDLE_SUBSCRIPTION = 0x200,
 
-	/** a message on the subscribed channel was received */
+	/** a message on a subscribed channel was received */
 	MPD_IDLE_MESSAGE = 0x400,
 };
 
