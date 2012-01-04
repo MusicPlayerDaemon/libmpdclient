@@ -1,4 +1,5 @@
 libmpdclient 2.7 (2011/??/??)
+* status: add nextsong/nextsongid support
 
 
 libmpdclient 2.6 (2011/10/23)

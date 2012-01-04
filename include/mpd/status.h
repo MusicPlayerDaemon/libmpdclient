@@ -225,6 +225,22 @@ int
 mpd_status_get_song_id(const struct mpd_status *status);
 
 /**
+ * The same as mpd_status_get_next_song_pos, but for the next song to be
+ * played.
+ */
+mpd_pure
+int
+mpd_status_get_next_song_pos(const struct mpd_status *status);
+
+/**
+ * Returns the id of the next song to be played.  If it is not known, -1 is
+ * returned.
+ */
+mpd_pure
+int
+mpd_status_get_next_song_id(const struct mpd_status *status);
+
+/**
  * Returns time in seconds that have elapsed in the currently playing/paused
  * song
  */

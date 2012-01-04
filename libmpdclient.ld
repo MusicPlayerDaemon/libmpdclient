@@ -319,6 +319,8 @@ global:
 	mpd_status_get_mixrampdelay;
 	mpd_status_get_song_pos;
 	mpd_status_get_song_id;
+	mpd_status_get_next_song_pos;
+	mpd_status_get_next_song_id;
 	mpd_status_get_elapsed_time;
 	mpd_status_get_elapsed_ms;
 	mpd_status_get_total_time;

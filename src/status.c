@@ -87,6 +87,12 @@ struct mpd_status {
 	/** Song ID of the currently selected song */
 	int song_id;
 
+	/** The same as song_pos, but for the next song to be played */
+	int next_song_pos;
+
+	/** Song ID of the next song to be played */
+	int next_song_id;
+
 	/**
 	 * Time in seconds that have elapsed in the currently
 	 * playing/paused song.
@@ -132,6 +138,8 @@ mpd_status_begin(void)
 	status->state = MPD_STATE_UNKNOWN;
 	status->song_pos = -1;
 	status->song_id = -1;
+	status->next_song_pos = -1;
+	status->next_song_id = -1;
 	status->elapsed_time = 0;
 	status->elapsed_ms = 0;
 	status->total_time = 0;
@@ -226,6 +234,10 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 		status->song_pos = atoi(pair->value);
 	else if (strcmp(pair->name, "songid") == 0)
 		status->song_id = atoi(pair->value);
+	else if (strcmp(pair->name, "nextsong") == 0)
+		status->next_song_pos = atoi(pair->value);
+	else if (strcmp(pair->name, "nextsongid") == 0)
+		status->next_song_id = atoi(pair->value);
 	else if (strcmp(pair->name, "time") == 0) {
 		char *endptr;
 
@@ -341,6 +353,18 @@ int
 mpd_status_get_song_id(const struct mpd_status *status)
 {
 	return status->song_id;
+}
+
+int
+mpd_status_get_next_song_pos(const struct mpd_status *status)
+{
+	return status->next_song_pos;
+}
+
+int
+mpd_status_get_next_song_id(const struct mpd_status *status)
+{
+	return status->next_song_id;
 }
 
 unsigned
