@@ -42,6 +42,10 @@ FILE_PATTERNS = *.h
 
 SOURCE_BROWSER = YES
 
+# setting this to NO prevents doxygen from sorting functions alphabetically,
+# which would destroy their "natural" order
+SORT_MEMBER_DOCS = NO
+
 #---------------------------------------------------------------------------
 # configuration options related to the HTML output
 #---------------------------------------------------------------------------
