@@ -62,7 +62,7 @@ dnl
 
 AC_ARG_ENABLE(documentation,
 	AS_HELP_STRING([--disable-documentation],
-		[Disable API doc generation (default: enabled)]),,
+		[Disable API doc generation @<:@default=enabled@:>@]),,
 	[enable_documentation=yes])
 if test "x$enable_documentation" = xyes; then
 	AC_PATH_PROG(DOXYGEN, doxygen)
@@ -72,7 +72,7 @@ fi
 
 AC_ARG_ENABLE(tcp,
 	AS_HELP_STRING([--disable-tcp],
-		[Disable TCP support (default: enabled)]),,
+		[Disable TCP support @<:@default=enabled@:>@]),,
 	[enable_tcp=yes])
 if test "x$enable_tcp" = xyes; then
 	AC_DEFINE([ENABLE_TCP], 1, [Define to enable TCP support])
@@ -80,7 +80,7 @@ fi
 
 AC_ARG_ENABLE(werror,
 	AS_HELP_STRING([--enable-werror],
-		[Treat warnings as errors (default: disabled)]),
+		[Treat warnings as errors @<:@default=disabled@:>@]),
 	ENABLE_WERROR=$enableval,
 	ENABLE_WERROR=no)
 
@@ -90,7 +90,7 @@ fi
 
 AC_ARG_ENABLE(debug,
 	AS_HELP_STRING([--enable-debug],
-		[Enable debugging (default: disabled)]),
+		[Enable debugging @<:@default=disabled@:>@]),
 	ENABLE_DEBUG=$enableval,
 	ENABLE_DEBUG=no)
 
