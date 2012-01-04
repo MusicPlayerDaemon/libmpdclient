@@ -217,7 +217,7 @@ int
 mpd_status_get_song_pos(const struct mpd_status *status);
 
 /**
- * Returns the id of the currently song.  If there is no current song,
+ * Returns the id of the current song.  If there is no current song,
  * -1 is returned.
  */
 mpd_pure
