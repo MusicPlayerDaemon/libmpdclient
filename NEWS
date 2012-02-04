@@ -1,6 +1,5 @@
-libmpdclient 2.7 (2011/??/??)
+libmpdclient 2.7 (2012/02/04)
 * status: add nextsong/nextsongid support
-
 
 libmpdclient 2.6 (2011/10/23)
 * mpd/client.h: include message.h
