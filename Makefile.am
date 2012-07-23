@@ -167,6 +167,9 @@ endif
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libmpdclient.pc
 
+vapidir = $(datadir)/vala/vapi
+vapi_DATA = vapi/libmpdclient.vapi
+
 #
 # Distribution
 #
@@ -175,4 +178,5 @@ EXTRA_DIST = \
 	libmpdclient.ld \
 	libmpdclient.pc.in \
 	autogen.sh \
+	vapi/libmpdclient.vapi \
 	$(doc_DATA)
