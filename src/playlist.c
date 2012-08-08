@@ -70,6 +70,8 @@ mpd_playlist_new(const char *path)
 		return NULL;
 	}
 
+	playlist->last_modified = 0;
+
 	return playlist;
 }
 
