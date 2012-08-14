@@ -160,6 +160,14 @@ unsigned
 mpd_song_get_id(const struct mpd_song *song);
 
 /**
+ * Returns the priority of this song in the playlist.  The value is
+ * undefined if you did not obtain this song from the queue.
+ */
+mpd_pure
+unsigned
+mpd_song_get_prio(const struct mpd_song *song);
+
+/**
  * Begins parsing a new song.
  *
  * @param pair the first pair in this song (name must be "file")

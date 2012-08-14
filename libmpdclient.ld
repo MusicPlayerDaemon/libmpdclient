@@ -280,6 +280,7 @@ global:
 	mpd_song_set_pos;
 	mpd_song_get_pos;
 	mpd_song_get_id;
+	mpd_song_get_prio;
 	mpd_song_begin;
 	mpd_song_feed;
 	mpd_recv_song;

@@ -87,6 +87,11 @@ struct mpd_song {
 	 */
 	unsigned id;
 
+	/**
+	 * The priority of this song within the queue.
+	 */
+	unsigned prio;
+
 #ifndef NDEBUG
 	/**
 	 * This flag is used in an assertion: when it is set, you must
@@ -125,6 +130,7 @@ mpd_song_new(const char *uri)
 	song->last_modified = 0;
 	song->pos = 0;
 	song->id = 0;
+	song->prio = 0;
 
 #ifndef NDEBUG
 	song->finished = false;
@@ -201,6 +207,7 @@ mpd_song_dup(const struct mpd_song *song)
 	ret->last_modified = song->last_modified;
 	ret->pos = song->pos;
 	ret->id = song->id;
+	ret->prio = song->prio;
 
 #ifndef NDEBUG
 	ret->finished = true;
@@ -366,6 +373,18 @@ mpd_song_get_id(const struct mpd_song *song)
 	return song->id;
 }
 
+static void
+mpd_song_set_prio(struct mpd_song *song, unsigned prio)
+{
+	song->prio = prio;
+}
+
+unsigned
+mpd_song_get_prio(const struct mpd_song *song)
+{
+	return song->prio;
+}
+
 struct mpd_song *
 mpd_song_begin(const struct mpd_pair *pair)
 {
@@ -450,6 +469,8 @@ mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair)
 		mpd_song_set_pos(song, atoi(pair->value));
 	else if (strcmp(pair->name, "Id") == 0)
 		mpd_song_set_id(song, atoi(pair->value));
+	else if (strcmp(pair->name, "Prio") == 0)
+		mpd_song_set_prio(song, atoi(pair->value));
 
 	return true;
 }
