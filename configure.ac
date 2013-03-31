@@ -64,6 +64,8 @@ AC_ARG_ENABLE(documentation,
 	AS_HELP_STRING([--disable-documentation],
 		[Disable API doc generation @<:@default=enabled@:>@]),,
 	[enable_documentation=yes])
+    AM_CONDITIONAL(DOXYGEN, test "x$enable_documentation" = xyes)
+
 if test "x$enable_documentation" = xyes; then
 	AC_PATH_PROG(DOXYGEN, doxygen)
 	AM_CONDITIONAL(DOXYGEN, test x$DOXYGEN != x)
