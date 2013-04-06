@@ -64,13 +64,12 @@ AC_ARG_ENABLE(documentation,
 	AS_HELP_STRING([--disable-documentation],
 		[Disable API doc generation @<:@default=enabled@:>@]),,
 	[enable_documentation=yes])
-    AM_CONDITIONAL(DOXYGEN, test "x$enable_documentation" = xyes)
 
 if test "x$enable_documentation" = xyes; then
-	AC_PATH_PROG(DOXYGEN, doxygen)
-	AM_CONDITIONAL(DOXYGEN, test x$DOXYGEN != x)
+	AC_PATH_PROG(DOXYGEN, doxygen, [AC_MSG_ERROR([doxygen not found])])
 	AC_SUBST(DOXYGEN)
 fi
+AM_CONDITIONAL(DOXYGEN, test x$enable_documentation = xyes)
 
 AC_ARG_ENABLE(tcp,
 	AS_HELP_STRING([--disable-tcp],
