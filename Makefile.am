@@ -155,7 +155,7 @@ uninstall-local:
 
 upload: doc/api/html/index.html
 	rsync -vpruz --delete doc/api/html/ \
-		cirrus@www.musicpd.org:/var/www/musicpd.org/www/doc/libmpdclient/ \
+		max@www.musicpd.org:/var/www/mpd/doc/libmpdclient/ \
 		--chmod=Dug+rwx,Do+rx,Fug+rw,Fo+r
 
 endif
