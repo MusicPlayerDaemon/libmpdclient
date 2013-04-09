@@ -1,6 +1,7 @@
 libmpdclient 2.8 (2012/??/??)
 * song: support attribute "Prio"
 * queue: fix the ranged "prio" command
+* queue: support open ranges
 
 libmpdclient 2.7 (2012/02/04)
 * status: add nextsong/nextsongid support

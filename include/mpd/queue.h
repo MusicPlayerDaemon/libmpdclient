@@ -59,7 +59,8 @@ mpd_send_list_queue_meta(struct mpd_connection *connection);
  *
  * @param connection the connection to MPD
  * @param start the start position of the range (including)
- * @param end the end position of the range (excluding)
+ * @param end the end position of the range (excluding); the special
+ * value "(unsigned)-1" makes the end of the range open
  * @return true on success, false on error
  */
 bool
@@ -233,7 +234,8 @@ mpd_run_delete(struct mpd_connection *connection, unsigned pos);
  *
  * @param connection the connection to MPD
  * @param start the start position of the range (including)
- * @param end the end position of the range (excluding)
+ * @param end the end position of the range (excluding); the special
+ * value "(unsigned)-1" makes the end of the range open
  * @return true on success, false on error
  */
 bool
@@ -245,7 +247,8 @@ mpd_send_delete_range(struct mpd_connection *connection,
  *
  * @param connection the connection to MPD
  * @param start the start position of the range (including)
- * @param end the end position of the range (excluding)
+ * @param end the end position of the range (excluding); the special
+ * value "(unsigned)-1" makes the end of the range open
  * @return true on success, false on error
  */
 bool
@@ -292,7 +295,8 @@ mpd_run_shuffle(struct mpd_connection *connection);
  *
  * @param connection the connection to MPD
  * @param start the start position of the range (including)
- * @param end the end position of the range (excluding)
+ * @param end the end position of the range (excluding); the special
+ * value "(unsigned)-1" makes the end of the range open
  */
 bool
 mpd_send_shuffle_range(struct mpd_connection *connection, unsigned start, unsigned end);
@@ -302,7 +306,8 @@ mpd_send_shuffle_range(struct mpd_connection *connection, unsigned start, unsign
  *
  * @param connection the connection to MPD
  * @param start the start position of the range (including)
- * @param end the end position of the range (excluding)
+ * @param end the end position of the range (excluding); the special
+ * value "(unsigned)-1" makes the end of the range open
  */
 bool
 mpd_run_shuffle_range(struct mpd_connection *connection,
@@ -369,7 +374,8 @@ mpd_run_move_id(struct mpd_connection *connection, unsigned from, unsigned to);
  *
  * @param connection the connection to MPD
  * @param start the start position of the range (including)
- * @param end the end position of the range (excluding)
+ * @param end the end position of the range (excluding); the special
+ * value "(unsigned)-1" makes the end of the range open
  * @param to the new position of the song range
  * @return true on success, false on error
  */
@@ -382,7 +388,8 @@ mpd_send_move_range(struct mpd_connection *connection,
  *
  * @param connection the connection to MPD
  * @param start the start position of the range (including)
- * @param end the end position of the range (excluding)
+ * @param end the end position of the range (excluding); the special
+ * value "(unsigned)-1" makes the end of the range open
  * @param to the new position of the song range
  * @return true on success, false on error
  */
@@ -447,7 +454,8 @@ mpd_send_prio(struct mpd_connection *connection, int priority,
  * @param connection the connection to MPD
  * @param priority a number between 0 and 255
  * @param start the start position of the range (including)
- * @param end the end position of the range (excluding)
+ * @param end the end position of the range (excluding); the special
+ * value "(unsigned)-1" makes the end of the range open
  */
 bool
 mpd_run_prio(struct mpd_connection *connection, int priority,
@@ -458,7 +466,9 @@ mpd_run_prio(struct mpd_connection *connection, int priority,
  *
  * @param connection the connection to MPD
  * @param priority a number between 0 and 255
- * @param position the position of the song
+ * @param start the start position of the range (including)
+ * @param end the end position of the range (excluding); the special
+ * value "(unsigned)-1" makes the end of the range open
  */
 bool
 mpd_send_prio_range(struct mpd_connection *connection, int priority,
@@ -470,6 +480,9 @@ mpd_send_prio_range(struct mpd_connection *connection, int priority,
  * @param connection the connection to MPD
  * @param priority a number between 0 and 255
  * @param position the position of the song
+ * @param start the start position of the range (including)
+ * @param end the end position of the range (excluding); the special
+ * value "(unsigned)-1" makes the end of the range open
  */
 bool
 mpd_run_prio_range(struct mpd_connection *connection, int priority,
