@@ -1,4 +1,4 @@
-libmpdclient 2.8 (2012/??/??)
+libmpdclient 2.8 (2013/04/09)
 * song: support attribute "Prio"
 * queue: fix the ranged "prio" command
 * queue: support open ranges
