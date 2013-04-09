@@ -406,7 +406,8 @@ bool
 mpd_send_prio_range(struct mpd_connection *connection, int priority,
 		    unsigned start, unsigned end)
 {
-	return mpd_send_int3_command(connection, "prio", priority, start, end);
+	return mpd_send_i_range_command(connection, "prio", priority,
+					start, end);
 }
 
 bool

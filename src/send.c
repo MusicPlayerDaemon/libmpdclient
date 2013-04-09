@@ -191,6 +191,19 @@ mpd_send_range_command(struct mpd_connection *connection, const char *command,
 }
 
 bool
+mpd_send_i_range_command(struct mpd_connection *connection,
+			 const char *command, int arg1,
+			 unsigned start, unsigned end)
+{
+	char arg1_string[INTLEN + 1], arg2_string[INTLEN * 2 + 1];
+
+	snprintf(arg1_string, sizeof(arg1_string), "%i", arg1);
+	format_range(arg2_string, sizeof(arg2_string), start, end);
+	return mpd_send_command(connection, command,
+				arg1_string, arg2_string, NULL);
+}
+
+bool
 mpd_send_range_u_command(struct mpd_connection *connection,
 			 const char *command,
 			 unsigned start, unsigned end, unsigned arg2)
