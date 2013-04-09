@@ -42,6 +42,12 @@ enum {
 	LONGLONGLEN = (sizeof(long long) * CHAR_BIT + 1) / 3 + 1,
 };
 
+static void
+format_range(char *buffer, size_t size, unsigned start, unsigned end)
+{
+	snprintf(buffer, size, "%u:%u", start, end);
+}
+
 /**
  * Checks whether it is possible to send a command now.
  */
@@ -180,7 +186,7 @@ mpd_send_range_command(struct mpd_connection *connection, const char *command,
 {
 	char arg_string[INTLEN*2+1];
 
-	snprintf(arg_string, sizeof arg_string, "%u:%u", arg1, arg2);
+	format_range(arg_string, sizeof(arg_string), arg1, arg2);
 	return mpd_send_command(connection, command, arg_string, NULL);
 }
 
@@ -191,7 +197,7 @@ mpd_send_range_u_command(struct mpd_connection *connection,
 {
 	char arg1_string[INTLEN*2+1], arg2_string[INTLEN];
 
-	snprintf(arg1_string, sizeof arg1_string, "%u:%u", start, end);
+	format_range(arg1_string, sizeof(arg1_string), start, end);
 	snprintf(arg2_string, sizeof(arg2_string), "%i", arg2);
 	return mpd_send_command(connection, command,
 				arg1_string, arg2_string, NULL);
