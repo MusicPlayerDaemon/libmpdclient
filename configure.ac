@@ -1,5 +1,5 @@
 AC_PREREQ(2.60)
-AC_INIT(libmpdclient, 2.8, musicpd-dev-team@lists.sourceforge.net)
+AC_INIT(libmpdclient, 2.9~git, musicpd-dev-team@lists.sourceforge.net)
 AC_CONFIG_SRCDIR([src/connection.c])
 AC_CONFIG_AUX_DIR(build)
 AM_INIT_AUTOMAKE([foreign 1.10 dist-bzip2 subdir-objects])
@@ -7,10 +7,10 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_SUBST(MAJOR_VERSION,2)
-AC_SUBST(MINOR_VERSION,8)
+AC_SUBST(MINOR_VERSION,9)
 AC_SUBST(PATCH_VERSION,0)
 
-LIBMPDCLIENT_LIBTOOL_VERSION=2:8:0
+LIBMPDCLIENT_LIBTOOL_VERSION=2:9:0
 AC_SUBST(LIBMPDCLIENT_LIBTOOL_VERSION)
 
 # Remove the check for c++ and fortran compiler
