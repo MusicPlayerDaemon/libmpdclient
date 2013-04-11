@@ -66,7 +66,11 @@ AC_ARG_ENABLE(documentation,
 	[enable_documentation=yes])
 
 if test "x$enable_documentation" = xyes; then
-	AC_PATH_PROG(DOXYGEN, doxygen, [AC_MSG_ERROR([doxygen not found])])
+	AC_PATH_PROG(DOXYGEN, doxygen)
+	if test x$DOXYGEN = x; then
+		AC_MSG_ERROR([doxygen not found])
+	fi
+
 	AC_SUBST(DOXYGEN)
 fi
 AM_CONDITIONAL(DOXYGEN, test x$enable_documentation = xyes)
