@@ -91,7 +91,9 @@ mpd_playlist_dup(const struct mpd_playlist *playlist)
 	assert(playlist != NULL);
 	assert(playlist->path != NULL);
 
-	return mpd_playlist_new(playlist->path);
+	struct mpd_playlist *copy = mpd_playlist_new(playlist->path);
+	copy->last_modified = playlist->last_modified;
+	return copy;
 }
 
 const char *
