@@ -42,6 +42,7 @@
 #include <mpd/compiler.h>
 
 #include <stdbool.h>
+#include <time.h>
 
 struct mpd_pair;
 struct mpd_connection;
@@ -79,6 +80,14 @@ void mpd_directory_free(struct mpd_directory *directory);
 mpd_pure
 const char *
 mpd_directory_get_path(const struct mpd_directory *directory);
+
+/**
+ * @return the POSIX UTC time stamp of the last modification, or 0 if
+ * that is unknown
+ */
+mpd_pure
+time_t
+mpd_directory_get_last_modified(const struct mpd_directory *directory);
 
 /**
  * Begins parsing a new directory.

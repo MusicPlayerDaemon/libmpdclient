@@ -51,6 +51,7 @@ global:
 	mpd_directory_dup;
 	mpd_directory_free;
 	mpd_directory_get_path;
+	mpd_directory_get_last_modified;
 	mpd_directory_begin;
 	mpd_directory_feed;
 	mpd_recv_directory;

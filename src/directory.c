@@ -45,6 +45,12 @@ struct mpd_directory {
 	 * slash.
 	 */
 	char *path;
+
+	/**
+	 * The POSIX UTC time stamp of the last modification, or 0 if
+	 * that is unknown.
+	 */
+	time_t last_modified;
 };
 
 mpd_malloc
@@ -68,6 +74,8 @@ mpd_directory_new(const char *path)
 		return NULL;
 	}
 
+	directory->last_modified = 0;
+
 	return directory;
 }
 
@@ -86,7 +94,9 @@ mpd_directory_dup(const struct mpd_directory *directory)
 	assert(directory != NULL);
 	assert(directory->path != NULL);
 
-	return mpd_directory_new(directory->path);
+	struct mpd_directory *copy = mpd_directory_new(directory->path);
+	copy->last_modified = directory->last_modified;
+	return copy;
 }
 
 const char *
@@ -96,6 +106,14 @@ mpd_directory_get_path(const struct mpd_directory *directory)
 	assert(directory->path != NULL);
 
 	return directory->path;
+}
+
+time_t
+mpd_directory_get_last_modified(const struct mpd_directory *directory)
+{
+	assert(directory != NULL);
+
+	return directory->last_modified;
 }
 
 struct mpd_directory *
@@ -125,10 +143,9 @@ mpd_directory_feed(struct mpd_directory *directory,
 	if (strcmp(pair->name, "directory") == 0)
 		return false;
 
-	/* ignore all other pairs - that might be attributes which we
-	   don't support yet */
-
-	(void)directory;
+	if (strcmp(pair->name, "Last-Modified") == 0)
+		directory->last_modified =
+			iso8601_datetime_parse(pair->value);
 
 	return true;
 }

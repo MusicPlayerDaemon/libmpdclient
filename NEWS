@@ -1,4 +1,5 @@
 libmpdclient 2.9 (not yet released)
+* directory: support attribute "Last-Modified"
 * support MPD protocol 0.18
   - command "readcomments"
   - command "toggleoutput"
