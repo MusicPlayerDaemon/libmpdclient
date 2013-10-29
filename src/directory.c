@@ -33,6 +33,7 @@
 #include <mpd/directory.h>
 #include <mpd/pair.h>
 #include "uri.h"
+#include "iso8601.h"
 
 #include <assert.h>
 #include <stdlib.h>
