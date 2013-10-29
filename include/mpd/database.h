@@ -88,6 +88,18 @@ bool
 mpd_send_list_meta(struct mpd_connection *connection, const char *path);
 
 /**
+ * Send "readcomments".  Read the "comments" of a song file.  This
+ * returns key/value pairs which can be read using mpd_recv_pair().
+ *
+ * @param connection the connection to MPD
+ * @param path the relative path of the song file within the music
+ * directory or an arbitrary file path starting with file:///
+ * @return true on success, false on error
+ */
+bool
+mpd_send_read_comments(struct mpd_connection *connection, const char *path);
+
+/**
  * Instructs MPD to update the music database: find new files, remove
  * deleted files, update modified files.
  *

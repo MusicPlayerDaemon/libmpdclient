@@ -55,6 +55,12 @@ mpd_send_list_meta(struct mpd_connection *connection, const char *dir)
 }
 
 bool
+mpd_send_read_comments(struct mpd_connection *connection, const char *path)
+{
+	return mpd_send_command(connection, "readcomments", path, NULL);
+}
+
+bool
 mpd_send_update(struct mpd_connection *connection, const char *path)
 {
 	return mpd_send_command(connection, "update", path, NULL);
