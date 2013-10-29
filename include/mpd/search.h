@@ -128,6 +128,19 @@ mpd_search_db_tags(struct mpd_connection *connection, enum mpd_tag_type type);
 bool mpd_count_db_songs(struct mpd_connection *connection);
 
 /**
+ * Limit the search to a certain directory.
+ *
+ * @param connection a #mpd_connection
+ * @param oper reserved, pass #MPD_OPERATOR_DEFAULT
+ * @param value the URI relative to the music directory
+ * @return true on success, false on error
+ */
+bool
+mpd_search_add_base_constraint(struct mpd_connection *connection,
+			       enum mpd_operator oper,
+			       const char *value);
+
+/**
  * Add a constraint on the song's URI.
  *
  * @param connection a #mpd_connection

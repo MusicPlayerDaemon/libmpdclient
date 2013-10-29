@@ -3,6 +3,7 @@ libmpdclient 2.9 (not yet released)
   - command "readcomments"
   - command "toggleoutput"
   - command "volume"
+  - the "base" constraint for commands "find"/"search"
 
 libmpdclient 2.8 (2013/04/09)
 * song: support attribute "Prio"

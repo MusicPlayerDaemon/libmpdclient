@@ -263,6 +263,7 @@ global:
 	mpd_search_queue_songs;
 	mpd_search_db_tags;
 	mpd_count_db_songs;
+	mpd_search_add_base_constraint;
 	mpd_search_add_uri_constraint;
 	mpd_search_add_tag_constraint;
 	mpd_search_add_any_tag_constraint;

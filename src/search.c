@@ -224,6 +224,13 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 	free(arg);
 	return true;
 }
+bool
+mpd_search_add_base_constraint(struct mpd_connection *connection,
+			       enum mpd_operator oper,
+			       const char *value)
+{
+	return mpd_search_add_constraint(connection, oper, "base", value);
+}
 
 bool
 mpd_search_add_uri_constraint(struct mpd_connection *connection,
