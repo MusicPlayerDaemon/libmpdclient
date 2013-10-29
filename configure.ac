@@ -1,5 +1,5 @@
 AC_PREREQ(2.60)
-AC_INIT(libmpdclient, 2.9~git, musicpd-dev-team@lists.sourceforge.net)
+AC_INIT(libmpdclient, 2.9, musicpd-dev-team@lists.sourceforge.net)
 AC_CONFIG_SRCDIR([src/connection.c])
 AC_CONFIG_AUX_DIR(build)
 AM_INIT_AUTOMAKE([foreign 1.11 dist-bzip2 dist-xz subdir-objects silent-rules])
