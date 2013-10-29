@@ -99,3 +99,17 @@ mpd_run_disable_output(struct mpd_connection *connection, unsigned output_id)
 		mpd_send_disable_output(connection, output_id) &&
 		mpd_response_finish(connection);
 }
+
+bool
+mpd_send_toggle_output(struct mpd_connection *connection, unsigned output_id)
+{
+	return mpd_send_int_command(connection, "toggleoutput", output_id);
+}
+
+bool
+mpd_run_toggle_output(struct mpd_connection *connection, unsigned output_id)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_toggle_output(connection, output_id) &&
+		mpd_response_finish(connection);
+}
