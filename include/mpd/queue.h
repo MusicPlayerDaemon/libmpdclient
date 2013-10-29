@@ -453,9 +453,7 @@ mpd_send_prio(struct mpd_connection *connection, int priority,
  *
  * @param connection the connection to MPD
  * @param priority a number between 0 and 255
- * @param start the start position of the range (including)
- * @param end the end position of the range (excluding); the special
- * value "(unsigned)-1" makes the end of the range open
+ * @param position the position of the song
  */
 bool
 mpd_run_prio(struct mpd_connection *connection, int priority,
