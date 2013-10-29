@@ -2,6 +2,7 @@ libmpdclient 2.9 (not yet released)
 * support MPD protocol 0.18
   - command "readcomments"
   - command "toggleoutput"
+  - command "volume"
 
 libmpdclient 2.8 (2013/04/09)
 * song: support attribute "Prio"

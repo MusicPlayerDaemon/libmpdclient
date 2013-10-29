@@ -46,3 +46,17 @@ mpd_run_set_volume(struct mpd_connection *connection, unsigned volume)
 		mpd_response_finish(connection);
 }
 
+bool
+mpd_send_change_volume(struct mpd_connection *connection, int relative_volume)
+{
+	return mpd_send_int_command(connection, "volume", relative_volume);
+}
+
+bool
+mpd_run_change_volume(struct mpd_connection *connection, int relative_volume)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_change_volume(connection, relative_volume) &&
+		mpd_response_finish(connection);
+}
+

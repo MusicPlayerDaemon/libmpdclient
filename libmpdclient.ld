@@ -100,6 +100,8 @@ global:
 	/* mpd/mixer.h */
 	mpd_send_set_volume;
 	mpd_run_set_volume;
+	mpd_send_change_volume;
+	mpd_run_change_volume;
 
 	/* mpd/output.h */
 	mpd_output_begin;
