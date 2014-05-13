@@ -1,3 +1,5 @@
+libmpdclient 2.10 (not yet released)
+
 libmpdclient 2.9 (2013/10/29)
 * directory: support attribute "Last-Modified"
 * support MPD protocol 0.18
