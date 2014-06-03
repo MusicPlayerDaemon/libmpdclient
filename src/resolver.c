@@ -82,7 +82,7 @@ resolver_new(const char *host, unsigned port)
 	if (resolver == NULL)
 		return NULL;
 
-	if (host[0] == '/') {
+	if (host[0] == '/' || host[0] == '@') {
 #ifndef WIN32
 		size_t path_length = strlen(host);
 		if (path_length >= sizeof(resolver->saun.sun_path)) {
@@ -92,6 +92,10 @@ resolver_new(const char *host, unsigned port)
 
 		resolver->saun.sun_family = AF_UNIX;
 		memcpy(resolver->saun.sun_path, host, path_length + 1);
+
+		if (host[0] == '@')
+			/* abstract socket */
+			resolver->saun.sun_path[0] = 0;
 
 		resolver->current.family = PF_UNIX;
 		resolver->current.protocol = 0;

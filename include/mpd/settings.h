@@ -56,6 +56,7 @@ extern "C" {
  * passed by the caller are taken from environment variables.
  *
  * @param host the server's host name, IP address or Unix socket path.
+ * An address starting with '@' denotes an "abstract socket".
  * NULL is allowed here, which will connect to the default host
  * (using the MPD_HOST environment variable if present).
  * @param port the TCP port to connect to, 0 for default port (using

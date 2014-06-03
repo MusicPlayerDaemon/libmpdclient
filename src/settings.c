@@ -59,7 +59,10 @@ mpd_parse_host_password(const char *host, char **password_r)
 	assert(password_r != NULL);
 	assert(*password_r == NULL);
 
-	if (host == NULL)
+	if (host == NULL ||
+	    /* if the MPD_HOST begins with a '@' then it's not an
+	       empty password but an abstract socket */
+	    *host == '@')
 		return host;
 
 	at = strchr(host, '@');
