@@ -52,7 +52,7 @@ dnl
 dnl Check for libraries
 dnl
 
-AC_SEARCH_LIBS([socket], [socket])
+AC_SEARCH_LIBS([socket], [network socket])
 AC_SEARCH_LIBS([gethostbyname], [nsl])
 
 
