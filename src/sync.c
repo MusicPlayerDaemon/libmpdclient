@@ -33,6 +33,9 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+#ifndef WIN32
+#include <sys/select.h>
+#endif
 #include <fcntl.h>
 #include <unistd.h>
 
