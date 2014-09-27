@@ -1,5 +1,6 @@
 libmpdclient 2.10 (not yet released)
 * support abstract sockets with "@" prefix
+* support tag "MUSICBRAINZ_RELEASETRACKID"
 
 libmpdclient 2.9 (2013/10/29)
 * directory: support attribute "Last-Modified"
