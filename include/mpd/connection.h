@@ -60,10 +60,10 @@ struct mpd_async;
  * mpd_connection_get_error_message(),
  * mpd_connection_get_server_error().
  *
- * Some errors can be cleared by calling mpd_clear_error(), like
- * #MPD_ERROR_SERVER, #MPD_ERROR_ARGUMENT.  Most others are fatal, and
- * cannot be recovered, like #MPD_ERROR_CLOSED - mpd_clear_error()
- * returns false.
+ * Some errors can be cleared by calling mpd_connection_clear_error(),
+ * like #MPD_ERROR_SERVER, #MPD_ERROR_ARGUMENT.  Most others are
+ * fatal, and cannot be recovered, like #MPD_ERROR_CLOSED -
+ * mpd_connection_clear_error() returns false.
  *
  * Some functions like mpd_recv_pair() cannot differentiate between
  * "end of response" and "error".  If this function returns NULL, you
