@@ -132,6 +132,21 @@ const struct mpd_settings *
 mpd_connection_get_settings(const struct mpd_connection *connection);
 
 /**
+ * Enables (or disables) TCP keepalives.
+ *
+ * Keepalives are enabled using the SO_KEEPALIVE socket option.  They may be
+ * required for long-idled connections to persist on some networks that
+ * would otherwise terminate inactive TCP sessions.
+ *
+ * The default value is false.
+ *
+ * @param connection the connection to MPD
+ * @param keepalive whether TCP keepalives should be enabled
+ */
+void mpd_connection_set_keepalive(struct mpd_connection *connection,
+                                  bool keepalive);
+
+/**
  * Sets the timeout for synchronous operations.  If the MPD server
  * does not send a response during this time span, the operation is
  * aborted by libmpdclient.

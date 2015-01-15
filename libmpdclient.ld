@@ -7,6 +7,7 @@ global:
 	mpd_async_get_error_message;
 	mpd_async_get_system_error;
 	mpd_async_get_fd;
+	mpd_async_set_keepalive;
 	mpd_async_events;
 	mpd_async_io;
 	mpd_async_send_command_v;
@@ -23,6 +24,7 @@ global:
 	mpd_connection_new;
 	mpd_connection_new_async;
 	mpd_connection_free;
+	mpd_connection_set_keepalive;
 	mpd_connection_get_settings;
 	mpd_connection_set_timeout;
 	mpd_connection_get_fd;

@@ -207,3 +207,13 @@ mpd_socket_close(int fd)
 	return closesocket(fd);
 #endif
 }
+
+void
+mpd_socket_keepalive(int fd, bool keepalive)
+{
+	int keepalive_i = keepalive;
+
+
+	(void) setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE,
+	                  (const char *) &keepalive_i, sizeof keepalive_i);
+}

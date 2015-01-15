@@ -137,6 +137,16 @@ mpd_async_get_fd(const struct mpd_async *async)
 	return async->fd;
 }
 
+void
+mpd_async_set_keepalive(struct mpd_async *async,
+                        bool keepalive)
+{
+	assert(async != NULL);
+	assert(async->fd >= 0);
+
+	mpd_socket_keepalive(async->fd, keepalive);
+}
+
 enum mpd_async_event
 mpd_async_events(const struct mpd_async *async)
 {

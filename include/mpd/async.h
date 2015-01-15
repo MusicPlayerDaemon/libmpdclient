@@ -138,6 +138,21 @@ int
 mpd_async_get_fd(const struct mpd_async *async);
 
 /**
+ * Enables (or disables) TCP keepalives.
+ *
+ * Keepalives are enabled using the SO_KEEPALIVE socket option.  They may be
+ * required for long-idled connections to persist on some networks that
+ * would otherwise terminate inactive TCP sessions.
+ *
+ * The default value is false.
+ *
+ * @param async the #mpd_async object
+ * @param keepalive whether TCP keepalives should be enabled
+ */
+void mpd_async_set_keepalive(struct mpd_async *async,
+                             bool keepalive);
+
+/**
  * Returns a bit mask of events which should be polled for.
  */
 mpd_pure

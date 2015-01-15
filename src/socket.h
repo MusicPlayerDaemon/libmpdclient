@@ -78,4 +78,10 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv,
 int
 mpd_socket_close(int fd);
 
+/**
+ * Sets (or unsets) keepalive on a socket descriptor.
+ */
+void
+mpd_socket_keepalive(int fd, bool keepalive);
+
 #endif
