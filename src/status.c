@@ -197,11 +197,11 @@ parse_audio_format(struct mpd_audio_format *audio_format, const char *p)
 {
 	char *endptr;
 
-	audio_format->sample_rate = strtol(p, &endptr, 10);
+	audio_format->sample_rate = strtoul(p, &endptr, 10);
 	if (*endptr == ':') {
-		audio_format->bits = strtol(endptr + 1, &endptr, 10);
+		audio_format->bits = strtoul(endptr + 1, &endptr, 10);
 		audio_format->channels = *endptr == ':'
-			? strtol(endptr + 1, NULL, 10)
+			? strtoul(endptr + 1, NULL, 10)
 			: 0;
 	} else {
 		audio_format->bits = 0;
@@ -223,7 +223,7 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 	else if (strcmp(pair->name, "consume") == 0)
 		status->consume = !!atoi(pair->value);
 	else if (strcmp(pair->name, "playlist") == 0)
-		status->queue_version = strtol(pair->value, NULL, 10);
+		status->queue_version = strtoul(pair->value, NULL, 10);
 	else if (strcmp(pair->name, "playlistlength") == 0)
 		status->queue_length = atoi(pair->value);
 	else if (strcmp(pair->name, "bitrate") == 0)
@@ -241,16 +241,16 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 	else if (strcmp(pair->name, "time") == 0) {
 		char *endptr;
 
-		status->elapsed_time = strtol(pair->value, &endptr, 10);
+		status->elapsed_time = strtoul(pair->value, &endptr, 10);
 		if (*endptr == ':')
-			status->total_time = strtol(endptr + 1, NULL, 10);
+			status->total_time = strtoul(endptr + 1, NULL, 10);
 
 		if (status->elapsed_ms == 0)
 			status->elapsed_ms = status->elapsed_time * 1000;
 	} else if (strcmp(pair->name, "elapsed") == 0) {
 		char *endptr;
 
-		status->elapsed_ms = strtol(pair->value, &endptr, 10) * 1000;
+		status->elapsed_ms = strtoul(pair->value, &endptr, 10) * 1000;
 		if (*endptr == '.')
 			status->elapsed_ms += parse_ms(endptr + 1);
 
