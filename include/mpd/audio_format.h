@@ -37,6 +37,18 @@
 
 #include <stdint.h>
 
+enum {
+	/**
+	 * 32 bit floating point samples.
+	 */
+	MPD_SAMPLE_FORMAT_FLOAT = 0xe0,
+
+	/**
+	 * DSD samples.
+	 */
+	MPD_SAMPLE_FORMAT_DSD = 0xe1,
+};
+
 /**
  * This structure describes the format of a raw PCM stream.
  */
@@ -51,7 +63,8 @@ struct mpd_audio_format {
 	/**
 	 * The number of significant bits per sample.  Samples are
 	 * currently always signed.  Supported values are 8, 16, 24,
-	 * 32.  24 bit samples are packed in 32 bit integers.
+	 * 32 and the special values #MPD_SAMPLE_FORMAT_FLOAT,
+	 * #MPD_SAMPLE_FORMAT_DSD.
 	 */
 	uint8_t bits;
 

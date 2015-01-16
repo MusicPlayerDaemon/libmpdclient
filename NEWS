@@ -2,6 +2,8 @@ libmpdclient 2.10 (not yet released)
 * support abstract sockets with "@" prefix
 * support tag "MUSICBRAINZ_RELEASETRACKID"
 * add TCP keepalive internal and external APIs
+* support MPD protocol 0.19
+  - status: support sample formats "float" and "dsd"
 * support MPD protocol 0.20
   - the "window" parameter for commands "find"/"search"
 

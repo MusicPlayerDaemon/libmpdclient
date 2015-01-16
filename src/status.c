@@ -199,9 +199,22 @@ parse_audio_format(struct mpd_audio_format *audio_format, const char *p)
 
 	audio_format->sample_rate = strtoul(p, &endptr, 10);
 	if (*endptr == ':') {
-		audio_format->bits = strtoul(endptr + 1, &endptr, 10);
-		audio_format->channels = *endptr == ':'
-			? strtoul(endptr + 1, NULL, 10)
+		p = endptr + 1;
+
+		if (p[0] == 'f' && p[1] == ':') {
+			audio_format->bits = MPD_SAMPLE_FORMAT_FLOAT;
+			p += 2;
+		} else if (p[0] == 'd' && p[1] == 's' &&
+			   p[2] == 'd' && p[3] == ':') {
+			audio_format->bits = MPD_SAMPLE_FORMAT_DSD;
+			p += 4;
+		} else {
+			audio_format->bits = strtoul(p, &endptr, 10);
+			p = *endptr == ':' ? endptr + 1 : NULL;
+		}
+
+		audio_format->channels = p != NULL
+			? strtoul(p, NULL, 10)
 			: 0;
 	} else {
 		audio_format->bits = 0;
