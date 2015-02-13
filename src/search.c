@@ -146,6 +146,33 @@ mpd_count_db_songs(struct mpd_connection *connection)
 	return true;
 }
 
+static char *
+mpd_search_prepare_append(struct mpd_connection *connection,
+			  size_t add_length)
+{
+	assert(connection != NULL);
+
+	if (mpd_error_is_defined(&connection->error))
+		return NULL;
+
+	if (connection->request == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "no search in progress");
+		return NULL;
+	}
+
+	const size_t old_length = strlen(connection->request);
+	char *new_request = realloc(connection->request,
+				    old_length + add_length + 1);
+	if (new_request == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return NULL;
+	}
+
+	connection->request = new_request;
+	return new_request + old_length;
+}
 
 static char *
 mpd_sanitize_arg(const char *src)
@@ -181,33 +208,21 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 	assert(name != NULL);
 	assert(value != NULL);
 
-	if (mpd_error_is_defined(&connection->error))
-		return false;
-
-	if (!connection->request) {
-		mpd_error_code(&connection->error, MPD_ERROR_STATE);
-		mpd_error_message(&connection->error,
-				  "no search in progress");
-		return false;
-	}
-
 	char *arg = mpd_sanitize_arg(value);
 	if (arg == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
 		return false;
 	}
 
-	const size_t old_length = strlen(connection->request);
-	const size_t add_length = 1 + strlen(name) + 2 + strlen(arg) + 2;
-	char *request = realloc(connection->request, old_length + add_length);
-	if (request == NULL) {
+	const size_t add_length = 1 + strlen(name) + 2 + strlen(arg) + 1;
+
+	char *dest = mpd_search_prepare_append(connection, add_length);
+	if (dest == NULL) {
 		free(arg);
-		mpd_error_code(&connection->error, MPD_ERROR_OOM);
 		return false;
 	}
 
-	connection->request = request;
-	sprintf(connection->request + old_length, " %s \"%s\"", name, arg);
+	sprintf(dest, " %s \"%s\"", name, arg);
 
 	free(arg);
 	return true;
