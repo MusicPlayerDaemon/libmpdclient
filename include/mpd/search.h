@@ -182,6 +182,19 @@ mpd_search_add_any_tag_constraint(struct mpd_connection *connection,
 				  const char *value);
 
 /**
+ * Request only a portion of the result set.
+ *
+ * @param connection a #mpd_connection
+ * @param oper reserved, pass #MPD_OPERATOR_DEFAULT
+ * @param type The tag type of the constraint
+ * @param value The value of the constraint
+ * @return true on success, false on error
+ */
+bool
+mpd_search_add_window(struct mpd_connection *connection,
+		      unsigned start, unsigned end);
+
+/**
  * Starts the real search with constraints added with
  * mpd_search_add_constraint().
  *

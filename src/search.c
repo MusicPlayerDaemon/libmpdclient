@@ -271,6 +271,22 @@ mpd_search_add_any_tag_constraint(struct mpd_connection *connection,
 }
 
 bool
+mpd_search_add_window(struct mpd_connection *connection,
+		      unsigned start, unsigned end)
+{
+	assert(connection != NULL);
+	assert(start <= end);
+
+	const size_t size = 64;
+	char *dest = mpd_search_prepare_append(connection, size);
+	if (dest == NULL)
+		return false;
+
+	snprintf(dest, size, "window %u:%u", start, end);
+	return true;
+}
+
+bool
 mpd_search_commit(struct mpd_connection *connection)
 {
 	assert(connection != NULL);
