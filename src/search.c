@@ -207,8 +207,7 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 	}
 
 	connection->request = request;
-	snprintf(connection->request + old_length, add_length,
-		 " %s \"%s\"", name, arg);
+	sprintf(connection->request + old_length, " %s \"%s\"", name, arg);
 
 	free(arg);
 	return true;
