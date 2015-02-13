@@ -148,26 +148,25 @@ mpd_count_db_songs(struct mpd_connection *connection)
 
 
 static char *
-mpd_sanitize_arg(const char * arg)
+mpd_sanitize_arg(const char *src)
 {
-	assert(arg != NULL);
+	assert(src != NULL);
 
 	/* instead of counting in that loop above, just
 	 * use a bit more memory and half running time
 	 */
-	char *ret = malloc(strlen(arg) * 2 + 1);
-	if (ret == NULL)
+	char *result = malloc(strlen(src) * 2 + 1);
+	if (result == NULL)
 		return NULL;
 
-	const char *c = arg;
-	char *rc = ret;
-	for (size_t i = strlen(arg) + 1; i != 0; --i) {
-		if (*c=='"' || *c=='\\')
-			*rc++ = '\\';
-		*(rc++) = *(c++);
+	char *dest = result;
+	for (size_t i = strlen(src) + 1; i != 0; --i) {
+		if (*src == '"' || *src == '\\')
+			*dest++ = '\\';
+		*dest++ = *src++;
 	}
 
-	return ret;
+	return result;
 }
 
 static bool
