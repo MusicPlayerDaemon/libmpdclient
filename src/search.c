@@ -160,12 +160,13 @@ mpd_sanitize_arg(const char *src)
 		return NULL;
 
 	char *dest = result;
-	for (size_t i = strlen(src) + 1; i != 0; --i) {
-		const char ch = *src++;
+	char ch;
+	do {
+		ch = *src++;
 		if (ch == '"' || ch == '\\')
 			*dest++ = '\\';
 		*dest++ = ch;
-	}
+	} while (ch != 0);
 
 	return result;
 }
