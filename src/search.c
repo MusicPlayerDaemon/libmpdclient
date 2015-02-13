@@ -90,9 +90,6 @@ mpd_search_queue_songs(struct mpd_connection *connection, bool exact)
 bool
 mpd_search_db_tags(struct mpd_connection *connection, enum mpd_tag_type type)
 {
-	const char *strtype;
-	int len;
-
 	assert(connection != NULL);
 
 	if (mpd_error_is_defined(&connection->error))
@@ -105,7 +102,7 @@ mpd_search_db_tags(struct mpd_connection *connection, enum mpd_tag_type type)
 		return false;
 	}
 
-	strtype = mpd_tag_name(type);
+	const char *strtype = mpd_tag_name(type);
 	if (strtype == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_ARGUMENT);
 		mpd_error_message(&connection->error,
@@ -113,7 +110,7 @@ mpd_search_db_tags(struct mpd_connection *connection, enum mpd_tag_type type)
 		return false;
 	}
 
-	len = 5+strlen(strtype)+1;
+	const size_t len = 5 + strlen(strtype) + 1;
 	connection->request = malloc(len);
 	if (connection->request == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
@@ -153,23 +150,18 @@ mpd_count_db_songs(struct mpd_connection *connection)
 static char *
 mpd_sanitize_arg(const char * arg)
 {
-	size_t i;
-	char * ret;
-	register const char *c;
-	register char *rc;
-
 	assert(arg != NULL);
 
 	/* instead of counting in that loop above, just
 	 * use a bit more memory and half running time
 	 */
-	ret = malloc(strlen(arg) * 2 + 1);
+	char *ret = malloc(strlen(arg) * 2 + 1);
 	if (ret == NULL)
 		return NULL;
 
-	c = arg;
-	rc = ret;
-	for (i = strlen(arg)+1; i != 0; --i) {
+	const char *c = arg;
+	char *rc = ret;
+	for (size_t i = strlen(arg) + 1; i != 0; --i) {
 		if (*c=='"' || *c=='\\')
 			*rc++ = '\\';
 		*(rc++) = *(c++);
@@ -184,9 +176,6 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 			  const char *name,
 			  const char *value)
 {
-	size_t old_length, add_length;
-	char *arg, *request;
-
 	assert(connection != NULL);
 	assert(name != NULL);
 	assert(value != NULL);
@@ -201,16 +190,15 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 		return false;
 	}
 
-	old_length = strlen(connection->request);
-
-	arg = mpd_sanitize_arg(value);
+	char *arg = mpd_sanitize_arg(value);
 	if (arg == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
 		return false;
 	}
 
-	add_length = 1 + strlen(name) + 2 + strlen(arg) + 2;
-	request = realloc(connection->request, old_length + add_length);
+	const size_t old_length = strlen(connection->request);
+	const size_t add_length = 1 + strlen(name) + 2 + strlen(arg) + 2;
+	char *request = realloc(connection->request, old_length + add_length);
 	if (request == NULL) {
 		free(arg);
 		mpd_error_code(&connection->error, MPD_ERROR_OOM);
@@ -245,12 +233,10 @@ mpd_search_add_tag_constraint(struct mpd_connection *connection,
 			      enum mpd_operator oper,
 			      enum mpd_tag_type type, const char *value)
 {
-	const char *strtype;
-
 	assert(connection != NULL);
 	assert(value != NULL);
 
-	strtype = mpd_tag_name(type);
+	const char *strtype = mpd_tag_name(type);
 	if (strtype == NULL) {
 		mpd_error_code(&connection->error, MPD_ERROR_ARGUMENT);
 		mpd_error_message(&connection->error,
@@ -272,8 +258,6 @@ mpd_search_add_any_tag_constraint(struct mpd_connection *connection,
 bool
 mpd_search_commit(struct mpd_connection *connection)
 {
-	bool success;
-
 	assert(connection != NULL);
 
 	if (mpd_error_is_defined(&connection->error)) {
@@ -288,7 +272,7 @@ mpd_search_commit(struct mpd_connection *connection)
 		return false;
 	}
 
-	success = mpd_send_command(connection, connection->request, NULL);
+	bool success = mpd_send_command(connection, connection->request, NULL);
 	free(connection->request);
 	connection->request = NULL;
 
@@ -309,11 +293,9 @@ mpd_search_cancel(struct mpd_connection *connection)
 struct mpd_pair *
 mpd_recv_pair_tag(struct mpd_connection *connection, enum mpd_tag_type type)
 {
-	const char *name;
-
 	assert(connection != NULL);
 
-	name = mpd_tag_name(type);
+	const char *name = mpd_tag_name(type);
 	if (name == NULL)
 		return NULL;
 
