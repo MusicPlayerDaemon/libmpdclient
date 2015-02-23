@@ -329,7 +329,9 @@ mpd_song_set_duration(struct mpd_song *song, unsigned duration)
 unsigned
 mpd_song_get_duration(const struct mpd_song *song)
 {
-	return song->duration;
+	return song->duration > 0
+		? song->duration
+		: (song->duration_ms + 500u) / 1000u;
 }
 
 static void
@@ -341,7 +343,9 @@ mpd_song_set_duration_ms(struct mpd_song *song, unsigned duration_ms)
 unsigned
 mpd_song_get_duration_ms(const struct mpd_song *song)
 {
-	return song->duration_ms;
+	return song->duration_ms > 0
+		? song->duration_ms
+		: (song->duration * 1000u);
 }
 
 unsigned
