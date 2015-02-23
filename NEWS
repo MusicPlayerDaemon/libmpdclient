@@ -5,6 +5,7 @@ libmpdclient 2.10 (not yet released)
 * support MPD protocol 0.19
   - status: support sample formats "float" and "dsd"
   - song: report duration with milliseconds precision
+  - search: support constraint "modified-since"
 * support MPD protocol 0.20
   - the "window" parameter for commands "find"/"search"
 

@@ -46,6 +46,7 @@
 #include <mpd/compiler.h>
 
 #include <stdbool.h>
+#include <time.h>
 
 /**
  * This type is not yet used, it is reserved for a future protocol
@@ -180,6 +181,19 @@ bool
 mpd_search_add_any_tag_constraint(struct mpd_connection *connection,
 				  enum mpd_operator oper,
 				  const char *value);
+
+/**
+ * Limit the search to files modified after the given time stamp.
+ *
+ * @param connection a #mpd_connection
+ * @param oper reserved, pass #MPD_OPERATOR_DEFAULT
+ * @param value the reference time stamp
+ * @return true on success, false on error
+ */
+bool
+mpd_search_add_modified_since_constraint(struct mpd_connection *connection,
+					 enum mpd_operator oper,
+					 time_t value);
 
 /**
  * Request only a portion of the result set.

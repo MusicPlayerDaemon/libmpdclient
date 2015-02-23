@@ -35,6 +35,7 @@
 #include <mpd/pair.h>
 #include <mpd/recv.h>
 #include "internal.h"
+#include "iso8601.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -268,6 +269,23 @@ mpd_search_add_any_tag_constraint(struct mpd_connection *connection,
 				  const char *value)
 {
 	return mpd_search_add_constraint(connection, oper, "any", value);
+}
+
+bool
+mpd_search_add_modified_since_constraint(struct mpd_connection *connection,
+					 enum mpd_operator oper,
+					 time_t value)
+{
+	char buffer[64];
+	if (!iso8601_datetime_format(buffer, sizeof(buffer), value)) {
+		mpd_error_code(&connection->error, MPD_ERROR_ARGUMENT);
+		mpd_error_message(&connection->error,
+				  "failed to format time stamp");
+		return false;
+	}
+
+	return mpd_search_add_constraint(connection, oper,
+					 "modified-since", buffer);
 }
 
 bool
