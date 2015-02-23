@@ -1,4 +1,4 @@
-libmpdclient 2.10 (not yet released)
+libmpdclient 2.10 (2015/02/23)
 * support abstract sockets with "@" prefix
 * support tag "MUSICBRAINZ_RELEASETRACKID"
 * add TCP keepalive internal and external APIs
