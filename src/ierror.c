@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2010 The Music Player Daemon Project
+   (c) 2003-2015 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in so and binary forms, with or without
