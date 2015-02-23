@@ -112,7 +112,6 @@ namespace Mpd {
 	[CCode (cname = "struct mpd_async",
 		free_function = "mpd_async_free")]
 	[Compact]
-	[Compact]
 	public class Async {
 		public Mpd.Error error { get; }
 		public string? error_message { get; }
