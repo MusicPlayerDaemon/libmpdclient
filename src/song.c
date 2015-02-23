@@ -59,6 +59,11 @@ struct mpd_song {
 	unsigned duration;
 
 	/**
+	 * Duration of the song in milliseconds, or 0 for unknown.
+	 */
+	unsigned duration_ms;
+
+	/**
 	 * Start of the virtual song within the physical file in
 	 * seconds.
 	 */
@@ -125,6 +130,7 @@ mpd_song_new(const char *uri)
 		song->tags[i].value = NULL;
 
 	song->duration = 0;
+	song->duration_ms = 0;
 	song->start = 0;
 	song->end = 0;
 	song->last_modified = 0;
@@ -202,6 +208,7 @@ mpd_song_dup(const struct mpd_song *song)
 	}
 
 	ret->duration = song->duration;
+	ret->duration_ms = song->duration_ms;
 	ret->start = song->start;
 	ret->end = song->end;
 	ret->last_modified = song->last_modified;
@@ -323,6 +330,18 @@ unsigned
 mpd_song_get_duration(const struct mpd_song *song)
 {
 	return song->duration;
+}
+
+static void
+mpd_song_set_duration_ms(struct mpd_song *song, unsigned duration_ms)
+{
+	song->duration_ms = duration_ms;
+}
+
+unsigned
+mpd_song_get_duration_ms(const struct mpd_song *song)
+{
+	return song->duration_ms;
 }
 
 unsigned
@@ -461,6 +480,8 @@ mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair)
 
 	if (strcmp(pair->name, "Time") == 0)
 		mpd_song_set_duration(song, atoi(pair->value));
+	else if (strcmp(pair->name, "duration") == 0)
+		mpd_song_set_duration_ms(song, 1000 * atof(pair->value));
 	else if (strcmp(pair->name, "Range") == 0)
 		mpd_song_parse_range(song, pair->value);
 	else if (strcmp(pair->name, "Last-Modified") == 0)

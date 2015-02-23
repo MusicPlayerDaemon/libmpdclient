@@ -109,6 +109,14 @@ unsigned
 mpd_song_get_duration(const struct mpd_song *song);
 
 /**
+ * Returns the duration of this song in milliseconds.  0 means the
+ * duration is unknown.
+ */
+mpd_pure
+unsigned
+mpd_song_get_duration_ms(const struct mpd_song *song);
+
+/**
  * Returns the start of the virtual song within the physical file in
  * seconds.
  */

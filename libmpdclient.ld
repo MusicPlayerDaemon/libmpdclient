@@ -284,6 +284,7 @@ global:
 	mpd_song_get_uri;
 	mpd_song_get_tag;
 	mpd_song_get_duration;
+	mpd_song_get_duration_ms;
 	mpd_song_get_start;
 	mpd_song_get_end;
 	mpd_song_get_last_modified;

@@ -4,6 +4,7 @@ libmpdclient 2.10 (not yet released)
 * add TCP keepalive internal and external APIs
 * support MPD protocol 0.19
   - status: support sample formats "float" and "dsd"
+  - song: report duration with milliseconds precision
 * support MPD protocol 0.20
   - the "window" parameter for commands "find"/"search"
 
