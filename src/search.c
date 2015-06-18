@@ -300,7 +300,7 @@ mpd_search_add_window(struct mpd_connection *connection,
 	if (dest == NULL)
 		return false;
 
-	snprintf(dest, size, "window %u:%u", start, end);
+	snprintf(dest, size, " window %u:%u", start, end);
 	return true;
 }
 
