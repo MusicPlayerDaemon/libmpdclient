@@ -1,5 +1,6 @@
 libmpdclient 2.11 (not yet released)
 * add space before "window" search argument
+* detect getaddrinfo() at configure time
 
 libmpdclient 2.10 (2015/02/23)
 * support abstract sockets with "@" prefix

@@ -46,19 +46,13 @@
 #endif
 #endif
 
-#if defined(ENABLE_TCP) && !defined(MPD_NO_GAI)
-#  ifdef AI_ADDRCONFIG
-#    define MPD_HAVE_GAI
-#  endif
-#endif
-
 struct resolver {
 	enum {
 		TYPE_ZERO, TYPE_ONE, TYPE_ANY
 	} type;
 
 #ifdef ENABLE_TCP
-#ifdef MPD_HAVE_GAI
+#ifdef HAVE_GETADDRINFO
 	struct addrinfo *ai;
 	const struct addrinfo *next;
 #else
@@ -109,7 +103,7 @@ resolver_new(const char *host, unsigned port)
 #endif /* WIN32 */
 	} else {
 #ifdef ENABLE_TCP
-#ifdef MPD_HAVE_GAI
+#ifdef HAVE_GETADDRINFO
 		struct addrinfo hints;
 		char service[20];
 		int ret;
@@ -170,7 +164,7 @@ resolver_new(const char *host, unsigned port)
 void
 resolver_free(struct resolver *resolver)
 {
-#ifdef MPD_HAVE_GAI
+#if defined(ENABLE_TCP) && defined(HAVE_GETADDRINFO)
 	if (resolver->type == TYPE_ANY)
 		freeaddrinfo(resolver->ai);
 #endif
@@ -188,7 +182,7 @@ resolver_next(struct resolver *resolver)
 		return &resolver->current;
 	}
 
-#ifdef MPD_HAVE_GAI
+#if defined(ENABLE_TCP) && defined(HAVE_GETADDRINFO)
 	if (resolver->next == NULL)
 		return NULL;
 

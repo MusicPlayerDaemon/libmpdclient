@@ -81,6 +81,7 @@ AC_ARG_ENABLE(tcp,
 if test "x$enable_tcp" = xyes; then
 	AC_DEFINE([ENABLE_TCP], 1, [Define to enable TCP support])
 	AC_SEARCH_LIBS([gethostbyname], [nsl])
+	AC_CHECK_FUNCS([getaddrinfo])
 fi
 
 AC_ARG_ENABLE(werror,
