@@ -53,7 +53,6 @@ dnl Check for libraries
 dnl
 
 AC_SEARCH_LIBS([socket], [network socket])
-AC_SEARCH_LIBS([gethostbyname], [nsl])
 
 
 dnl
@@ -81,6 +80,7 @@ AC_ARG_ENABLE(tcp,
 	[enable_tcp=yes])
 if test "x$enable_tcp" = xyes; then
 	AC_DEFINE([ENABLE_TCP], 1, [Define to enable TCP support])
+	AC_SEARCH_LIBS([gethostbyname], [nsl])
 fi
 
 AC_ARG_ENABLE(werror,
