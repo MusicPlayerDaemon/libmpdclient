@@ -1,6 +1,7 @@
 libmpdclient 2.11 (not yet released)
 * add space before "window" search argument
 * detect getaddrinfo() at configure time
+* add support for ArtistSort and AlbumArtistSort tags
 
 libmpdclient 2.10 (2015/02/23)
 * support abstract sockets with "@" prefix
