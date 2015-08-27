@@ -111,6 +111,8 @@ mpd_song_get_duration(const struct mpd_song *song);
 /**
  * Returns the duration of this song in milliseconds.  0 means the
  * duration is unknown.
+ *
+ * @since libmpdclient 2.10
  */
 mpd_pure
 unsigned
@@ -119,6 +121,8 @@ mpd_song_get_duration_ms(const struct mpd_song *song);
 /**
  * Returns the start of the virtual song within the physical file in
  * seconds.
+ *
+ * @since libmpdclient 2.3
  */
 mpd_pure
 unsigned
@@ -128,6 +132,8 @@ mpd_song_get_start(const struct mpd_song *song);
  * Returns the end of the virtual song within the physical file in
  * seconds.  Zero means that the physical song file is played to the
  * end.
+ *
+ * @since libmpdclient 2.3
  */
 mpd_pure
 unsigned
@@ -170,6 +176,8 @@ mpd_song_get_id(const struct mpd_song *song);
 /**
  * Returns the priority of this song in the playlist.  The value is
  * undefined if you did not obtain this song from the queue.
+ *
+ * @since libmpdclient 2.8
  */
 mpd_pure
 unsigned

@@ -178,6 +178,8 @@ mpd_run_disable_output(struct mpd_connection *connection, unsigned output_id);
  * @param output_id an identifier for the output device (see
  * mpd_recv_output())
  * @return true on success
+ *
+ * @since libmpdclient 2.9
  */
 bool
 mpd_send_toggle_output(struct mpd_connection *connection, unsigned output_id);
@@ -189,6 +191,8 @@ mpd_send_toggle_output(struct mpd_connection *connection, unsigned output_id);
  * @param output_id an identifier for the output device (see
  * mpd_recv_output())
  * @return true on success
+ *
+ * @since libmpdclient 2.9
  */
 bool
 mpd_run_toggle_output(struct mpd_connection *connection, unsigned output_id);

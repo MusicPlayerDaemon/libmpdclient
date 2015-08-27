@@ -121,6 +121,8 @@ mpd_playlist_feed(struct mpd_playlist *playlist, const struct mpd_pair *pair);
  *
  * @param connection the connection to MPD
  * @return true on success, false on error
+ *
+ * @since libmpdclient 2.5
  */
 bool
 mpd_send_list_playlists(struct mpd_connection *connection);

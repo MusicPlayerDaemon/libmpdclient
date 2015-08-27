@@ -69,6 +69,8 @@ extern "C" {
  * @param password the password, or NULL to use the default (MPD_HOST
  * before "@")
  * @return a #mpd_settings object or NULL if out of memory
+ *
+ * @since libmpdclient 2.4
  */
 struct mpd_settings *
 mpd_settings_new(const char *host, unsigned port, unsigned timeout_ms,
@@ -76,30 +78,40 @@ mpd_settings_new(const char *host, unsigned port, unsigned timeout_ms,
 
 /**
  * Releases a #mpd_settings object.
+ *
+ * @since libmpdclient 2.4
  */
 void
 mpd_settings_free(struct mpd_settings *settings);
 
 /**
  * Returns the host name (without password/port), or NULL if unknown.
+ *
+ * @since libmpdclient 2.4
  */
 const char *
 mpd_settings_get_host(const struct mpd_settings *settings);
 
 /**
  * Returns the port number, or 0 if not applicable.
+ *
+ * @since libmpdclient 2.4
  */
 unsigned
 mpd_settings_get_port(const struct mpd_settings *settings);
 
 /**
  * Returns the timeout in milliseconds, or 0 if unknown.
+ *
+ * @since libmpdclient 2.4
  */
 unsigned
 mpd_settings_get_timeout_ms(const struct mpd_settings *settings);
 
 /**
  * Returns the password, or NULL if none was configured.
+ *
+ * @since libmpdclient 2.4
  */
 const char *
 mpd_settings_get_password(const struct mpd_settings *settings);

@@ -48,6 +48,9 @@ struct mpd_connection;
 
 /**
  * This enum contains bit masks for all idle events.
+ *
+ * @since libmpdclient 2.5 added support for #MPD_IDLE_STICKER,
+ * #MPD_IDLE_SUBSCRIPTION and #MPD_IDLE_MESSAGE.
  */
 enum mpd_idle {
 	/** song database has been updated*/

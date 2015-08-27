@@ -194,6 +194,8 @@ mpd_status_get_crossfade(const struct mpd_status *status);
 
 /**
  * Returns mixrampdb setting in db.
+ *
+ * @since libmpdclient 2.2
  */
 mpd_pure
 float
@@ -202,6 +204,8 @@ mpd_status_get_mixrampdb(const struct mpd_status *status);
 /**
  * Returns mixrampdelay setting in seconds.  Negative means mixramp is
  * disabled.
+ *
+ * @since libmpdclient 2.2
  */
 mpd_pure
 float
@@ -227,6 +231,8 @@ mpd_status_get_song_id(const struct mpd_status *status);
 /**
  * The same as mpd_status_get_next_song_pos, but for the next song to be
  * played.
+ *
+ * @since libmpdclient 2.7
  */
 mpd_pure
 int
@@ -235,6 +241,8 @@ mpd_status_get_next_song_pos(const struct mpd_status *status);
 /**
  * Returns the id of the next song to be played.  If it is not known, -1 is
  * returned.
+ *
+ * @since libmpdclient 2.7
  */
 mpd_pure
 int
@@ -251,6 +259,8 @@ mpd_status_get_elapsed_time(const struct mpd_status *status);
 /**
  * Returns time in milliseconds that have elapsed in the currently
  * playing/paused song.
+ *
+ * @since libmpdclient 2.1
  */
 mpd_pure
 unsigned

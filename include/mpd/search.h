@@ -135,6 +135,8 @@ bool mpd_count_db_songs(struct mpd_connection *connection);
  * @param oper reserved, pass #MPD_OPERATOR_DEFAULT
  * @param value the URI relative to the music directory
  * @return true on success, false on error
+ *
+ * @since libmpdclient 2.9
  */
 bool
 mpd_search_add_base_constraint(struct mpd_connection *connection,
@@ -189,6 +191,8 @@ mpd_search_add_any_tag_constraint(struct mpd_connection *connection,
  * @param oper reserved, pass #MPD_OPERATOR_DEFAULT
  * @param value the reference time stamp
  * @return true on success, false on error
+ *
+ * @since libmpdclient 2.10
  */
 bool
 mpd_search_add_modified_since_constraint(struct mpd_connection *connection,
@@ -203,6 +207,8 @@ mpd_search_add_modified_since_constraint(struct mpd_connection *connection,
  * @param type The tag type of the constraint
  * @param value The value of the constraint
  * @return true on success, false on error
+ *
+ * @since libmpdclient 2.10
  */
 bool
 mpd_search_add_window(struct mpd_connection *connection,

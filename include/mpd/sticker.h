@@ -57,6 +57,8 @@ extern "C" {
  * @param name the name of the sticker
  * @param value the value of the sticker
  * @return true on success, false on error
+ *
+ * @since libmpdclient 2.1
  */
 bool
 mpd_send_sticker_set(struct mpd_connection *connection, const char *type,
@@ -71,6 +73,8 @@ mpd_send_sticker_set(struct mpd_connection *connection, const char *type,
  * @param name the name of the sticker
  * @param value the value of the sticker
  * @return true on success, false on error
+ *
+ * @since libmpdclient 2.1
  */
 bool
 mpd_run_sticker_set(struct mpd_connection *connection, const char *type,
@@ -84,6 +88,8 @@ mpd_run_sticker_set(struct mpd_connection *connection, const char *type,
  * @param uri the URI of the object
  * @param name the name of the sticker
  * @return true on success, false on error
+ *
+ * @since libmpdclient 2.1
  */
 bool
 mpd_send_sticker_delete(struct mpd_connection *connection, const char *type,
@@ -97,6 +103,8 @@ mpd_send_sticker_delete(struct mpd_connection *connection, const char *type,
  * @param uri the URI of the object
  * @param name the name of the sticker
  * @return true on success, false on error
+ *
+ * @since libmpdclient 2.1
  */
 bool
 mpd_run_sticker_delete(struct mpd_connection *connection, const char *type,
@@ -110,6 +118,8 @@ mpd_run_sticker_delete(struct mpd_connection *connection, const char *type,
  * @param uri the URI of the object
  * @param name the name of the sticker
  * @return true on success, false on error
+ *
+ * @since libmpdclient 2.1
  */
 bool
 mpd_send_sticker_get(struct mpd_connection *connection, const char *type,
@@ -123,6 +133,8 @@ mpd_send_sticker_get(struct mpd_connection *connection, const char *type,
  * @param type the object type, e.g. "song"
  * @param uri the URI of the object
  * @return true on success, false on error
+ *
+ * @since libmpdclient 2.1
  */
 bool
 mpd_send_sticker_list(struct mpd_connection *connection, const char *type,
@@ -137,6 +149,8 @@ mpd_send_sticker_list(struct mpd_connection *connection, const char *type,
  * NULL to search for all objects of the specified type
  * @param name the name of the sticker
  * @return true on success, false on error
+ *
+ * @since libmpdclient 2.1
  */
 bool
 mpd_send_sticker_find(struct mpd_connection *connection, const char *type,
@@ -150,6 +164,8 @@ mpd_send_sticker_find(struct mpd_connection *connection, const char *type,
  * @param name_length_r the length of the name (starting at the
  * beginning of the input string) is returned here
  * @return a pointer to the sticker value, or NULL on error
+ *
+ * @since libmpdclient 2.1
  */
 const char *
 mpd_parse_sticker(const char *input, size_t *name_length_r);
@@ -161,6 +177,8 @@ mpd_parse_sticker(const char *input, size_t *name_length_r);
  * @param connection the connection to MPD
  * @return a #mpd_pair object on success, NULL on end of response or
  * error
+ *
+ * @since libmpdclient 2.1
  */
 mpd_malloc
 struct mpd_pair *
@@ -168,6 +186,8 @@ mpd_recv_sticker(struct mpd_connection *connection);
 
 /**
  * Free the pair returned by mpd_recv_sticker().
+ *
+ * @since libmpdclient 2.1
  */
 void
 mpd_return_sticker(struct mpd_connection *connection, struct mpd_pair *pair);

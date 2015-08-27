@@ -57,6 +57,8 @@ extern "C" {
  * @param pair the first pair in this message (name must be "channel")
  * @return the new #mpd_entity object, or NULL on error (out of
  * memory, or pair name is not "channel")
+ *
+ * @since libmpdclient 2.5
  */
 mpd_malloc
 struct mpd_message *
@@ -69,18 +71,24 @@ mpd_message_begin(const struct mpd_pair *pair);
  * @return true if the pair was parsed and added to the message (or if
  * the pair was not understood and ignored), false if this pair is the
  * beginning of the next message
+ *
+ * @since libmpdclient 2.5
  */
 bool
 mpd_message_feed(struct mpd_message *output, const struct mpd_pair *pair);
 
 /**
  * Frees a #mpd_message object.
+ *
+ * @since libmpdclient 2.5
  */
 void
 mpd_message_free(struct mpd_message *message);
 
 /**
  * Returns the channel name.
+ *
+ * @since libmpdclient 2.5
  */
 mpd_pure
 const char *
@@ -88,6 +96,8 @@ mpd_message_get_channel(const struct mpd_message *message);
 
 /**
  * Returns the message text.
+ *
+ * @since libmpdclient 2.5
  */
 mpd_pure
 const char *
@@ -99,6 +109,8 @@ mpd_message_get_text(const struct mpd_message *message);
  * @param connection the connection to MPD
  * @param channel the channel name
  * @return true on success
+ *
+ * @since libmpdclient 2.5
  */
 bool
 mpd_send_subscribe(struct mpd_connection *connection, const char *channel);
@@ -109,6 +121,8 @@ mpd_send_subscribe(struct mpd_connection *connection, const char *channel);
  * @param connection the connection to MPD
  * @param channel the channel name
  * @return true on success
+ *
+ * @since libmpdclient 2.5
  */
 bool
 mpd_run_subscribe(struct mpd_connection *connection, const char *channel);
@@ -120,6 +134,8 @@ mpd_run_subscribe(struct mpd_connection *connection, const char *channel);
  * @param connection the connection to MPD
  * @param channel the channel name
  * @return true on success
+ *
+ * @since libmpdclient 2.5
  */
 bool
 mpd_send_unsubscribe(struct mpd_connection *connection, const char *channel);
@@ -130,6 +146,8 @@ mpd_send_unsubscribe(struct mpd_connection *connection, const char *channel);
  * @param connection the connection to MPD
  * @param channel the channel name
  * @return true on success
+ *
+ * @since libmpdclient 2.5
  */
 bool
 mpd_run_unsubscribe(struct mpd_connection *connection, const char *channel);
@@ -141,6 +159,8 @@ mpd_run_unsubscribe(struct mpd_connection *connection, const char *channel);
  * @param channel the channel name
  * @param text the message text
  * @return true on success
+ *
+ * @since libmpdclient 2.5
  */
 bool
 mpd_send_send_message(struct mpd_connection *connection,
@@ -153,6 +173,8 @@ mpd_send_send_message(struct mpd_connection *connection,
  * @param channel the channel name
  * @param text the message text
  * @return true on success
+ *
+ * @since libmpdclient 2.5
  */
 bool
 mpd_run_send_message(struct mpd_connection *connection,
@@ -163,6 +185,8 @@ mpd_run_send_message(struct mpd_connection *connection,
  *
  * @param connection the connection to MPD
  * @return true on success
+ *
+ * @since libmpdclient 2.5
  */
 bool
 mpd_send_read_messages(struct mpd_connection *connection);
@@ -173,6 +197,8 @@ mpd_send_read_messages(struct mpd_connection *connection);
  *
  * @return a mpd_message object on success, NULL on error or
  * end-of-response
+ *
+ * @since libmpdclient 2.5
  */
 mpd_malloc
 struct mpd_message *
@@ -183,6 +209,8 @@ mpd_recv_message(struct mpd_connection *connection);
  *
  * @param connection the connection to MPD
  * @return true on success
+ *
+ * @since libmpdclient 2.5
  */
 bool
 mpd_send_channels(struct mpd_connection *connection);
@@ -196,6 +224,8 @@ mpd_send_channels(struct mpd_connection *connection);
  * @param connection a #mpd_connection
  * @returns a "channel" pair, or NULL on error or if the end of the
  * response is reached
+ *
+ * @since libmpdclient 2.5
  */
 mpd_malloc
 static inline struct mpd_pair *

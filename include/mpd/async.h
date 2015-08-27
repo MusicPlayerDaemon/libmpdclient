@@ -148,6 +148,8 @@ mpd_async_get_fd(const struct mpd_async *async);
  *
  * @param async the #mpd_async object
  * @param keepalive whether TCP keepalives should be enabled
+ *
+ * @since libmpdclient 2.10
  */
 void mpd_async_set_keepalive(struct mpd_async *async,
                              bool keepalive);

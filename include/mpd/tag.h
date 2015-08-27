@@ -33,6 +33,10 @@
 #ifndef LIBMPDCLIENT_TAG_H
 #define LIBMPDCLIENT_TAG_H
 
+/**
+ * @since libmpdclient 2.10 added support for #MPD_TAG_MUSICBRAINZ_RELEASETRACKID.
+ * @since libmpdclient 2.11 added support for #MPD_TAG_ARTIST_SORT and #MPD_TAG_ALBUM_ARTIST_SORT.
+ */
 enum mpd_tag_type
 {
 	/**

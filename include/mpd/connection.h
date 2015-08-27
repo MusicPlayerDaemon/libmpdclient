@@ -95,6 +95,9 @@ extern "C" {
  * mpd_connection_set_timeout()
  * @return a mpd_connection object (which may have failed to connect),
  * or NULL on out-of-memory
+ *
+ * @since libmpdclient 2.3 added support for #MPD_HOST, #MPD_PORT and
+ * #MPD_TIMEOUT.
  */
 mpd_malloc
 struct mpd_connection *
@@ -127,6 +130,8 @@ void mpd_connection_free(struct mpd_connection *connection);
 /**
  * Returns the settings which were used to connect to the server.  May
  * be NULL if the settings are not known.
+ *
+ * @since libmpdclient 2.4
  */
 const struct mpd_settings *
 mpd_connection_get_settings(const struct mpd_connection *connection);
@@ -142,6 +147,8 @@ mpd_connection_get_settings(const struct mpd_connection *connection);
  *
  * @param connection the connection to MPD
  * @param keepalive whether TCP keepalives should be enabled
+ *
+ * @since libmpdclient 2.10
  */
 void mpd_connection_set_keepalive(struct mpd_connection *connection,
                                   bool keepalive);
@@ -220,6 +227,8 @@ mpd_connection_get_server_error(const struct mpd_connection *connection);
  * command list.  Calling this function is only valid in a command
  * list response, and if mpd_connection_get_error() returned
  * #MPD_ERROR_SERVER.
+ *
+ * @since libmpdclient 2.4
  */
 mpd_pure
 unsigned

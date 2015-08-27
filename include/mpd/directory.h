@@ -84,6 +84,8 @@ mpd_directory_get_path(const struct mpd_directory *directory);
 /**
  * @return the POSIX UTC time stamp of the last modification, or 0 if
  * that is unknown
+ *
+ * @since libmpdclient 2.9
  */
 mpd_pure
 time_t

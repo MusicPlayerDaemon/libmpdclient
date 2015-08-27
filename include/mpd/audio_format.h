@@ -65,6 +65,9 @@ struct mpd_audio_format {
 	 * currently always signed.  Supported values are 8, 16, 24,
 	 * 32 and the special values #MPD_SAMPLE_FORMAT_FLOAT,
 	 * #MPD_SAMPLE_FORMAT_DSD.
+	 *
+	 * @since libmpdclient 2.10 added support for #MPD_SAMPLE_FORMAT_FLOAT and
+	 * #MPD_SAMPLE_FORMAT_DSD.
 	 */
 	uint8_t bits;
 
