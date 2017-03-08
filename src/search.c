@@ -289,6 +289,24 @@ mpd_search_add_modified_since_constraint(struct mpd_connection *connection,
 }
 
 bool
+mpd_search_add_sort_tag(struct mpd_connection *connection,
+			enum mpd_tag_type type, bool reserved)
+{
+	assert(connection != NULL);
+	assert(!reserved);
+
+	(void)reserved;
+
+	const size_t size = 64;
+	char *dest = mpd_search_prepare_append(connection, size);
+	if (dest == NULL)
+		return false;
+
+	snprintf(dest, size, " sort %s", mpd_tag_name(type));
+	return true;
+}
+
+bool
 mpd_search_add_window(struct mpd_connection *connection,
 		      unsigned start, unsigned end)
 {
