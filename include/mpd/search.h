@@ -203,9 +203,8 @@ mpd_search_add_modified_since_constraint(struct mpd_connection *connection,
  * Request only a portion of the result set.
  *
  * @param connection a #mpd_connection
- * @param oper reserved, pass #MPD_OPERATOR_DEFAULT
- * @param type The tag type of the constraint
- * @param value The value of the constraint
+ * @param start the start offset (including)
+ * @param end the end offset (not including)
  * @return true on success, false on error
  *
  * @since libmpdclient 2.10
