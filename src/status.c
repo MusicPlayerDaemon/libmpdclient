@@ -197,6 +197,22 @@ parse_audio_format(struct mpd_audio_format *audio_format, const char *p)
 {
 	char *endptr;
 
+	if (strncmp(p, "dsd", 3) == 0) {
+		/* allow format specifications such as "dsd64" which
+		   implies the sample rate */
+
+		unsigned long dsd = strtoul(p + 3, &endptr, 10);
+		if (endptr > p + 3 && *endptr == ':' &&
+		    dsd >= 32 && dsd <= 4096 && dsd % 2 == 0) {
+			audio_format->sample_rate = dsd * 44100 / 8;
+			audio_format->bits = MPD_SAMPLE_FORMAT_DSD;
+
+			p = endptr + 1;
+			audio_format->channels = strtoul(p, NULL, 10);
+			return;
+		}
+	}
+
 	audio_format->sample_rate = strtoul(p, &endptr, 10);
 	if (*endptr == ':') {
 		p = endptr + 1;
