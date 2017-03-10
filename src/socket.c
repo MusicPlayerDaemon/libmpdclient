@@ -86,7 +86,7 @@ mpd_socket_global_init(struct mpd_error_info *error)
 #endif
 
 /**
- * Wait for the socket to become readable.
+ * Wait for the socket to become writable.
  */
 static int
 mpd_socket_wait(unsigned fd, struct timeval *tv)
