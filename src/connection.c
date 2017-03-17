@@ -197,6 +197,7 @@ mpd_connection_new_async(struct mpd_async *async, const char *welcome)
 		return NULL;
 
 	mpd_error_init(&connection->error);
+	connection->settings = NULL;
 	connection->async = async;
 	connection->timeout.tv_sec = 30;
 	connection->timeout.tv_usec = 0;
