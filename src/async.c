@@ -32,6 +32,8 @@
 #include "quote.h"
 #include "socket.h"
 
+#include <mpd/socket.h>
+
 #include <assert.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -55,7 +57,7 @@ closesocket(int fd)
 #endif
 
 struct mpd_async {
-	int fd;
+	mpd_socket_t fd;
 
 	struct mpd_error_info error;
 
@@ -69,7 +71,7 @@ mpd_async_new(int fd)
 {
 	struct mpd_async *async;
 
-	assert(fd >= 0);
+	assert(fd != MPD_INVALID_SOCKET);
 
 	async = malloc(sizeof(*async));
 	if (async == NULL)
@@ -132,7 +134,7 @@ int
 mpd_async_get_fd(const struct mpd_async *async)
 {
 	assert(async != NULL);
-	assert(async->fd >= 0);
+	assert(async->fd != MPD_INVALID_SOCKET);
 
 	return async->fd;
 }
@@ -142,7 +144,7 @@ mpd_async_set_keepalive(struct mpd_async *async,
 			bool keepalive)
 {
 	assert(async != NULL);
-	assert(async->fd >= 0);
+	assert(async->fd != MPD_INVALID_SOCKET);
 
 	mpd_socket_keepalive(async->fd, keepalive);
 }
@@ -190,7 +192,7 @@ mpd_async_read(struct mpd_async *async)
 	ssize_t nbytes;
 
 	assert(async != NULL);
-	assert(async->fd >= 0);
+	assert(async->fd != MPD_INVALID_SOCKET);
 	assert(!mpd_error_is_defined(&async->error));
 
 	room = mpd_buffer_room(&async->input);
@@ -227,7 +229,7 @@ mpd_async_write(struct mpd_async *async)
 	ssize_t nbytes;
 
 	assert(async != NULL);
-	assert(async->fd >= 0);
+	assert(async->fd != MPD_INVALID_SOCKET);
 	assert(!mpd_error_is_defined(&async->error));
 
 	size = mpd_buffer_size(&async->output);

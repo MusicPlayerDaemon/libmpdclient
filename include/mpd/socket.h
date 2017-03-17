@@ -26,64 +26,22 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MPD_SOCKET_H
-#define MPD_SOCKET_H
-
-#include <mpd/socket.h>
-
-#include <stdbool.h>
-
-#ifdef WIN32
-#  include <winsock2.h>
-#else
-#  include <errno.h>
-#endif
-
-struct timeval;
-struct mpd_error_info;
-
-#ifdef WIN32
-bool
-mpd_socket_global_init(struct mpd_error_info *error);
-#else
-static inline bool
-mpd_socket_global_init(struct mpd_error_info *error)
-{
-	(void)error;
-	return true;
-}
-#endif
-
-static inline int
-mpd_socket_errno(void)
-{
-#ifdef WIN32
-	return WSAGetLastError();
-#else
-	return errno;
-#endif
-}
-
-/**
- * Connects the socket to the specified host and port.
+/*! \file
+ * \brief MPD client library
  *
- * @return the socket file descriptor, or -1 on failure
+ * Do not include this header directly.  Use mpd/client.h instead.
  */
-mpd_socket_t
-mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv,
-		   struct mpd_error_info *error);
 
-/**
- * Closes a socket descriptor.  This is a wrapper for close() or
- * closesocket(), depending on the OS.
- */
-int
-mpd_socket_close(int fd);
+#ifndef LIBMPDCLIENT_SOCKET_H
+#define LIBMPDCLIENT_SOCKET_H
 
-/**
- * Sets (or unsets) keepalive on a socket descriptor.
- */
-void
-mpd_socket_keepalive(int fd, bool keepalive);
+#ifdef WIN32
+#include <winsock2.h>
+typedef SOCKET mpd_socket_t;
+#define MPD_INVALID_SOCKET INVALID_SOCKET
+#else
+typedef int mpd_socket_t;
+#define MPD_INVALID_SOCKET -1
+#endif
 
 #endif

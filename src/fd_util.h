@@ -36,11 +36,13 @@
 #ifndef FD_UTIL_H
 #define FD_UTIL_H
 
+#include <mpd/socket.h>
+
 /**
  * Wrapper for socket(), which sets the CLOEXEC and the NONBLOCK flag
  * (atomically if supported by the OS).
  */
-int
+mpd_socket_t
 socket_cloexec_nonblock(int domain, int type, int protocol);
 
 #endif

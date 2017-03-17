@@ -31,6 +31,7 @@ mpdinclude_HEADERS = \
 	include/mpd/output.h \
 	include/mpd/pair.h \
 	include/mpd/search.h \
+	include/mpd/socket.h \
 	include/mpd/song.h \
 	include/mpd/sticker.h \
 	include/mpd/settings.h \

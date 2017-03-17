@@ -35,6 +35,8 @@
 #include <mpd/async.h>
 #include <mpd/parser.h>
 #include <mpd/password.h>
+#include <mpd/socket.h>
+
 #include "resolver.h"
 #include "sync.h"
 #include "socket.h"
@@ -112,7 +114,7 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 	connection->settings = settings;
 
 	bool success;
-	int fd;
+	mpd_socket_t fd;
 	const char *line;
 
 	mpd_error_init(&connection->error);
@@ -132,7 +134,7 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 	host = mpd_settings_get_host(settings);
 	fd = mpd_socket_connect(host, mpd_settings_get_port(settings),
 				&connection->timeout, &connection->error);
-	if (fd < 0) {
+	if (fd == MPD_INVALID_SOCKET) {
 #if defined(DEFAULT_SOCKET) && defined(ENABLE_TCP)
 		if (host == NULL || strcmp(host, DEFAULT_SOCKET) == 0) {
 			/* special case: try the default host if the
@@ -149,7 +151,7 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 		}
 #endif
 
-		if (fd < 0)
+		if (fd == MPD_INVALID_SOCKET)
 			return connection;
 	}
 

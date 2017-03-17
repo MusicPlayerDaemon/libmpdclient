@@ -48,11 +48,11 @@
 #ifndef WIN32
 
 static int
-fd_mask_flags(int fd, int and_mask, int xor_mask)
+fd_mask_flags(mpd_socket_t fd, int and_mask, int xor_mask)
 {
 	int ret;
 
-	assert(fd >= 0);
+	assert(fd != MPD_INVALID_SOCKET);
 
 	ret = fcntl(fd, F_GETFD, 0);
 	if (ret < 0)
@@ -64,7 +64,7 @@ fd_mask_flags(int fd, int and_mask, int xor_mask)
 #endif /* !WIN32 */
 
 static int
-fd_set_cloexec(int fd, bool enable)
+fd_set_cloexec(mpd_socket_t fd, bool enable)
 {
 #ifndef WIN32
 	return fd_mask_flags(fd, ~FD_CLOEXEC, enable ? FD_CLOEXEC : 0);
@@ -80,7 +80,7 @@ fd_set_cloexec(int fd, bool enable)
  * WIN32, this function only works for sockets.
  */
 static int
-fd_set_nonblock(int fd)
+fd_set_nonblock(mpd_socket_t fd)
 {
 #ifdef WIN32
 	u_long val = 1;
@@ -88,7 +88,7 @@ fd_set_nonblock(int fd)
 #else
 	int flags;
 
-	assert(fd >= 0);
+	assert(fd != MPD_INVALID_SOCKET);
 
 	flags = fcntl(fd, F_GETFL);
 	if (flags < 0)
@@ -98,19 +98,19 @@ fd_set_nonblock(int fd)
 #endif
 }
 
-int
+mpd_socket_t
 socket_cloexec_nonblock(int domain, int type, int protocol)
 {
-	int fd;
+	mpd_socket_t fd;
 
 #if defined(SOCK_CLOEXEC) && defined(SOCK_NONBLOCK)
 	fd = socket(domain, type | SOCK_CLOEXEC | SOCK_NONBLOCK, protocol);
-	if (fd >= 0 || errno != EINVAL)
+	if (fd != MPD_INVALID_SOCKET || errno != EINVAL)
 		return fd;
 #endif
 
 	fd = socket(domain, type, protocol);
-	if (fd >= 0) {
+	if (fd != MPD_INVALID_SOCKET) {
 		fd_set_cloexec(fd, true);
 		fd_set_nonblock(fd);
 	}

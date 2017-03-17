@@ -112,7 +112,7 @@ mpd_socket_wait(unsigned fd, struct timeval *tv)
  * on success, 0 on timeout, -errno on error.
  */
 static int
-mpd_socket_wait_connected(int fd, struct timeval *tv)
+mpd_socket_wait_connected(mpd_socket_t fd, struct timeval *tv)
 {
 	int ret;
 	int s_err = 0;
@@ -133,14 +133,14 @@ mpd_socket_wait_connected(int fd, struct timeval *tv)
 	return 1;
 }
 
-int
+mpd_socket_t
 mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 		   struct mpd_error_info *error)
 {
 	struct timeval tv = *tv0;
 	struct resolver *resolver;
 	const struct resolver_address *address;
-	int fd, ret;
+	int ret;
 
 	resolver = resolver_new(host, port);
 	if (resolver == NULL) {
@@ -152,9 +152,10 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 	assert(!mpd_error_is_defined(error));
 
 	while ((address = resolver_next(resolver)) != NULL) {
-		fd = socket_cloexec_nonblock(address->family, SOCK_STREAM,
-					     address->protocol);
-		if (fd < 0) {
+		mpd_socket_t fd = socket_cloexec_nonblock(address->family,
+							  SOCK_STREAM,
+							  address->protocol);
+		if (fd == MPD_INVALID_SOCKET) {
 			mpd_error_clear(error);
 			mpd_error_errno(error);
 			continue;
