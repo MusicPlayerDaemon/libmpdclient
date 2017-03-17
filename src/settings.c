@@ -164,7 +164,7 @@ mpd_settings_new(const char *host, unsigned port, unsigned timeout_ms,
 		? timeout_ms
 		: mpd_default_timeout_ms();
 
-	settings->port = host[0] == '/'
+	settings->port = host[0] == '/' || host[0] == '@'
 		? 0 /* no port for local socket */
 		: (port != 0 ? port : DEFAULT_PORT);
 
