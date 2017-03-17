@@ -240,7 +240,7 @@ void mpd_connection_free(struct mpd_connection *connection)
 
 void
 mpd_connection_set_keepalive(struct mpd_connection *connection,
-                             bool keepalive)
+			     bool keepalive)
 {
 	assert(connection != NULL);
 

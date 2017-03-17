@@ -139,7 +139,7 @@ mpd_async_get_fd(const struct mpd_async *async)
 
 void
 mpd_async_set_keepalive(struct mpd_async *async,
-                        bool keepalive)
+			bool keepalive)
 {
 	assert(async != NULL);
 	assert(async->fd >= 0);

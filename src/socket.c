@@ -215,5 +215,5 @@ mpd_socket_keepalive(int fd, bool keepalive)
 
 
 	(void) setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE,
-	                  (const char *) &keepalive_i, sizeof keepalive_i);
+			  (const char *) &keepalive_i, sizeof keepalive_i);
 }

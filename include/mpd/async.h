@@ -151,8 +151,9 @@ mpd_async_get_fd(const struct mpd_async *async);
  *
  * @since libmpdclient 2.10
  */
-void mpd_async_set_keepalive(struct mpd_async *async,
-                             bool keepalive);
+void
+mpd_async_set_keepalive(struct mpd_async *async,
+			bool keepalive);
 
 /**
  * Returns a bit mask of events which should be polled for.

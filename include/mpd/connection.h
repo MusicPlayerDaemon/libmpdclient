@@ -150,8 +150,9 @@ mpd_connection_get_settings(const struct mpd_connection *connection);
  *
  * @since libmpdclient 2.10
  */
-void mpd_connection_set_keepalive(struct mpd_connection *connection,
-                                  bool keepalive);
+void
+mpd_connection_set_keepalive(struct mpd_connection *connection,
+			     bool keepalive);
 
 /**
  * Sets the timeout for synchronous operations.  If the MPD server
