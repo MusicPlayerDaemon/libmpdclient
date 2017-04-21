@@ -110,10 +110,15 @@ dnl
 AC_SUBST(AM_CFLAGS)
 AC_SUBST(AM_CPPFLAGS)
 
-WANTED_CFLAGS="-Wall -W -Wextra -Wno-deprecated-declarations -Wmissing-prototypes -Wshadow -Wpointer-arith -Wstrict-prototypes -Wcast-qual -Wwrite-strings"
-for flag in $WANTED_CFLAGS ; do
-	AX_CHECK_COMPILER_FLAGS([$flag], [CFLAGS="$CFLAGS $flag"],)
-done
+AX_APPEND_COMPILE_FLAGS([-Wall])
+AX_APPEND_COMPILE_FLAGS([-Wextra])
+AX_APPEND_COMPILE_FLAGS([-Wno-deprecated-declarations])
+AX_APPEND_COMPILE_FLAGS([-Wmissing-prototypes])
+AX_APPEND_COMPILE_FLAGS([-Wshadow])
+AX_APPEND_COMPILE_FLAGS([-Wpointer-arith])
+AX_APPEND_COMPILE_FLAGS([-Wstrict-prototypes])
+AX_APPEND_COMPILE_FLAGS([-Wcast-qual])
+AX_APPEND_COMPILE_FLAGS([-Wwrite-strings])
 
 dnl
 dnl Compile-time options
