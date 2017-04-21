@@ -1,5 +1,5 @@
 AC_PREREQ(2.60)
-AC_INIT(libmpdclient, 2.11, musicpd-dev-team@lists.sourceforge.net)
+AC_INIT(libmpdclient, 2.12, musicpd-dev-team@lists.sourceforge.net)
 AC_CONFIG_SRCDIR([src/connection.c])
 AC_CONFIG_AUX_DIR(build)
 AM_INIT_AUTOMAKE([foreign 1.11 dist-xz subdir-objects silent-rules])
@@ -7,7 +7,7 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_SUBST(MAJOR_VERSION,2)
-AC_SUBST(MINOR_VERSION,11)
+AC_SUBST(MINOR_VERSION,12)
 AC_SUBST(PATCH_VERSION,0)
 
 LIBMPDCLIENT_LIBTOOL_VERSION=2:11:0

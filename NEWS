@@ -1,3 +1,5 @@
+libmpdclient 2.12 (not yet released)
+
 libmpdclient 2.11 (2017/03/20)
 * fix heap corruption with mpd_connection_new_async()
 * add space before "window" search argument
