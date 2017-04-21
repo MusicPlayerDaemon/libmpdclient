@@ -133,7 +133,7 @@ sparse-check:
 # Documentation
 #
 
-doc_DATA = README COPYING NEWS
+doc_DATA = README.rst COPYING NEWS
 
 if DOXYGEN
 
