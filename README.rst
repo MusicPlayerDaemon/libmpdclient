@@ -1,0 +1,13 @@
+libmpdclient
+============
+
+This is a library for interfacing `Music Player Daemon
+<http://www.musicpd.org/>`__.
+
+The API documentation is generated during the build if you have
+doxygen.  You may browse it online:
+
+http://www.musicpd.org/doc/libmpdclient/
+
+libmpdclient is released under the revised BSD License.
+For the full license, see `COPYING <COPYING>`__.
