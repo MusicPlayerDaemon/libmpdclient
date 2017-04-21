@@ -52,13 +52,13 @@
 #define LOG_INFO(x, ...) {printf("    [info]" x "\n", __VA_ARGS__);}
 #define LOG_WARNING(x, ...) \
 {\
-	fprintf(stderr, "%c[%d;%d;%dm[WARNING](%s:%d) %s : " x "\n", COLOR_CODE, BRIGHT, YELLOW, BG_BLACK, __FILE__, __LINE__, __FUNCTION__, __VA_ARGS__);\
+	fprintf(stderr, "%c[%d;%d;%dm[WARNING](%s:%d) : " x "\n", COLOR_CODE, BRIGHT, YELLOW, BG_BLACK, __FILE__, __LINE__, __VA_ARGS__);\
 	printf("%c[%dm", 0x1B, 0);\
 }
 
 #define LOG_ERROR(x, ...) \
 {\
-	fprintf(stderr, "%c[%d;%d;%dm[ERROR](%s:%d) %s : " x "\n", COLOR_CODE, BRIGHT, RED, BG_BLACK, __FILE__, __LINE__, __FUNCTION__, __VA_ARGS__);\
+	fprintf(stderr, "%c[%d;%d;%dm[ERROR](%s:%d) : " x "\n", COLOR_CODE, BRIGHT, RED, BG_BLACK, __FILE__, __LINE__, __VA_ARGS__);\
 	printf("%c[%dm", 0x1B, 0);\
 }
 
