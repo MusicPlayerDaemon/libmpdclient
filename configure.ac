@@ -90,7 +90,7 @@ AC_ARG_ENABLE(werror,
 	enable_werror=no)
 
 if test "x$enable_werror" = xyes; then
-	AM_CFLAGS="$AM_CFLAGS -Werror -pedantic-errors"
+	AX_APPEND_COMPILE_FLAGS([-Werror -pedantic-errors])
 fi
 
 AC_ARG_ENABLE(debug,
