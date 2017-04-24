@@ -1,8 +1,8 @@
 libmpdclient
 ============
 
-This is a library for interfacing `Music Player Daemon
-<http://www.musicpd.org/>`__.
+libmpdclient is a C library which implements the `Music Player Daemon
+<http://www.musicpd.org/>`__ protocol.
 
 The API documentation is generated during the build if you have
 doxygen.  You may browse it online:
