@@ -44,12 +44,6 @@
 
 #ifndef _WIN32
 #include <sys/socket.h>
-
-static inline int
-closesocket(int fd)
-{
-	return close(fd);
-}
 #endif
 
 #ifndef MSG_DONTWAIT
@@ -91,7 +85,7 @@ mpd_async_free(struct mpd_async *async)
 {
 	assert(async != NULL);
 
-	closesocket(async->fd);
+	mpd_socket_close(async->fd);
 	mpd_error_deinit(&async->error);
 	free(async);
 }
