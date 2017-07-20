@@ -15,6 +15,7 @@ flavors = {
     'release': {
         'options': [
             '--buildtype', 'release',
+            '--unity',
             '-Dtest=true',
         ],
     },
