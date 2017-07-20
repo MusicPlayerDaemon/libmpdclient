@@ -39,10 +39,10 @@
 #ifndef MPD_ENTITY_H
 #define MPD_ENTITY_H
 
-#include <mpd/song.h>
-#include <mpd/directory.h>
-#include <mpd/client.h>
-#include <mpd/compiler.h>
+#include "song.h"
+#include "directory.h"
+#include "client.h"
+#include "compiler.h"
 
 struct mpd_pair;
 

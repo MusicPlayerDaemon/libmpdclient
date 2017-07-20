@@ -39,7 +39,7 @@
 #ifndef MPD_IDLE_H
 #define MPD_IDLE_H
 
-#include <mpd/compiler.h>
+#include "compiler.h"
 
 #include <stdbool.h>
 

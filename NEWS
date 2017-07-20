@@ -1,6 +1,7 @@
 libmpdclient 2.12 (not yet released)
 * support MPD protocol 0.21
   - support tag "OriginalDate"
+* use relative #include paths to avoid clashes with other libmpdclient copies
 
 libmpdclient 2.11 (2017/03/20)
 * fix heap corruption with mpd_connection_new_async()

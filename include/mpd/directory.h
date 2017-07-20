@@ -39,7 +39,7 @@
 #ifndef MPD_DIRECTORY_H
 #define MPD_DIRECTORY_H
 
-#include <mpd/compiler.h>
+#include "compiler.h"
 
 #include <stdbool.h>
 #include <time.h>

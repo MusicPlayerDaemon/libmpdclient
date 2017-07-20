@@ -37,7 +37,7 @@
 #ifndef MPD_STICKER_H
 #define MPD_STICKER_H
 
-#include <mpd/compiler.h>
+#include "compiler.h"
 
 #include <stdbool.h>
 #include <stddef.h>

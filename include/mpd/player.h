@@ -37,7 +37,7 @@
 #ifndef MPD_PLAYER_H
 #define MPD_PLAYER_H
 
-#include <mpd/compiler.h>
+#include "compiler.h"
 
 #include <stdbool.h>
 

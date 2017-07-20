@@ -37,7 +37,7 @@
 #ifndef MPD_QUEUE_H
 #define MPD_QUEUE_H
 
-#include <mpd/compiler.h>
+#include "compiler.h"
 
 #include <stdbool.h>
 

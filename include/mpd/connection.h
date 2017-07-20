@@ -39,9 +39,9 @@
 #ifndef MPD_CONNECTION_H
 #define MPD_CONNECTION_H
 
-#include <mpd/protocol.h>
-#include <mpd/error.h>
-#include <mpd/compiler.h>
+#include "protocol.h"
+#include "error.h"
+#include "compiler.h"
 
 #include <stdbool.h>
 

@@ -39,7 +39,7 @@
 #ifndef MPD_STATUS_H
 #define MPD_STATUS_H
 
-#include <mpd/compiler.h>
+#include "compiler.h"
 
 #include <stdbool.h>
 

@@ -37,7 +37,7 @@
 #ifndef MPD_RECV_H
 #define MPD_RECV_H
 
-#include <mpd/compiler.h>
+#include "compiler.h"
 
 struct mpd_pair;
 struct mpd_connection;

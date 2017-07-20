@@ -35,7 +35,7 @@
 #ifndef LIBMPDCLIENT_SEND_H
 #define LIBMPDCLIENT_SEND_H
 
-#include <mpd/compiler.h>
+#include "compiler.h"
 
 #include <stdbool.h>
 

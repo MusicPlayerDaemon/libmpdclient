@@ -39,7 +39,7 @@
 #ifndef MPD_OUTPUT_H
 #define MPD_OUTPUT_H
 
-#include <mpd/compiler.h>
+#include "compiler.h"
 
 #include <stdbool.h>
 

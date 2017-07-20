@@ -41,7 +41,7 @@
 #ifndef LIBMPDCLIENT_PLAYLIST_H
 #define LIBMPDCLIENT_PLAYLIST_H
 
-#include <mpd/compiler.h>
+#include "compiler.h"
 
 #include <stdbool.h>
 #include <time.h>

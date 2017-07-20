@@ -29,8 +29,8 @@
 #ifndef LIBMPDCLIENT_PARSER_H
 #define LIBMPDCLIENT_PARSER_H
 
-#include <mpd/protocol.h>
-#include <mpd/compiler.h>
+#include "protocol.h"
+#include "compiler.h"
 
 #include <stdbool.h>
 

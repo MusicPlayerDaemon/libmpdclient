@@ -41,8 +41,8 @@
 #ifndef MPD_ASYNC_H
 #define MPD_ASYNC_H
 
-#include <mpd/error.h>
-#include <mpd/compiler.h>
+#include "error.h"
+#include "compiler.h"
 
 #include <stdbool.h>
 #include <stdarg.h>

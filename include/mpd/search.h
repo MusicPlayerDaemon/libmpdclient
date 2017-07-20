@@ -41,9 +41,9 @@
 #ifndef MPD_DB_H
 #define MPD_DB_H
 
-#include <mpd/connection.h>
-#include <mpd/tag.h>
-#include <mpd/compiler.h>
+#include "connection.h"
+#include "tag.h"
+#include "compiler.h"
 
 #include <stdbool.h>
 #include <time.h>

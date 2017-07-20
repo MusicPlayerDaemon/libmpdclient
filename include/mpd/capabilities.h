@@ -35,8 +35,8 @@
 #ifndef MPD_CAPABILITIES_H
 #define MPD_CAPABILITIES_H
 
-#include <mpd/recv.h>
-#include <mpd/compiler.h>
+#include "recv.h"
+#include "compiler.h"
 
 #include <stdbool.h>
 

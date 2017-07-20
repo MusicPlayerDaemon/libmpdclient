@@ -39,8 +39,8 @@
 #ifndef MPD_SONG_H
 #define MPD_SONG_H
 
-#include <mpd/tag.h>
-#include <mpd/compiler.h>
+#include "tag.h"
+#include "compiler.h"
 
 #include <stdbool.h>
 #include <time.h>
