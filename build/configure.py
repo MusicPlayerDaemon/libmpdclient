@@ -56,6 +56,11 @@ for name, data in flavors.items():
         prefix = os.path.join(prefix, data['arch'])
         cmdline += ('--cross-file', os.path.join(cross_path, name + '.txt'))
 
+        # this is necessary because Meson uses Debian's build machine
+        # MultiArch path (e.g. "lib/x86_64-linux-gnu") for cross
+        # builds, which is obviously wrong
+        cmdline += ('--libdir', 'lib')
+
     cmdline += ('--prefix', prefix)
 
     try:
