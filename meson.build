@@ -207,9 +207,13 @@ pkg_mod.generate(
   description: 'Music Player Daemon client library',
 )
 
-doxygen = find_program('doxygen', required: false)
-if doxygen.found()
-  subdir('doc')
+if get_option('documentation')
+  doxygen = find_program('doxygen', required: false)
+  if doxygen.found()
+    subdir('doc')
+  endif
 endif
 
-subdir('test')
+if get_option('test')
+  subdir('test')
+endif

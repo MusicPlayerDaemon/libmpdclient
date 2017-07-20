@@ -13,3 +13,11 @@ option('default_port', type: 'string',
 option('tcp', type: 'boolean',
   value: true,
   description: 'Enable TCP support')
+
+option('documentation', type: 'boolean',
+  value: false,
+  description: 'Build API documentation')
+
+option('test', type: 'boolean',
+  value: true,
+  description: 'Enable unit tests')
