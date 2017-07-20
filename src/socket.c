@@ -54,16 +54,6 @@
 #  define MSG_DONTWAIT 0
 #endif
 
-static bool
-ignore_errno(int e)
-{
-#ifdef _WIN32
-	return e == WSAEINTR || e == WSAEINPROGRESS || e == WSAEWOULDBLOCK;
-#else
-	return e == EINTR || e == EINPROGRESS;
-#endif
-}
-
 #ifdef _WIN32
 
 bool
@@ -102,7 +92,7 @@ mpd_socket_wait(unsigned fd, struct timeval *tv)
 		if (ret > 0)
 			return 0;
 
-		if (ret == 0 || !ignore_errno(mpd_socket_errno()))
+		if (ret == 0 || !mpd_socket_ignore_errno(mpd_socket_errno()))
 			return -1;
 	}
 }
@@ -168,7 +158,7 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 			return fd;
 		}
 
-		if (!ignore_errno(mpd_socket_errno())) {
+		if (!mpd_socket_ignore_errno(mpd_socket_errno())) {
 			mpd_error_clear(error);
 			mpd_error_errno(error);
 

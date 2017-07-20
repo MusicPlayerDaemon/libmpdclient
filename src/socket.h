@@ -65,6 +65,19 @@ mpd_socket_errno(void)
 }
 
 /**
+ * Can this error code be ignored?
+ */
+static inline bool
+mpd_socket_ignore_errno(int e)
+{
+#ifdef _WIN32
+	return e == WSAEINTR || e == WSAEINPROGRESS || e == WSAEWOULDBLOCK;
+#else
+	return e == EINTR || e == EAGAIN;
+#endif
+}
+
+/**
  * Connects the socket to the specified host and port.
  *
  * @return the socket file descriptor, or -1 on failure

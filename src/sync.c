@@ -39,16 +39,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-static bool
-ignore_errno(int e)
-{
-#ifdef _WIN32
-	return e == WSAEINTR || e == WSAEINPROGRESS;
-#else
-	return e == EINTR;
-#endif
-}
-
 static enum mpd_async_event
 mpd_sync_poll(struct mpd_async *async, struct timeval *tv)
 {
@@ -88,7 +78,7 @@ mpd_sync_poll(struct mpd_async *async, struct timeval *tv)
 			return events;
 		}
 
-		if (ret == 0 || !ignore_errno(mpd_socket_errno()))
+		if (ret == 0 || !mpd_socket_ignore_errno(mpd_socket_errno()))
 			return 0;
 	}
 }
