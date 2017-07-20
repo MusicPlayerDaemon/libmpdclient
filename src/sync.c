@@ -33,7 +33,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
-#ifndef WIN32
+#ifndef _WIN32
 #include <sys/select.h>
 #endif
 #include <fcntl.h>
@@ -42,7 +42,7 @@
 static bool
 ignore_errno(int e)
 {
-#ifdef WIN32
+#ifdef _WIN32
 	return e == WSAEINTR || e == WSAEINPROGRESS;
 #else
 	return e == EINTR;

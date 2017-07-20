@@ -37,7 +37,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #  include <winsock2.h>
 #  include <ws2tcpip.h>
 #else
@@ -57,14 +57,14 @@
 static bool
 ignore_errno(int e)
 {
-#ifdef WIN32
+#ifdef _WIN32
 	return e == WSAEINTR || e == WSAEINPROGRESS || e == WSAEWOULDBLOCK;
 #else
 	return e == EINTR || e == EINPROGRESS;
 #endif
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 
 bool
 mpd_socket_global_init(struct mpd_error_info *error)
@@ -202,7 +202,7 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 int
 mpd_socket_close(int fd)
 {
-#ifndef WIN32
+#ifndef _WIN32
 	return close(fd);
 #else
 	return closesocket(fd);

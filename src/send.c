@@ -226,7 +226,7 @@ mpd_send_ll_command(struct mpd_connection *connection, const char *command,
 {
 	char arg_string[LONGLONGLEN];
 
-#ifdef WIN32
+#ifdef _WIN32
 	snprintf(arg_string, sizeof(arg_string), "%ld", (long)arg);
 #else
 	snprintf(arg_string, sizeof(arg_string), "%lld", arg);

@@ -42,7 +42,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-#ifndef WIN32
+#ifndef _WIN32
 #include <sys/socket.h>
 
 static inline int
@@ -178,7 +178,7 @@ mpd_async_events(const struct mpd_async *async)
 static bool
 ignore_errno(int e)
 {
-#ifdef WIN32
+#ifdef _WIN32
 	return e == WSAEINTR || e == WSAEINPROGRESS;
 #else
 	return e == EINTR || e == EAGAIN;

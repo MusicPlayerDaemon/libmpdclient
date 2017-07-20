@@ -93,7 +93,7 @@ mpd_error_printf(struct mpd_error_info *error, const char *fmt, ...)
 void
 mpd_error_system_message(struct mpd_error_info *error, int code)
 {
-#ifdef WIN32
+#ifdef _WIN32
 	char buffer[1024];
 	DWORD nbytes;
 #endif
@@ -102,7 +102,7 @@ mpd_error_system_message(struct mpd_error_info *error, int code)
 
 	mpd_error_system(error, code);
 
-#ifdef WIN32
+#ifdef _WIN32
 	nbytes = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM |
 			       FORMAT_MESSAGE_IGNORE_INSERTS |
 			       FORMAT_MESSAGE_MAX_WIDTH_MASK, NULL, code, 0,

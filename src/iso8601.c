@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 static inline struct tm *
 gmtime_r(const time_t *timep, struct tm *result)
 {
@@ -41,7 +41,7 @@ gmtime_r(const time_t *timep, struct tm *result)
 	   sucks. */
 	return gmtime(timep);
 }
-#endif /* WIN32 */
+#endif /* _WIN32 */
 
 /**
  * @return the current time zone offset in seconds
@@ -145,7 +145,7 @@ iso8601_datetime_format(char *buffer, size_t size, time_t t)
 	if (tm == NULL)
 		return false;
 
-#ifdef WIN32
+#ifdef _WIN32
 	strftime(buffer, size, "%Y-%m-%dT%H:%M:%SZ", tm);
 #else
 	strftime(buffer, size, "%FT%TZ", tm);

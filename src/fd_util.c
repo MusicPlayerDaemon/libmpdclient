@@ -39,13 +39,13 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <winsock2.h>
 #else
 #include <sys/socket.h>
 #endif
 
-#ifndef WIN32
+#ifndef _WIN32
 
 static int
 fd_mask_flags(mpd_socket_t fd, int and_mask, int xor_mask)
@@ -61,12 +61,12 @@ fd_mask_flags(mpd_socket_t fd, int and_mask, int xor_mask)
 	return fcntl(fd, F_SETFD, (ret & and_mask) ^ xor_mask);
 }
 
-#endif /* !WIN32 */
+#endif /* !_WIN32 */
 
 static int
 fd_set_cloexec(mpd_socket_t fd, bool enable)
 {
-#ifndef WIN32
+#ifndef _WIN32
 	return fd_mask_flags(fd, ~FD_CLOEXEC, enable ? FD_CLOEXEC : 0);
 #else
 	(void)fd;
@@ -82,7 +82,7 @@ fd_set_cloexec(mpd_socket_t fd, bool enable)
 static int
 fd_set_nonblock(mpd_socket_t fd)
 {
-#ifdef WIN32
+#ifdef _WIN32
 	u_long val = 1;
 	return ioctlsocket(fd, FIONBIO, &val);
 #else

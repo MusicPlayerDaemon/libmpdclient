@@ -33,7 +33,7 @@
 
 #include <stdbool.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #  include <winsock2.h>
 #else
 #  include <errno.h>
@@ -42,7 +42,7 @@
 struct timeval;
 struct mpd_error_info;
 
-#ifdef WIN32
+#ifdef _WIN32
 bool
 mpd_socket_global_init(struct mpd_error_info *error);
 #else
@@ -57,7 +57,7 @@ mpd_socket_global_init(struct mpd_error_info *error)
 static inline int
 mpd_socket_errno(void)
 {
-#ifdef WIN32
+#ifdef _WIN32
 	return WSAGetLastError();
 #else
 	return errno;
