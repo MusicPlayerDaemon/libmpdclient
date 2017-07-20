@@ -200,7 +200,7 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv0,
 }
 
 int
-mpd_socket_close(int fd)
+mpd_socket_close(mpd_socket_t fd)
 {
 #ifndef _WIN32
 	return close(fd);
@@ -210,7 +210,7 @@ mpd_socket_close(int fd)
 }
 
 void
-mpd_socket_keepalive(int fd, bool keepalive)
+mpd_socket_keepalive(mpd_socket_t fd, bool keepalive)
 {
 	int keepalive_i = keepalive;
 

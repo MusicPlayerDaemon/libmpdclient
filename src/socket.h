@@ -78,12 +78,12 @@ mpd_socket_connect(const char *host, unsigned port, const struct timeval *tv,
  * closesocket(), depending on the OS.
  */
 int
-mpd_socket_close(int fd);
+mpd_socket_close(mpd_socket_t fd);
 
 /**
  * Sets (or unsets) keepalive on a socket descriptor.
  */
 void
-mpd_socket_keepalive(int fd, bool keepalive);
+mpd_socket_keepalive(mpd_socket_t fd, bool keepalive);
 
 #endif
