@@ -13,6 +13,24 @@ libmpdclient is released under the revised BSD License.
 For the full license, see `COPYING <COPYING>`__.
 
 
+Installing from source
+----------------------
+
+You need:
+
+- a C99 compliant compiler (e.g. gcc)
+- `Meson 0.37 <http://mesonbuild.com/>`__ and `Ninja <https://ninja-build.org/>`__
+
+Run ``meson``:
+
+ meson . output
+
+Compile and install::
+
+ ninja -C output
+ ninja -C output install
+
+
 Links
 -----
 

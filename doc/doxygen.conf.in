@@ -7,10 +7,10 @@ DOXYFILE_ENCODING = UTF-8
 PROJECT_NAME = libmpdclient
 PROJECT_NUMBER = @VERSION@
 
-OUTPUT_DIRECTORY = doc/api
+OUTPUT_DIRECTORY = doc
 
 FULL_PATH_NAMES = YES
-STRIP_FROM_PATH = include/
+STRIP_FROM_PATH = @abs_top_srcdir@/include/
 
 #---------------------------------------------------------------------------
 # Build related configuration options
@@ -96,6 +96,19 @@ GENERATE_PERLMOD = NO
 #---------------------------------------------------------------------------
 
 ENABLE_PREPROCESSING = NO
+
+#---------------------------------------------------------------------------
+# Configuration options related to the dot tool
+#---------------------------------------------------------------------------
+
+# If you set the HAVE_DOT tag to YES then doxygen will assume the dot tool is
+# available from the path. This tool is part of Graphviz (see:
+# http://www.graphviz.org/), a graph visualization toolkit from AT&T and Lucent
+# Bell Labs. The other options in this section have no effect if this option is
+# set to NO
+# The default value is: YES.
+
+HAVE_DOT = @HAVE_DOT@
 
 #---------------------------------------------------------------------------
 # Configuration options related to the dot tool
