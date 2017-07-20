@@ -19,5 +19,5 @@ option('documentation', type: 'boolean',
   description: 'Build API documentation')
 
 option('test', type: 'boolean',
-  value: true,
+  value: false,
   description: 'Enable unit tests')

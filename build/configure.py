@@ -8,11 +8,15 @@ flavors = {
     'debug': {
         'options': [
             '-Ddocumentation=true',
+            '-Dtest=true',
         ],
     },
 
     'release': {
-        'options': ['--buildtype', 'release'],
+        'options': [
+            '--buildtype', 'release',
+            '-Dtest=true',
+        ],
     },
 
     'musl': {

@@ -215,5 +215,6 @@ if get_option('documentation')
 endif
 
 if get_option('test')
+  check_dep = dependency('check')
   subdir('test')
 endif

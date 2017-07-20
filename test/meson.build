@@ -10,4 +10,5 @@ test('t_iso8601', executable('t_iso8601',
   '../src/iso8601.c',
   include_directories: inc,
   dependencies: [
+    check_dep,
   ]))
