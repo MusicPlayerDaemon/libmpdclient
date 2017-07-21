@@ -55,6 +55,12 @@ mpd_send_list_meta(struct mpd_connection *connection, const char *dir)
 }
 
 bool
+mpd_send_list_files(struct mpd_connection *connection, const char *uri)
+{
+	return mpd_send_command(connection, "listfiles", uri, NULL);
+}
+
+bool
 mpd_send_read_comments(struct mpd_connection *connection, const char *path)
 {
 	return mpd_send_command(connection, "readcomments", path, NULL);

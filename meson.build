@@ -137,6 +137,9 @@ libmpdclient = library('mpdclient',
   'src/settings.c',
   'src/message.c',
   'src/cmessage.c',
+  link_depends: [
+    'libmpdclient.ld'
+  ],
   include_directories: inc,
   dependencies: [
     platform_deps,

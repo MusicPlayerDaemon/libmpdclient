@@ -2,6 +2,7 @@
 #include <mpd/connection.h>
 #include <mpd/response.h>
 #include <mpd/queue.h>
+#include <mpd/database.h>
 #include <mpd/search.h>
 
 #include <check.h>
@@ -72,6 +73,20 @@ START_TEST(test_queue_commands)
 }
 END_TEST
 
+START_TEST(test_database_commands)
+{
+	struct test_capture capture;
+	struct mpd_connection *c = test_capture_init(&capture);
+
+	ck_assert(mpd_send_list_files(c, "nfs://foo/bar"));
+	ck_assert_str_eq(test_capture_receive(&capture), "listfiles \"nfs://foo/bar\"\n");
+	abort_command(&capture, c);
+
+	mpd_connection_free(c);
+	test_capture_deinit(&capture);
+}
+END_TEST
+
 START_TEST(test_search)
 {
 	struct test_capture capture;
@@ -111,6 +126,10 @@ create_suite(void)
 	TCase *tc_queue = tcase_create("queue");
 	tcase_add_test(tc_queue, test_queue_commands);
 	suite_add_tcase(s, tc_queue);
+
+	TCase *tc_database = tcase_create("database");
+	tcase_add_test(tc_database, test_database_commands);
+	suite_add_tcase(s, tc_database);
 
 	TCase *tc_search = tcase_create("search");
 	tcase_add_test(tc_search, test_search);

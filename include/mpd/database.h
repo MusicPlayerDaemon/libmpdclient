@@ -73,7 +73,6 @@ mpd_send_list_all(struct mpd_connection *connection, const char *path);
 bool
 mpd_send_list_all_meta(struct mpd_connection *connection, const char *path);
 
-
 /**
  * Get a list of all directories, songs and playlist in a directory
  * from MPD, including metadata.
@@ -86,6 +85,23 @@ mpd_send_list_all_meta(struct mpd_connection *connection, const char *path);
  */
 bool
 mpd_send_list_meta(struct mpd_connection *connection, const char *path);
+
+/**
+ * Lists the contents of the specified directory, including files are
+ * not recognized by MPD (command "listfiles").
+ *
+ * To read the response, you may use mpd_recv_entity().  All regular
+ * files will be reported as #MPD_ENTITY_TYPE_SONG, even if they are
+ * not actually songs.
+ *
+ * @param connection the connection to MPD
+ * @param uri the directory to be listed
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.12, MPD 0.19
+ */
+bool
+mpd_send_list_files(struct mpd_connection *connection, const char *uri);
 
 /**
  * Send "readcomments".  Read the "comments" of a song file.  This
