@@ -6,6 +6,7 @@ libmpdclient 2.12 (not yet released)
 * support MPD protocol 0.19
   - commands "addtagid", "cleartagid"
   - command "listfiles"
+  - grouping for "list" and "count"
   - tag "AlbumSort"
 * use relative #include paths to avoid clashes with other libmpdclient copies
 * build with Meson instead of autotools

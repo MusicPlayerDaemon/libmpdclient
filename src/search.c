@@ -273,6 +273,21 @@ mpd_search_add_modified_since_constraint(struct mpd_connection *connection,
 }
 
 bool
+mpd_search_add_group_tag(struct mpd_connection *connection,
+			 enum mpd_tag_type type)
+{
+	assert(connection != NULL);
+
+	const size_t size = 64;
+	char *dest = mpd_search_prepare_append(connection, size);
+	if (dest == NULL)
+		return false;
+
+	snprintf(dest, size, " group %s", mpd_tag_name(type));
+	return true;
+}
+
+bool
 mpd_search_add_sort_tag(struct mpd_connection *connection,
 			enum mpd_tag_type type, bool reserved)
 {

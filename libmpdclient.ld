@@ -280,6 +280,7 @@ global:
 	mpd_search_add_tag_constraint;
 	mpd_search_add_any_tag_constraint;
 	mpd_search_add_modified_since_constraint;
+	mpd_search_add_group_tag;
 	mpd_search_add_sort_tag;
 	mpd_search_add_window;
 	mpd_search_commit;

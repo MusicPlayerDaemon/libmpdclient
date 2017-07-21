@@ -139,6 +139,12 @@ START_TEST(test_list)
 	ck_assert_str_eq(test_capture_receive(&capture), "list Artist\n");
 	abort_command(&capture, c);
 
+	ck_assert(mpd_search_db_tags(c, MPD_TAG_ALBUM));
+	ck_assert(mpd_search_add_group_tag(c, MPD_TAG_ARTIST));
+	ck_assert(mpd_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture), "list Album group Artist\n");
+	abort_command(&capture, c);
+
 	mpd_connection_free(c);
 	test_capture_deinit(&capture);
 }
@@ -154,6 +160,14 @@ START_TEST(test_count)
 						MPD_TAG_ARTIST, "Queen"));
 	ck_assert(mpd_search_commit(c));
 	ck_assert_str_eq(test_capture_receive(&capture), "count Artist \"Queen\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_count_db_songs(c));
+	ck_assert(mpd_search_add_tag_constraint(c, MPD_OPERATOR_DEFAULT,
+						MPD_TAG_ARTIST, "Queen"));
+	ck_assert(mpd_search_add_group_tag(c, MPD_TAG_ALBUM));
+	ck_assert(mpd_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture), "count Artist \"Queen\" group Album\n");
 	abort_command(&capture, c);
 
 	mpd_connection_free(c);

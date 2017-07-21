@@ -200,6 +200,19 @@ mpd_search_add_modified_since_constraint(struct mpd_connection *connection,
 					 time_t value);
 
 /**
+ * Group the results by the specified tag.
+ *
+ * @param connection a #mpd_connection
+ * @param type the tag type to group by
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.12, MPD 0.19
+ */
+bool
+mpd_search_add_group_tag(struct mpd_connection *connection,
+			 enum mpd_tag_type type);
+
+/**
  * Sort the results by the specified tag.
  *
  * @param connection a #mpd_connection
