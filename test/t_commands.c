@@ -113,6 +113,17 @@ START_TEST(test_search)
 	ck_assert_str_eq(test_capture_receive(&capture), "find base \"foo\" Artist \"Queen\" any \"Foo\" sort Date window 7:9\n");
 	abort_command(&capture, c);
 
+	/* another search */
+	ck_assert(mpd_search_db_songs(c, false));
+	ck_assert(mpd_search_add_base_constraint(c, MPD_OPERATOR_DEFAULT,
+						 "foo"));
+	ck_assert(mpd_search_add_sort_tag(c, MPD_TAG_DATE, false));
+	ck_assert(mpd_search_add_window(c, 7, 9));
+	ck_assert(mpd_search_commit(c));
+
+	ck_assert_str_eq(test_capture_receive(&capture), "search base \"foo\" sort Date window 7:9\n");
+	abort_command(&capture, c);
+
 	mpd_connection_free(c);
 	test_capture_deinit(&capture);
 }
