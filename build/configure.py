@@ -23,6 +23,7 @@ flavors = {
         'options': [
             '--buildtype', 'release',
             '--unity',
+            '-Db_ndebug=true',
             '-Dtest=true',
         ],
     },
@@ -31,6 +32,7 @@ flavors = {
         'options': [
             '--buildtype', 'minsize',
             '--default-library', 'static',
+            '-Db_ndebug=true',
         ],
         'env': {
             'CC': 'musl-gcc',
