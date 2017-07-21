@@ -4,6 +4,7 @@
 #include <mpd/queue.h>
 #include <mpd/database.h>
 #include <mpd/search.h>
+#include <mpd/player.h>
 
 #include <check.h>
 
@@ -175,6 +176,24 @@ START_TEST(test_count)
 }
 END_TEST
 
+START_TEST(test_player_commands)
+{
+	struct test_capture capture;
+	struct mpd_connection *c = test_capture_init(&capture);
+
+	ck_assert(mpd_send_seek_pos(c, 2, 120));
+	ck_assert_str_eq(test_capture_receive(&capture), "seek \"2\" \"120\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_seek_id(c, 2, 120));
+	ck_assert_str_eq(test_capture_receive(&capture), "seekid \"2\" \"120\"\n");
+	abort_command(&capture, c);
+
+	mpd_connection_free(c);
+	test_capture_deinit(&capture);
+}
+END_TEST
+
 static Suite *
 create_suite(void)
 {
@@ -193,6 +212,10 @@ create_suite(void)
 	tcase_add_test(tc_search, test_list);
 	tcase_add_test(tc_search, test_count);
 	suite_add_tcase(s, tc_search);
+
+	TCase *tc_player = tcase_create("player");
+	tcase_add_test(tc_player, test_player_commands);
+	suite_add_tcase(s, tc_player);
 
 	return s;
 }
