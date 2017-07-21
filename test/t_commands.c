@@ -129,6 +129,23 @@ START_TEST(test_search)
 }
 END_TEST
 
+START_TEST(test_count)
+{
+	struct test_capture capture;
+	struct mpd_connection *c = test_capture_init(&capture);
+
+	ck_assert(mpd_count_db_songs(c));
+	ck_assert(mpd_search_add_tag_constraint(c, MPD_OPERATOR_DEFAULT,
+						MPD_TAG_ARTIST, "Queen"));
+	ck_assert(mpd_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture), "count Artist \"Queen\"\n");
+	abort_command(&capture, c);
+
+	mpd_connection_free(c);
+	test_capture_deinit(&capture);
+}
+END_TEST
+
 static Suite *
 create_suite(void)
 {
@@ -144,6 +161,7 @@ create_suite(void)
 
 	TCase *tc_search = tcase_create("search");
 	tcase_add_test(tc_search, test_search);
+	tcase_add_test(tc_search, test_count);
 	suite_add_tcase(s, tc_search);
 
 	return s;
