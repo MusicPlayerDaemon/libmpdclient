@@ -169,6 +169,22 @@ bool
 mpd_run_seek_id(struct mpd_connection *connection,
 		unsigned song_id, unsigned t);
 
+/**
+ * Seeks the specified song (with floating point time).
+ *
+ * @param connection the connection to MPD
+ * @param id the id of the song
+ * @param t the position within the song, in seconds
+ * @return true on success, false on error
+ */
+bool
+mpd_send_seek_id_float(struct mpd_connection *connection,
+		       unsigned id, float t);
+
+bool
+mpd_run_seek_id_float(struct mpd_connection *connection,
+		      unsigned song_id, float t);
+
 bool
 mpd_send_repeat(struct mpd_connection *connection, bool mode);
 

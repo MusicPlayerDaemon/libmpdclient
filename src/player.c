@@ -201,6 +201,22 @@ mpd_run_seek_id(struct mpd_connection *connection,
 }
 
 bool
+mpd_send_seek_id_float(struct mpd_connection *connection,
+		       unsigned id, float t)
+{
+	return mpd_send_u_f_command(connection, "seekid", id, t);
+}
+
+bool
+mpd_run_seek_id_float(struct mpd_connection *connection,
+		      unsigned song_id, float t)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_seek_id_float(connection, song_id, t) &&
+		mpd_response_finish(connection);
+}
+
+bool
 mpd_send_repeat(struct mpd_connection *connection, bool mode)
 {
 	return mpd_send_int_command(connection, "repeat", mode);

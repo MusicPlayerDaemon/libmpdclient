@@ -161,6 +161,8 @@ global:
 	mpd_run_seek_pos;
 	mpd_send_seek_id;
 	mpd_run_seek_id;
+	mpd_send_seek_id_float;
+	mpd_run_seek_id_float;
 	mpd_send_repeat;
 	mpd_run_repeat;
 	mpd_send_random;

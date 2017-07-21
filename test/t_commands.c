@@ -189,6 +189,10 @@ START_TEST(test_player_commands)
 	ck_assert_str_eq(test_capture_receive(&capture), "seekid \"2\" \"120\"\n");
 	abort_command(&capture, c);
 
+	ck_assert(mpd_send_seek_id_float(c, 2, 120.5));
+	ck_assert_str_eq(test_capture_receive(&capture), "seekid \"2\" \"120.500\"\n");
+	abort_command(&capture, c);
+
 	mpd_connection_free(c);
 	test_capture_deinit(&capture);
 }
