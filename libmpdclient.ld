@@ -19,6 +19,12 @@ global:
 	mpd_send_disallowed_commands;
 	mpd_send_list_url_schemes;
 	mpd_send_list_tag_types;
+	mpd_send_disable_tag_types;
+	mpd_run_disable_tag_types;
+	mpd_send_enable_tag_types;
+	mpd_run_enable_tag_types;
+	mpd_send_clear_tag_types;
+	mpd_run_clear_tag_types;
 
 	/* mpd/connection.h */
 	mpd_connection_new;

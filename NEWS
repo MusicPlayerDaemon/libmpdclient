@@ -1,6 +1,7 @@
 libmpdclient 2.12 (not yet released)
 * support MPD protocol 0.21
   - support tag "OriginalDate"
+  - command "tagtypes" plus "disable", "enable", "clear"
 * support MPD protocol 0.20
   - support "plchanges" and "plchangesposid" with range
 * support MPD protocol 0.19

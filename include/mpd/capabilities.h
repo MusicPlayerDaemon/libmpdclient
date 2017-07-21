@@ -37,6 +37,7 @@
 
 #include "recv.h"
 #include "compiler.h"
+#include "tag.h"
 
 #include <stdbool.h>
 
@@ -137,6 +138,76 @@ mpd_recv_tag_type_pair(struct mpd_connection *connection)
 {
 	return mpd_recv_pair_named(connection, "tagtype");
 }
+
+/**
+ * Remove one or more tags from the list of tag types the client is
+ * interested in.  These will be omitted from responses to this
+ * client.
+ *
+ * @param connection the connection to MPD
+ * @param types an array of tag types to disable
+ * @param n the number of tag types in the array
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.12, MPD 0.21
+ */
+bool
+mpd_send_disable_tag_types(struct mpd_connection *connection,
+			   const enum mpd_tag_type *types, unsigned n);
+
+/**
+ * Shortcut for mpd_send_disable_tag_types() and mpd_response_finish().
+ *
+ * @since libmpdclient 2.12, MPD 0.21
+ */
+bool
+mpd_run_disable_tag_types(struct mpd_connection *connection,
+			   const enum mpd_tag_type *types, unsigned n);
+
+/**
+ * Re-enable one or more tags from the list of tag types for this
+ * client.  These will no longer be hidden from responses to this
+ * client.
+ *
+ * @param connection the connection to MPD
+ * @param types an array of tag types to enable
+ * @param n the number of tag types in the array
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.12, MPD 0.21
+ */
+bool
+mpd_send_enable_tag_types(struct mpd_connection *connection,
+			  const enum mpd_tag_type *types, unsigned n);
+
+/**
+ * Shortcut for mpd_send_enable_tag_types() and mpd_response_finish().
+ *
+ * @since libmpdclient 2.12, MPD 0.21
+ */
+bool
+mpd_run_enable_tag_types(struct mpd_connection *connection,
+			 const enum mpd_tag_type *types, unsigned n);
+
+/**
+ * Clear the list of tag types this client is interested in.  This
+ * means that MPD will not send any tags to this client.
+ *
+ * @param connection the connection to MPD
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.12, MPD 0.21
+ */
+bool
+mpd_send_clear_tag_types(struct mpd_connection *connection);
+
+/**
+ * Shortcut for mpd_send_clear_tag_types() and mpd_response_finish().
+ *
+ * @since libmpdclient 2.12, MPD 0.21
+ */
+bool
+mpd_run_clear_tag_types(struct mpd_connection *connection);
 
 #ifdef __cplusplus
 }

@@ -42,6 +42,24 @@ START_TEST(test_capabilities_commands)
 	ck_assert_str_eq(test_capture_receive(&capture), "tagtypes\n");
 	abort_command(&capture, c);
 
+	static const enum mpd_tag_type types[] = {
+		MPD_TAG_COMMENT,
+		MPD_TAG_PERFORMER,
+		MPD_TAG_MUSICBRAINZ_RELEASETRACKID,
+	};
+
+	ck_assert(mpd_send_disable_tag_types(c, types, 3));
+	ck_assert_str_eq(test_capture_receive(&capture), "tagtypes disable Comment Performer MUSICBRAINZ_RELEASETRACKID\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_enable_tag_types(c, types, 3));
+	ck_assert_str_eq(test_capture_receive(&capture), "tagtypes enable Comment Performer MUSICBRAINZ_RELEASETRACKID\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_clear_tag_types(c));
+	ck_assert_str_eq(test_capture_receive(&capture), "tagtypes \"clear\"\n");
+	abort_command(&capture, c);
+
 	mpd_connection_free(c);
 	test_capture_deinit(&capture);
 }
