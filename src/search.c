@@ -128,23 +128,7 @@ mpd_count_db_songs(struct mpd_connection *connection)
 {
 	assert(connection != NULL);
 
-	if (mpd_error_is_defined(&connection->error))
-		return false;
-
-	if (connection->request) {
-		mpd_error_code(&connection->error, MPD_ERROR_STATE);
-		mpd_error_message(&connection->error,
-				  "search already in progress");
-		return false;
-	}
-
-	connection->request = strdup("count");
-	if (connection->request == NULL) {
-		mpd_error_code(&connection->error, MPD_ERROR_OOM);
-		return false;
-	}
-
-	return true;
+	return mpd_search_init(connection, "count");
 }
 
 static char *
