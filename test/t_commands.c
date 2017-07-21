@@ -129,6 +129,21 @@ START_TEST(test_search)
 }
 END_TEST
 
+START_TEST(test_list)
+{
+	struct test_capture capture;
+	struct mpd_connection *c = test_capture_init(&capture);
+
+	ck_assert(mpd_search_db_tags(c, MPD_TAG_ARTIST));
+	ck_assert(mpd_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture), "list Artist\n");
+	abort_command(&capture, c);
+
+	mpd_connection_free(c);
+	test_capture_deinit(&capture);
+}
+END_TEST
+
 START_TEST(test_count)
 {
 	struct test_capture capture;
@@ -161,6 +176,7 @@ create_suite(void)
 
 	TCase *tc_search = tcase_create("search");
 	tcase_add_test(tc_search, test_search);
+	tcase_add_test(tc_search, test_list);
 	tcase_add_test(tc_search, test_count);
 	suite_add_tcase(s, tc_search);
 
