@@ -1,6 +1,7 @@
 #include "capture.h"
 #include <mpd/connection.h>
 #include <mpd/response.h>
+#include <mpd/capabilities.h>
 #include <mpd/queue.h>
 #include <mpd/database.h>
 #include <mpd/search.h>
@@ -19,6 +20,32 @@ abort_command(struct test_capture *capture,
 	mpd_response_finish(connection);
 	ck_assert(mpd_connection_clear_error(connection));
 }
+
+START_TEST(test_capabilities_commands)
+{
+	struct test_capture capture;
+	struct mpd_connection *c = test_capture_init(&capture);
+
+	ck_assert(mpd_send_allowed_commands(c));
+	ck_assert_str_eq(test_capture_receive(&capture), "commands\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_disallowed_commands(c));
+	ck_assert_str_eq(test_capture_receive(&capture), "notcommands\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_list_url_schemes(c));
+	ck_assert_str_eq(test_capture_receive(&capture), "urlhandlers\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_list_tag_types(c));
+	ck_assert_str_eq(test_capture_receive(&capture), "tagtypes\n");
+	abort_command(&capture, c);
+
+	mpd_connection_free(c);
+	test_capture_deinit(&capture);
+}
+END_TEST
 
 START_TEST(test_queue_commands)
 {
@@ -202,6 +229,10 @@ static Suite *
 create_suite(void)
 {
 	Suite *s = suite_create("commands");
+
+	TCase *tc_capabilities = tcase_create("capabilities");
+	tcase_add_test(tc_capabilities, test_capabilities_commands);
+	suite_add_tcase(s, tc_capabilities);
 
 	TCase *tc_queue = tcase_create("queue");
 	tcase_add_test(tc_queue, test_queue_commands);
