@@ -3,7 +3,8 @@ libmpdclient 2.12 (not yet released)
   - support tag "OriginalDate"
 * support MPD protocol 0.20
   - support "plchanges" and "plchangesposid" with range
-* support tag "AlbumSort" (MPD 0.19)
+* support MPD protocol 0.19
+  - tag "AlbumSort"
 * use relative #include paths to avoid clashes with other libmpdclient copies
 * build with Meson instead of autotools
 
