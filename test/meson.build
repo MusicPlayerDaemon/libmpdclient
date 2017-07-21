@@ -12,3 +12,12 @@ test('t_iso8601', executable('t_iso8601',
   dependencies: [
     check_dep,
   ]))
+
+test('t_commands', executable('t_commands',
+  't_commands.c',
+  'capture.c',
+  include_directories: inc,
+  dependencies: [
+    libmpdclient_dep,
+    check_dep,
+  ]))
