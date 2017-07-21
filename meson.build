@@ -1,5 +1,4 @@
-project('libmpdclient', 'c',
-  version: '2.12',
+project('libmpdclient', 'c', version: '2.13',
   default_options: [
     'c_std=c99',
   ],
