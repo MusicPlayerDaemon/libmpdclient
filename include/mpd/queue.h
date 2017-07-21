@@ -38,6 +38,7 @@
 #define MPD_QUEUE_H
 
 #include "compiler.h"
+#include "tag.h"
 
 #include <stdbool.h>
 
@@ -484,6 +485,82 @@ mpd_send_swap_id(struct mpd_connection *connection, unsigned id1, unsigned id2);
  */
 bool
 mpd_run_swap_id(struct mpd_connection *connection, unsigned id1, unsigned id2);
+
+/**
+ * Adds a tag to the specified song (command "addtagid").
+ *
+ * @param connection the connection to MPD
+ * @param id the id of the song
+ * @param tag the tag to be added
+ * @param value the tag value
+ *
+ * @since libmpdclient 2.12, MPD 0.19
+ */
+bool
+mpd_send_add_tag_id(struct mpd_connection *connection, unsigned id,
+		    enum mpd_tag_type tag, const char *value);
+
+/**
+ * Shortcut for mpd_send_add_tag_id() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param id the id of the song
+ * @param tag the tag to be added
+ * @param value the tag value
+ *
+ * @since libmpdclient 2.12, MPD 0.19
+ */
+bool
+mpd_run_add_tag_id(struct mpd_connection *connection, unsigned id,
+		   enum mpd_tag_type tag, const char *value);
+
+/**
+ * Remove a tag from the specified song (command "cleartagid").
+ *
+ * @param connection the connection to MPD
+ * @param id the id of the song
+ * @param tag the tag to be cleared
+ *
+ * @since libmpdclient 2.12, MPD 0.19
+ */
+bool
+mpd_send_clear_tag_id(struct mpd_connection *connection, unsigned id,
+		      enum mpd_tag_type tag);
+
+/**
+ * Shortcut for mpd_send_clear_tag_id() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param id the id of the song
+ * @param tag the tag to be cleared
+ *
+ * @since libmpdclient 2.12, MPD 0.19
+ */
+bool
+mpd_run_clear_tag_id(struct mpd_connection *connection, unsigned id,
+		     enum mpd_tag_type tag);
+
+/**
+ * Remove all tags from the specified song (command "cleartagid").
+ *
+ * @param connection the connection to MPD
+ * @param id the id of the song
+ *
+ * @since libmpdclient 2.12, MPD 0.19
+ */
+bool
+mpd_send_clear_all_tags_id(struct mpd_connection *connection, unsigned id);
+
+/**
+ * Shortcut for mpd_send_clear_all_tags_id() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param id the id of the song
+ *
+ * @since libmpdclient 2.12, MPD 0.19
+ */
+bool
+mpd_run_clear_all_tags_id(struct mpd_connection *connection, unsigned id);
 
 /**
  * Change the priority of the specified song.

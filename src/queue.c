@@ -405,6 +405,54 @@ mpd_run_swap_id(struct mpd_connection *connection, unsigned id1, unsigned id2)
 }
 
 bool
+mpd_send_add_tag_id(struct mpd_connection *connection, unsigned id,
+		    enum mpd_tag_type tag, const char *value)
+{
+	return mpd_send_u_s_s_command(connection, "addtagid",
+				      id, mpd_tag_name(tag), value);
+}
+
+bool
+mpd_run_add_tag_id(struct mpd_connection *connection, unsigned id,
+		   enum mpd_tag_type tag, const char *value)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_add_tag_id(connection, id, tag, value) &&
+		mpd_response_finish(connection);
+}
+
+bool
+mpd_send_clear_tag_id(struct mpd_connection *connection, unsigned id,
+		      enum mpd_tag_type tag)
+{
+	return mpd_send_u_s_command(connection, "cleartagid",
+				    id, mpd_tag_name(tag));
+}
+
+bool
+mpd_run_clear_tag_id(struct mpd_connection *connection, unsigned id,
+		     enum mpd_tag_type tag)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_clear_tag_id(connection, id, tag) &&
+		mpd_response_finish(connection);
+}
+
+bool
+mpd_send_clear_all_tags_id(struct mpd_connection *connection, unsigned id)
+{
+	return mpd_send_int_command(connection, "cleartagid", id);
+}
+
+bool
+mpd_run_clear_all_tags_id(struct mpd_connection *connection, unsigned id)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_clear_all_tags_id(connection, id) &&
+		mpd_response_finish(connection);
+}
+
+bool
 mpd_send_prio(struct mpd_connection *connection, int priority,
 	      unsigned position)
 {

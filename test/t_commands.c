@@ -55,6 +55,18 @@ START_TEST(test_queue_commands)
 	ck_assert_str_eq(test_capture_receive(&capture), "plchanges \"42\" \"6:\"\n");
 	abort_command(&capture, c);
 
+	ck_assert(mpd_send_add_tag_id(c, 42, MPD_TAG_COMMENT, "foo"));
+	ck_assert_str_eq(test_capture_receive(&capture), "addtagid \"42\" \"Comment\" \"foo\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_clear_tag_id(c, 42, MPD_TAG_COMMENT));
+	ck_assert_str_eq(test_capture_receive(&capture), "cleartagid \"42\" \"Comment\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_clear_all_tags_id(c, 42));
+	ck_assert_str_eq(test_capture_receive(&capture), "cleartagid \"42\"\n");
+	abort_command(&capture, c);
+
 	mpd_connection_free(c);
 	test_capture_deinit(&capture);
 }

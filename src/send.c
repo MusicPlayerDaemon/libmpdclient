@@ -174,6 +174,28 @@ mpd_send_float_command(struct mpd_connection *connection, const char *command,
 }
 
 bool
+mpd_send_u_s_command(struct mpd_connection *connection, const char *command,
+		     unsigned arg1, const char *arg2)
+{
+	char arg1_string[INTLEN];
+
+	snprintf(arg1_string, sizeof(arg1_string), "%i", arg1);
+	return mpd_send_command(connection, command,
+				arg1_string, arg2, NULL);
+}
+
+bool
+mpd_send_u_s_s_command(struct mpd_connection *connection, const char *command,
+		       unsigned arg1, const char *arg2, const char *arg3)
+{
+	char arg1_string[INTLEN];
+
+	snprintf(arg1_string, sizeof(arg1_string), "%i", arg1);
+	return mpd_send_command(connection, command,
+				arg1_string, arg2, arg3, NULL);
+}
+
+bool
 mpd_send_s_u_command(struct mpd_connection *connection, const char *command,
 		     const char *arg1, unsigned arg2)
 {

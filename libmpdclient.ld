@@ -246,6 +246,12 @@ global:
 	mpd_run_swap;
 	mpd_send_swap_id;
 	mpd_run_swap_id;
+	mpd_send_add_tag_id;
+	mpd_run_add_tag_id;
+	mpd_send_clear_tag_id;
+	mpd_run_clear_tag_id;
+	mpd_send_clear_all_tags_id;
+	mpd_run_clear_all_tags_id;
 	mpd_send_prio;
 	mpd_run_prio;
 	mpd_send_prio_range;

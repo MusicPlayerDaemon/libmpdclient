@@ -58,6 +58,14 @@ mpd_send_float_command(struct mpd_connection *connection, const char *command,
 		       float arg);
 
 bool
+mpd_send_u_s_command(struct mpd_connection *connection, const char *command,
+		     unsigned arg1, const char *arg2);
+
+bool
+mpd_send_u_s_s_command(struct mpd_connection *connection, const char *command,
+		       unsigned arg1, const char *arg2, const char *arg3);
+
+bool
 mpd_send_s_u_command(struct mpd_connection *connection, const char *command,
 		     const char *arg1, unsigned arg2);
 

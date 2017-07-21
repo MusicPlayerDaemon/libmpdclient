@@ -4,6 +4,7 @@ libmpdclient 2.12 (not yet released)
 * support MPD protocol 0.20
   - support "plchanges" and "plchangesposid" with range
 * support MPD protocol 0.19
+  - commands "addtagid", "cleartagid"
   - tag "AlbumSort"
 * use relative #include paths to avoid clashes with other libmpdclient copies
 * build with Meson instead of autotools
