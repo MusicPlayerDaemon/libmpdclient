@@ -212,7 +212,9 @@ global:
 	mpd_send_get_queue_song_id;
 	mpd_run_get_queue_song_id;
 	mpd_send_queue_changes_meta;
+	mpd_send_queue_changes_meta_range;
 	mpd_send_queue_changes_brief;
+	mpd_send_queue_changes_brief_range;
 	mpd_recv_queue_change_brief;
 	mpd_send_add;
 	mpd_run_add;

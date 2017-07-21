@@ -124,6 +124,23 @@ mpd_send_queue_changes_meta(struct mpd_connection *connection,
 			    unsigned version);
 
 /**
+ * Same as mpd_send_queue_changes_meta(), but limit the result to a
+ * range.
+ *
+ * @param connection the connection to MPD
+ * @param start the start position of the range (including)
+ * @param end the end position of the range (excluding); the special
+ * value "(unsigned)-1" makes the end of the range open
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.12
+ */
+bool
+mpd_send_queue_changes_meta_range(struct mpd_connection *connection,
+				  unsigned version,
+				  unsigned start, unsigned end);
+
+/**
  * A more bandwidth efficient version of the
  * mpd_send_queue_changes_meta().  It only returns the position and id
  * of changed songs.  The MPD command is called "plchangesposid".
@@ -135,6 +152,23 @@ mpd_send_queue_changes_meta(struct mpd_connection *connection,
 bool
 mpd_send_queue_changes_brief(struct mpd_connection *connection,
 			     unsigned version);
+
+/**
+ * Same as mpd_send_queue_changes_brief(), but limit the result to a
+ * range.
+ *
+ * @param connection the connection to MPD
+ * @param start the start position of the range (including)
+ * @param end the end position of the range (excluding); the special
+ * value "(unsigned)-1" makes the end of the range open
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.12
+ */
+bool
+mpd_send_queue_changes_brief_range(struct mpd_connection *connection,
+				   unsigned version,
+				   unsigned start, unsigned end);
 
 /**
  * Receives a response element of mpd_send_queue_changes_brief().

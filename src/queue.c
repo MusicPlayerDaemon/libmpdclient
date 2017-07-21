@@ -111,10 +111,28 @@ mpd_send_queue_changes_meta(struct mpd_connection *connection,
 }
 
 bool
+mpd_send_queue_changes_meta_range(struct mpd_connection *connection,
+				  unsigned version,
+				  unsigned start, unsigned end)
+{
+	return mpd_send_u_range_command(connection, "plchanges",
+					version, start, end);
+}
+
+bool
 mpd_send_queue_changes_brief(struct mpd_connection *connection,
 			     unsigned version)
 {
 	return mpd_send_ll_command(connection, "plchangesposid", version);
+}
+
+bool
+mpd_send_queue_changes_brief_range(struct mpd_connection *connection,
+				   unsigned version,
+				   unsigned start, unsigned end)
+{
+	return mpd_send_u_range_command(connection, "plchangesposid",
+					version, start, end);
 }
 
 bool
