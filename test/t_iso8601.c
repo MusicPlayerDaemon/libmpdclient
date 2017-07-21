@@ -3,7 +3,6 @@
 
 #include <check.h>
 
-#include <assert.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -15,10 +14,10 @@ START_TEST(test_iso8601)
 
 	now = time(NULL);
 	success = iso8601_datetime_format(buffer, sizeof(buffer), now);
-	assert(success);
+	ck_assert(success);
 
 	t = iso8601_datetime_parse(buffer);
-	assert(t == now);
+	ck_assert_int_eq(t, now);
 }
 END_TEST
 
