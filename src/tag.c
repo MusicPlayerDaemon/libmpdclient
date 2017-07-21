@@ -41,6 +41,7 @@ static const char *const mpd_tag_type_names[MPD_TAG_COUNT] =
 	[MPD_TAG_ARTIST] = "Artist",
 	[MPD_TAG_ARTIST_SORT] = "ArtistSort",
 	[MPD_TAG_ALBUM] = "Album",
+	[MPD_TAG_ALBUM_SORT] = "AlbumSort",
 	[MPD_TAG_ALBUM_ARTIST] = "AlbumArtist",
 	[MPD_TAG_ALBUM_ARTIST_SORT] = "AlbumArtistSort",
 	[MPD_TAG_TITLE] = "Title",
