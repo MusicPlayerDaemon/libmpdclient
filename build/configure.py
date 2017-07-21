@@ -12,6 +12,13 @@ flavors = {
         ],
     },
 
+    'asan': {
+        'options': [
+            '-Db_sanitize=address',
+            '-Dtest=true',
+        ],
+    },
+
     'release': {
         'options': [
             '--buildtype', 'release',
