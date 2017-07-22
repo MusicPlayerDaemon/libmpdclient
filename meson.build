@@ -89,7 +89,7 @@ inc = include_directories(
   'include',
 
   # for the generated config.h
-  meson.current_build_dir(),
+  '.',
 )
 
 libmpdclient = library('mpdclient',
