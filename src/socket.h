@@ -73,7 +73,7 @@ mpd_socket_ignore_errno(int e)
 #ifdef _WIN32
 	return e == WSAEINTR || e == WSAEINPROGRESS || e == WSAEWOULDBLOCK;
 #else
-	return e == EINTR || e == EAGAIN;
+	return e == EINTR || e == EINPROGRESS || e == EAGAIN;
 #endif
 }
 
