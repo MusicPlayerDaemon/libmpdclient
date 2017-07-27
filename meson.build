@@ -19,11 +19,8 @@ conf.set_quoted('DEFAULT_HOST', get_option('default_host'))
 conf.set('DEFAULT_PORT', get_option('default_port'))
 
 if get_option('tcp')
-  conf.set('ENABLE_TCP', '1')
-
-  if cc.has_function('getaddrinfo')
-    conf.set('HAVE_GETADDRINFO', '1')
-  endif
+  conf.set('ENABLE_TCP', true)
+  conf.set('HAVE_GETADDRINFO', cc.has_function('getaddrinfo'))
 endif
 
 configure_file(output: 'config.h', configuration: conf)
