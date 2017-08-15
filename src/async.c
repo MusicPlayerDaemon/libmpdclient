@@ -43,7 +43,9 @@
 
 #ifdef _WIN32
 #  include <basetsd.h> /* for SSIZE_T */
+#ifndef __MINGW32__
 typedef SSIZE_T ssize_t;
+#endif
 #else
 #  include <sys/socket.h>
 #endif
