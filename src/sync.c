@@ -37,7 +37,6 @@
 #include <sys/select.h>
 #endif
 #include <fcntl.h>
-#include <unistd.h>
 
 static enum mpd_async_event
 mpd_sync_poll(struct mpd_async *async, struct timeval *tv)

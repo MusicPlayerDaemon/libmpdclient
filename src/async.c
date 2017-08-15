@@ -37,13 +37,15 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <sys/types.h>
 #include <string.h>
 #include <stdarg.h>
 
-#ifndef _WIN32
-#include <sys/socket.h>
+#ifdef _WIN32
+#  include <basetsd.h> /* for SSIZE_T */
+typedef SSIZE_T ssize_t;
+#else
+#  include <sys/socket.h>
 #endif
 
 #ifndef MSG_DONTWAIT

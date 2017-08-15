@@ -35,7 +35,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
-#include <unistd.h>
 
 #ifdef _WIN32
 #  include <winsock2.h>
@@ -48,6 +47,7 @@
 #  include <netdb.h>
 #  include <sys/un.h>
 #  include <errno.h>
+#  include <unistd.h>
 #endif
 
 #ifndef MSG_DONTWAIT

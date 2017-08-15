@@ -31,10 +31,17 @@
 #include <mpd/connection.h>
 #include <mpd/async.h>
 
-#include <sys/socket.h>
-#include <unistd.h>
 #include <stdio.h>
 #include <string.h>
+
+#ifdef _WIN32
+#  include <winsock2.h>
+#  include <basetsd.h> /* for SSIZE_T */
+typedef SSIZE_T ssize_t;
+#else
+#  include <sys/socket.h>
+#  include <unistd.h>
+#endif
 
 struct mpd_connection *
 test_capture_init(struct test_capture *tc)
