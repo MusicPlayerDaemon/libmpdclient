@@ -33,7 +33,12 @@
 
 #include "ierror.h"
 
+/* for struct timeval */
+#ifdef _WIN32
+#include <winsock2.h>
+#else
 #include <sys/time.h>
+#endif
 
 /**
  * This opaque object represents a connection to a MPD server.  Call

@@ -1,4 +1,5 @@
 libmpdclient 2.14 (not yet released)
+* MSVC compatibility
 
 libmpdclient 2.13 (2017/07/25)
 * fix build with meson > 0.38.1
