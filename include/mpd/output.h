@@ -100,6 +100,16 @@ const char *
 mpd_output_get_name(const struct mpd_output *output);
 
 /**
+ * @return the plugin of the specified #mpd_output object, or NULL if
+ * none was specified by the server
+ *
+ * @since libmpdclient 2.14, MPD 0.21
+ */
+mpd_pure
+const char *
+mpd_output_get_plugin(const struct mpd_output *output);
+
+/**
  * @return true if this output is enabled
  */
 mpd_pure

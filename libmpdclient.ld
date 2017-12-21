@@ -119,6 +119,7 @@ global:
 	mpd_output_free;
 	mpd_output_get_id;
 	mpd_output_get_name;
+	mpd_output_get_plugin;
 	mpd_output_get_enabled;
 	mpd_send_outputs;
 	mpd_recv_output;

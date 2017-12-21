@@ -40,6 +40,7 @@
 struct mpd_output {
 	unsigned id;
 	char *name;
+	char *plugin;
 	bool enabled;
 };
 
@@ -60,6 +61,7 @@ mpd_output_begin(const struct mpd_pair *pair)
 	output->id = atoi(pair->value);
 
 	output->name = NULL;
+	output->plugin = NULL;
 	output->enabled = false;
 
 	return output;
@@ -78,6 +80,12 @@ mpd_output_feed(struct mpd_output *output, const struct mpd_pair *pair)
 		output->name = strdup(pair->value);
 	} else if (strcmp(pair->name, "outputenabled") == 0)
 		output->enabled = atoi(pair->value) != 0;
+	else if (strcmp(pair->name, "plugin") == 0) {
+		if (output->plugin != NULL)
+			free(output->plugin);
+
+		output->plugin = strdup(pair->value);
+	}
 
 	return true;
 }
@@ -106,6 +114,14 @@ mpd_output_get_name(const struct mpd_output *output)
 	assert(output != NULL);
 
 	return output->name;
+}
+
+const char *
+mpd_output_get_plugin(const struct mpd_output *output)
+{
+	assert(output != NULL);
+
+	return output->plugin;
 }
 
 bool
