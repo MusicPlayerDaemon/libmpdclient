@@ -286,9 +286,7 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 		if (status->elapsed_time == 0)
 			status->elapsed_time = status->elapsed_ms / 1000;
 	} else if (strcmp(pair->name, "error") == 0) {
-		if (status->error != NULL)
-			free(status->error);
-
+		free(status->error);
 		status->error = strdup(pair->value);
 	} else if (strcmp(pair->name, "xfade") == 0)
 		status->crossfade = atoi(pair->value);
@@ -303,7 +301,7 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 }
 
 void mpd_status_free(struct mpd_status * status) {
-	if (status->error) free(status->error);
+	free(status->error);
 	free(status);
 }
 

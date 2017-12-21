@@ -350,10 +350,8 @@ mpd_search_cancel(struct mpd_connection *connection)
 {
 	assert(connection != NULL);
 
-	if (connection->request != NULL) {
-		free(connection->request);
-		connection->request = NULL;
-	}
+	free(connection->request);
+	connection->request = NULL;
 }
 
 struct mpd_pair *

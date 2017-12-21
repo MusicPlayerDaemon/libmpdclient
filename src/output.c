@@ -74,16 +74,12 @@ mpd_output_feed(struct mpd_output *output, const struct mpd_pair *pair)
 		return false;
 
 	if (strcmp(pair->name, "outputname") == 0) {
-		if (output->name != NULL)
-			free(output->name);
-
+		free(output->name);
 		output->name = strdup(pair->value);
 	} else if (strcmp(pair->name, "outputenabled") == 0)
 		output->enabled = atoi(pair->value) != 0;
 	else if (strcmp(pair->name, "plugin") == 0) {
-		if (output->plugin != NULL)
-			free(output->plugin);
-
+		free(output->plugin);
 		output->plugin = strdup(pair->value);
 	}
 
@@ -95,8 +91,7 @@ mpd_output_free(struct mpd_output *output)
 {
 	assert(output != NULL);
 
-	if (output->name != NULL)
-		free(output->name);
+	free(output->name);
 	free(output);
 }
 

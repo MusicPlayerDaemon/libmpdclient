@@ -40,7 +40,7 @@ mpd_error_deinit(struct mpd_error_info *error)
 {
 	assert(error != NULL);
 
-	if (error->code != MPD_ERROR_SUCCESS && error->message != NULL)
+	if (error->code != MPD_ERROR_SUCCESS)
 		free(error->message);
 }
 
