@@ -128,6 +128,8 @@ global:
 	mpd_run_disable_output;
 	mpd_send_toggle_output;
 	mpd_run_toggle_output;
+	mpd_send_output_set;
+	mpd_run_output_set;
 
 	/* mpd/parser.h */
 	mpd_parser_new;

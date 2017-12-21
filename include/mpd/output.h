@@ -197,6 +197,31 @@ mpd_send_toggle_output(struct mpd_connection *connection, unsigned output_id);
 bool
 mpd_run_toggle_output(struct mpd_connection *connection, unsigned output_id);
 
+/**
+ * Sends the "outputset" command to MPD.
+ *
+ * @param connection a valid and connected mpd_connection
+ * @param output_id an identifier for the output device (see
+ * mpd_recv_output())
+ * @param attribute_name the attribute name
+ * @param attribute_value the attribute value
+ * @return true on success
+ *
+ * @since libmpdclient 2.14
+ */
+bool
+mpd_send_output_set(struct mpd_connection *connection, unsigned output_id,
+		    const char *attribute_name, const char *attribute_value);
+
+/**
+ * Shortcut for mpd_send_output_set() and mpd_response_finish().
+ *
+ * @since libmpdclient 2.14
+ */
+bool
+mpd_run_output_set(struct mpd_connection *connection, unsigned output_id,
+		   const char *attribute_name, const char *attribute_value);
+
 #ifdef __cplusplus
 }
 #endif

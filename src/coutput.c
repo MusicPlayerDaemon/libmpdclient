@@ -113,3 +113,21 @@ mpd_run_toggle_output(struct mpd_connection *connection, unsigned output_id)
 		mpd_send_toggle_output(connection, output_id) &&
 		mpd_response_finish(connection);
 }
+
+bool
+mpd_send_output_set(struct mpd_connection *connection, unsigned output_id,
+		    const char *attribute_name, const char *attribute_value)
+{
+	return mpd_send_u_s_s_command(connection, "outputset", output_id,
+				      attribute_name, attribute_value);
+}
+
+bool
+mpd_run_output_set(struct mpd_connection *connection, unsigned output_id,
+		    const char *attribute_name, const char *attribute_value)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_output_set(connection, output_id,
+				    attribute_name, attribute_value) &&
+		mpd_response_finish(connection);
+}
