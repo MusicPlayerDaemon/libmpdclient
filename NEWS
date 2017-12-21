@@ -2,6 +2,7 @@ libmpdclient 2.14 (not yet released)
 * support MPD protocol 0.21
   - command "outputset"
   - mpd_output_get_plugin()
+  - receive output attributes
 * MSVC compatibility
 * improved local and abstract socket support
 

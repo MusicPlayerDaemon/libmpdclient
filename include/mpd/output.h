@@ -117,6 +117,31 @@ bool
 mpd_output_get_enabled(const struct mpd_output *output);
 
 /**
+ * Obtains the first attribute for this output.  This rewinds the
+ * current attribute pointer to the start.  Call
+ * mpd_output_next_attribute() to obtain more attributes.
+ *
+ * @return a pointer to the first attribute or NULL if there are no
+ * attributes
+ *
+ * @since libmpdclient 2.14, MPD 0.21
+ */
+const struct mpd_pair *
+mpd_output_first_attribute(struct mpd_output *output);
+
+/**
+ * Obtains the next attribute for this output.  Call this function
+ * repeatedly until it returns NULL to get a full list of attributes.
+ *
+ * @return a pointer to the next attribute or NULL if there are no
+ * more attributes
+ *
+ * @since libmpdclient 2.14, MPD 0.21
+ */
+const struct mpd_pair *
+mpd_output_next_attribute(struct mpd_output *output);
+
+/**
  * Sends the "outputs" command to MPD.  Call mpd_recv_output() to
  * read the response.
  *

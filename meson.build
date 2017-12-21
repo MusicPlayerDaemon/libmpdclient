@@ -18,6 +18,8 @@ endif
 conf.set_quoted('DEFAULT_HOST', get_option('default_host'))
 conf.set('DEFAULT_PORT', get_option('default_port'))
 
+conf.set('HAVE_STRNDUP', cc.has_function('strndup', prefix: '#define _GNU_SOURCE\n#include <string.h>'))
+
 if get_option('tcp')
   conf.set('ENABLE_TCP', true)
   conf.set('HAVE_GETADDRINFO', cc.has_function('getaddrinfo'))
@@ -105,6 +107,7 @@ libmpdclient = library('mpdclient',
   'src/entity.c',
   'src/idle.c',
   'src/iso8601.c',
+  'src/kvlist.c',
   'src/list.c',
   'src/mixer.c',
   'src/parser.c',
