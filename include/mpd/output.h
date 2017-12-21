@@ -207,7 +207,7 @@ mpd_run_toggle_output(struct mpd_connection *connection, unsigned output_id);
  * @param attribute_value the attribute value
  * @return true on success
  *
- * @since libmpdclient 2.14
+ * @since libmpdclient 2.14, MPD 0.21
  */
 bool
 mpd_send_output_set(struct mpd_connection *connection, unsigned output_id,
@@ -216,7 +216,7 @@ mpd_send_output_set(struct mpd_connection *connection, unsigned output_id,
 /**
  * Shortcut for mpd_send_output_set() and mpd_response_finish().
  *
- * @since libmpdclient 2.14
+ * @since libmpdclient 2.14, MPD 0.21
  */
 bool
 mpd_run_output_set(struct mpd_connection *connection, unsigned output_id,
