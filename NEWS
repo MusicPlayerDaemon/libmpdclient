@@ -1,4 +1,4 @@
-libmpdclient 2.14 (not yet released)
+libmpdclient 2.14 (2018/02/11)
 * support MPD protocol 0.21
   - command "outputset"
   - mpd_output_get_plugin()
