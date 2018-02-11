@@ -92,6 +92,7 @@ mpd_output_free(struct mpd_output *output)
 	assert(output != NULL);
 
 	free(output->name);
+	free(output->plugin);
 	free(output);
 }
 
