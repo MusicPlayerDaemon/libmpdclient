@@ -22,7 +22,6 @@ flavors = {
     'release': {
         'options': [
             '--buildtype', 'release',
-            '--unity',
             '-Db_ndebug=true',
             '-Dtest=true',
         ],
