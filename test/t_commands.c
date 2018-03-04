@@ -264,6 +264,18 @@ START_TEST(test_player_commands)
 	ck_assert_str_eq(test_capture_receive(&capture), "seekid \"2\" \"120.500\"\n");
 	abort_command(&capture, c);
 
+	ck_assert(mpd_send_seek_current(c, 42, false));
+	ck_assert_str_eq(test_capture_receive(&capture), "seekcur \"42.000\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_seek_current(c, 42, true));
+	ck_assert_str_eq(test_capture_receive(&capture), "seekcur \"+42.000\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_seek_current(c, -42, false));
+	ck_assert_str_eq(test_capture_receive(&capture), "seekcur \"-42.000\"\n");
+	abort_command(&capture, c);
+
 	mpd_connection_free(c);
 	test_capture_deinit(&capture);
 }

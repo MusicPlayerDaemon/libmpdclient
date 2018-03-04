@@ -217,6 +217,28 @@ mpd_run_seek_id_float(struct mpd_connection *connection,
 }
 
 bool
+mpd_send_seek_current(struct mpd_connection *connection,
+		      float t, bool relative)
+{
+	char ts[32];
+	if (relative)
+		snprintf(ts, sizeof(ts), "%+.3f", t);
+	else
+		snprintf(ts, sizeof(ts), "%.3f", t);
+
+	return mpd_send_command(connection, "seekcur", ts, NULL);
+}
+
+bool
+mpd_run_seek_current(struct mpd_connection *connection,
+		     float t, bool relative)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_seek_current(connection, t, relative) &&
+		mpd_response_finish(connection);
+}
+
+bool
 mpd_send_repeat(struct mpd_connection *connection, bool mode)
 {
 	return mpd_send_int_command(connection, "repeat", mode);

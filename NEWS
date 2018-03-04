@@ -4,6 +4,8 @@ libmpdclient 2.15 (not yet released)
   - search: descending sort
   - search: support sorting by "Last-Modified"
   - song: audio format
+* support MPD protocol 0.17
+  - player: command "seekcur"
 * fix `-Wrestrict` compiler warning
 
 libmpdclient 2.14 (2018/02/11)

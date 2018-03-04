@@ -185,6 +185,24 @@ bool
 mpd_run_seek_id_float(struct mpd_connection *connection,
 		      unsigned song_id, float t);
 
+/**
+ * Seeks the current song.
+ *
+ * @param connection the connection to MPD
+ * @param t the position within the song, in seconds
+ * @param relative true makes #t a relative to the current position
+ * @return true on success, false on error
+ *
+ * @since MPD 0.17, libmpdclient 2.15
+ */
+bool
+mpd_send_seek_current(struct mpd_connection *connection,
+		      float t, bool relative);
+
+bool
+mpd_run_seek_current(struct mpd_connection *connection,
+		     float t, bool relative);
+
 bool
 mpd_send_repeat(struct mpd_connection *connection, bool mode);
 
