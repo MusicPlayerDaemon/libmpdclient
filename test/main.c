@@ -171,6 +171,11 @@ print_song(const struct mpd_song *song)
 	if (mpd_song_get_duration_ms(song) > 0)
 		LOG_INFO("duration: %i", mpd_song_get_duration_ms(song));
 
+	const struct mpd_audio_format *audio_format =
+		mpd_song_get_audio_format(song);
+	if (audio_format != NULL)
+		print_audio_format(audio_format);
+
 	LOG_INFO("pos: %u", mpd_song_get_pos(song));
 }
 

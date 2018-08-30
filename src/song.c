@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2017 The Music Player Daemon Project
+   (c) 2003-2018 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -31,11 +31,13 @@
 */
 
 #include <mpd/song.h>
+#include <mpd/audio_format.h>
 #include <mpd/pair.h>
 #include <mpd/recv.h>
 #include "internal.h"
 #include "iso8601.h"
 #include "uri.h"
+#include "iaf.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -105,6 +107,11 @@ struct mpd_song {
 	 */
 	bool finished;
 #endif
+
+	/**
+	 * The audio format as reported by MPD's decoder plugin.
+	 */
+	struct mpd_audio_format audio_format;
 };
 
 static struct mpd_song *
@@ -137,6 +144,8 @@ mpd_song_new(const char *uri)
 	song->pos = 0;
 	song->id = 0;
 	song->prio = 0;
+
+	memset(&song->audio_format, 0, sizeof(song->audio_format));
 
 #ifndef NDEBUG
 	song->finished = false;
@@ -408,6 +417,14 @@ mpd_song_get_prio(const struct mpd_song *song)
 	return song->prio;
 }
 
+const struct mpd_audio_format *
+mpd_song_get_audio_format(const struct mpd_song *song)
+{
+	return !mpd_audio_format_is_empty(&song->audio_format)
+		? &song->audio_format
+		: NULL;
+}
+
 struct mpd_song *
 mpd_song_begin(const struct mpd_pair *pair)
 {
@@ -455,6 +472,15 @@ mpd_song_parse_range(struct mpd_song *song, const char *value)
 		song->end = 0;
 }
 
+static void
+mpd_song_parse_audio_format(struct mpd_song *song, const char *value)
+{
+	assert(song != NULL);
+	assert(value != NULL);
+
+	mpd_parse_audio_format(&song->audio_format, value);
+}
+
 bool
 mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair)
 {
@@ -496,6 +522,8 @@ mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair)
 		mpd_song_set_id(song, atoi(pair->value));
 	else if (strcmp(pair->name, "Prio") == 0)
 		mpd_song_set_prio(song, atoi(pair->value));
+	else if (strcmp(pair->name, "Format") == 0)
+		mpd_song_parse_audio_format(song, pair->value);
 
 	return true;
 }

@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2017 The Music Player Daemon Project
+   (c) 2003-2018 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -182,6 +182,16 @@ mpd_song_get_id(const struct mpd_song *song);
 mpd_pure
 unsigned
 mpd_song_get_prio(const struct mpd_song *song);
+
+/**
+ * Returns audio format as determined by MPD's decoder plugin.  May
+ * return NULL if the format is not available or unknown.
+ *
+ * @since libmpdclient 2.15
+ */
+mpd_pure
+const struct mpd_audio_format *
+mpd_song_get_audio_format(const struct mpd_song *song);
 
 /**
  * Begins parsing a new song.
