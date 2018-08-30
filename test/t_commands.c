@@ -170,6 +170,15 @@ START_TEST(test_search)
 	ck_assert_str_eq(test_capture_receive(&capture), "search base \"foo\" sort Date window 7:9\n");
 	abort_command(&capture, c);
 
+	/* check backslash escape */
+	ck_assert(mpd_search_db_songs(c, false));
+	ck_assert(mpd_search_add_tag_constraint(c, MPD_OPERATOR_DEFAULT,
+						MPD_TAG_ARTIST, "double quote: \" and backslash: \\"));
+	ck_assert(mpd_search_commit(c));
+
+	ck_assert_str_eq(test_capture_receive(&capture), "search Artist \"double quote: \\\" and backslash: \\\\\"\n");
+	abort_command(&capture, c);
+
 	mpd_connection_free(c);
 	test_capture_deinit(&capture);
 }
