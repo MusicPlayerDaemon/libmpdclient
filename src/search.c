@@ -273,6 +273,33 @@ mpd_search_add_modified_since_constraint(struct mpd_connection *connection,
 }
 
 bool
+mpd_search_add_expression(struct mpd_connection *connection,
+			  const char *expression)
+{
+	assert(connection != NULL);
+	assert(expression != NULL);
+
+	char *arg = mpd_sanitize_arg(expression);
+	if (arg == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return false;
+	}
+
+	const size_t add_length = 2 + strlen(arg) + 1;
+
+	char *dest = mpd_search_prepare_append(connection, add_length);
+	if (dest == NULL) {
+		free(arg);
+		return false;
+	}
+
+	sprintf(dest, " \"%s\"", arg);
+
+	free(arg);
+	return true;
+}
+
+bool
 mpd_search_add_group_tag(struct mpd_connection *connection,
 			 enum mpd_tag_type type)
 {

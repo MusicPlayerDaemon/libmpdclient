@@ -200,6 +200,20 @@ mpd_search_add_modified_since_constraint(struct mpd_connection *connection,
 					 time_t value);
 
 /**
+ * Add an expression string.
+ *
+ * @param connection a #mpd_connection
+ * @param expression the expression string; must be enclosed in
+ * parantheses
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.15, MPD 0.21
+ */
+bool
+mpd_search_add_expression(struct mpd_connection *connection,
+			  const char *expression);
+
+/**
  * Group the results by the specified tag.
  *
  * @param connection a #mpd_connection

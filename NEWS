@@ -1,4 +1,6 @@
 libmpdclient 2.15 (not yet released)
+* support MPD protocol 0.21
+  - search: support search expressions
 * fix `-Wrestrict` compiler warning
 
 libmpdclient 2.14 (2018/02/11)
