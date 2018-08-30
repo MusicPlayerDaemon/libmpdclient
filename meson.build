@@ -99,6 +99,7 @@ inc = include_directories(
 
 libmpdclient = library('mpdclient',
   'src/async.c',
+  'src/audio_format.c',
   'src/ierror.c',
   'src/resolver.c',
   'src/capabilities.c',
