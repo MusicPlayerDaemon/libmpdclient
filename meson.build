@@ -72,11 +72,17 @@ if host_machine.system() == 'linux'
   test_ldflags += [ '-Wl,--version-script=' + join_paths(meson.source_root(), 'libmpdclient.ld') ]
 endif
 
-foreach f: test_ldflags
-  if cc.has_argument(f)
-    common_ldflags += [ f ]
-  endif
-endforeach
+if meson.version().version_compare('>=0.46.0')
+  # compiler.has_link_argument() was added in Meson 0.46.0
+  foreach f: test_ldflags
+    if cc.has_link_argument(f)
+      common_ldflags += [ f ]
+    endif
+  endforeach
+else
+  # Meson too old: assume the linker supports all flags
+  common_ldflags += test_ldflags
+endif
 
 platform_deps = []
 if host_machine.system() == 'windows'
