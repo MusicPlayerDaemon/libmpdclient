@@ -376,9 +376,7 @@ mpd_status_get_kbit_rate(const struct mpd_status *status)
 const struct mpd_audio_format *
 mpd_status_get_audio_format(const struct mpd_status *status)
 {
-	return status->audio_format.sample_rate > 0 ||
-		status->audio_format.bits > 0 ||
-		status->audio_format.channels > 0
+	return !mpd_audio_format_is_empty(&status->audio_format)
 		? &status->audio_format
 		: NULL;
 }
