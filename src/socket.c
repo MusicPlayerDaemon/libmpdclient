@@ -88,7 +88,7 @@ mpd_socket_wait(unsigned fd, struct timeval *tv)
 		FD_ZERO(&fds);
 		FD_SET(fd, &fds);
 
-		ret = select(fd + 1, NULL, &fds, &fds, tv);
+		ret = select(fd + 1, NULL, &fds, NULL, tv);
 		if (ret > 0)
 			return 0;
 
