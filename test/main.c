@@ -109,6 +109,14 @@ test_version(struct mpd_connection *conn)
 }
 
 static void
+print_audio_format(const struct mpd_audio_format *audio_format)
+{
+	printf("sampleRate: %i\n", audio_format->sample_rate);
+	printf("bits: %i\n", audio_format->bits);
+	printf("channels: %i\n", audio_format->channels);
+}
+
+static void
 print_status(struct mpd_status *status)
 {
 	const struct mpd_audio_format *audio_format;
@@ -131,11 +139,8 @@ print_status(struct mpd_status *status)
 	}
 
 	audio_format = mpd_status_get_audio_format(status);
-	if (audio_format != NULL) {
-		printf("sampleRate: %i\n", audio_format->sample_rate);
-		printf("bits: %i\n", audio_format->bits);
-		printf("channels: %i\n", audio_format->channels);
-	}
+	if (audio_format != NULL)
+		print_audio_format(audio_format);
 }
 
 static void
