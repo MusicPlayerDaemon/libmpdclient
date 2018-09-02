@@ -295,6 +295,7 @@ global:
 	mpd_search_add_modified_since_constraint;
 	mpd_search_add_expression;
 	mpd_search_add_group_tag;
+	mpd_search_add_sort_name;
 	mpd_search_add_sort_tag;
 	mpd_search_add_window;
 	mpd_search_commit;

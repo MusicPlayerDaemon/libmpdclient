@@ -315,8 +315,8 @@ mpd_search_add_group_tag(struct mpd_connection *connection,
 }
 
 bool
-mpd_search_add_sort_tag(struct mpd_connection *connection,
-			enum mpd_tag_type type, bool descending)
+mpd_search_add_sort_name(struct mpd_connection *connection,
+			 const char *name, bool descending)
 {
 	assert(connection != NULL);
 
@@ -327,8 +327,17 @@ mpd_search_add_sort_tag(struct mpd_connection *connection,
 
 	snprintf(dest, size, " sort %s%s",
 		 descending ? "-" : "",
-		 mpd_tag_name(type));
+		 name);
 	return true;
+}
+
+bool
+mpd_search_add_sort_tag(struct mpd_connection *connection,
+			enum mpd_tag_type type, bool descending)
+{
+	return mpd_search_add_sort_name(connection,
+					mpd_tag_name(type),
+					descending);
 }
 
 bool

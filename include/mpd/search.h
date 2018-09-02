@@ -227,6 +227,21 @@ mpd_search_add_group_tag(struct mpd_connection *connection,
 			 enum mpd_tag_type type);
 
 /**
+ * Sort the results by the specified named attribute.
+ *
+ * @param connection a #mpd_connection
+ * @param name the attribute name to sort with; can be a tag name or
+ * "Last-Modified"
+ * @param descending sort in reverse order?
+ * @return true on success, false on error
+ *
+ * @since MPD 0.21, libmpdclient 2.15
+ */
+bool
+mpd_search_add_sort_name(struct mpd_connection *connection,
+			 const char *name, bool descending);
+
+/**
  * Sort the results by the specified tag.
  *
  * @param connection a #mpd_connection
