@@ -316,19 +316,18 @@ mpd_search_add_group_tag(struct mpd_connection *connection,
 
 bool
 mpd_search_add_sort_tag(struct mpd_connection *connection,
-			enum mpd_tag_type type, bool reserved)
+			enum mpd_tag_type type, bool descending)
 {
 	assert(connection != NULL);
-	assert(!reserved);
-
-	(void)reserved;
 
 	const size_t size = 64;
 	char *dest = mpd_search_prepare_append(connection, size);
 	if (dest == NULL)
 		return false;
 
-	snprintf(dest, size, " sort %s", mpd_tag_name(type));
+	snprintf(dest, size, " sort %s%s",
+		 descending ? "-" : "",
+		 mpd_tag_name(type));
 	return true;
 }
 

@@ -231,14 +231,15 @@ mpd_search_add_group_tag(struct mpd_connection *connection,
  *
  * @param connection a #mpd_connection
  * @param type the tag type to sort with
- * @param reserved must be false
+ * @param descending sort in reverse order?
  * @return true on success, false on error
  *
- * @since libmpdclient 2.11
+ * @since MPD 0.21, libmpdclient 2.11; #descending since libmpdclient
+ * 2.15
  */
 bool
 mpd_search_add_sort_tag(struct mpd_connection *connection,
-			enum mpd_tag_type type, bool reserved);
+			enum mpd_tag_type type, bool descending);
 
 /**
  * Request only a portion of the result set.
