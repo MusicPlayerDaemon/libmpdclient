@@ -40,6 +40,7 @@
 enum {
 	INTLEN = (sizeof(int) * CHAR_BIT + 1) / 3 + 1,
 	LONGLONGLEN = (sizeof(long long) * CHAR_BIT + 1) / 3 + 1,
+	FLOATLEN = LONGLONGLEN + 8,
 };
 
 static void
@@ -167,7 +168,7 @@ bool
 mpd_send_float_command(struct mpd_connection *connection, const char *command,
 		       float arg)
 {
-	char arg_string[INTLEN];
+	char arg_string[FLOATLEN];
 
 	snprintf(arg_string, sizeof(arg_string), "%f", arg);
 	return mpd_send_command(connection, command, arg_string, NULL);
@@ -177,7 +178,7 @@ bool
 mpd_send_u_f_command(struct mpd_connection *connection, const char *command,
 		     unsigned arg1, float arg2)
 {
-	char arg1_string[INTLEN], arg2_string[INTLEN];
+	char arg1_string[INTLEN], arg2_string[FLOATLEN];
 
 	snprintf(arg1_string, sizeof(arg1_string), "%u", arg1);
 	snprintf(arg2_string, sizeof(arg2_string), "%.3f", arg2);
