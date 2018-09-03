@@ -154,6 +154,14 @@ START_TEST(test_playlist_commands)
 	ck_assert_str_eq(test_capture_receive(&capture), "load \"foo\"\n");
 	abort_command(&capture, c);
 
+	ck_assert(mpd_send_load_range(c, "foo", 2, 5));
+	ck_assert_str_eq(test_capture_receive(&capture), "load \"foo\" \"2:5\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_load_range(c, "foo", 2, UINT_MAX));
+	ck_assert_str_eq(test_capture_receive(&capture), "load \"foo\" \"2:\"\n");
+	abort_command(&capture, c);
+
 	mpd_connection_free(c);
 	test_capture_deinit(&capture);
 }

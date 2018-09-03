@@ -209,6 +209,31 @@ mpd_send_load(struct mpd_connection *connection, const char *name);
 bool
 mpd_run_load(struct mpd_connection *connection, const char *name);
 
+/**
+ * Like mpd_send_load(), but load only a portion of the playlist.
+ *
+ * @param connection the connection to MPD
+ * @param name the name of the playlist
+ * @param start the start position of the range (including)
+ * @param end the end position of the range (excluding); the special
+ * value "UINT_MAX" makes the end of the range open
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.16
+ */
+bool
+mpd_send_load_range(struct mpd_connection *connection, const char *name,
+		    unsigned start, unsigned end);
+
+/**
+ * Shortcut for mpd_send_load_range() and mpd_response_finish().
+ *
+ * @since libmpdclient 2.16
+ */
+bool
+mpd_run_load_range(struct mpd_connection *connection, const char *name,
+		   unsigned start, unsigned end);
+
 bool
 mpd_send_rename(struct mpd_connection *connection,
 		const char *from, const char *to);

@@ -78,6 +78,14 @@ mpd_send_range_command(struct mpd_connection *connection, const char *command,
 		       unsigned arg1, unsigned arg2);
 
 /**
+ * Send command with one string argument followed by a range argument.
+ */
+bool
+mpd_send_s_range_command(struct mpd_connection *connection,
+			 const char *command, const char *arg1,
+			 unsigned start, unsigned end);
+
+/**
  * Send command with one integer argument followed by a range argument.
  */
 bool

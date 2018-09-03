@@ -215,6 +215,8 @@ global:
 	mpd_run_save;
 	mpd_send_load;
 	mpd_run_load;
+	mpd_send_load_range;
+	mpd_run_load_range;
 	mpd_send_rename;
 	mpd_run_rename;
 	mpd_send_rm;
