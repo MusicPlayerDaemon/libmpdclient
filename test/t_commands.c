@@ -10,6 +10,7 @@
 #include <check.h>
 
 #include <stdlib.h>
+#include <limits.h>
 #include <time.h>
 
 static void
@@ -78,7 +79,7 @@ START_TEST(test_queue_commands)
 	ck_assert_str_eq(test_capture_receive(&capture), "playlistinfo \"0:1\"\n");
 	abort_command(&capture, c);
 
-	ck_assert(mpd_send_list_queue_range_meta(c, 42, (unsigned)-1));
+	ck_assert(mpd_send_list_queue_range_meta(c, 42, UINT_MAX));
 	ck_assert_str_eq(test_capture_receive(&capture), "playlistinfo \"42:\"\n");
 	abort_command(&capture, c);
 
@@ -98,7 +99,7 @@ START_TEST(test_queue_commands)
 	ck_assert_str_eq(test_capture_receive(&capture), "plchangesposid \"42\"\n");
 	abort_command(&capture, c);
 
-	ck_assert(mpd_send_queue_changes_meta_range(c, 42, 6, (unsigned)-1));
+	ck_assert(mpd_send_queue_changes_meta_range(c, 42, 6, UINT_MAX));
 	ck_assert_str_eq(test_capture_receive(&capture), "plchanges \"42\" \"6:\"\n");
 	abort_command(&capture, c);
 

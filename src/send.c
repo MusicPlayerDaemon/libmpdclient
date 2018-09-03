@@ -46,7 +46,7 @@ enum {
 static void
 format_range(char *buffer, size_t size, unsigned start, unsigned end)
 {
-	if (end == (unsigned)-1)
+	if (end == UINT_MAX)
 		/* the special value -1 means "open end" */
 		snprintf(buffer, size, "%u:", start);
 	else
