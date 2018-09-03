@@ -3,6 +3,7 @@
 #include <mpd/response.h>
 #include <mpd/capabilities.h>
 #include <mpd/queue.h>
+#include <mpd/playlist.h>
 #include <mpd/database.h>
 #include <mpd/search.h>
 #include <mpd/player.h>
@@ -113,6 +114,44 @@ START_TEST(test_queue_commands)
 
 	ck_assert(mpd_send_clear_all_tags_id(c, 42));
 	ck_assert_str_eq(test_capture_receive(&capture), "cleartagid \"42\"\n");
+	abort_command(&capture, c);
+
+	mpd_connection_free(c);
+	test_capture_deinit(&capture);
+}
+END_TEST
+
+START_TEST(test_playlist_commands)
+{
+	struct test_capture capture;
+	struct mpd_connection *c = test_capture_init(&capture);
+
+	ck_assert(mpd_send_list_playlists(c));
+	ck_assert_str_eq(test_capture_receive(&capture), "listplaylists\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_list_playlist(c, "foo"));
+	ck_assert_str_eq(test_capture_receive(&capture), "listplaylist \"foo\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_list_playlist_meta(c, "foo"));
+	ck_assert_str_eq(test_capture_receive(&capture), "listplaylistinfo \"foo\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_playlist_clear(c, "foo"));
+	ck_assert_str_eq(test_capture_receive(&capture), "playlistclear \"foo\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_playlist_add(c, "foo", "bar"));
+	ck_assert_str_eq(test_capture_receive(&capture), "playlistadd \"foo\" \"bar\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_save(c, "foo"));
+	ck_assert_str_eq(test_capture_receive(&capture), "save \"foo\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_load(c, "foo"));
+	ck_assert_str_eq(test_capture_receive(&capture), "load \"foo\"\n");
 	abort_command(&capture, c);
 
 	mpd_connection_free(c);
@@ -294,6 +333,10 @@ create_suite(void)
 	TCase *tc_queue = tcase_create("queue");
 	tcase_add_test(tc_queue, test_queue_commands);
 	suite_add_tcase(s, tc_queue);
+
+	TCase *tc_playlist = tcase_create("playlist");
+	tcase_add_test(tc_playlist, test_playlist_commands);
+	suite_add_tcase(s, tc_playlist);
 
 	TCase *tc_database = tcase_create("database");
 	tcase_add_test(tc_database, test_database_commands);
