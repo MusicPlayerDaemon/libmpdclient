@@ -189,9 +189,23 @@ mpd_send_save(struct mpd_connection *connection, const char *name);
 bool
 mpd_run_save(struct mpd_connection *connection, const char *name);
 
+/**
+ * Load a stored playlist into the queue.
+ *
+ * @param connection the connection to MPD
+ * @param name the name of the playlist
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.0
+ */
 bool
 mpd_send_load(struct mpd_connection *connection, const char *name);
 
+/**
+ * Shortcut for mpd_send_load() and mpd_response_finish().
+ *
+ * @since libmpdclient 2.0
+ */
 bool
 mpd_run_load(struct mpd_connection *connection, const char *name);
 
