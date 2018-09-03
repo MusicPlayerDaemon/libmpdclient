@@ -1,3 +1,5 @@
+libmpdclient 2.16 (not yet released)
+
 libmpdclient 2.15 (2018/09/02)
 * support MPD protocol 0.21
   - search: support search expressions
