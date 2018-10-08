@@ -113,6 +113,19 @@ global:
 	mpd_send_change_volume;
 	mpd_run_change_volume;
 
+	/* mpd/mount.h */
+	mpd_mount_begin;
+	mpd_mount_feed;
+	mpd_mount_free;
+	mpd_mount_get_uri;
+	mpd_mount_get_storage;
+	mpd_send_list_mounts;
+	mpd_recv_mount;
+	mpd_send_mount;
+	mpd_run_mount;
+	mpd_send_unmount;
+	mpd_run_unmount;
+
 	/* mpd/output.h */
 	mpd_output_begin;
 	mpd_output_feed;

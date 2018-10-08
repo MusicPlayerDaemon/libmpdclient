@@ -7,6 +7,7 @@
 #include <mpd/database.h>
 #include <mpd/search.h>
 #include <mpd/player.h>
+#include <mpd/mount.h>
 
 #include <check.h>
 
@@ -329,6 +330,28 @@ START_TEST(test_player_commands)
 }
 END_TEST
 
+START_TEST(test_mount_commands)
+{
+	struct test_capture capture;
+	struct mpd_connection *c = test_capture_init(&capture);
+
+	ck_assert(mpd_send_list_mounts(c));
+	ck_assert_str_eq(test_capture_receive(&capture), "listmounts\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_mount(c, "foo", "nfs://server/share"));
+	ck_assert_str_eq(test_capture_receive(&capture), "mount \"foo\" \"nfs://server/share\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_unmount(c, "foo"));
+	ck_assert_str_eq(test_capture_receive(&capture), "unmount \"foo\"\n");
+	abort_command(&capture, c);
+
+	mpd_connection_free(c);
+	test_capture_deinit(&capture);
+}
+END_TEST
+
 static Suite *
 create_suite(void)
 {
@@ -360,6 +383,10 @@ create_suite(void)
 	TCase *tc_player = tcase_create("player");
 	tcase_add_test(tc_player, test_player_commands);
 	suite_add_tcase(s, tc_player);
+
+	TCase *tc_mount = tcase_create("mount");
+	tcase_add_test(tc_mount, test_mount_commands);
+	suite_add_tcase(s, tc_mount);
 
 	return s;
 }

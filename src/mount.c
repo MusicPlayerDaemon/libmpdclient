@@ -26,51 +26,76 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*! \file
- * \brief MPD client library
- *
- * This is a client library for the Music Player Daemon, written in C.
- *
- * You can choose one of several APIs, depending on your requirements:
- *
- * - struct mpd_async: a very low-level asynchronous API which knows
- *   the protocol syntax, but no specific commands
- *
- * - struct mpd_connection: a basic synchronous API which knows all
- *   MPD commands and parses all responses
- *
- * \author Max Kellermann (max@duempel.org)
- */
+#include <mpd/mount.h>
+#include <mpd/pair.h>
 
-#ifndef MPD_CLIENT_H
-#define MPD_CLIENT_H
+#include <assert.h>
+#include <string.h>
+#include <stdlib.h>
 
-#include "audio_format.h"
-#include "capabilities.h"
-#include "connection.h"
-#include "database.h"
-#include "directory.h"
-#include "entity.h"
-#include "idle.h"
-#include "list.h"
-#include "message.h"
-#include "mixer.h"
-#include "mount.h"
-#include "output.h"
-#include "pair.h"
-#include "password.h"
-#include "player.h"
-#include "playlist.h"
-#include "queue.h"
-#include "recv.h"
-#include "response.h"
-#include "search.h"
-#include "send.h"
-#include "settings.h"
-#include "song.h"
-#include "stats.h"
-#include "status.h"
-#include "sticker.h"
-#include "version.h"
+struct mpd_mount {
+	char *uri;
+	char *storage;
+};
 
-#endif
+struct mpd_mount *
+mpd_mount_begin(const struct mpd_pair *pair)
+{
+	assert(pair != NULL);
+
+	if (strcmp(pair->name, "mount") != 0)
+		return NULL;
+
+	struct mpd_mount *mount = malloc(sizeof(*mount));
+	if (mount == NULL)
+		return NULL;
+
+	mount->uri = strdup(pair->value);
+	if (mount->uri == NULL) {
+		free(mount);
+		return NULL;
+	}
+
+	mount->storage = NULL;
+	return mount;
+}
+
+bool
+mpd_mount_feed(struct mpd_mount *mount, const struct mpd_pair *pair)
+{
+	if (strcmp(pair->name, "mount") == 0)
+		return false;
+
+	if (strcmp(pair->name, "storage") == 0) {
+		free(mount->storage);
+		mount->storage = strdup(pair->value);
+	}
+
+	return true;
+}
+
+void
+mpd_mount_free(struct mpd_mount *mount)
+{
+	assert(mount != NULL);
+
+	free(mount->uri);
+	free(mount->storage);
+	free(mount);
+}
+
+const char *
+mpd_mount_get_uri(const struct mpd_mount *mount)
+{
+	assert(mount != NULL);
+
+	return mount->uri;
+}
+
+const char *
+mpd_mount_get_storage(const struct mpd_mount *mount)
+{
+	assert(mount != NULL);
+
+	return mount->storage;
+}

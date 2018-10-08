@@ -1,4 +1,6 @@
 libmpdclient 2.16 (not yet released)
+* support MPD protocol 0.19
+  - "mount", "unmount", "listmounts"
 * support MPD protocol 0.17
   - "load" with range
 * add mpd_output_get_attribute()
