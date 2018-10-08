@@ -30,6 +30,7 @@
 #define MPD_KVLIST_H
 
 #include <mpd/pair.h>
+#include <mpd/compiler.h>
 
 #include <stddef.h>
 
@@ -49,6 +50,10 @@ mpd_kvlist_deinit(struct mpd_kvlist *l);
 void
 mpd_kvlist_add(struct mpd_kvlist *l, const char *key, size_t key_length,
 	       const char *value);
+
+mpd_pure
+const char *
+mpd_kvlist_get(const struct mpd_kvlist *l, const char *name);
 
 const struct mpd_pair *
 mpd_kvlist_first(struct mpd_kvlist *l);

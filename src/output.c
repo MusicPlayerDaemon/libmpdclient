@@ -140,6 +140,14 @@ mpd_output_get_enabled(const struct mpd_output *output)
 	return output->enabled;
 }
 
+const char *
+mpd_output_get_attribute(const struct mpd_output *output, const char *name)
+{
+	assert(output != NULL);
+
+	return mpd_kvlist_get(&output->attributes, name);
+}
+
 const struct mpd_pair *
 mpd_output_first_attribute(struct mpd_output *output)
 {

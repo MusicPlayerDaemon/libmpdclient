@@ -117,6 +117,17 @@ bool
 mpd_output_get_enabled(const struct mpd_output *output);
 
 /**
+ * Find an attribute with the given name and return its value.
+ *
+ * @return the attribute value or NULL if there is no such attributes
+ *
+ * @since libmpdclient 2.16, MPD 0.21
+ */
+mpd_pure
+const char *
+mpd_output_get_attribute(const struct mpd_output *output, const char *name);
+
+/**
  * Obtains the first attribute for this output.  This rewinds the
  * current attribute pointer to the start.  Call
  * mpd_output_next_attribute() to obtain more attributes.

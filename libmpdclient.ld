@@ -121,6 +121,7 @@ global:
 	mpd_output_get_name;
 	mpd_output_get_plugin;
 	mpd_output_get_enabled;
+	mpd_output_get_attribute;
 	mpd_output_first_attribute;
 	mpd_output_next_attribute;
 	mpd_send_outputs;

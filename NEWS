@@ -1,6 +1,7 @@
 libmpdclient 2.16 (not yet released)
 * support MPD protocol 0.17
   - "load" with range
+* add mpd_output_get_attribute()
 * use UINX_MAX instead of `(unsigned)-1` to avoid undefined behavior
 
 libmpdclient 2.15 (2018/09/02)

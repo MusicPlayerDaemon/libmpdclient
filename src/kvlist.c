@@ -109,6 +109,16 @@ mpd_kvlist_add(struct mpd_kvlist *l, const char *key, size_t key_length,
 	l->tail_r = &i->next;
 }
 
+const char *
+mpd_kvlist_get(const struct mpd_kvlist *l, const char *name)
+{
+	for (const struct mpd_kvlist_item *i = l->head; i != NULL; i = i->next)
+		if (strcmp(name, i->key) == 0)
+			return i->value;
+
+	return NULL;
+}
+
 static const struct mpd_pair *
 mpd_kvlist_item_to_pair(struct mpd_pair *buffer,
 			const struct mpd_kvlist_item *item)
