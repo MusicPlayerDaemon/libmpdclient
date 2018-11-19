@@ -400,3 +400,38 @@ mpd_recv_pair_tag(struct mpd_connection *connection, enum mpd_tag_type type)
 
 	return mpd_recv_pair_named(connection, name);
 }
+
+bool
+mpd_search_add_db_songs_to_playlist(struct mpd_connection *connection,
+				    const char *playlist_name)
+{
+	assert(connection != NULL);
+	assert(playlist_name != NULL);
+
+	if (mpd_error_is_defined(&connection->error))
+		return false;
+
+	if (connection->request) {
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "search already in progress");
+		return false;
+	}
+
+	char *arg = mpd_sanitize_arg(playlist_name);
+	if (arg == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return false;
+	}
+
+	const size_t len = 13 + strlen(arg) + 2;
+	connection->request = malloc(len);
+	if (connection->request == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return false;
+	}
+
+	snprintf(connection->request, len, "searchaddpl \"%s\" ", arg);
+
+	return true;
+}
