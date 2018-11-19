@@ -82,6 +82,12 @@ mpd_search_add_db_songs(struct mpd_connection *connection, bool exact)
 }
 
 bool
+mpd_search_add_pl_db_songs(struct mpd_connection *connection)
+{
+	return mpd_search_init(connection, "searchaddpl");
+}
+
+bool
 mpd_search_queue_songs(struct mpd_connection *connection, bool exact)
 {
 	return mpd_search_init(connection,
@@ -212,12 +218,21 @@ mpd_search_add_constraint(struct mpd_connection *connection,
 	free(arg);
 	return true;
 }
+
 bool
 mpd_search_add_base_constraint(struct mpd_connection *connection,
 			       enum mpd_operator oper,
 			       const char *value)
 {
 	return mpd_search_add_constraint(connection, oper, "base", value);
+}
+
+bool
+mpd_search_add_pl_constraint(struct mpd_connection *connection,
+			       enum mpd_operator oper,
+			       const char *value)
+{
+	return mpd_search_add_pl_constraint(connection, oper, value);
 }
 
 bool
