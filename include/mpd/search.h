@@ -93,6 +93,7 @@ mpd_search_add_db_songs(struct mpd_connection *connection, bool exact);
 
 /**
  * Search for songs in the database and adds the result to a playlist
+ * Playlist must be specified with mpd_search_add_pl_constraint().
  * Constraints may be specified with mpd_search_add_tag_constraint().
  * Send the search command with mpd_search_commit().
  *

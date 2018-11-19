@@ -229,10 +229,30 @@ mpd_search_add_base_constraint(struct mpd_connection *connection,
 
 bool
 mpd_search_add_pl_constraint(struct mpd_connection *connection,
-			       enum mpd_operator oper,
+			       mpd_unused enum mpd_operator oper,
 			       const char *value)
 {
-	return mpd_search_add_pl_constraint(connection, oper, value);
+	assert(connection != NULL);
+	assert(value != NULL);
+
+	char *arg = mpd_sanitize_arg(value);
+	if (arg == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return false;
+	}
+
+	const size_t add_length = 2 + strlen(arg) + 1;
+
+	char *dest = mpd_search_prepare_append(connection, add_length);
+	if (dest == NULL) {
+		free(arg);
+		return false;
+	}
+
+	sprintf(dest, " \"%s\"", arg);
+
+	free(arg);
+	return true;
 }
 
 bool
