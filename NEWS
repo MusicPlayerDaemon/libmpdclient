@@ -1,3 +1,5 @@
+libmpdclient 2.17 (not yet released)
+
 libmpdclient 2.16 (2018/10/09)
 * support MPD protocol 0.19
   - "mount", "unmount", "listmounts"
