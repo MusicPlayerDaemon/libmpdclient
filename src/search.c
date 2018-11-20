@@ -81,11 +81,7 @@ mpd_search_add_db_songs(struct mpd_connection *connection, bool exact)
 			       exact ? "findadd" : "searchadd");
 }
 
-bool
-mpd_search_add_pl_db_songs(struct mpd_connection *connection)
-{
-	return mpd_search_init(connection, "searchaddpl");
-}
+
 
 bool
 mpd_search_queue_songs(struct mpd_connection *connection, bool exact)
@@ -225,34 +221,6 @@ mpd_search_add_base_constraint(struct mpd_connection *connection,
 			       const char *value)
 {
 	return mpd_search_add_constraint(connection, oper, "base", value);
-}
-
-bool
-mpd_search_add_pl_constraint(struct mpd_connection *connection,
-			       mpd_unused enum mpd_operator oper,
-			       const char *value)
-{
-	assert(connection != NULL);
-	assert(value != NULL);
-
-	char *arg = mpd_sanitize_arg(value);
-	if (arg == NULL) {
-		mpd_error_code(&connection->error, MPD_ERROR_OOM);
-		return false;
-	}
-
-	const size_t add_length = 2 + strlen(arg) + 1;
-
-	char *dest = mpd_search_prepare_append(connection, add_length);
-	if (dest == NULL) {
-		free(arg);
-		return false;
-	}
-
-	sprintf(dest, " \"%s\"", arg);
-
-	free(arg);
-	return true;
 }
 
 bool
@@ -434,4 +402,38 @@ mpd_recv_pair_tag(struct mpd_connection *connection, enum mpd_tag_type type)
 		return NULL;
 
 	return mpd_recv_pair_named(connection, name);
+}
+
+bool
+mpd_search_add_pl_db_songs(struct mpd_connection *connection, const char *value)
+{
+	assert(connection != NULL);
+	assert(value != NULL);
+
+	if (mpd_error_is_defined(&connection->error))
+		return false;
+
+	if (connection->request) {
+		mpd_error_code(&connection->error, MPD_ERROR_STATE);
+		mpd_error_message(&connection->error,
+				  "search already in progress");
+		return false;
+	}
+
+	char *arg = mpd_sanitize_arg(value);
+	if (arg == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return false;
+	}
+
+	const size_t len = 13 + strlen(arg) + 2;
+	connection->request = malloc(len);
+	if (connection->request == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return false;
+	}
+
+	snprintf(connection->request, len, "searchaddpl \"%s\" ", arg);
+
+	return true;
 }

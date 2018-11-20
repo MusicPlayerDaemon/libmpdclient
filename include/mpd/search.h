@@ -102,7 +102,7 @@ mpd_search_add_db_songs(struct mpd_connection *connection, bool exact);
  * @return true on success, false on error
  */
 bool
-mpd_search_add_pl_db_songs(struct mpd_connection *connection);
+mpd_search_add_pl_db_songs(struct mpd_connection *connection, const char *value);
 
 /**
  * Search for songs in the queue.
@@ -155,21 +155,6 @@ bool
 mpd_search_add_base_constraint(struct mpd_connection *connection,
 			       enum mpd_operator oper,
 			       const char *value);
-
-/**
- * Adds the playlist for search_add_pl_db_songs.
- *
- * @param connection a #mpd_connection
- * @param oper reserved, pass #MPD_OPERATOR_DEFAULT
- * @param value the URI relative to the music directory
- * @return true on success, false on error
- *
- * @since libmpdclient 2.9
- */
-bool
-mpd_search_add_pl_constraint(struct mpd_connection *connection,
-                               enum mpd_operator oper,
-                               const char *value);
 
 /**
  * Add a constraint on the song's URI.

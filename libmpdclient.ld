@@ -310,7 +310,6 @@ global:
 	mpd_search_add_base_constraint;
 	mpd_search_add_uri_constraint;
 	mpd_search_add_tag_constraint;
-	mpd_search_add_pl_constraint;
 	mpd_search_add_any_tag_constraint;
 	mpd_search_add_modified_since_constraint;
 	mpd_search_add_expression;
