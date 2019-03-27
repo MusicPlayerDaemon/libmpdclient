@@ -20,9 +20,14 @@ conf.set('DEFAULT_PORT', get_option('default_port'))
 
 conf.set('HAVE_STRNDUP', cc.has_function('strndup', prefix: '#define _GNU_SOURCE\n#include <string.h>'))
 
+platform_deps = []
+if host_machine.system() == 'haiku'
+  platform_deps = [cc.find_library('network')]
+endif
+
 if get_option('tcp')
   conf.set('ENABLE_TCP', true)
-  conf.set('HAVE_GETADDRINFO', cc.has_function('getaddrinfo'))
+  conf.set('HAVE_GETADDRINFO', cc.has_function('getaddrinfo', dependencies: platform_deps))
 endif
 
 configure_file(output: 'config.h', configuration: conf)
@@ -84,7 +89,6 @@ else
   common_ldflags += test_ldflags
 endif
 
-platform_deps = []
 if host_machine.system() == 'windows'
   platform_deps = [cc.find_library('ws2_32')]
 endif
