@@ -276,6 +276,15 @@ int main(int argc, char ** argv) {
 
 		if (!mpd_run_send_message(conn, argv[2], argv[3]))
 			return handle_error(conn);
+	} else if (argc == 3 && strcmp(argv[1], "fingerprint") == 0) {
+		char buffer[8192];
+
+		const char *fingerprint = mpd_run_getfingerprint_chromaprint(conn, argv[2],
+									     buffer, sizeof(buffer));
+		if (fingerprint == NULL)
+			return handle_error(conn);
+
+		printf("%s\n", fingerprint);
 	}
 
 	mpd_connection_free(conn);

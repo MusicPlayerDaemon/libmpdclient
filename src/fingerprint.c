@@ -13,6 +13,10 @@
    notice, this list of conditions and the following disclaimer in the
    documentation and/or other materials provided with the distribution.
 
+   - Neither the name of the Music Player Daemon nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
    ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -26,52 +30,51 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*! \file
- * \brief MPD client library
- *
- * This is a client library for the Music Player Daemon, written in C.
- *
- * You can choose one of several APIs, depending on your requirements:
- *
- * - struct mpd_async: a very low-level asynchronous API which knows
- *   the protocol syntax, but no specific commands
- *
- * - struct mpd_connection: a basic synchronous API which knows all
- *   MPD commands and parses all responses
- *
- * \author Max Kellermann (max@duempel.org)
- */
+#include <mpd/fingerprint.h>
+#include <mpd/send.h>
+#include <mpd/recv.h>
+#include <mpd/pair.h>
+#include <mpd/response.h>
+#include "run.h"
 
-#ifndef MPD_CLIENT_H
-#define MPD_CLIENT_H
+#include <string.h>
+#include <stdio.h>
 
-#include "audio_format.h"
-#include "capabilities.h"
-#include "connection.h"
-#include "database.h"
-#include "directory.h"
-#include "entity.h"
-#include "fingerprint.h"
-#include "idle.h"
-#include "list.h"
-#include "message.h"
-#include "mixer.h"
-#include "mount.h"
-#include "output.h"
-#include "pair.h"
-#include "password.h"
-#include "player.h"
-#include "playlist.h"
-#include "queue.h"
-#include "recv.h"
-#include "response.h"
-#include "search.h"
-#include "send.h"
-#include "settings.h"
-#include "song.h"
-#include "stats.h"
-#include "status.h"
-#include "sticker.h"
-#include "version.h"
+bool
+mpd_send_getfingerprint(struct mpd_connection *connection, const char *uri)
+{
+	return mpd_send_command(connection, "getfingerprint", uri, NULL);
+}
 
-#endif
+enum mpd_fingerprint_type
+mpd_parse_fingerprint_type(const char *name)
+{
+	if (strcmp(name, "chromaprint") == 0)
+		return MPD_FINGERPRINT_TYPE_CHROMAPRINT;
+	else
+		return MPD_FINGERPRINT_TYPE_UNKNOWN;
+}
+
+const char *
+mpd_run_getfingerprint_chromaprint(struct mpd_connection *connection,
+				   const char *uri,
+				   char *buffer, size_t buffer_size)
+{
+	if (!mpd_run_check(connection) ||
+	    !mpd_send_getfingerprint(connection, uri))
+		return NULL;
+
+	const char *result = NULL;
+
+	struct mpd_pair *pair = mpd_recv_pair_named(connection, "chromaprint");
+	if (pair != NULL) {
+		snprintf(buffer, buffer_size, "%s", pair->value);
+		result = buffer;
+		mpd_return_pair(connection, pair);
+	}
+
+	if (!mpd_response_finish(connection))
+		result = NULL;
+
+	return result;
+}

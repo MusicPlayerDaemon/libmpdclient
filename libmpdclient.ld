@@ -405,6 +405,11 @@ global:
 	mpd_recv_sticker;
 	mpd_return_sticker;
 
+	/* mpd/fingerprint.h */
+	mpd_parse_fingerprint_type;
+	mpd_send_getfingerprint;
+	mpd_run_getfingerprint_chromaprint;
+
 	/* mpd/settings.h */
 	mpd_settings_new;
 	mpd_settings_free;
