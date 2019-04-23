@@ -181,6 +181,7 @@ install_headers(
   'include/mpd/directory.h',
   'include/mpd/entity.h',
   'include/mpd/error.h',
+  'include/mpd/fingerprint.h',
   'include/mpd/idle.h',
   'include/mpd/list.h',
   'include/mpd/mixer.h',
