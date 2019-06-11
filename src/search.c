@@ -433,5 +433,6 @@ mpd_search_add_db_songs_to_playlist(struct mpd_connection *connection,
 
 	snprintf(connection->request, len, "searchaddpl \"%s\" ", arg);
 
+	free(arg);
 	return true;
 }
