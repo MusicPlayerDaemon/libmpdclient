@@ -410,6 +410,12 @@ global:
 	mpd_send_getfingerprint;
 	mpd_run_getfingerprint_chromaprint;
 
+	/* mpd/albumart.h */
+	mpd_send_getalbumart;
+	mpd_recv_albumart;
+	mpd_run_getalbumart;
+	mpd_return_albumart;
+
 	/* mpd/settings.h */
 	mpd_settings_new;
 	mpd_settings_free;
