@@ -55,8 +55,13 @@ mpd_recv_binary(struct mpd_connection *connection, const unsigned binary) {
         struct mpd_binary ok = mpd_sync_recv_binary(connection->async,
                                                     mpd_connection_timeout(connection), 
                                                     4);
-        if (consumed != binary || ok.data == NULL || ok.size != 4 || strncmp(ok.data, "\nOK\n", 4) != 0) {
+        if (ok.data == NULL || ok.size != 4 || strncmp(ok.data, "\nOK\n", 4) != 0) {
 		free(data);
+		mpd_error_code(&connection->error,
+			       MPD_ERROR_MALFORMED);
+		mpd_error_message(&connection->error,
+				  "failed to read binary data");
+		connection->receiving = false;
                 return NULL;
         }
         connection->receiving = false;
