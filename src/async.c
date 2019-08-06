@@ -32,6 +32,7 @@
 #include "quote.h"
 #include "socket.h"
 #include <stddef.h>
+
 #include <mpd/socket.h>
 #include <mpd/binary.h>
 

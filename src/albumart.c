@@ -36,7 +36,6 @@
 #include <mpd/pair.h>
 #include <mpd/response.h>
 #include <mpd/connection.h>
-#include "binary.h"
 #include "run.h"
 #include "internal.h"
 #include "sync.h"
@@ -84,24 +83,10 @@ mpd_recv_albumart(struct mpd_connection *connection)
         mpd_return_pair(connection, pair);
 
         //binary data
-        albumart->data = malloc(albumart->binary);
-        unsigned consumed = 0;
-        while (consumed < albumart->binary) {
-                struct mpd_binary data = mpd_sync_recv_binary(connection->async,
-                                                              mpd_connection_timeout(connection), 
-                                                              albumart->binary - consumed);
-                assert(albumart->binary >= consumed + data.size);
-                memcpy(albumart->data + consumed, data.data, data.size);
-                consumed += data.size;
-        }
-        //final "\nOK\n"
-        struct mpd_binary ok = mpd_sync_recv_binary(connection->async,
-                                                    mpd_connection_timeout(connection), 
-                                                    4);
-        connection->receiving = false;
-        if (consumed != albumart->binary || ok.size != 4 || strncmp(ok.data, "\nOK\n", 4) != 0) {
-               mpd_return_albumart(albumart);
-               return NULL;
+        albumart->data = mpd_recv_binary(connection, albumart->binary);
+        if (albumart->data == NULL) {
+                free(albumart);
+                return NULL;
         }
         
 	return albumart;
