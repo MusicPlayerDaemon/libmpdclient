@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2018 The Music Player Daemon Project
+   (c) 2003-2019 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -12,6 +12,10 @@
    - Redistributions in binary form must reproduce the above copyright
    notice, this list of conditions and the following disclaimer in the
    documentation and/or other materials provided with the distribution.
+
+   - Neither the name of the Music Player Daemon nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
 
    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
    ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -27,51 +31,27 @@
 */
 
 /*! \file
- * \brief Synchronous MPD connections
+ * \brief MPD client library
  *
- * This library provides synchronous access to a mpd_async object.
- * For all operations, you may provide a timeout.
+ * Do not include this header directly.  Use mpd/client.h instead.
  */
 
-#ifndef MPD_SYNC_H
-#define MPD_SYNC_H
+#ifndef MPD_BINARY_H
+#define MPD_BINARY_H
 
 #include <mpd/compiler.h>
 
 #include <stdbool.h>
-#include <stdarg.h>
+#include <stddef.h>
 
-struct timeval;
-struct mpd_async;
+struct mpd_connection;
 
-/**
- * Synchronous wrapper for mpd_async_send_command_v().
- */
-bool
-mpd_sync_send_command_v(struct mpd_async *async, const struct timeval *tv,
-			const char *command, va_list args);
+struct mpd_binary {
+        /** the binary data */
+        char *data;
 
-/**
- * Synchronous wrapper for mpd_async_send_command().
- */
-mpd_sentinel
-bool
-mpd_sync_send_command(struct mpd_async *async, const struct timeval *tv,
-		      const char *command, ...);
-
-/**
- * Sends all pending data from the output buffer to MPD.
- */
-bool
-mpd_sync_flush(struct mpd_async *async, const struct timeval *tv);
-
-/**
- * Synchronous wrapper for mpd_async_recv_line().
- */
-char *
-mpd_sync_recv_line(struct mpd_async *async, const struct timeval *tv);
-
-struct mpd_binary
-mpd_sync_recv_binary(struct mpd_async *async, const struct timeval *tv, const unsigned binary);
+        /** the size of the binary data */
+        size_t size;
+};
 
 #endif

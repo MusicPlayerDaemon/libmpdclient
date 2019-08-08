@@ -209,6 +209,10 @@ mpd_malloc
 char *
 mpd_async_recv_line(struct mpd_async *async);
 
+
+struct mpd_binary
+mpd_async_recv_binary(struct mpd_async *async, const unsigned binary);
+
 #ifdef __cplusplus
 }
 #endif
