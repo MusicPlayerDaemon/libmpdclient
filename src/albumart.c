@@ -51,7 +51,7 @@ mpd_send_getalbumart(struct mpd_connection *connection, const char *uri, const u
 }
 
 bool
-mpd_return_albumart(struct mpd_albumart * albumart) {
+mpd_free_albumart(struct mpd_albumart * albumart) {
         assert(albumart);
         free(albumart->data);
         free(albumart);
@@ -101,5 +101,9 @@ mpd_run_getalbumart(struct mpd_connection *connection, const char *uri, const un
         }
         
         struct mpd_albumart * albumart = mpd_recv_albumart(connection);
+        if (!mpd_response_finish(connection) && albumart != NULL) {
+                mpd_free_albumart(albumart);
+                return NULL;
+        }
 	return albumart;
 }
