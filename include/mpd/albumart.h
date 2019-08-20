@@ -76,7 +76,7 @@ mpd_send_getalbumart(struct mpd_connection *connection,
                                    const unsigned offset);
 
 bool
-mpd_free_albumart(struct mpd_albumart * albumart);
+mpd_return_albumart(struct mpd_albumart * albumart);
 
 mpd_malloc
 struct mpd_albumart *

@@ -300,7 +300,7 @@ int main(int argc, char ** argv) {
 			fwrite(albumart->data, 1, albumart->binary, fp);
 			offset += albumart->binary;
 			size = albumart->size;
-			mpd_free_albumart(albumart);
+			mpd_return_albumart(albumart);
 			if (size == offset) 
 				break;
 		}

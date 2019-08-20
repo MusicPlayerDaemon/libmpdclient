@@ -414,7 +414,7 @@ global:
 	mpd_send_getalbumart;
 	mpd_recv_albumart;
 	mpd_run_getalbumart;
-	mpd_free_albumart;
+	mpd_return_albumart;
 
 	/* mpd/settings.h */
 	mpd_settings_new;
