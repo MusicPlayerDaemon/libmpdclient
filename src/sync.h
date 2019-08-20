@@ -40,7 +40,6 @@
 
 #include <stdbool.h>
 #include <stdarg.h>
-#include <stddef.h>
 
 struct timeval;
 struct mpd_async;
@@ -71,8 +70,5 @@ mpd_sync_flush(struct mpd_async *async, const struct timeval *tv);
  */
 char *
 mpd_sync_recv_line(struct mpd_async *async, const struct timeval *tv);
-
-struct mpd_binary
-mpd_sync_recv_binary(struct mpd_async *async, const struct timeval *tv, const unsigned binary);
 
 #endif

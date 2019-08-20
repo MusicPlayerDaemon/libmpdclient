@@ -31,9 +31,8 @@
 #include "ierror.h"
 #include "quote.h"
 #include "socket.h"
-#include <stddef.h>
+
 #include <mpd/socket.h>
-#include <mpd/binary.h>
 
 #include <assert.h>
 #include <stdbool.h>
@@ -378,25 +377,5 @@ mpd_async_recv_line(struct mpd_async *async)
 	*newline = 0;
 	mpd_buffer_consume(&async->input, newline + 1 - src);
 
-	return src;
-}
-
-struct mpd_binary
-mpd_async_recv_binary(struct mpd_async *async, const unsigned binary)
-{
-	struct mpd_binary src;
-
-	assert(async != NULL);
-	src.size = mpd_buffer_size(&async->input);
-	src.data = NULL;
-	if (src.size == 0)
-		return src;
-
-	src.data = mpd_buffer_read(&async->input);
-	assert(src.data != NULL);
-
-	src.size = binary < src.size ? binary : src.size;
-	mpd_buffer_consume(&async->input, src.size);
-		
 	return src;
 }

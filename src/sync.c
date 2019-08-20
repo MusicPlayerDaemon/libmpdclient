@@ -29,10 +29,10 @@
 #include "sync.h"
 #include "socket.h"
 #include <mpd/async.h>
-#include <mpd/binary.h>
-#include <stddef.h>
-#include <assert.h>
 
+#include <assert.h>
+#include <stdlib.h>
+#include <stdio.h>
 #ifndef _WIN32
 #include <sys/select.h>
 #endif
@@ -178,30 +178,5 @@ mpd_sync_recv_line(struct mpd_async *async, const struct timeval *tv0)
 
 		if (!mpd_sync_io(async, tvp))
 			return NULL;
-	}
-}
-
-struct mpd_binary
-mpd_sync_recv_binary(struct mpd_async *async, const struct timeval *tv0, const unsigned binary)
-{
-	struct timeval tv, *tvp;
-
-	if (tv0 != NULL) {
-		tv = *tv0;
-		tvp = &tv;
-	} else
-		tvp = NULL;
-
-	while (true) {
-		struct mpd_binary data;
-		data.size = 0;
-		data.data = NULL;
-		
-		data = mpd_async_recv_binary(async, binary);
-		if (data.data != NULL)
-			return data;
-
-		if (!mpd_sync_io(async, tvp))
-			return data;
 	}
 }
