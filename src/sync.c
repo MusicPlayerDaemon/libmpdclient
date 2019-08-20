@@ -26,10 +26,10 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <mpd/binary.h>
 #include "sync.h"
 #include "socket.h"
 #include <mpd/async.h>
-#include <mpd/binary.h>
 #include <assert.h>
 
 #ifndef _WIN32
@@ -180,13 +180,10 @@ mpd_sync_recv_line(struct mpd_async *async, const struct timeval *tv0)
 	}
 }
 
-struct mpd_binary
-mpd_sync_recv_binary(struct mpd_async *async, const struct timeval *tv0, const unsigned binary)
+struct mpd_binary *
+mpd_sync_recv_binary(struct mpd_async *async, const struct timeval *tv0, struct mpd_binary *buffer, const unsigned length)
 {
 	struct timeval tv, *tvp;
-	struct mpd_binary data;
-	data.size = 0;
-	data.data = NULL;
 
 	if (tv0 != NULL) {
 		tv = *tv0;
@@ -195,11 +192,18 @@ mpd_sync_recv_binary(struct mpd_async *async, const struct timeval *tv0, const u
 		tvp = NULL;
 
 	while (true) {
-		data = mpd_async_recv_binary(async, binary);
-		if (data.data != NULL)
-			return data;
+		struct mpd_binary *result = mpd_async_recv_binary(async, buffer, length);
+		if (result == NULL) {
+			return NULL;
+		}
+		else if (result->size > 0 || 
+		         result->size == length)
+		{
+			return result;
+		}
 
-		if (!mpd_sync_io(async, tvp))
-			return data;
+		if (!mpd_sync_io(async, tvp)) {
+			return NULL;
+		}
 	}
 }

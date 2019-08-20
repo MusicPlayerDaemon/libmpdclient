@@ -39,19 +39,12 @@
 #ifndef MPD_BINARY_H
 #define MPD_BINARY_H
 
-#include <mpd/compiler.h>
-
-#include <stdbool.h>
-#include <stddef.h>
-
-struct mpd_connection;
-
 struct mpd_binary {
         /** the binary data */
-        char *data;
+        unsigned char *data;
 
         /** the size of the binary data */
-        size_t size;
+        unsigned size;
 };
 
 #endif

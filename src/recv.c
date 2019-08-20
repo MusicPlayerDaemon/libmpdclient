@@ -27,44 +27,50 @@
 */
 
 #include <mpd/recv.h>
+#include <mpd/binary.h>
 #include <mpd/pair.h>
 #include <mpd/parser.h>
 #include "internal.h"
 #include "iasync.h"
 #include "sync.h"
-#include "binary.h"
 
 #include <string.h>
 #include <stdlib.h>
 
-char * 
-mpd_recv_binary(struct mpd_connection *connection, const unsigned binary) {
-	char * data = malloc(binary);
-	assert(data);
+size_t 
+mpd_recv_binary(struct mpd_connection *connection, unsigned char *data, const unsigned length)
+{
+	assert(connection != NULL);
+
+	if (mpd_error_is_defined(&connection->error))
+		return 0;
+
+	/* check if the caller has returned the previous pair */
+	assert(connection->pair_state != PAIR_STATE_FLOATING);
+
         unsigned consumed = 0;
-        
-        while (consumed < binary) {
-                struct mpd_binary src = mpd_sync_recv_binary(connection->async,
-                                                             mpd_connection_timeout(connection), 
-                                                             binary - consumed);
-                assert(src.data != NULL);
-                assert(binary >= consumed + src.size);
-                memcpy(data + consumed, src.data, src.size);
-                consumed += src.size;
+	struct mpd_binary buffer;
+	struct mpd_binary *binary;
+
+        while ((binary = mpd_sync_recv_binary(connection->async,
+					      mpd_connection_timeout(connection),
+					      &buffer,
+					      length - consumed)
+		) != NULL)
+	{
+                if (binary != NULL && 
+		    binary->size > 0 &&
+		    binary->data != NULL &&
+                    length >= consumed + binary->size) {
+                	memcpy(data + consumed, binary->data, binary->size);
+                	consumed += binary->size;
+		}
+		else {
+			return 0;
+		}
         }
-        struct mpd_binary ok = mpd_sync_recv_binary(connection->async,
-                                                    mpd_connection_timeout(connection), 
-                                                    1);
-        if (ok.data == NULL || ok.size != 1 || strncmp(ok.data, "\n", 1) != 0) {
-		free(data);
-		mpd_error_code(&connection->error,
-			       MPD_ERROR_MALFORMED);
-		mpd_error_message(&connection->error,
-				  "failed to read binary data");
-                return NULL;
-        }
-        
-        return data;
+
+        return consumed;
 }
 
 struct mpd_pair *

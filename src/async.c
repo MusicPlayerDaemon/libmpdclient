@@ -26,15 +26,14 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <mpd/binary.h>
 #include "iasync.h"
 #include "buffer.h"
 #include "ierror.h"
 #include "quote.h"
 #include "socket.h"
-#include <stddef.h>
 
 #include <mpd/socket.h>
-#include <mpd/binary.h>
 
 #include <assert.h>
 #include <stdbool.h>
@@ -382,22 +381,42 @@ mpd_async_recv_line(struct mpd_async *async)
 	return src;
 }
 
-struct mpd_binary
-mpd_async_recv_binary(struct mpd_async *async, const unsigned binary)
+struct mpd_binary *
+mpd_async_recv_binary(struct mpd_async *async, struct mpd_binary *buffer, const unsigned length)
 {
-	struct mpd_binary src;
-
+	char *newline;
+	
 	assert(async != NULL);
-	src.size = mpd_buffer_size(&async->input);
-	src.data = NULL;
-	if (src.size == 0)
-		return src;
 
-	src.data = mpd_buffer_read(&async->input);
-	assert(src.data != NULL);
+	buffer->data = NULL;
+	buffer->size = mpd_buffer_size(&async->input);
+	if (buffer->size == 0)
+		return buffer;
 
-	src.size = binary < src.size ? binary : src.size;
-	mpd_buffer_consume(&async->input, src.size);
-		
-	return src;
+	buffer->data = mpd_buffer_read(&async->input);
+	assert(buffer->data != NULL);
+	
+	struct mpd_binary *result = buffer;
+
+	if (length == 0) {
+		newline = memchr(result->data, '\n', result->size);
+		if (newline == NULL) {
+			/* line is not finished yet */
+			if (mpd_buffer_full(&async->input)) {
+				/* .. but the buffer is full - line is too
+				long, abort connection and bail out */
+				mpd_error_code(&async->error, MPD_ERROR_MALFORMED);
+				mpd_error_message(&async->error,
+						  "Response line too large");
+			}
+			return NULL;
+		}
+		//consume the final newline character
+		mpd_buffer_consume(&async->input, 1);
+		return NULL;
+	}
+
+	result->size = length < result->size ? length : result->size;
+	mpd_buffer_consume(&async->input, buffer->size);
+	return result;
 }

@@ -209,9 +209,18 @@ mpd_malloc
 char *
 mpd_async_recv_line(struct mpd_async *async);
 
-
-struct mpd_binary
-mpd_async_recv_binary(struct mpd_async *async, const unsigned binary);
+/**
+ * Receives length raw bytes from the input buffer. The result will be
+ * without the newline character. The pointer is only valid until the 
+ * next async function is called. Call this function till it returns NULL.
+ *
+ * @param async the connection
+ * @param buffer pointer to allocated struct mpd_binary
+ * @param length the bytes to return
+ * @return a pointer to struct mpd_binary, NULL on error or end of buffer.
+ */
+struct mpd_binary *
+mpd_async_recv_binary(struct mpd_async *async, struct mpd_binary *buffer, const unsigned length);
 
 #ifdef __cplusplus
 }
