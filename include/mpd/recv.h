@@ -47,14 +47,6 @@ extern "C" {
 #endif
 
 /**
- * Reads the binary data from the server.  Returns NULL on error.
- *
- * The caller must free the allocated memory.
- */
-char * 
-mpd_recv_binary(struct mpd_connection *connection, const unsigned binary);
-
-/**
  * Reads the next #mpd_pair from the server.  Returns NULL if there
  * are no more pairs.
  *

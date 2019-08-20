@@ -32,37 +32,9 @@
 #include "internal.h"
 #include "iasync.h"
 #include "sync.h"
-#include "binary.h"
 
 #include <string.h>
 #include <stdlib.h>
-
-char * 
-mpd_recv_binary(struct mpd_connection *connection, const unsigned binary) {
-	char * data = malloc(binary);
-	assert(data);
-        unsigned consumed = 0;
-        
-        while (consumed < binary) {
-                struct mpd_binary src = mpd_sync_recv_binary(connection->async,
-                                                             mpd_connection_timeout(connection), 
-                                                             binary - consumed);
-                assert(src.data != NULL);
-                assert(binary >= consumed + src.size);
-                memcpy(data + consumed, src.data, src.size);
-                consumed += src.size;
-        }
-        struct mpd_binary ok = mpd_sync_recv_binary(connection->async,
-                                                    mpd_connection_timeout(connection), 
-                                                    4);
-        if (consumed != binary || ok.data == NULL || ok.size != 4 || strncmp(ok.data, "\nOK\n", 4) != 0) {
-		free(data);
-                return NULL;
-        }
-        connection->receiving = false;
-        
-        return data;
-}
 
 struct mpd_pair *
 mpd_recv_pair(struct mpd_connection *connection)

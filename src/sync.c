@@ -185,9 +185,6 @@ struct mpd_binary
 mpd_sync_recv_binary(struct mpd_async *async, const struct timeval *tv0, const unsigned binary)
 {
 	struct timeval tv, *tvp;
-	struct mpd_binary data;
-	data.size = 0;
-	data.data = NULL;
 
 	if (tv0 != NULL) {
 		tv = *tv0;
@@ -196,6 +193,10 @@ mpd_sync_recv_binary(struct mpd_async *async, const struct timeval *tv0, const u
 		tvp = NULL;
 
 	while (true) {
+		struct mpd_binary data;
+		data.size = 0;
+		data.data = NULL;
+		
 		data = mpd_async_recv_binary(async, binary);
 		if (data.data != NULL)
 			return data;
