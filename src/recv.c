@@ -37,7 +37,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-size_t 
+unsigned 
 mpd_recv_binary(struct mpd_connection *connection, unsigned char *data, const unsigned length)
 {
 	assert(connection != NULL);
