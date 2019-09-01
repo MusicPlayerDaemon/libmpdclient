@@ -26,7 +26,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <mpd/binary.h>
+#include "binary.h"
 #include "iasync.h"
 #include "buffer.h"
 #include "ierror.h"

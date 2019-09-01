@@ -27,7 +27,7 @@
 */
 
 #include <mpd/recv.h>
-#include <mpd/binary.h>
+#include "binary.h"
 #include <mpd/pair.h>
 #include <mpd/parser.h>
 #include "internal.h"
