@@ -45,6 +45,8 @@
 #ifndef MPD_CLIENT_H
 #define MPD_CLIENT_H
 
+// IWYU pragma: begin_exports
+
 #include "audio_format.h"
 #include "capabilities.h"
 #include "connection.h"
@@ -73,5 +75,7 @@
 #include "status.h"
 #include "sticker.h"
 #include "version.h"
+
+// IWYU pragma: end_exports
 
 #endif
