@@ -39,7 +39,7 @@
  * - struct mpd_connection: a basic synchronous API which knows all
  *   MPD commands and parses all responses
  *
- * \author Max Kellermann (max@duempel.org)
+ * \author Max Kellermann (max.kellermann@gmail.com)
  */
 
 #ifndef MPD_CLIENT_H
