@@ -27,18 +27,18 @@
 */
 
 #include <mpd/recv.h>
-#include "binary.h"
 #include <mpd/pair.h>
 #include <mpd/parser.h>
 #include "internal.h"
 #include "iasync.h"
+#include "binary.h"
 #include "sync.h"
 
 #include <string.h>
 #include <stdlib.h>
 
 unsigned 
-mpd_recv_binary(struct mpd_connection *connection, unsigned char *data, const unsigned length)
+mpd_recv_binary(struct mpd_connection *connection, unsigned char *data, unsigned length)
 {
 	assert(connection != NULL);
 
@@ -58,16 +58,8 @@ mpd_recv_binary(struct mpd_connection *connection, unsigned char *data, const un
 					      length - consumed)
 		) != NULL)
 	{
-                if (binary != NULL && 
-		    binary->size > 0 &&
-		    binary->data != NULL &&
-                    length >= consumed + binary->size) {
-                	memcpy(data + consumed, binary->data, binary->size);
-                	consumed += binary->size;
-		}
-		else {
-			return 0;
-		}
+        	memcpy(data + consumed, binary->data, binary->size);
+                consumed += binary->size;
         }
 
         return consumed;

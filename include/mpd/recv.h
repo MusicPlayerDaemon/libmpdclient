@@ -47,14 +47,14 @@ extern "C" {
 #endif
 
 /**
- * Reads the binary data from the server.  Returns the length
+ * Reads the binary data response from the server.  Returns the length
  * of consumed bytes.
  * The size and binary pair must be already read from the input buffer.
  *
  * The caller must allocate length bytes of memory for data.
  */
 unsigned
-mpd_recv_binary(struct mpd_connection *connection, unsigned char *data, const unsigned length);
+mpd_recv_binary(struct mpd_connection *connection, unsigned char *data, unsigned length);
 
 /**
  * Reads the next #mpd_pair from the server.  Returns NULL if there

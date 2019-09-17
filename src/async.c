@@ -26,12 +26,13 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "binary.h"
+
 #include "iasync.h"
 #include "buffer.h"
 #include "ierror.h"
 #include "quote.h"
 #include "socket.h"
+#include "binary.h"
 
 #include <mpd/socket.h>
 
@@ -384,11 +385,8 @@ mpd_async_recv_line(struct mpd_async *async)
 struct mpd_binary *
 mpd_async_recv_binary(struct mpd_async *async, struct mpd_binary *buffer, const unsigned length)
 {
-	char *newline;
-	
 	assert(async != NULL);
 
-	buffer->data = NULL;
 	buffer->size = mpd_buffer_size(&async->input);
 	if (buffer->size == 0)
 		return buffer;
@@ -399,11 +397,10 @@ mpd_async_recv_binary(struct mpd_async *async, struct mpd_binary *buffer, const 
 	struct mpd_binary *result = buffer;
 
 	if (length == 0) {
-		newline = memchr(result->data, '\n', result->size);
-		if (newline == NULL) {
-			/* line is not finished yet */
+		if (memcmp(result->data, "\n", 1) != 0) {
+			/* response is not finished yet */
 			if (mpd_buffer_full(&async->input)) {
-				/* .. but the buffer is full - line is too
+				/* .. but the buffer is full - response is too
 				long, abort connection and bail out */
 				mpd_error_code(&async->error, MPD_ERROR_MALFORMED);
 				mpd_error_message(&async->error,

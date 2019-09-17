@@ -26,12 +26,15 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "binary.h"
 #include "sync.h"
 #include "socket.h"
+#include "binary.h"
+
 #include <mpd/async.h>
+
 #include <assert.h>
-#include <stddef.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #ifndef _WIN32
 #include <sys/select.h>

@@ -39,12 +39,14 @@
 #ifndef MPD_BINARY_H
 #define MPD_BINARY_H
 
+#include <stdlib.h>
+
 struct mpd_binary {
         /** the binary data */
-        unsigned char *data;
+        void *data;
 
         /** the size of the binary data */
-        unsigned size;
+        size_t size;
 };
 
 #endif

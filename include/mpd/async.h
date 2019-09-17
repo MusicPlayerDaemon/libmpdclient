@@ -216,7 +216,7 @@ mpd_async_recv_line(struct mpd_async *async);
  *
  * @param async the connection
  * @param buffer pointer to allocated struct mpd_binary
- * @param length the bytes to return
+ * @param length of bytes to consume
  * @return a pointer to struct mpd_binary, NULL on error or end of buffer.
  */
 struct mpd_binary *
