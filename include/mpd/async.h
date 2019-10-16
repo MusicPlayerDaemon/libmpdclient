@@ -102,9 +102,9 @@ enum mpd_error
 mpd_async_get_error(const struct mpd_async *async);
 
 /**
- * If mpd_async_is_alive() returns false, this function returns the
- * human readable error message which caused this.  This message is
- * optional, and may be NULL.  The pointer is invalidated by
+ * If mpd_async_get_error() returns an error code other than #MPD_ERROR_SUCCESS,
+ * this function returns the human readable error message which caused this.
+ * This message is optional, and may be NULL.  The pointer is invalidated by
  * mpd_async_free().
  *
  * For #MPD_ERROR_SERVER, the error message is encoded in UTF-8.
