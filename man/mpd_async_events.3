@@ -1,0 +1,79 @@
+.TH MPD_ASYNC_EVENTS 3 2019
+.SH NAME
+mpd_async_events, mpd_async_io \- async I/O operations for mpd
+.SH SYNOPSIS
+.B #include <mpd/async.h>
+.PP
+.BI "enum mpd_async_event mpd_async_events(const struct mpd_async *" async );
+.PP
+.BI "bool mpd_async_io(struct mpd_async *" "async" ", enum mpd_async_event"
+.BI "" events );
+.SH DESCRIPTION
+The
+.BR mpd_async_events ()
+creates the bitmask of events for the function
+.BR mpd_async_io ().
+.PP
+The
+.BR mpd_async_io ()
+will attempt to perform I/O operations on the
+.IR mpd_async
+object.
+.PP
+The user should first use the function
+.BR poll ()
+then use the functions
+.BR mpd_async_events ()
+and
+.BR mpd_async_io ()
+after 
+.BR poll () 
+returns so that libmpdclient can perform I/O operations.
+.SS The mpd_async_event enum
+The
+.I mpd_async_event
+enum is defined as follows:
+.PP
+.in +4n
+.EX
+enum mpd_async_event {
+	/** ready to read from the file descriptor */
+	MPD_ASYNC_EVENT_READ = 1,
+
+	/** ready to write to the file descriptor */
+	MPD_ASYNC_EVENT_WRITE = 2,
+
+	/** hangup detected */
+	MPD_ASYNC_EVENT_HUP = 4,
+
+	/** I/O error */
+	MPD_ASYNC_EVENT_ERROR = 8,
+};
+.EE
+.in
+.PP
+.SH RETURN VALUE
+The function
+.BR mpd_async_events ()
+returns a
+.IR mpd_async_event
+object.
+.PP
+The function
+.BR mpd_async_io ()
+returns false if the connection was closed due to an error; otherwise, true is
+returned.
+.SH ERRORS
+No errors are defined for
+.BR mpd_async_events () .
+.PP
+If
+.BR mpd_async_io () 
+returned false, the user should use one of the error functions of libmpdclient.
+.SH SEE ALSO
+.BR mpd_async_get_error (3),
+.BR mpd_async_get_error_message (3),
+.BR mpd_async_get_system_error (3),
+.BR mpd_async_send_command_v (3),
+.BR mpd_async_send_command (3),
+.BR mpd_async_recv_line (3)

@@ -1,0 +1,38 @@
+.TH MPD_ASYNC_NEW 3 2019
+.SH NAME
+mpd_async_new \- creates a new asynchronous MPD connection
+.SH SYNOPSIS
+.nf
+.B #include <mpd/async.h>
+.PP
+.BI "struct mpd_async *mpd_async_new(int "fd );
+.fi
+.SH DESCRIPTION
+The
+.BR mpd_async_new ()
+returns a pointer to the asynchronous MPD connection, based on the stream socket 
+.IR fd
+connected with MPD. Memory for the opaque object
+.IR "struct mpd_async"
+is obtained with
+.BR malloc (3)
+and must be freed with
+.BR mpd_async_free ().
+.SH RETURN VALUE
+The
+.BR mpd_async_new ()
+function returns a pointer to the opaque object
+.IR "struct mpd_async".
+It returns NULL if insufficient memory was available,
+with
+.I errno
+set appropriately to indicate the cause of the error.
+.SH ERRORS
+.BR ENOMEM
+Out of memory.
+.SH SEE ALSO
+.BR mpd_async_free (3),
+.BR mpd_async_get_error (3),
+.BR mpd_async_get_error_message (3),
+.BR mpd_async_get_system_error (3),
+.BR mpd_async_get_fd (3)

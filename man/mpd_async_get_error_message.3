@@ -1,0 +1,94 @@
+.TH MPD_ASYNC_GET_ERROR_MESSAGE 3 2019
+.SH NAME
+mpd_async_get_error_message \- returns the human-readable error message
+.SH SYNOPSIS
+.nf
+.B #include <mpd/async.h>
+.PP
+.BI "const char *mpd_async_get_error_message(const struct mpd_async *" async );
+.fi
+.SH DESCRIPTION
+The
+.BR mpd_async_get_error_message ()
+returns the human-readable error message for the last error encountered. The
+message returned by this function is optional, and may be NULL.
+.PP
+.BR mpd_async_get_error_message ()
+should only be used if the last libmpdclient function returned an
+error. The operation status can be checked by calling the function
+.BR mpd_async_get_error ().
+.PP
+For the error type
+.IR "MPD_ERROR_SERVER" , 
+the error message is encoded in UTF-8. Additionally,
+.I MPD_ERROR_SYSTEM
+obtains its error message from the operating system, and thus the locale's
+character set is used. Keep that in mind when you print error messages.
+
+
+.SS The mpd_error enum
+The
+.BR mpd_async_get_error_message ()
+uses internally the
+.I mpd_error
+enum, which has one of the following values:
+.PP
+.in +4n
+.EX
+enum mpd_error {
+	/** no error */
+	MPD_ERROR_SUCCESS = 0,
+
+	/** out of memory */
+	MPD_ERROR_OOM,
+
+	/** a function was called with an unrecognized or invalid
+	    argument */
+	MPD_ERROR_ARGUMENT,
+
+	/** a function was called which is not available in the
+	    current state of libmpdclient */
+	MPD_ERROR_STATE,
+
+	/** timeout trying to talk to mpd */
+	MPD_ERROR_TIMEOUT,
+
+	/** system error */
+	MPD_ERROR_SYSTEM,
+
+	/** unknown host */
+	MPD_ERROR_RESOLVER,
+
+	/** malformed response received from MPD */
+	MPD_ERROR_MALFORMED,
+
+	/** connection closed by mpd */
+	MPD_ERROR_CLOSED,
+
+	/**
+	 * The server has returned an error code, which can be queried
+	 * with mpd_connection_get_server_error().
+	 */
+	MPD_ERROR_SERVER,
+};
+.EE
+.in
+.PP
+The user can access the value by calling
+.BR mpd_async_get_error ().
+.SH RETURN VALUE
+The function returns the null-terminated string as a
+.I const char *
+or NULL.
+.SH ERRORS
+No errors are defined.
+.SH SEE ALSO
+.BR mpd_async_new (3),
+.BR mpd_async_get_error (3),
+.BR mpd_async_get_system_error (3),
+.BR mpd_async_keepalive (3),
+.BR mpd_async_events (3),
+.BR mpd_async_io (3),
+.BR mpd_async_send_command_v (3),
+.BR mpd_async_send_command (3),
+.BR mpd_async_recv_line (3)

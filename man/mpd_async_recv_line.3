@@ -1,0 +1,30 @@
+.TH MPD_ASYNC_RECV_LINE 3 2019
+.SH NAME
+mpd_async_recv_line \- receives a line from the input buffer
+.SH SYNOPSIS
+.nf
+.B #include <mpd/async.h>
+.PP
+.BI "char *mpd_async_recv_line(struct mpd_async *" async );
+.fi
+.SH DESCRIPTION
+The functions
+.BR mpd_async_recv_line ()
+receives a line from the input buffer. The line is null-terminated without the
+newline character at the end.
+.PP
+The line is returned as a
+.IR "char *"
+and is only valid until the next async function is called.
+
+.SH RETURN VALUE
+The function returns a line on success or NULL on error.
+.SH ERRORS
+If
+.BR mpd_async_recv_line ()
+returns NULL, the user should use one of the error functions of libmpdclient.
+.SH SEE ALSO
+.BR mpd_async_get_error (3),
+.BR mpd_async_get_error_message (3),
+.BR mpd_async_get_system_error (3),
+.BR mpd_async_io (3)

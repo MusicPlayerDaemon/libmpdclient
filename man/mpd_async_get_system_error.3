@@ -1,0 +1,40 @@
+.TH MPD_ASYNC_GET_SYSTEM_ERROR 3 2019
+.SH NAME
+mpd_async_get_system_error \- returns the error code from the operating system
+.SH SYNOPSIS
+.nf
+.B #include <mpd/async.h>
+.PP
+.BI "int mpd_async_get_system_error(const struct mpd_async *" async );
+.fi
+.SH DESCRIPTION
+The
+.BR mpd_async_get_system_error ()
+returns the error code from the operating system; on most operating systems,
+this is the
+.IR errno
+value.
+.PP
+Calling this function is only valid if
+.BR mpd_async_get_error ()
+returns
+.IR "MPD_ERROR_SYSTEM" .
+.SH RETURN VALUE
+The function returns the
+.IR errno
+value or the equivalent for the operating system.
+.PP
+This function may return 0 if the operating system did not specify an error
+code.
+.SH ERRORS
+No errors are defined.
+.SH SEE ALSO
+.BR mpd_async_new (3),
+.BR mpd_async_get_error (3),
+.BR mpd_async_get_error_message (3),
+.BR mpd_async_keepalive (3),
+.BR mpd_async_events (3),
+.BR mpd_async_io (3),
+.BR mpd_async_send_command_v (3),
+.BR mpd_async_send_command (3),
+.BR mpd_async_recv_line (3)

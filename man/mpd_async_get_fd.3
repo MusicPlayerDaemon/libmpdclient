@@ -1,0 +1,40 @@
+.TH MPD_ASYNC_GET_FD 3 2019
+.SH NAME
+mpd_async_get_fd \- returns the file descriptor to be polled by the caller
+.SH SYNOPSIS
+.nf
+.B #include <mpd/async.h>
+.PP
+.BI "int mpd_async_get_fd(const struct mpd_async *" async );
+.fi
+.SH DESCRIPTION
+The
+.BR mpd_async_get_fd ()
+returns the file descriptor which should be polled by the caller.
+.PP
+The user must not use the file descriptor for anything except polling.
+.PP
+The file descriptor never changes during the lifetime of the caller
+.IR mpd_async
+object.
+.SH RETURN VALUE
+The function returns the file descriptor
+.IR fd
+of the
+.IR mpd_async
+object.
+.PP
+The
+.IR fd
+was previously received by the function
+.BR mpd_async_new ().
+.SH ERRORS
+No errors are defined.
+.SH SEE ALSO
+.BR mpd_async_new (3),
+.BR mpd_async_keepalive (3),
+.BR mpd_async_events (3),
+.BR mpd_async_io (3),
+.BR mpd_async_send_command_v (3),
+.BR mpd_async_send_command (3),
+.BR mpd_async_recv_line (3)

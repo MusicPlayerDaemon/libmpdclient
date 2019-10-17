@@ -1,0 +1,36 @@
+.TH MPD_ASYNC_EVENTS 3 2019
+.SH NAME
+mpd_async_send_command, mpd_async_send_command_v \- appends a command to the
+output buffer
+.SH SYNOPSIS
+.B #include <mpd/async.h>
+.PP
+.BI "bool mpd_async_send_command(struct mpd_async *" "async" ","
+.BI "const char *" "command" ", ...);"
+.PP
+.BI "bool mpd_async_send_command_v(struct mpd_async *" async ","
+.BI "const char *" command ", va_list " args );
+.SH DESCRIPTION
+The functions
+.BR mpd_async_send_command ()
+and
+.BR mpd_async_send_command_v ()
+append a command to the output buffer. Both functions receive the command
+followed by arguments that must be terminated by NULL. The arguments are
+expected to be of type 
+.IR "const char *".
+
+.SH RETURN VALUE
+The functions return true on success or false if either the buffer is full or
+an error has occured previous to the function call.
+.SH ERRORS
+If
+.BR mpd_async_send_command ()
+or
+.BR mpd_async_send_command_v ()
+returned false, the user should use one of the error functions of libmpdclient.
+.SH SEE ALSO
+.BR mpd_async_get_error (3),
+.BR mpd_async_get_error_message (3),
+.BR mpd_async_get_system_error (3),
+.BR mpd_async_recv_line (3)

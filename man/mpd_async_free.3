@@ -1,0 +1,20 @@
+.TH MPD_ASYNC_FREE 3 2019
+.SH NAME
+mpd_async_free \- closes the asynchronous MPD connection
+.SH SYNOPSIS
+.nf
+.B #include <mpd/async.h>
+.PP
+.BI "void mpd_async_free(struct mpd_async *" async );
+.fi
+.SH DESCRIPTION
+The
+.BR mpd_async_free ()
+closes the socket and frees the memory allocated previously with
+.BR mpd_async_new (3).
+.SH RETURN VALUE
+The
+.BR mpd_async_free ()
+function returns no value.
+.SH SEE ALSO
+.BR mpd_async_new (3)

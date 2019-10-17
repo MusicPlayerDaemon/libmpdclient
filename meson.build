@@ -209,6 +209,19 @@ install_headers(
   join_paths(meson.build_root(), 'version.h'),
   subdir: 'mpd')
 
+install_man('man/mpd_async_events.3',
+	'man/mpd_async_free.3',
+	'man/mpd_async_get_error.3',
+	'man/mpd_async_get_error_message.3',
+	'man/mpd_async_get_fd.3',
+	'man/mpd_async_get_system_error.3',
+	'man/mpd_async_io.3',
+	'man/mpd_async_new.3',
+	'man/mpd_async_recv_line.3',
+	'man/mpd_async_send_command.3',
+	'man/mpd_async_send_command_v.3',
+	'man/mpd_async_set_keepalive.3')
+
 docdir = join_paths(get_option('datadir'), 'doc', meson.project_name())
 install_data('AUTHORS', 'COPYING', 'NEWS', 'README.rst',
   install_dir: docdir)

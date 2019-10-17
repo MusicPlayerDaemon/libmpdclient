@@ -1,0 +1,81 @@
+.TH MPD_ASYNC_GET_ERROR 3 2019
+.SH NAME
+mpd_async_get_error \- returns the error code
+.SH SYNOPSIS
+.nf
+.B #include <mpd/async.h>
+.PP
+.BI "enum mpd_error mpd_async_get_error(const struct mpd_async *" async );
+.fi
+.SH DESCRIPTION
+The
+.BR mpd_async_get_error ()
+returns information about the last error encountered. If no error has occured,
+it returns
+.I MPD_ERROR_SUCCESS.
+.SS The mpd_error enum
+The
+.BR mpd_async_get_error ()
+function returns a
+.I mpd_error
+enum, which has one of the following values:
+.PP
+.in +4n
+.EX
+enum mpd_error {
+	/** no error */
+	MPD_ERROR_SUCCESS = 0,
+
+	/** out of memory */
+	MPD_ERROR_OOM,
+
+	/** a function was called with an unrecognized or invalid
+	    argument */
+	MPD_ERROR_ARGUMENT,
+
+	/** a function was called which is not available in the
+	    current state of libmpdclient */
+	MPD_ERROR_STATE,
+
+	/** timeout trying to talk to mpd */
+	MPD_ERROR_TIMEOUT,
+
+	/** system error */
+	MPD_ERROR_SYSTEM,
+
+	/** unknown host */
+	MPD_ERROR_RESOLVER,
+
+	/** malformed response received from MPD */
+	MPD_ERROR_MALFORMED,
+
+	/** connection closed by mpd */
+	MPD_ERROR_CLOSED,
+
+	/**
+	 * The server has returned an error code, which can be queried
+	 * with mpd_connection_get_server_error().
+	 */
+	MPD_ERROR_SERVER,
+};
+.EE
+.in
+.PP
+.SH RETURN VALUE
+The
+.BR mpd_async_get_new ()
+function returns a 
+.I mpd_error
+object.
+.SH ERRORS
+No errors are defined.
+.SH SEE ALSO
+.BR mpd_async_new (3),
+.BR mpd_async_get_error_message (3),
+.BR mpd_async_get_system_error (3),
+.BR mpd_async_keepalive (3),
+.BR mpd_async_events (3),
+.BR mpd_async_io (3),
+.BR mpd_async_send_command_v (3),
+.BR mpd_async_send_command (3),
+.BR mpd_async_recv_line (3)
