@@ -148,10 +148,11 @@ mpd_async_get_fd(const struct mpd_async *async);
  *
  * @param async the #mpd_async object
  * @param keepalive whether TCP keepalives should be enabled
+ * @return true on success, false if setsockopt failed
  *
  * @since libmpdclient 2.10
  */
-void
+bool
 mpd_async_set_keepalive(struct mpd_async *async,
 			bool keepalive);
 
@@ -178,8 +179,9 @@ mpd_async_io(struct mpd_async *async, enum mpd_async_event events);
  * @param async the connection
  * @param command the command name, followed by arguments, terminated by
  * NULL
- * @param args the argument list
- * @return true on success, false if the buffer is full
+ * @param args the list of 'const char *' arguments
+ * @return true on success, false if the buffer is full or an error has
+ * previously occurred
  */
 bool
 mpd_async_send_command_v(struct mpd_async *async, const char *command,
@@ -190,8 +192,9 @@ mpd_async_send_command_v(struct mpd_async *async, const char *command,
  *
  * @param async the connection
  * @param command the command name, followed by arguments, terminated by
- * NULL
- * @return true on success, false if the buffer is full
+ * NULL. The arguments should be of type 'const char *'
+ * @return true on success, false if the buffer is full or an error has
+ * previously occurred
  */
 mpd_sentinel
 bool

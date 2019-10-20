@@ -199,12 +199,12 @@ mpd_socket_close(mpd_socket_t fd)
 #endif
 }
 
-void
+int
 mpd_socket_keepalive(mpd_socket_t fd, bool keepalive)
 {
 	int keepalive_i = keepalive;
 
 
-	(void) setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE,
+	return setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE,
 			  (const char *) &keepalive_i, sizeof keepalive_i);
 }

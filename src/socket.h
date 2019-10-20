@@ -96,7 +96,7 @@ mpd_socket_close(mpd_socket_t fd);
 /**
  * Sets (or unsets) keepalive on a socket descriptor.
  */
-void
+int
 mpd_socket_keepalive(mpd_socket_t fd, bool keepalive);
 
 #endif
