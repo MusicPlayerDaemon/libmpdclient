@@ -36,8 +36,6 @@
 /**
  * @since libmpdclient 2.10 added support for #MPD_TAG_MUSICBRAINZ_RELEASETRACKID.
  * @since libmpdclient 2.11 added support for #MPD_TAG_ARTIST_SORT and #MPD_TAG_ALBUM_ARTIST_SORT.
- * @since libmpdclient 2.11 added support for #MPD_TAG_LABEL
- * @since libmpdclient 2.11 added support for #MPD_TAG_MUSICBRAINZ_WORKID
  */
 enum mpd_tag_type
 {
@@ -59,14 +57,12 @@ enum mpd_tag_type
 	MPD_TAG_PERFORMER,
 	MPD_TAG_COMMENT,
 	MPD_TAG_DISC,
-	MPD_TAG_LABEL,
 
 	MPD_TAG_MUSICBRAINZ_ARTISTID,
 	MPD_TAG_MUSICBRAINZ_ALBUMID,
 	MPD_TAG_MUSICBRAINZ_ALBUMARTISTID,
 	MPD_TAG_MUSICBRAINZ_TRACKID,
 	MPD_TAG_MUSICBRAINZ_RELEASETRACKID,
-	MPD_TAG_MUSICBRAINZ_WORKID,
 
 	MPD_TAG_ORIGINAL_DATE,
 
