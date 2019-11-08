@@ -241,13 +241,13 @@ void mpd_connection_free(struct mpd_connection *connection)
 	free(connection);
 }
 
-void
+bool
 mpd_connection_set_keepalive(struct mpd_connection *connection,
 			     bool keepalive)
 {
 	assert(connection != NULL);
 
-	mpd_async_set_keepalive(connection->async, keepalive);
+	return mpd_async_set_keepalive(connection->async, keepalive);
 }
 
 const struct mpd_settings *

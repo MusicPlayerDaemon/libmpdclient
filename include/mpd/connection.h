@@ -147,10 +147,11 @@ mpd_connection_get_settings(const struct mpd_connection *connection);
  *
  * @param connection the connection to MPD
  * @param keepalive whether TCP keepalives should be enabled
+ * @return true on success, false if setsockopt failed
  *
  * @since libmpdclient 2.10
  */
-void
+bool
 mpd_connection_set_keepalive(struct mpd_connection *connection,
 			     bool keepalive);
 
