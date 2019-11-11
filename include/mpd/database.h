@@ -51,6 +51,8 @@ extern "C" {
  * MPD.  They are returned without metadata.  This is a rather
  * expensive operation, because the response may be large.
  *
+ * To read the response, you may use mpd_recv_entity().
+ *
  * @param connection the connection to MPD
  * @param path an optional base path for the query
  * @return true on success, false on error
@@ -80,14 +82,14 @@ mpd_send_list_all_meta(struct mpd_connection *connection, const char *path);
  * To read the response, you may use mpd_recv_entity().
  *
  * @param connection the connection to MPD
- * @param path the directory to be listed
+ * @param path an optional the directory to be listed
  * @return true on success, false on error
  */
 bool
 mpd_send_list_meta(struct mpd_connection *connection, const char *path);
 
 /**
- * Lists the contents of the specified directory, including files are
+ * Lists the contents of the specified directory, including files that are
  * not recognized by MPD (command "listfiles").
  *
  * To read the response, you may use mpd_recv_entity().  All regular
@@ -141,7 +143,7 @@ bool
 mpd_send_rescan(struct mpd_connection *connection, const char *path);
 
 /**
- * Receives the id the of the update job which was submitted by
+ * Receives the id of the update job which was submitted by
  * mpd_send_update().
  *
  * @param connection the connection to MPD
