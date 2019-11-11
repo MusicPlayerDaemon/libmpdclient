@@ -82,7 +82,7 @@ mpd_send_list_all_meta(struct mpd_connection *connection, const char *path);
  * To read the response, you may use mpd_recv_entity().
  *
  * @param connection the connection to MPD
- * @param path an optional the directory to be listed
+ * @param path an optional directory to be listed
  * @return true on success, false on error
  */
 bool
