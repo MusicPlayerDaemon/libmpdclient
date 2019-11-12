@@ -70,7 +70,10 @@ mpd_parse_fingerprint_type(const char *name);
  * fingerprint.
  *
  * @param connection a valid and connected #mpd_connection
+ * @param uri the song URI
  * @return true on success
+ *
+ * @since libmpdclient 2.17, MPD 0.22
  */
 bool
 mpd_send_getfingerprint(struct mpd_connection *connection, const char *uri);
@@ -80,12 +83,15 @@ mpd_send_getfingerprint(struct mpd_connection *connection, const char *uri);
  * mpd_response_finish().
  *
  * @param connection a valid and connected #mpd_connection
+ * @param uri the song URI
  * @param buffer a buffer for the fingerprint string
  * @param buffer_size the size of the buffer (with enough room for a
  * trailing null byte); if the buffer is too small, behavior is
  * undefined; the library may truncate the string or fail
  * @return a pointer to the buffer on success or NULL on error (or if
  * there was no chromaprint in MPD's response)
+ *
+ * @since libmpdclient 2.17, MPD 0.22
  */
 mpd_malloc
 const char *
