@@ -89,6 +89,9 @@ enum mpd_idle {
 
 	/** a message on a subscribed channel was received */
 	MPD_IDLE_MESSAGE = 0x400,
+
+	/** a partition was added or changed */
+	MPD_IDLE_PARTITION = 0x800,
 };
 
 #ifdef __cplusplus
