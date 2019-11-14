@@ -410,6 +410,17 @@ global:
 	mpd_send_getfingerprint;
 	mpd_run_getfingerprint_chromaprint;
 
+	/* mpd/partition.h */
+	mpd_partition_new;
+	mpd_partition_free;
+	mpd_partition_get_channel;
+	mpd_partition_get_partition;
+	mpd_send_newpartition;
+	mpd_run_newpartition;
+	mpd_send_partition;
+	mpd_run_partition;
+	mpd_send_listpartitions;
+
 	/* mpd/settings.h */
 	mpd_settings_new;
 	mpd_settings_free;

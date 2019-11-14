@@ -26,57 +26,45 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*! \file
- * \brief MPD client library
- *
- * This is a client library for the Music Player Daemon, written in C.
- *
- * You can choose one of several APIs, depending on your requirements:
- *
- * - struct mpd_async: a very low-level asynchronous API which knows
- *   the protocol syntax, but no specific commands
- *
- * - struct mpd_connection: a basic synchronous API which knows all
- *   MPD commands and parses all responses
- *
- * \author Max Kellermann (max.kellermann@gmail.com)
- */
+#include <mpd/partition.h>
+#include <mpd/send.h>
+#include <mpd/response.h>
+#include "internal.h"
+#include "run.h"
 
-#ifndef MPD_CLIENT_H
-#define MPD_CLIENT_H
+#include <assert.h>
+#include <stddef.h>
 
-// IWYU pragma: begin_exports
+bool
+mpd_send_newpartition(struct mpd_connection *connection, const char *partition)
+{
+	return mpd_send_command(connection, "newpartition", partition, NULL);
+}
 
-#include "audio_format.h"
-#include "capabilities.h"
-#include "connection.h"
-#include "database.h"
-#include "directory.h"
-#include "entity.h"
-#include "fingerprint.h"
-#include "idle.h"
-#include "list.h"
-#include "message.h"
-#include "mixer.h"
-#include "mount.h"
-#include "output.h"
-#include "pair.h"
-#include "partition.h"
-#include "password.h"
-#include "player.h"
-#include "playlist.h"
-#include "queue.h"
-#include "recv.h"
-#include "response.h"
-#include "search.h"
-#include "send.h"
-#include "settings.h"
-#include "song.h"
-#include "stats.h"
-#include "status.h"
-#include "sticker.h"
-#include "version.h"
+bool
+mpd_run_newpartition(struct mpd_connection *connection, const char *partition)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_newpartition(connection, partition) &&
+		mpd_response_finish(connection);
+}
 
-// IWYU pragma: end_exports
+bool
+mpd_send_partition(struct mpd_connection *connection, const char *partition)
+{
+	return mpd_send_command(connection, "partition", partition, NULL);
+}
 
-#endif
+bool
+mpd_run_partition(struct mpd_connection *connection, const char *partition)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_partition(connection, partition) &&
+		mpd_response_finish(connection);
+}
+
+bool
+mpd_send_listpartitions(struct mpd_connection *connection)
+{
+	return mpd_send_command(connection, "listpartitions", NULL);
+}

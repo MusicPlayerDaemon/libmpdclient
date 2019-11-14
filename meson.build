@@ -149,6 +149,8 @@ libmpdclient = library('mpdclient',
   'src/settings.c',
   'src/message.c',
   'src/cmessage.c',
+  'src/partition.c',
+  'src/cpartition.c',
   link_depends: [
     'libmpdclient.ld'
   ],
@@ -187,6 +189,7 @@ install_headers(
   'include/mpd/mixer.h',
   'include/mpd/mount.h',
   'include/mpd/parser.h',
+  'include/mpd/partition.h',
   'include/mpd/password.h',
   'include/mpd/player.h',
   'include/mpd/playlist.h',

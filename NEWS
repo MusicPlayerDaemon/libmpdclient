@@ -3,6 +3,7 @@ libmpdclient 2.17 (not yet released)
 * support MPD protocol 0.22
   - "getfingerprint"
 * support tag "MPD_TAG_LABEL" and "MPD_TAG_MUSICBRAINZ_WORKID"
+* support MPD partitions
 * mpd_async_set_keepalive() returns bool
 * mpd_connection_set_keepalive() returns bool
 * fix build failure on Haiku

@@ -26,57 +26,71 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*! \file
- * \brief MPD client library
- *
- * This is a client library for the Music Player Daemon, written in C.
- *
- * You can choose one of several APIs, depending on your requirements:
- *
- * - struct mpd_async: a very low-level asynchronous API which knows
- *   the protocol syntax, but no specific commands
- *
- * - struct mpd_connection: a basic synchronous API which knows all
- *   MPD commands and parses all responses
- *
- * \author Max Kellermann (max.kellermann@gmail.com)
- */
+#include <mpd/pair.h>
+#include <mpd/partition.h>
 
-#ifndef MPD_CLIENT_H
-#define MPD_CLIENT_H
+#include <assert.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
 
-// IWYU pragma: begin_exports
+struct mpd_partition {
+	char *channel;
+	char *partition;
+};
 
-#include "audio_format.h"
-#include "capabilities.h"
-#include "connection.h"
-#include "database.h"
-#include "directory.h"
-#include "entity.h"
-#include "fingerprint.h"
-#include "idle.h"
-#include "list.h"
-#include "message.h"
-#include "mixer.h"
-#include "mount.h"
-#include "output.h"
-#include "pair.h"
-#include "partition.h"
-#include "password.h"
-#include "player.h"
-#include "playlist.h"
-#include "queue.h"
-#include "recv.h"
-#include "response.h"
-#include "search.h"
-#include "send.h"
-#include "settings.h"
-#include "song.h"
-#include "stats.h"
-#include "status.h"
-#include "sticker.h"
-#include "version.h"
+struct mpd_partition *
+mpd_partition_new(const struct mpd_pair *pair)
+{
+	struct mpd_partition *output;
 
-// IWYU pragma: end_exports
+	assert(pair != NULL);
 
-#endif
+	if (strcmp(pair->name, "partition") != 0)
+		return NULL;
+
+	output = malloc(sizeof(*output));
+	if (output == NULL)
+		return NULL;
+
+	output->channel = strdup(pair->name);
+	if (output->channel == NULL) {
+		free(output);
+		return NULL;
+	}
+	output->partition = strdup(pair->value);
+	if (output->partition == NULL) {
+		free(output);
+		return NULL;
+	}
+
+	return output;
+}
+
+void
+mpd_partition_free(struct mpd_partition *partition)
+{
+	assert(partition != NULL);
+
+	free(partition->channel);
+	free(partition->partition);
+	free(partition);
+}
+
+mpd_pure
+const char *
+mpd_partition_get_channel(const struct mpd_partition *partition)
+{
+	assert(partition != NULL);
+
+	return partition->channel;
+}
+
+mpd_pure
+const char *
+mpd_partition_get_partition(const struct mpd_partition *partition)
+{
+	assert(partition != NULL);
+
+	return partition->partition;
+}
