@@ -413,8 +413,7 @@ global:
 	/* mpd/partition.h */
 	mpd_partition_new;
 	mpd_partition_free;
-	mpd_partition_get_channel;
-	mpd_partition_get_partition;
+	mpd_partition_get_name;
 	mpd_send_newpartition;
 	mpd_run_newpartition;
 	mpd_send_switch_partition;

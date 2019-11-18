@@ -73,22 +73,13 @@ void
 mpd_partition_free(struct mpd_partition *partition);
 
 /**
- * Returns the channel name.
- *
- * @since libmpdclient 2.17
- */
-mpd_pure
-const char *
-mpd_partition_get_channel(const struct mpd_partition *partition);
-
-/**
  * Returns the partition name.
  *
  * @since libmpdclient 2.17
  */
 mpd_pure
 const char *
-mpd_partition_get_partition(const struct mpd_partition *partition);
+mpd_partition_get_name(const struct mpd_partition *partition);
 
 /**
  * Creates a new partition.

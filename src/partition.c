@@ -35,8 +35,7 @@
 #include <string.h>
 
 struct mpd_partition {
-	char *channel;
-	char *partition;
+	char *name;
 };
 
 struct mpd_partition *
@@ -53,13 +52,8 @@ mpd_partition_new(const struct mpd_pair *pair)
 	if (output == NULL)
 		return NULL;
 
-	output->channel = strdup(pair->name);
-	if (output->channel == NULL) {
-		free(output);
-		return NULL;
-	}
-	output->partition = strdup(pair->value);
-	if (output->partition == NULL) {
+	output->name = strdup(pair->value);
+	if (output->name == NULL) {
 		free(output);
 		return NULL;
 	}
@@ -72,25 +66,15 @@ mpd_partition_free(struct mpd_partition *partition)
 {
 	assert(partition != NULL);
 
-	free(partition->channel);
-	free(partition->partition);
+	free(partition->name);
 	free(partition);
 }
 
 mpd_pure
 const char *
-mpd_partition_get_channel(const struct mpd_partition *partition)
+mpd_partition_get_name(const struct mpd_partition *partition)
 {
 	assert(partition != NULL);
 
-	return partition->channel;
-}
-
-mpd_pure
-const char *
-mpd_partition_get_partition(const struct mpd_partition *partition)
-{
-	assert(partition != NULL);
-
-	return partition->partition;
+	return partition->name;
 }

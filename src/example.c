@@ -302,7 +302,7 @@ int main(int argc, char ** argv) {
 			mpd_return_pair(conn, pair);
 
 			printf("partition name: %s\n",
-					mpd_partition_get_partition(part));
+					mpd_partition_get_name(part));
 			mpd_partition_free(part);
 		}
 		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS)
@@ -322,7 +322,7 @@ int main(int argc, char ** argv) {
 				mpd_return_pair(conn, pair);
 
 				printf("partition name: %s\n",
-					mpd_partition_get_partition(part));
+					mpd_partition_get_name(part));
 				mpd_partition_free(part);
 			}
 			if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS)
