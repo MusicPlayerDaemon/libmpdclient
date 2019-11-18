@@ -126,10 +126,11 @@ mpd_run_newpartition(struct mpd_connection *connection, const char *partition);
  * @since libmpdclient 2.17
  */
 bool
-mpd_send_partition(struct mpd_connection *connection, const char *partition);
+mpd_send_switch_partition(struct mpd_connection *connection,
+			  const char *partition);
 
 /**
- * Shortcut for mpd_send_partition() and mpd_response_finish().
+ * Shortcut for mpd_send_switch_partition() and mpd_response_finish().
  *
  * @param connection the connection to MPD
  * @param partition the partition name
@@ -138,7 +139,8 @@ mpd_send_partition(struct mpd_connection *connection, const char *partition);
  * @since libmpdclient 2.17
  */
 bool
-mpd_run_partition(struct mpd_connection *connection, const char *partition);
+mpd_run_switch_partition(struct mpd_connection *connection,
+			 const char *partition);
 
 /**
  * Sends the "listpartitions" command: request the list of partitions.

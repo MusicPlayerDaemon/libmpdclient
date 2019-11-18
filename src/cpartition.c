@@ -50,16 +50,18 @@ mpd_run_newpartition(struct mpd_connection *connection, const char *partition)
 }
 
 bool
-mpd_send_partition(struct mpd_connection *connection, const char *partition)
+mpd_send_switch_partition(struct mpd_connection *connection,
+			  const char *partition)
 {
 	return mpd_send_command(connection, "partition", partition, NULL);
 }
 
 bool
-mpd_run_partition(struct mpd_connection *connection, const char *partition)
+mpd_run_switch_partition(struct mpd_connection *connection,
+			 const char *partition)
 {
 	return mpd_run_check(connection) &&
-		mpd_send_partition(connection, partition) &&
+		mpd_send_switch_partition(connection, partition) &&
 		mpd_response_finish(connection);
 }
 

@@ -330,8 +330,8 @@ int main(int argc, char ** argv) {
 		}
 		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS)
 			handle_error(conn);
-	} else if (argc == 3 && strcmp(argv[1], "partition") == 0) {
-		if (!mpd_run_partition(conn, argv[2]))
+	} else if (argc == 3 && strcmp(argv[1], "switchpartition") == 0) {
+		if (!mpd_run_switch_partition(conn, argv[2]))
 			return handle_error(conn);
 		printf("switched to partition %s\n", argv[2]);
 	}

@@ -417,8 +417,8 @@ global:
 	mpd_partition_get_partition;
 	mpd_send_newpartition;
 	mpd_run_newpartition;
-	mpd_send_partition;
-	mpd_run_partition;
+	mpd_send_switch_partition;
+	mpd_run_switch_partition;
 	mpd_send_listpartitions;
 
 	/* mpd/settings.h */
