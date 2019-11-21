@@ -164,7 +164,7 @@ mpd_idle_parse_pair(const struct mpd_pair *pair);
  * bit mask.
  *
  * @param connection the connection to MPD
- * @param disable_timeout if true, then libmpdclients temporarily
+ * @param disable_timeout if true, then libmpdclient temporarily
  * disables the configured timeout (see mpd_connection_set_timeout()):
  * this function blocks forever, until either MPD sends a response, or
  * an error occurs.
