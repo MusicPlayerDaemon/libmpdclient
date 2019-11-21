@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2018 The Music Player Daemon Project
+   (c) 2003-2019 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -39,11 +39,13 @@
  * - struct mpd_connection: a basic synchronous API which knows all
  *   MPD commands and parses all responses
  *
- * \author Max Kellermann (max@duempel.org)
+ * \author Max Kellermann (max.kellermann@gmail.com)
  */
 
 #ifndef MPD_CLIENT_H
 #define MPD_CLIENT_H
+
+// IWYU pragma: begin_exports
 
 #include "audio_format.h"
 #include "capabilities.h"
@@ -73,5 +75,7 @@
 #include "status.h"
 #include "sticker.h"
 #include "version.h"
+
+// IWYU pragma: end_exports
 
 #endif

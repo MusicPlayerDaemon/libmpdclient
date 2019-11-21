@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2018 The Music Player Daemon Project
+   (c) 2003-2019 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -147,10 +147,11 @@ mpd_connection_get_settings(const struct mpd_connection *connection);
  *
  * @param connection the connection to MPD
  * @param keepalive whether TCP keepalives should be enabled
+ * @return true on success, false if setsockopt failed
  *
  * @since libmpdclient 2.10
  */
-void
+bool
 mpd_connection_set_keepalive(struct mpd_connection *connection,
 			     bool keepalive);
 

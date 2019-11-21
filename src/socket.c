@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2018 The Music Player Daemon Project
+   (c) 2003-2019 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -199,12 +199,12 @@ mpd_socket_close(mpd_socket_t fd)
 #endif
 }
 
-void
+int
 mpd_socket_keepalive(mpd_socket_t fd, bool keepalive)
 {
 	int keepalive_i = keepalive;
 
 
-	(void) setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE,
+	return setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE,
 			  (const char *) &keepalive_i, sizeof keepalive_i);
 }

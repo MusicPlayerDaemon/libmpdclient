@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2018 The Music Player Daemon Project
+   (c) 2003-2019 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -53,12 +53,14 @@ static const char *const mpd_tag_type_names[MPD_TAG_COUNT] =
 	[MPD_TAG_PERFORMER] = "Performer",
 	[MPD_TAG_COMMENT] = "Comment",
 	[MPD_TAG_DISC] = "Disc",
+	[MPD_TAG_LABEL] = "Label",
 
 	[MPD_TAG_MUSICBRAINZ_ARTISTID] = "MUSICBRAINZ_ARTISTID",
 	[MPD_TAG_MUSICBRAINZ_ALBUMID] = "MUSICBRAINZ_ALBUMID",
 	[MPD_TAG_MUSICBRAINZ_ALBUMARTISTID] = "MUSICBRAINZ_ALBUMARTISTID",
 	[MPD_TAG_MUSICBRAINZ_TRACKID] = "MUSICBRAINZ_TRACKID",
 	[MPD_TAG_MUSICBRAINZ_RELEASETRACKID] = "MUSICBRAINZ_RELEASETRACKID",
+	[MPD_TAG_MUSICBRAINZ_WORKID] = "MUSICBRAINZ_WORKID",
 
 	[MPD_TAG_ORIGINAL_DATE] = "OriginalDate",
 };

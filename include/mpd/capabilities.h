@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2018 The Music Player Daemon Project
+   (c) 2003-2019 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -48,8 +48,8 @@ extern "C" {
 #endif
 
 /**
- * Requests a list of supported and allowed.  Use
- * mpd_recv_pair_named() to obtain the list of "command" pairs.
+ * Requests a list of supported and allowed commands. Use
+ * mpd_recv_command_pair() to obtain the list of "command" pairs.
  *
  * @param connection the connection to MPD
  * @return true on success, false on error
@@ -59,7 +59,7 @@ mpd_send_allowed_commands(struct mpd_connection *connection);
 
 /**
  * Requests a list of supported commands which are not allowed for
- * this connection.  Use mpd_recv_pair_named() to obtain the list of
+ * this connection.  Use mpd_recv_command_pair() to obtain the list of
  * "command" pairs.
  *
  * @param connection the connection to MPD
@@ -70,7 +70,7 @@ mpd_send_disallowed_commands(struct mpd_connection *connection);
 
 /**
  * Receives the next supported command.  Call this in a loop after
- * mpd_send_commands() or mpd_send_notcommands().
+ * mpd_send_allowed_commands() or mpd_send_disallowed_commands().
  *
  * Free the return value with mpd_return_pair().
  *
@@ -87,7 +87,7 @@ mpd_recv_command_pair(struct mpd_connection *connection)
 
 /**
  * Requests a list of supported URL handlers in the form "scheme://",
- * example: "http://".  Use mpd_recv_pair_named() to obtain the list
+ * example: "http://".  Use mpd_recv_url_scheme_pair() to obtain the list
  * of "handler" pairs.
  *
  * @param connection the connection to MPD
@@ -97,7 +97,7 @@ bool
 mpd_send_list_url_schemes(struct mpd_connection *connection);
 
 /**
- * Receives one line of the mpd_send_urlhandlers() response.
+ * Receives one line of the mpd_send_url_schemes() response.
  *
  * Free the return value with mpd_return_pair().
  *
@@ -113,7 +113,7 @@ mpd_recv_url_scheme_pair(struct mpd_connection *connection)
 }
 
 /**
- * Requests a list of supported tag types.  Use mpd_recv_pair_named()
+ * Requests a list of supported tag types.  Use mpd_recv_tag_type_pair()
  * to obtain the list of "tagtype" pairs.
  *
  * @param connection the connection to MPD
@@ -124,7 +124,7 @@ mpd_send_list_tag_types(struct mpd_connection *connection);
 
 /**
  * Receives the next tag type name.  Call this in a loop after
- * mpd_send_tagtypes().
+ * mpd_send_list_tag_types().
  *
  * Free the return value with mpd_return_pair().
  *

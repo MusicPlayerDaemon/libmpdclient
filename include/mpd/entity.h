@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2018 The Music Player Daemon Project
+   (c) 2003-2019 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -99,7 +99,7 @@ mpd_entity_get_type(const struct mpd_entity *entity);
 
 /**
  * Obtains a pointer to the #mpd_directory object enclosed by this
- * #mpd_entity.  Calling this function is only allowed of
+ * #mpd_entity.  Calling this function is only allowed if
  * mpd_entity_get_type() has returned #MPD_ENTITY_TYPE_DIRECTORY.
  *
  * @return the directory object
@@ -110,7 +110,7 @@ mpd_entity_get_directory(const struct mpd_entity *entity);
 
 /**
  * Obtains a pointer to the #mpd_song object enclosed by this
- * #mpd_entity.  Calling this function is only allowed of
+ * #mpd_entity.  Calling this function is only allowed if
  * mpd_entity_get_type() has returned #MPD_ENTITY_TYPE_SONG.
  *
  * @return the song object
@@ -121,10 +121,10 @@ mpd_entity_get_song(const struct mpd_entity *entity);
 
 /**
  * Obtains a pointer to the #mpd_playlist object enclosed by
- * this #mpd_entity.  Calling this function is only allowed of
+ * this #mpd_entity.  Calling this function is only allowed if
  * mpd_entity_get_type() has returned #MPD_ENTITY_TYPE_PLAYLIST.
  *
- * @return the directory object
+ * @return the playlist object
  */
 mpd_pure
 const struct mpd_playlist *

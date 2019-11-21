@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2018 The Music Player Daemon Project
+   (c) 2003-2019 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,8 @@
 
 /**
  * @since libmpdclient 2.10 added support for #MPD_TAG_MUSICBRAINZ_RELEASETRACKID.
- * @since libmpdclient 2.11 added support for #MPD_TAG_ARTIST_SORT and #MPD_TAG_ALBUM_ARTIST_SORT.
+ * @since libmpdclient 2.11 added support for #MPD_TAG_ARTIST_SORT and #MPD_TAG_ALBUM_ARTIST_SORT
+ * @since libmpdclient 2.17 added support for #MPD_TAG_LABEL and #MPD_TAG_MUSICBRAINZ_WORKID.
  */
 enum mpd_tag_type
 {
@@ -70,6 +71,8 @@ enum mpd_tag_type
 	MPD_TAG_ALBUM_ARTIST_SORT,
 
 	MPD_TAG_ALBUM_SORT,
+	MPD_TAG_LABEL,
+	MPD_TAG_MUSICBRAINZ_WORKID,
 
 	/* IMPORTANT: the ordering of tag types above must be
 	   retained, or else the libmpdclient ABI breaks */

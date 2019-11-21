@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2018 The Music Player Daemon Project
+   (c) 2003-2019 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -102,9 +102,9 @@ enum mpd_error
 mpd_async_get_error(const struct mpd_async *async);
 
 /**
- * If mpd_async_is_alive() returns false, this function returns the
- * human readable error message which caused this.  This message is
- * optional, and may be NULL.  The pointer is invalidated by
+ * If mpd_async_get_error() returns an error code other than #MPD_ERROR_SUCCESS,
+ * this function returns the human readable error message which caused this.
+ * This message is optional, and may be NULL.  The pointer is invalidated by
  * mpd_async_free().
  *
  * For #MPD_ERROR_SERVER, the error message is encoded in UTF-8.
@@ -148,10 +148,11 @@ mpd_async_get_fd(const struct mpd_async *async);
  *
  * @param async the #mpd_async object
  * @param keepalive whether TCP keepalives should be enabled
+ * @return true on success, false if setsockopt failed
  *
  * @since libmpdclient 2.10
  */
-void
+bool
 mpd_async_set_keepalive(struct mpd_async *async,
 			bool keepalive);
 
@@ -178,8 +179,9 @@ mpd_async_io(struct mpd_async *async, enum mpd_async_event events);
  * @param async the connection
  * @param command the command name, followed by arguments, terminated by
  * NULL
- * @param args the argument list
- * @return true on success, false if the buffer is full
+ * @param args the list of 'const char *' arguments
+ * @return true on success, false if the buffer is full or an error has
+ * previously occurred
  */
 bool
 mpd_async_send_command_v(struct mpd_async *async, const char *command,
@@ -190,8 +192,9 @@ mpd_async_send_command_v(struct mpd_async *async, const char *command,
  *
  * @param async the connection
  * @param command the command name, followed by arguments, terminated by
- * NULL
- * @return true on success, false if the buffer is full
+ * NULL. The arguments should be of type 'const char *'
+ * @return true on success, false if the buffer is full or an error has
+ * previously occurred
  */
 mpd_sentinel
 bool
