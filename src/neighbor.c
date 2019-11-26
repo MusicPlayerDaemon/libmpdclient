@@ -26,57 +26,76 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*! \file
- * \brief MPD client library
- *
- * This is a client library for the Music Player Daemon, written in C.
- *
- * You can choose one of several APIs, depending on your requirements:
- *
- * - struct mpd_async: a very low-level asynchronous API which knows
- *   the protocol syntax, but no specific commands
- *
- * - struct mpd_connection: a basic synchronous API which knows all
- *   MPD commands and parses all responses
- *
- * \author Max Kellermann (max.kellermann@gmail.com)
- */
+#include <mpd/neighbor.h>
+#include <mpd/pair.h>
 
-#ifndef MPD_CLIENT_H
-#define MPD_CLIENT_H
+#include <assert.h>
+#include <string.h>
+#include <stdlib.h>
 
-// IWYU pragma: begin_exports
+struct mpd_neighbor {
+	char *uri;
+	char *display_name;
+};
 
-#include "audio_format.h"
-#include "capabilities.h"
-#include "connection.h"
-#include "database.h"
-#include "directory.h"
-#include "entity.h"
-#include "fingerprint.h"
-#include "idle.h"
-#include "list.h"
-#include "message.h"
-#include "mixer.h"
-#include "mount.h"
-#include "neighbor.h"
-#include "output.h"
-#include "pair.h"
-#include "password.h"
-#include "player.h"
-#include "playlist.h"
-#include "queue.h"
-#include "recv.h"
-#include "response.h"
-#include "search.h"
-#include "send.h"
-#include "settings.h"
-#include "song.h"
-#include "stats.h"
-#include "status.h"
-#include "sticker.h"
-#include "version.h"
+struct mpd_neighbor *
+mpd_neighbor_begin(const struct mpd_pair *pair)
+{
+	assert(pair != NULL);
 
-// IWYU pragma: end_exports
+	if (strcmp(pair->name, "neighbor") != 0)
+		return NULL;
 
-#endif
+	struct mpd_neighbor *neighbor = malloc(sizeof(*neighbor));
+	if (neighbor == NULL)
+		return NULL;
+
+	neighbor->uri = strdup(pair->value);
+	if (neighbor->uri == NULL) {
+		free(neighbor);
+		return NULL;
+	}
+
+	neighbor->display_name = NULL;
+	return neighbor;
+}
+
+bool
+mpd_neighbor_feed(struct mpd_neighbor *neighbor, const struct mpd_pair *pair)
+{
+	if (strcmp(pair->name, "neighbor") == 0)
+		return false;
+
+	if (strcmp(pair->name, "name") == 0) {
+		free(neighbor->display_name);
+		neighbor->display_name = strdup(pair->value);
+	}
+
+	return true;
+}
+
+void
+mpd_neighbor_free(struct mpd_neighbor *neighbor)
+{
+	assert(neighbor != NULL);
+
+	free(neighbor->uri);
+	free(neighbor->display_name);
+	free(neighbor);
+}
+
+const char *
+mpd_neighbor_get_uri(const struct mpd_neighbor *neighbor)
+{
+	assert(neighbor != NULL);
+
+	return neighbor->uri;
+}
+
+const char *
+mpd_neighbor_get_display_name(const struct mpd_neighbor *neighbor)
+{
+	assert(neighbor != NULL);
+
+	return neighbor->display_name;
+}
