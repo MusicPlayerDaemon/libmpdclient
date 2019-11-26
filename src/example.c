@@ -285,6 +285,22 @@ int main(int argc, char ** argv) {
 			return handle_error(conn);
 
 		printf("%s\n", fingerprint);
+	} else if (argc == 2 && strcmp(argv[1], "listneighbors") == 0) {
+		struct mpd_neighbor *neighbor;
+
+		if (!mpd_send_list_neighbors(conn))
+			return handle_error(conn);
+
+		while ((neighbor = mpd_recv_neighbor(conn)) != NULL) {
+			printf("uri: %s\n display name: %s\n",
+				mpd_neighbor_get_uri(neighbor),
+				mpd_neighbor_get_display_name(neighbor));
+			mpd_neighbor_free(neighbor);
+		}
+
+		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS ||
+		    !mpd_response_finish(conn))
+			return handle_error(conn);
 	}
 
 	mpd_connection_free(conn);
