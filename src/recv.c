@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2018 The Music Player Daemon Project
+   (c) 2003-2019 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-unsigned 
-mpd_recv_binary(struct mpd_connection *connection, unsigned char *data, unsigned length)
+size_t
+mpd_recv_binary(struct mpd_connection *connection, void *data, size_t length)
 {
 	assert(connection != NULL);
 
@@ -58,8 +58,8 @@ mpd_recv_binary(struct mpd_connection *connection, unsigned char *data, unsigned
 					      length - consumed)
 		) != NULL)
 	{
-        	memcpy(data + consumed, binary->data, binary->size);
-                consumed += binary->size;
+		memcpy(((unsigned char *)data) + consumed, binary->data, binary->size);
+		consumed += binary->size;
         }
 
         return consumed;

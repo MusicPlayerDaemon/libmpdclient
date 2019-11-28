@@ -1,5 +1,5 @@
 /* libmpdclient
-   (c) 2003-2018 The Music Player Daemon Project
+   (c) 2003-2019 The Music Player Daemon Project
    This project's homepage is: http://www.musicpd.org
 
    Redistribution and use in source and binary forms, with or without
@@ -40,6 +40,7 @@
 
 #include <stdbool.h>
 #include <stdarg.h>
+#include <stddef.h>
 
 struct timeval;
 struct mpd_async;
@@ -75,6 +76,6 @@ mpd_sync_recv_line(struct mpd_async *async, const struct timeval *tv);
  * Synchronous wrapper for mpd_async_recv_binary().
  */
 struct mpd_binary *
-mpd_sync_recv_binary(struct mpd_async *async, const struct timeval *tv, struct mpd_binary *buffer, const unsigned length);
+mpd_sync_recv_binary(struct mpd_async *async, const struct timeval *tv, struct mpd_binary *buffer, size_t length);
 
 #endif
