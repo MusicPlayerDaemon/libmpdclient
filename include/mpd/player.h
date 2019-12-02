@@ -49,6 +49,23 @@ extern "C" {
 #endif
 
 /**
+ * There are two ways to address songs within the queue: by their position and
+ * by their id.
+ * The position is a 0-based index. It is unstable by design: if you move,
+ * delete or insert songs, all following indices will change, and a client can
+ * never be sure what song is behind a given index/position.
+ *
+ * Song ids on the other hand are stable: an id is assigned to a song when it
+ * is added, and will stay the same, no matter how much it is moved around.
+ * Adding the same song twice will assign different ids to them, and a
+ * deleted-and-readded song will have a new id. This way, a client can always
+ * be sure the correct song is being used.
+ *
+ * Many commands come in two flavors, one for each address type. Whenever
+ * possible, ids should be used.
+ */
+
+/**
  * Fetches the currently selected song (the song referenced by
  * mpd_status_get_song_id()).
  * Call mpd_recv_song() to receive the response.
