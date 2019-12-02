@@ -133,7 +133,7 @@ mpd_run_play_pos(struct mpd_connection *connection, unsigned song_pos);
  * @return true on success, false on error
  */
 bool
-mpd_send_play_id(struct mpd_connection *connection, unsigned id);
+mpd_send_play_id(struct mpd_connection *connection, unsigned song_id);
 
 /**
  * Shortcut for mpd_send_play_id() and mpd_response_finish().
