@@ -205,6 +205,8 @@ mpd_async_send_command(struct mpd_async *async, const char *command, ...);
  * null-terminated, without the newline character.  The pointer is
  * only valid until the next async function is called.
  *
+ * You can use mpd_parser_new() and mpd_parser_feed() for parsing the line.
+ *
  * @param async the connection
  * @return a line on success, NULL otherwise
  */
