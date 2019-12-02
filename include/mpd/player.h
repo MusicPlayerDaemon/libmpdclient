@@ -257,7 +257,8 @@ mpd_run_seek_pos(struct mpd_connection *connection,
  * @return true on success, false on error
  */
 bool
-mpd_send_seek_id(struct mpd_connection *connection, unsigned id, unsigned t);
+mpd_send_seek_id(struct mpd_connection *connection,
+		 unsigned song_id, unsigned t);
 
 /**
  * Shortcut for mpd_send_seek_id() and mpd_response_finish().
@@ -275,13 +276,13 @@ mpd_run_seek_id(struct mpd_connection *connection,
  * Seeks to the position t (in seconds; fractions allowed) of song id song_id.
  *
  * @param connection the connection to MPD
- * @param id the id of the song
+ * @param song_id the id of the song
  * @param t the position within the song, in seconds (fractions allowed)
  * @return true on success, false on error
  */
 bool
 mpd_send_seek_id_float(struct mpd_connection *connection,
-		       unsigned id, float t);
+		       unsigned song_id, float t);
 
 /**
  * Shortcut for mpd_send_seek_id_float() and mpd_response_finish().
