@@ -396,7 +396,7 @@ mpd_async_recv_binary(struct mpd_async *async, struct mpd_binary *buffer, size_t
 	struct mpd_binary *result = buffer;
 
 	if (length == 0) {
-		if (memcmp(result->data, "\n", 1) != 0) {
+		if (*(char *)result->data != '\n') {
 			/* response is not finished yet */
 			if (mpd_buffer_full(&async->input)) {
 				/* .. but the buffer is full - response is too
