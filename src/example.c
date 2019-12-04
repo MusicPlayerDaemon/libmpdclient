@@ -301,6 +301,55 @@ int main(int argc, char ** argv) {
 		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS ||
 		    !mpd_response_finish(conn))
 			return handle_error(conn);
+	} else if (argc == 3 && strcmp(argv[1], "newpartition") == 0) {
+		if (!mpd_run_newpartition(conn, argv[2]))
+			return handle_error(conn);
+	} else if (argc == 2 && strcmp(argv[1], "listpartitions") == 0) {
+		struct mpd_pair *pair;
+		struct mpd_partition *part;
+
+		if (!mpd_send_listpartitions(conn))
+			return handle_error(conn);
+
+		while ((pair = mpd_recv_partition_pair(conn)) != NULL) {
+			part = mpd_partition_new(pair);
+			if (part == NULL)
+				return handle_error(conn);
+			mpd_return_pair(conn, pair);
+
+			printf("partition name: %s\n",
+					mpd_partition_get_name(part));
+			mpd_partition_free(part);
+		}
+		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS)
+			handle_error(conn);
+	} else if (argc == 2 && strcmp(argv[1], "idle_partition") == 0) {
+		while (mpd_run_idle_mask(conn, MPD_IDLE_PARTITION) != 0) {
+			struct mpd_pair *pair;
+			struct mpd_partition *part;
+
+			if (!mpd_send_listpartitions(conn))
+				return handle_error(conn);
+
+			while ((pair = mpd_recv_partition_pair(conn)) != NULL) {
+				part = mpd_partition_new(pair);
+				if (part == NULL)
+					return handle_error(conn);
+				mpd_return_pair(conn, pair);
+
+				printf("partition name: %s\n",
+					mpd_partition_get_name(part));
+				mpd_partition_free(part);
+			}
+			if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS)
+				handle_error(conn);
+		}
+		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS)
+			handle_error(conn);
+	} else if (argc == 3 && strcmp(argv[1], "switchpartition") == 0) {
+		if (!mpd_run_switch_partition(conn, argv[2]))
+			return handle_error(conn);
+		printf("switched to partition %s\n", argv[2]);
 	}
 
 	mpd_connection_free(conn);

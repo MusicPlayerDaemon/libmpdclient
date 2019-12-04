@@ -51,6 +51,7 @@ struct mpd_connection;
  *
  * @since libmpdclient 2.5 added support for #MPD_IDLE_STICKER,
  * #MPD_IDLE_SUBSCRIPTION and #MPD_IDLE_MESSAGE.
+ * @since libmpdclient 2.17 added support for #MPD_IDLE_PARTITION.
  */
 enum mpd_idle {
 	/** song database has been updated */
@@ -89,6 +90,9 @@ enum mpd_idle {
 
 	/** a message on a subscribed channel was received */
 	MPD_IDLE_MESSAGE = 0x400,
+
+	/** a partition was added or changed */
+	MPD_IDLE_PARTITION = 0x800,
 };
 
 #ifdef __cplusplus
