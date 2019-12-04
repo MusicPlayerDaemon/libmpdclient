@@ -41,24 +41,22 @@ struct mpd_partition {
 struct mpd_partition *
 mpd_partition_new(const struct mpd_pair *pair)
 {
-	struct mpd_partition *output;
-
 	assert(pair != NULL);
 
 	if (strcmp(pair->name, "partition") != 0)
 		return NULL;
 
-	output = malloc(sizeof(*output));
-	if (output == NULL)
+	struct mpd_partition *partition = malloc(sizeof(*partition));
+	if (partition == NULL)
 		return NULL;
 
-	output->name = strdup(pair->value);
-	if (output->name == NULL) {
-		free(output);
+	partition->name = strdup(pair->value);
+	if (partition->name == NULL) {
+		free(partition);
 		return NULL;
 	}
 
-	return output;
+	return partition;
 }
 
 void
