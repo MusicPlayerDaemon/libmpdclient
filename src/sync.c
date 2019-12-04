@@ -185,7 +185,8 @@ mpd_sync_recv_line(struct mpd_async *async, const struct timeval *tv0)
 }
 
 struct mpd_binary *
-mpd_sync_recv_binary(struct mpd_async *async, const struct timeval *tv0, struct mpd_binary *buffer, size_t length)
+mpd_sync_recv_binary(struct mpd_async *async, const struct timeval *tv0,
+		     struct mpd_binary *buffer, size_t length)
 {
 	struct timeval tv, *tvp;
 
@@ -196,18 +197,14 @@ mpd_sync_recv_binary(struct mpd_async *async, const struct timeval *tv0, struct 
 		tvp = NULL;
 
 	while (true) {
-		struct mpd_binary *result = mpd_async_recv_binary(async, buffer, length);
-		if (result == NULL) {
+		struct mpd_binary *result =
+			mpd_async_recv_binary(async, buffer, length);
+		if (result == NULL)
 			return NULL;
-		}
-		else if (result->size > 0 || 
-		         result->size == length)
-		{
+		else if (result->size > 0 || result->size == length)
 			return result;
-		}
 
-		if (!mpd_sync_io(async, tvp)) {
+		if (!mpd_sync_io(async, tvp))
 			return NULL;
-		}
 	}
 }

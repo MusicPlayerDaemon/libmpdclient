@@ -392,7 +392,7 @@ mpd_async_recv_binary(struct mpd_async *async, struct mpd_binary *buffer, size_t
 
 	buffer->data = mpd_buffer_read(&async->input);
 	assert(buffer->data != NULL);
-	
+
 	struct mpd_binary *result = buffer;
 
 	if (length == 0) {
