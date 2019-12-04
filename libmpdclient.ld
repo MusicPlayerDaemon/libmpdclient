@@ -13,7 +13,7 @@ global:
 	mpd_async_send_command_v;
 	mpd_async_send_command;
 	mpd_async_recv_line;
-	mpd_async_recv_binary;
+	mpd_async_recv_raw;
 
 	/* mpd/capabilities.h */
 	mpd_send_allowed_commands;
