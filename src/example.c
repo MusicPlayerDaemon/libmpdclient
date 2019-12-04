@@ -63,6 +63,67 @@ print_tag(const struct mpd_song *song, enum mpd_tag_type type,
 		printf("%s: %s\n", label, value);
 }
 
+static int
+readpicture(struct mpd_connection *c, const char *uri)
+{
+	unsigned long long offset = 0;
+	unsigned long long total_size;
+
+	do {
+		char offset_s[32];
+		snprintf(offset_s, sizeof(offset_s), "%llu", offset);
+
+		if (!mpd_send_command(c, "readpicture", uri, offset_s, NULL))
+			return handle_error(c);
+
+		struct mpd_pair *pair = mpd_recv_pair_named(c, "size");
+		if (pair == NULL) {
+			if (mpd_connection_get_error(c) != MPD_ERROR_SUCCESS)
+				return handle_error(c);
+			fprintf(stderr, "No 'size'\n");
+			return EXIT_FAILURE;
+		}
+
+		total_size = strtoull(pair->value, NULL, 10);
+
+		mpd_return_pair(c, pair);
+
+		pair = mpd_recv_pair_named(c, "binary");
+		if (pair == NULL) {
+			if (mpd_connection_get_error(c) != MPD_ERROR_SUCCESS)
+				return handle_error(c);
+			fprintf(stderr, "No 'binary'\n");
+			return EXIT_FAILURE;
+		}
+
+		const unsigned long long chunk_size =
+			strtoull(pair->value, NULL, 10);
+		mpd_return_pair(c, pair);
+
+		if (chunk_size == 0)
+			break;
+
+		char *p = malloc(chunk_size);
+		if (p == NULL)
+			abort();
+
+		if (!mpd_recv_binary(c, p, chunk_size))
+			return handle_error(c);
+
+		if (!mpd_response_finish(c))
+			return handle_error(c);
+
+		if (fwrite(p, chunk_size, 1, stdout) != 1)
+			exit(EXIT_FAILURE);
+
+		free(p);
+
+		offset += chunk_size;
+	} while (offset < total_size);
+
+	return EXIT_SUCCESS;
+}
+
 int main(int argc, char ** argv) {
 	struct mpd_connection *conn;
 
@@ -187,8 +248,11 @@ int main(int argc, char ** argv) {
 		if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS ||
 		    !mpd_response_finish(conn))
 			return handle_error(conn);
-	}
-	else if(argc==2 && strcmp(argv[1],"artists")==0) {
+	} else if (argc == 3 && strcmp(argv[1], "readpicture") == 0) {
+		int result = readpicture(conn, argv[2]);
+		if (result != EXIT_SUCCESS)
+			return result;
+	} else if(argc==2 && strcmp(argv[1],"artists")==0) {
 		struct mpd_pair *pair;
 
 		if (!mpd_search_db_tags(conn, MPD_TAG_ARTIST) ||
