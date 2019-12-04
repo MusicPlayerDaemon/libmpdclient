@@ -31,10 +31,39 @@
 #include <mpd/parser.h>
 #include "internal.h"
 #include "iasync.h"
+#include "binary.h"
 #include "sync.h"
 
 #include <string.h>
 #include <stdlib.h>
+
+size_t
+mpd_recv_binary(struct mpd_connection *connection, void *data, size_t length)
+{
+	assert(connection != NULL);
+
+	if (mpd_error_is_defined(&connection->error))
+		return 0;
+
+	/* check if the caller has returned the previous pair */
+	assert(connection->pair_state != PAIR_STATE_FLOATING);
+
+        unsigned consumed = 0;
+	struct mpd_binary buffer;
+	struct mpd_binary *binary;
+
+        while ((binary = mpd_sync_recv_binary(connection->async,
+					      mpd_connection_timeout(connection),
+					      &buffer,
+					      length - consumed)
+		) != NULL)
+	{
+		memcpy(((unsigned char *)data) + consumed, binary->data, binary->size);
+		consumed += binary->size;
+        }
+
+        return consumed;
+}
 
 struct mpd_pair *
 mpd_recv_pair(struct mpd_connection *connection)

@@ -31,6 +31,7 @@
 #include "ierror.h"
 #include "quote.h"
 #include "socket.h"
+#include "binary.h"
 
 #include <mpd/socket.h>
 
@@ -378,4 +379,40 @@ mpd_async_recv_line(struct mpd_async *async)
 	mpd_buffer_consume(&async->input, newline + 1 - src);
 
 	return src;
+}
+
+struct mpd_binary *
+mpd_async_recv_binary(struct mpd_async *async, struct mpd_binary *buffer, size_t length)
+{
+	assert(async != NULL);
+
+	buffer->size = mpd_buffer_size(&async->input);
+	if (buffer->size == 0)
+		return buffer;
+
+	buffer->data = mpd_buffer_read(&async->input);
+	assert(buffer->data != NULL);
+	
+	struct mpd_binary *result = buffer;
+
+	if (length == 0) {
+		if (memcmp(result->data, "\n", 1) != 0) {
+			/* response is not finished yet */
+			if (mpd_buffer_full(&async->input)) {
+				/* .. but the buffer is full - response is too
+				long, abort connection and bail out */
+				mpd_error_code(&async->error, MPD_ERROR_MALFORMED);
+				mpd_error_message(&async->error,
+						  "Response line too large");
+			}
+			return NULL;
+		}
+		//consume the final newline character
+		mpd_buffer_consume(&async->input, 1);
+		return NULL;
+	}
+
+	result->size = length < result->size ? length : result->size;
+	mpd_buffer_consume(&async->input, buffer->size);
+	return result;
 }
