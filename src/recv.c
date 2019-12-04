@@ -48,7 +48,7 @@ mpd_recv_binary(struct mpd_connection *connection, void *data, size_t length)
 	/* check if the caller has returned the previous pair */
 	assert(connection->pair_state != PAIR_STATE_FLOATING);
 
-	unsigned consumed = 0;
+	size_t consumed = 0;
 	struct mpd_binary buffer;
 	struct mpd_binary *binary;
 
