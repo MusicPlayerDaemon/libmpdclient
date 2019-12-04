@@ -396,15 +396,11 @@ mpd_async_recv_binary(struct mpd_async *async, struct mpd_binary *buffer, size_t
 	struct mpd_binary *result = buffer;
 
 	if (length == 0) {
+		/* binary must be followed by a newline */
 		if (*(char *)result->data != '\n') {
-			/* response is not finished yet */
-			if (mpd_buffer_full(&async->input)) {
-				/* .. but the buffer is full - response is too
-				long, abort connection and bail out */
-				mpd_error_code(&async->error, MPD_ERROR_MALFORMED);
-				mpd_error_message(&async->error,
-						  "Response line too large");
-			}
+			mpd_error_code(&async->error, MPD_ERROR_MALFORMED);
+			mpd_error_message(&async->error,
+					  "Malformed binary response");
 			return NULL;
 		}
 		//consume the final newline character
