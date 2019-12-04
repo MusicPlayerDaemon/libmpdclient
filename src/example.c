@@ -71,7 +71,7 @@ readpicture(struct mpd_connection *c, const char *uri)
 
 	do {
 		char offset_s[32];
-		snprintf(offset_s, sizeof(offset_s), "%llu", offset);
+		snprintf(offset_s, sizeof(offset_s), "%lu", (unsigned long)offset);
 
 		if (!mpd_send_command(c, "readpicture", uri, offset_s, NULL))
 			return handle_error(c);
