@@ -132,15 +132,12 @@ int main(int argc, char ** argv) {
 	if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS)
 		return handle_error(conn);
 
-	{
-		int i;
-		for(i=0;i<3;i++) {
+	if(argc==1) {
+		for(int i=0;i<3;i++) {
 			printf("version[%i]: %i\n",i,
 			       mpd_connection_get_server_version(conn)[i]);
 		}
-	}
 
-	if(argc==1) {
 		struct mpd_status * status;
 		struct mpd_song *song;
 		const struct mpd_audio_format *audio_format;
