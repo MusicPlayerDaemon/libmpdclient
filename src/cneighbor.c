@@ -26,57 +26,48 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*! \file
- * \brief MPD client library
- *
- * This is a client library for the Music Player Daemon, written in C.
- *
- * You can choose one of several APIs, depending on your requirements:
- *
- * - struct mpd_async: a very low-level asynchronous API which knows
- *   the protocol syntax, but no specific commands
- *
- * - struct mpd_connection: a basic synchronous API which knows all
- *   MPD commands and parses all responses
- *
- * \author Max Kellermann (max.kellermann@gmail.com)
- */
+#include <mpd/neighbor.h>
+#include <mpd/send.h>
+#include <mpd/recv.h>
+#include <mpd/response.h>
+#include "internal.h"
 
-#ifndef MPD_CLIENT_H
-#define MPD_CLIENT_H
+#include <stddef.h>
 
-// IWYU pragma: begin_exports
+bool
+mpd_send_list_neighbors(struct mpd_connection *connection)
+{
+	return mpd_send_command(connection, "listneighbors", NULL);
+}
 
-#include "audio_format.h"
-#include "capabilities.h"
-#include "connection.h"
-#include "database.h"
-#include "directory.h"
-#include "entity.h"
-#include "fingerprint.h"
-#include "idle.h"
-#include "list.h"
-#include "message.h"
-#include "mixer.h"
-#include "mount.h"
-#include "neighbor.h"
-#include "output.h"
-#include "pair.h"
-#include "password.h"
-#include "player.h"
-#include "playlist.h"
-#include "queue.h"
-#include "recv.h"
-#include "response.h"
-#include "search.h"
-#include "send.h"
-#include "settings.h"
-#include "song.h"
-#include "stats.h"
-#include "status.h"
-#include "sticker.h"
-#include "version.h"
+struct mpd_neighbor *
+mpd_recv_neighbor(struct mpd_connection *connection)
+{
+	struct mpd_neighbor *neighbor;
+	struct mpd_pair *pair;
 
-// IWYU pragma: end_exports
+	pair = mpd_recv_pair_named(connection, "neighbor");
+	if (pair == NULL)
+		return NULL;
 
-#endif
+	neighbor = mpd_neighbor_begin(pair);
+	mpd_return_pair(connection, pair);
+	if (neighbor == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return NULL;
+	}
+
+	while ((pair = mpd_recv_pair(connection)) != NULL &&
+	       mpd_neighbor_feed(neighbor, pair))
+		mpd_return_pair(connection, pair);
+
+	if (mpd_error_is_defined(&connection->error)) {
+		assert(pair == NULL);
+
+		mpd_neighbor_free(neighbor);
+		return NULL;
+	}
+
+	mpd_enqueue_pair(connection, pair);
+	return neighbor;
+}

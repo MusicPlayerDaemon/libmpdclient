@@ -126,6 +126,15 @@ global:
 	mpd_send_unmount;
 	mpd_run_unmount;
 
+	/* mpd/neighbor.h */
+	mpd_neighbor_begin;
+	mpd_neighbor_feed;
+	mpd_neighbor_free;
+	mpd_neighbor_get_uri;
+	mpd_neighbor_get_display_name;
+	mpd_send_list_neighbors;
+	mpd_recv_neighbor;
+
 	/* mpd/output.h */
 	mpd_output_begin;
 	mpd_output_feed;
