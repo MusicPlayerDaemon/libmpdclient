@@ -49,6 +49,11 @@ extern "C" {
 #endif
 
 /**
+ * Consult mpd/playlist.h for the rationale on the preference of manipulating
+ * song ids over positions in the queue.
+ */
+
+/**
  * Sends the "playlistinfo" command: list all songs in the queue
  * including meta information.
  * Use mpd_recv_entity() to receive the songs (#MPD_ENTITY_TYPE_SONG).
