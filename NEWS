@@ -1,3 +1,5 @@
+libmpdclient 2.18 (not yet released)
+
 libmpdclient 2.17 (2019/12/04)
 * search: add mpd_search_add_db_songs_to_playlist()
 * idle: support event "partition"
