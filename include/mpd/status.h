@@ -249,6 +249,9 @@ int
 mpd_status_get_next_song_id(const struct mpd_status *status);
 
 /**
+ * This function uses a deprecated feature of MPD, call
+ * mpd_status_get_elapsed_ms() instead.
+ *
  * Returns time in seconds that have elapsed in the currently playing/paused
  * song
  */
