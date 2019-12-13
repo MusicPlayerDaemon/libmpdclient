@@ -84,29 +84,56 @@ strndup(const char *s, size_t length)
 }
 #endif
 
-void
-mpd_kvlist_add(struct mpd_kvlist *l, const char *key, size_t key_length,
-	       const char *value)
+bool
+mpd_kvlist_create_item(struct mpd_kvlist_item **i, const char *key,
+		       size_t key_length, const char *value)
 {
+	struct mpd_kvlist_item *item = *i;
+
+	if (item != NULL)
+		return false;
+
+	item = malloc(sizeof(*item));
+	if (item == NULL)
+		return false;
+
+	item->key = strndup(key, key_length);
+	if (item->key == NULL) {
+		free(item);
+		return false;
+	}
+
+	item->value = strdup(value);
+	if (item->value == NULL) {
+		free(item->key);
+		free(item);
+		return false;
+	}
+
+	item->next = NULL;
+	*i = item;
+	return true;
+}
+
+bool
+mpd_kvlist_add_fn(struct mpd_kvlist *l, const char *key, size_t key_length,
+		  const char *value, struct mpd_kvlist_item *i)
+{
+	bool success;
 	assert(l != NULL);
 	assert(l->tail_r != NULL);
 	assert(key != NULL);
 	assert(value != NULL);
 
-	struct mpd_kvlist_item *i = malloc(sizeof(*i));
-	if (i == NULL)
-		return;
-
-	i->next = NULL;
-	i->key = strndup(key, key_length);
-	i->value = strdup(value);
-	if (i->key == NULL || i->value == NULL) {
-		mpd_kvlist_item_free(i);
-		return;
+	if (i == NULL) {
+		success = mpd_kvlist_create_item(&i, key, key_length, value);
+		if (!success)
+			return false;
 	}
 
 	*l->tail_r = i;
 	l->tail_r = &i->next;
+	return true;
 }
 
 const char *

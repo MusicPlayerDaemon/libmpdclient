@@ -32,21 +32,43 @@
 
 #include <mpd/output.h>
 #include <mpd/pair.h>
+#include "ioutput.h"
 #include "kvlist.h"
 
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 
-struct mpd_output {
-	unsigned id;
-	char *name;
-	char *plugin;
+static
+struct mpd_kvlist_item *
+fetch_kvlist_item(struct mpd_output *output)
+{
+	struct mpd_kvlist_item *ret = output->item_buf;
+	output->item_buf = NULL;
+	return ret;
+}
 
-	struct mpd_kvlist attributes;
+static
+bool
+handle_kvlist_add(struct mpd_output *output, const struct mpd_pair *pair,
+		  const char *eq)
+{
+	/**
+	 * Use the preallocated item to avoid triggering OOM in
+	 * kvlist. This is possible if we were called from mpd_recv_output().
+	 *
+	 * If the user decide to use mpd_recv_pair_named() directly, there is
+	 * no preallocated item to use and kvlist may silently fail.
+	 **/
+	struct mpd_kvlist_item *item = fetch_kvlist_item(output);
 
-	bool enabled;
-};
+	if (item != NULL)
+		return mpd_kvlist_add_noalloc(&output->attributes, pair->value,
+					      eq - pair->value, eq + 1, item);
+	else
+		return mpd_kvlist_add(&output->attributes, pair->value,
+				      eq - pair->value, eq + 1);
+}
 
 struct mpd_output *
 mpd_output_begin(const struct mpd_pair *pair)
@@ -66,6 +88,7 @@ mpd_output_begin(const struct mpd_pair *pair)
 
 	output->name = NULL;
 	output->plugin = NULL;
+	output->item_buf = NULL;
 	mpd_kvlist_init(&output->attributes);
 	output->enabled = false;
 
@@ -89,9 +112,8 @@ mpd_output_feed(struct mpd_output *output, const struct mpd_pair *pair)
 	} else if (strcmp(pair->name, "attribute") == 0) {
 		const char *eq = strchr(pair->value, '=');
 		if (eq != NULL && eq > pair->value)
-			mpd_kvlist_add(&output->attributes,
-				       pair->value, eq - pair->value,
-				       eq + 1);
+			/* we cannot handle OOM here */
+			(void)handle_kvlist_add(output, pair, eq);
 	}
 
 	return true;
@@ -105,6 +127,7 @@ mpd_output_free(struct mpd_output *output)
 	free(output->name);
 	free(output->plugin);
 	mpd_kvlist_deinit(&output->attributes);
+	free(output->item_buf);
 	free(output);
 }
 

@@ -32,12 +32,31 @@
 #include <mpd/response.h>
 #include "internal.h"
 #include "isend.h"
+#include "ioutput.h"
 #include "run.h"
+
+#include <stdlib.h>
+#include <string.h>
 
 bool
 mpd_send_outputs(struct mpd_connection *connection)
 {
 	return mpd_send_command(connection, "outputs", NULL);
+}
+
+static bool
+handle_kvlist_item(struct mpd_output *output, const struct mpd_pair *pair)
+{
+	bool success;
+	const char *eq = strchr(pair->value, '=');
+
+	/* no need to preallocate */
+	if (output->item_buf != NULL || eq == NULL || eq <= pair->value)
+		return true;
+
+	success = mpd_kvlist_create_item(&output->item_buf, pair->value,
+					 eq - pair->value, eq + 1);
+	return success;
 }
 
 struct mpd_output *
@@ -58,8 +77,15 @@ mpd_recv_output(struct mpd_connection *connection)
 	}
 
 	while ((pair = mpd_recv_pair(connection)) != NULL &&
-	       mpd_output_feed(output, pair))
+	       mpd_output_feed(output, pair)) {
+
+		if (!handle_kvlist_item(output, pair)) {
+			mpd_error_code(&connection->error, MPD_ERROR_OOM);
+			mpd_output_free(output);
+			return NULL;
+		}
 		mpd_return_pair(connection, pair);
+	}
 
 	if (mpd_error_is_defined(&connection->error)) {
 		assert(pair == NULL);

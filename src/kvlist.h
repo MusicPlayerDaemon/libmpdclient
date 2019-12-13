@@ -32,6 +32,7 @@
 #include <mpd/pair.h>
 #include <mpd/compiler.h>
 
+#include <stdbool.h>
 #include <stddef.h>
 
 struct mpd_kvlist {
@@ -47,9 +48,34 @@ mpd_kvlist_init(struct mpd_kvlist *l);
 void
 mpd_kvlist_deinit(struct mpd_kvlist *l);
 
-void
+bool
+mpd_kvlist_create_item(struct mpd_kvlist_item **i, const char *key,
+		       size_t key_length, const char *value);
+
+/**
+ * Do not use this function directly:
+ * 1. Call mpd_kvlist_add() if you want the function to internally allocate the
+ * kvlist item
+ * 2. Call mpd_kvlist_add_noalloc() if you already have allocated the item, and
+ * pass it via the item parameter
+ */
+bool
+mpd_kvlist_add_fn(struct mpd_kvlist *l, const char *key, size_t key_length,
+		  const char *value, struct mpd_kvlist_item *item);
+
+static inline bool
 mpd_kvlist_add(struct mpd_kvlist *l, const char *key, size_t key_length,
-	       const char *value);
+	       const char *value)
+{
+	return mpd_kvlist_add_fn(l, key, key_length, value, NULL);
+}
+
+static inline bool
+mpd_kvlist_add_noalloc(struct mpd_kvlist *l, const char *key, size_t key_length,
+		       const char *value, struct mpd_kvlist_item *item)
+{
+	return mpd_kvlist_add_fn(l, key, key_length, value, item);
+}
 
 mpd_pure
 const char *
