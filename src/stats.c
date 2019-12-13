@@ -50,17 +50,9 @@ struct mpd_stats {
 struct mpd_stats *
 mpd_stats_begin(void)
 {
-	struct mpd_stats *stats = malloc(sizeof(struct mpd_stats));
+	struct mpd_stats *stats = calloc(1, sizeof(*stats));
 	if (stats == NULL)
 		return NULL;
-
-	stats->number_of_artists = 0;
-	stats->number_of_albums = 0;
-	stats->number_of_songs = 0;
-	stats->uptime = 0;
-	stats->db_update_time = 0;
-	stats->play_time = 0;
-	stats->db_play_time = 0;
 
 	return stats;
 }
