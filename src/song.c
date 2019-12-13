@@ -122,7 +122,7 @@ mpd_song_new(const char *uri)
 	assert(uri != NULL);
 	assert(mpd_verify_uri(uri));
 
-	song = malloc(sizeof(*song));
+	song = calloc(1, sizeof(*song));
 	if (song == NULL)
 		/* out of memory */
 		return NULL;
@@ -132,24 +132,6 @@ mpd_song_new(const char *uri)
 		free(song);
 		return NULL;
 	}
-
-	for (unsigned i = 0; i < MPD_TAG_COUNT; ++i)
-		song->tags[i].value = NULL;
-
-	song->duration = 0;
-	song->duration_ms = 0;
-	song->start = 0;
-	song->end = 0;
-	song->last_modified = 0;
-	song->pos = 0;
-	song->id = 0;
-	song->prio = 0;
-
-	memset(&song->audio_format, 0, sizeof(song->audio_format));
-
-#ifndef NDEBUG
-	song->finished = false;
-#endif
 
 	return song;
 }
@@ -199,6 +181,11 @@ mpd_song_dup(const struct mpd_song *song)
 		/* out of memory */
 		return NULL;
 
+	*ret = *song;
+#ifndef NDEBUG
+	ret->finished = true;
+#endif
+	memset(&ret->audio_format, 0, sizeof(ret->audio_format));
 	for (unsigned i = 0; i < MPD_TAG_COUNT; ++i) {
 		const struct mpd_tag_value *src_tag = &song->tags[i];
 
@@ -215,19 +202,6 @@ mpd_song_dup(const struct mpd_song *song)
 			src_tag = src_tag->next;
 		} while (src_tag != NULL);
 	}
-
-	ret->duration = song->duration;
-	ret->duration_ms = song->duration_ms;
-	ret->start = song->start;
-	ret->end = song->end;
-	ret->last_modified = song->last_modified;
-	ret->pos = song->pos;
-	ret->id = song->id;
-	ret->prio = song->prio;
-
-#ifndef NDEBUG
-	ret->finished = true;
-#endif
 
 	return ret;
 }
