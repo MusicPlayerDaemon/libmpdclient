@@ -204,6 +204,8 @@ global:
 	mpd_run_repeat;
 	mpd_send_random;
 	mpd_run_random;
+	mpd_send_single_state;
+	mpd_run_single_state;
 	mpd_send_single;
 	mpd_run_single;
 	mpd_send_consume;
@@ -379,6 +381,7 @@ global:
 	mpd_status_get_volume;
 	mpd_status_get_repeat;
 	mpd_status_get_random;
+	mpd_status_get_single_state;
 	mpd_status_get_single;
 	mpd_status_get_consume;
 	mpd_status_get_queue_length;

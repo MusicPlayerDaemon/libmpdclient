@@ -268,6 +268,37 @@ mpd_run_random(struct mpd_connection *connection, bool mode)
 }
 
 bool
+mpd_send_single_state(struct mpd_connection *connection,
+		      enum mpd_single_state state)
+{
+	char state_str[16];
+
+	switch (state) {
+	case MPD_SINGLE_OFF:
+	case MPD_SINGLE_ON:
+		snprintf(state_str, sizeof(state_str), "%u",
+			 (unsigned int)state);
+		break;
+	case MPD_SINGLE_ONESHOT:
+		snprintf(state_str, sizeof(state_str), "oneshot");
+		break;
+	case MPD_SINGLE_UNKNOWN:
+		return false;
+	}
+
+	return mpd_send_command(connection, "single", state_str, NULL);
+}
+
+bool
+mpd_run_single_state(struct mpd_connection *connection,
+		      enum mpd_single_state state)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_single_state(connection, state) &&
+		mpd_response_finish(connection);
+}
+
+bool
 mpd_send_single(struct mpd_connection *connection, bool mode)
 {
 	return mpd_send_int_command(connection, "single", mode);

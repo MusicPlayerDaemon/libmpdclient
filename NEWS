@@ -1,5 +1,7 @@
 libmpdclient 2.18 (not yet released)
 * more out-of-memory checks
+* support MPD protocol 0.21
+ - "oneshot" single state
 
 libmpdclient 2.17 (2019/12/04)
 * search: add mpd_search_add_db_songs_to_playlist()
