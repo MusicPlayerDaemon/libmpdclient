@@ -400,6 +400,7 @@ global:
 	mpd_status_get_kbit_rate;
 	mpd_status_get_audio_format;
 	mpd_status_get_update_id;
+	mpd_status_get_partition;
 	mpd_status_get_error;
 
 	/* mpd/tag.h */
