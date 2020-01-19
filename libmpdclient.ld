@@ -433,6 +433,7 @@ global:
 	mpd_send_switch_partition;
 	mpd_run_switch_partition;
 	mpd_send_listpartitions;
+	mpd_recv_partition;
 
 	/* mpd/settings.h */
 	mpd_settings_new;
