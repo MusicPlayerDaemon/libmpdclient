@@ -170,6 +170,8 @@ mpd_recv_partition_pair(struct mpd_connection *connection)
  *
  * @return a mpd_partition object on success, NULL on error or
  * end-of-response
+ *
+ * @since libmpdclient 2.18
  */
 mpd_malloc
 struct mpd_partition *
