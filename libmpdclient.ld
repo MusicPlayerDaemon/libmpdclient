@@ -157,6 +157,8 @@ global:
 	mpd_run_toggle_output;
 	mpd_send_output_set;
 	mpd_run_output_set;
+	mpd_send_move_output;
+	mpd_run_move_output;
 
 	/* mpd/parser.h */
 	mpd_parser_new;
@@ -435,6 +437,8 @@ global:
 	mpd_run_switch_partition;
 	mpd_send_listpartitions;
 	mpd_recv_partition;
+	mpd_send_move_output;
+	mpd_run_move_output;
 
 	/* mpd/settings.h */
 	mpd_settings_new;
