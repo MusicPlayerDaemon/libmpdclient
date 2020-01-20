@@ -1,4 +1,4 @@
-libmpdclient 2.18 (not yet released)
+libmpdclient 2.18 (2020/01/20)
 * more out-of-memory checks
 * partition: add mpd_recv_partition()
 * support MPD protocol 0.21
