@@ -433,6 +433,8 @@ global:
 	mpd_partition_get_name;
 	mpd_send_newpartition;
 	mpd_run_newpartition;
+	mpd_send_delete_partition;
+	mpd_run_delete_partition;
 	mpd_send_switch_partition;
 	mpd_run_switch_partition;
 	mpd_send_listpartitions;
