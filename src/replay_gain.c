@@ -94,7 +94,8 @@ mpd_run_replay_gain_status(struct mpd_connection *connection)
 	if (pair != NULL) {
 		mode = mpd_parse_replay_gain_name(pair->value);
 		mpd_return_pair(connection, pair);
-	}
+	} else
+		mode = MPD_REPLAY_UNKNOWN;
 
 	if (!mpd_response_finish(connection))
 		return MPD_REPLAY_UNKNOWN;
