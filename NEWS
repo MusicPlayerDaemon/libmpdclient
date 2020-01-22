@@ -1,3 +1,5 @@
+libmpdclient 2.19 (not yet released)
+
 libmpdclient 2.18 (2020/01/20)
 * more out-of-memory checks
 * partition: add mpd_recv_partition()
