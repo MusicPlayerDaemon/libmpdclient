@@ -1,4 +1,6 @@
 libmpdclient 2.19 (not yet released)
+* support MPD protocol 0.16
+ - replay gain
 
 libmpdclient 2.18 (2020/01/20)
 * more out-of-memory checks

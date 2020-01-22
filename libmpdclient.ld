@@ -450,6 +450,13 @@ global:
 	mpd_settings_get_timeout_ms;
 	mpd_settings_get_password;
 
+	/* mpd/replay_gain.h */
+	mpd_parse_replay_gain_name;
+	mpd_send_replay_gain_status;
+	mpd_run_replay_gain_status;
+	mpd_send_replay_gain_mode;
+	mpd_run_replay_gain_mode;
+
 local:
 	*;
 };

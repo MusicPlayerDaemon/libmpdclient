@@ -68,6 +68,7 @@
 #include "playlist.h"
 #include "queue.h"
 #include "recv.h"
+#include "replay_gain.h"
 #include "response.h"
 #include "search.h"
 #include "send.h"
