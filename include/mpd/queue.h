@@ -714,6 +714,29 @@ bool
 mpd_run_prio_id(struct mpd_connection *connection, int priority,
 		unsigned id);
 
+/**
+ * Specify the portion of a song that shall be played.
+ * The song is identified by its id and cannot be the currently playing song.
+ *
+ * The start/end values are offsets in seconds (fractional seconds allowed);
+ * both are optional.
+ *
+ * @param id the id of the song (cannot be the currently playing song)
+ * @param start the offset in seconds for starting the song; the special value
+ * "0.0" makes the start of the range open
+ * @param end the offset in seconds for ending the song; the special value
+ * "0.0" makes the end of the range open
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.19, MPD 0.19
+ */
+bool
+mpd_send_range_id(struct mpd_connection *connection, unsigned id,
+		  float start, float end);
+
+bool
+mpd_run_range_id(struct mpd_connection *connection, unsigned id,
+		  float start, float end);
 #ifdef __cplusplus
 }
 #endif
