@@ -6,6 +6,8 @@ libmpdclient 2.19 (not yet released)
  - replay gain
 * support MPD protocol 0.19
  - idle events "neighbor" and "mount"
+* support MPD protocol 0.20
+ - rangeid
 * support MPD protocol 0.21
   - command "tagtypes all"
 
