@@ -728,15 +728,28 @@ mpd_run_prio_id(struct mpd_connection *connection, int priority,
  * "0.0" makes the end of the range open
  * @return true on success, false on error
  *
- * @since libmpdclient 2.19, MPD 0.19
+ * @since libmpdclient 2.19, MPD 0.20
  */
 bool
 mpd_send_range_id(struct mpd_connection *connection, unsigned id,
 		  float start, float end);
 
+/**
+ *
+ * Shortcut for mpd_send_range_id() and mpd_response_finish().
+ *
+ * @param id the id of the song (cannot be the currently playing song)
+ * @param start the offset in seconds for starting the song; the special value
+ * "0.0" makes the start of the range open
+ * @param end the offset in seconds for ending the song; the special value
+ * "0.0" makes the end of the range open
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.19, MPD 0.20
+ */
 bool
 mpd_run_range_id(struct mpd_connection *connection, unsigned id,
-		  float start, float end);
+		 float start, float end);
 #ifdef __cplusplus
 }
 #endif
