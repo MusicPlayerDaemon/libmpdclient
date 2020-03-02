@@ -722,34 +722,34 @@ mpd_run_prio_id(struct mpd_connection *connection, int priority,
  * both are optional.
  *
  * @param id the id of the song (cannot be the currently playing song)
- * @param start the offset in seconds for starting the song; the special value
- * "0.0" makes the start of the range open
- * @param end the offset in seconds for ending the song; the special value
- * "0.0" makes the end of the range open
+ * @param start_ms the offset in milliseconds for starting the song; the special
+ * value "UINT_MAX" makes the start of the range open
+ * @param end-Ms the offset in milliseconds for ending the song; the special
+ * value "UINT_MAX" makes the end of the range open
  * @return true on success, false on error
  *
  * @since libmpdclient 2.19, MPD 0.20
  */
 bool
 mpd_send_range_id(struct mpd_connection *connection, unsigned id,
-		  float start, float end);
+		  unsigned start_ms, unsigned end_ms);
 
 /**
  *
  * Shortcut for mpd_send_range_id() and mpd_response_finish().
  *
  * @param id the id of the song (cannot be the currently playing song)
- * @param start the offset in seconds for starting the song; the special value
- * "0.0" makes the start of the range open
- * @param end the offset in seconds for ending the song; the special value
- * "0.0" makes the end of the range open
+ * @param start_ms the offset in milliseconds for starting the song; the special
+ * value "UINT_MAX" makes the start of the range open
+ * @param end_ms the offset in milliseconds for ending the song; the special
+ * value "UINT_MAX" makes the end of the range open
  * @return true on success, false on error
  *
  * @since libmpdclient 2.19, MPD 0.20
  */
 bool
 mpd_run_range_id(struct mpd_connection *connection, unsigned id,
-		 float start, float end);
+		 unsigned start_ms, unsigned end_ms);
 #ifdef __cplusplus
 }
 #endif

@@ -54,17 +54,19 @@ format_range(char *buffer, size_t size, unsigned start, unsigned end)
 }
 
 static void
-format_frange(char *buffer, size_t size, float start, float end)
+format_millirange(char *buffer, size_t size,
+		  unsigned start_ms, unsigned int end_ms)
 {
-	/* the special value 0.0 means "open range" */
-	if (start == 0.0 && end == 0.0)
+	/* the special value UINT_MAX means "open range" */
+	if (start_ms == UINT_MAX && end_ms == UINT_MAX)
 		snprintf(buffer, size, ":");
-	else if (start == 0.0)
-		snprintf(buffer, size, ":%f", end);
-	else if (end == 0.0)
-		snprintf(buffer, size, "%f:", start);
+	else if (start_ms == UINT_MAX)
+		snprintf(buffer, size, ":%u.%u", end_ms / 1000, end_ms % 1000);
+	else if (end_ms == UINT_MAX)
+		snprintf(buffer, size, "%u.%u:", start_ms / 1000, end_ms % 1000);
 	else
-		snprintf(buffer, size, "%f:%f", start, end);
+		snprintf(buffer, size, "%u.%u:%u.%u", start_ms / 1000,
+			 start_ms % 1000, end_ms / 1000, end_ms % 1000);
 }
 
 /**
@@ -295,16 +297,16 @@ mpd_send_range_u_command(struct mpd_connection *connection,
 }
 
 bool
-mpd_send_u_frange_command(struct mpd_connection *connection,
+mpd_send_u_millirange_command(struct mpd_connection *connection,
 			 const char *command, unsigned arg1,
-			 float start, float end)
+			 unsigned start_ms, unsigned end_ms)
 {
-	/* <start>:<end> */
-	char range_string[FLOATLEN * 2 + 1 + 1];
+	/* <start_s>.<start_ms>:<end_s>.<end_ms> */
+	char range_string[INTLEN * 4 + 3 + 1];
 	char arg1_string[INTLEN + 1];
 
 	snprintf(arg1_string, sizeof(arg1_string), "%u", arg1);
-	format_frange(range_string, sizeof(range_string), start, end);
+	format_millirange(range_string, sizeof(range_string), start_ms, end_ms);
 	return mpd_send_command(connection, command,
 				arg1_string, range_string, NULL);
 }

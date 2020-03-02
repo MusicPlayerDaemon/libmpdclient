@@ -103,9 +103,9 @@ mpd_send_range_u_command(struct mpd_connection *connection,
 			 const char *command,
 			 unsigned start, unsigned end, unsigned arg2);
 bool
-mpd_send_u_frange_command(struct mpd_connection *connection,
-			  const char *command, unsigned arg1,
-			  float start, float end);
+mpd_send_u_millirange_command(struct mpd_connection *connection,
+			      const char *command, unsigned arg1,
+			      unsigned start_ms, unsigned end_ms);
 
 bool
 mpd_send_ll_command(struct mpd_connection *connection, const char *command,
