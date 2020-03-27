@@ -79,8 +79,16 @@ mpd_async_new(int fd)
 	async->fd = fd;
 	mpd_error_init(&async->error);
 
-	mpd_buffer_init(&async->input);
-	mpd_buffer_init(&async->output);
+	if (mpd_buffer_init(&async->input) == NULL) {
+		async->output.data = NULL;
+		mpd_async_free(async);
+		return NULL;
+	}
+
+	if (mpd_buffer_init(&async->output) == NULL) {
+		mpd_async_free(async);
+		return NULL;
+	}
 
 	return async;
 }
@@ -92,6 +100,8 @@ mpd_async_free(struct mpd_async *async)
 
 	mpd_socket_close(async->fd);
 	mpd_error_deinit(&async->error);
+	mpd_buffer_end(&async->input);
+	mpd_buffer_end(&async->output);
 	free(async);
 }
 
@@ -179,14 +189,17 @@ mpd_async_read(struct mpd_async *async)
 {
 	size_t room;
 	ssize_t nbytes;
+	const size_t min_size = 256;
 
 	assert(async != NULL);
 	assert(async->fd != MPD_INVALID_SOCKET);
 	assert(!mpd_error_is_defined(&async->error));
 
+	if (!mpd_buffer_make_room(&async->input, min_size)) {
+		mpd_error_code(&async->error, MPD_ERROR_OOM);
+		return false;
+	}
 	room = mpd_buffer_room(&async->input);
-	if (room == 0)
-		return true;
 
 	nbytes = recv(async->fd, mpd_buffer_write(&async->input), room,
 		      MSG_DONTWAIT);
@@ -276,39 +289,25 @@ mpd_async_io(struct mpd_async *async, enum mpd_async_event events)
 	return true;
 }
 
-bool
-mpd_async_send_command_v(struct mpd_async *async, const char *command,
-			 va_list args)
+static bool
+quote_vargs(struct mpd_buffer *buffer, char *start, char **end_pos,
+	    va_list args)
 {
-	size_t room, length;
-	char *dest, *end, *p;
+	char *end, *p;
 	const char *arg;
 
-	assert(async != NULL);
-	assert(command != NULL);
-
-	if (mpd_error_is_defined(&async->error))
-		return false;
-
-	room = mpd_buffer_room(&async->output);
-	length = strlen(command);
-	if (room <= length)
-		return false;
-
-	dest = mpd_buffer_write(&async->output);
 	/* -1 because we reserve space for the \n character */
-	end = dest + room - 1;
-
-	/* copy the command (no quoting, we asumme it is "clean") */
-
-	memcpy(dest, command, length);
-	p = dest + length;
+	/**
+	 * mpd_async_send_command_v() guarantees that mpd_buffer_room() has at
+	 * least 1 position available (length + 1)
+	 */
+	assert(mpd_buffer_room(buffer) >= 1);
+	end = start + mpd_buffer_room(buffer) - 1;
+	p = start;
 
 	/* now append all arguments (quoted) */
-
 	while ((arg = va_arg(args, const char *)) != NULL) {
 		/* append a space separator */
-
 		if (p >= end)
 			return false;
 
@@ -317,17 +316,57 @@ mpd_async_send_command_v(struct mpd_async *async, const char *command,
 		/* quote the argument into the destination buffer */
 
 		p = quote(p, end, arg);
-		assert(p == NULL || (p >= dest && p <= end));
+		assert(p == NULL || (p >= start && p <= end));
 		if (p == NULL)
 			return false;
 	}
 
-
 	/* append the newline to finish this command */
-
 	*p++ = '\n';
+	*end_pos = p;
+	return true;
+}
 
-	mpd_buffer_expand(&async->output, p - dest);
+bool
+mpd_async_send_command_v(struct mpd_async *async, const char *command,
+			 va_list args)
+{
+	char *end_pos = NULL, *write_p;
+	bool success = false;
+	size_t length;
+	va_list cargs;
+
+	assert(async != NULL);
+	assert(command != NULL);
+
+	if (mpd_error_is_defined(&async->error))
+		return false;
+
+	length = strlen(command);
+	/* we need a '\n' at the end */
+	if (!mpd_buffer_make_room(&async->output, length + 1)) {
+		mpd_error_code(&async->error, MPD_ERROR_OOM);
+		return false;
+	}
+
+	/* copy the command (no quoting, we assume it is "clean") */
+	memcpy(mpd_buffer_write(&async->output), command, length);
+	mpd_buffer_expand(&async->output, length);
+
+	while (!success) {
+		va_copy(cargs, args);
+		write_p = mpd_buffer_write(&async->output);
+		success = quote_vargs(&async->output, write_p, &end_pos, cargs);
+		va_end(cargs);
+		if (!success) {
+			if (!mpd_buffer_double_buffer_size(&async->output)) {
+				mpd_error_code(&async->error, MPD_ERROR_OOM);
+				return false;
+			}
+		}
+	}
+
+	mpd_buffer_expand(&async->output, end_pos - write_p);
 	return true;
 }
 
