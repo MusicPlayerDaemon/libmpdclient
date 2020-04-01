@@ -28,6 +28,7 @@ matrix:
             - meson
             - ninja
             - check
+          update: true
 
 cache:
   apt: true
