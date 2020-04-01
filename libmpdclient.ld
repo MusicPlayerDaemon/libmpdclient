@@ -26,6 +26,8 @@ global:
 	mpd_run_enable_tag_types;
 	mpd_send_clear_tag_types;
 	mpd_run_clear_tag_types;
+	mpd_send_all_tag_types;
+	mpd_run_all_tag_types;
 
 	/* mpd/connection.h */
 	mpd_connection_new;
