@@ -1,4 +1,5 @@
 libmpdclient 2.19 (not yet released)
+* fix off-by-one bug in MPD_HOST parser
 * support MPD protocol 0.16
  - replay gain
 * support MPD protocol 0.21
