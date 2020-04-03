@@ -37,7 +37,6 @@
 /**
  * A buffer which can be appended at the end, and consumed at the beginning.
  */
-#define DEFAULT_BUFFER_SIZE 4096
 struct mpd_buffer {
 	/** the next buffer position to write to */
 	unsigned write;
@@ -48,11 +47,8 @@ struct mpd_buffer {
 	/** the actual buffer */
 	unsigned char *data;
 
-	/** buffer allocated */
-	bool data_allocated;
-
-	/** size of buffer */
-	size_t data_size;
+	/** capacity of buffer */
+	size_t capacity;
 };
 
 /**
@@ -64,8 +60,7 @@ mpd_buffer_init(struct mpd_buffer *buffer)
 	buffer->read = 0;
 	buffer->write = 0;
 	buffer->data = NULL;
-	buffer->data_allocated = false;
-	buffer->data_size = DEFAULT_BUFFER_SIZE;
+	buffer->capacity = 0;
 }
 
 /**
@@ -78,15 +73,12 @@ mpd_buffer_deinit(struct mpd_buffer *buffer)
 }
 
 /**
- * Allocate the buffer area.
+ * Return the capacity of the buffer.
  */
-static inline void
-mpd_buffer_alloc(struct mpd_buffer *buffer)
+static inline size_t
+mpd_buffer_capacity(struct mpd_buffer *buffer)
 {
-	assert(!buffer->data_allocated);
-
-	buffer->data = malloc(buffer->data_size);
-	buffer->data_allocated = true;
+	return buffer->capacity;
 }
 
 /**
@@ -96,8 +88,6 @@ mpd_buffer_alloc(struct mpd_buffer *buffer)
 static inline void
 mpd_buffer_move(struct mpd_buffer *buffer)
 {
-	assert(buffer->data_allocated);
-
 	memmove(buffer->data, buffer->data + buffer->read,
 		buffer->write - buffer->read);
 
@@ -112,10 +102,10 @@ mpd_buffer_move(struct mpd_buffer *buffer)
 static inline size_t
 mpd_buffer_room(const struct mpd_buffer *buffer)
 {
-	assert(buffer->write <= buffer->data_size);
+	assert(buffer->write <= buffer->capacity);
 	assert(buffer->read <= buffer->write);
 
-	return buffer->data_size - (buffer->write - buffer->read);
+	return buffer->capacity - (buffer->write - buffer->read);
 }
 
 
@@ -137,9 +127,6 @@ mpd_buffer_write(struct mpd_buffer *buffer)
 {
 	assert(mpd_buffer_room(buffer) > 0);
 
-	if (!buffer->data_allocated)
-		mpd_buffer_alloc(buffer);
-
 	mpd_buffer_move(buffer);
 	return buffer->data + buffer->write;
 }
@@ -150,7 +137,6 @@ mpd_buffer_write(struct mpd_buffer *buffer)
 static inline void
 mpd_buffer_expand(struct mpd_buffer *buffer, size_t nbytes)
 {
-	assert(buffer->data_allocated);
 	assert(mpd_buffer_room(buffer) >= nbytes);
 
 	buffer->write += nbytes;
@@ -163,7 +149,7 @@ mpd_buffer_expand(struct mpd_buffer *buffer, size_t nbytes)
 static inline size_t
 mpd_buffer_size(const struct mpd_buffer *buffer)
 {
-	assert(buffer->write <= buffer->data_size);
+	assert(buffer->write <= buffer->capacity);
 	assert(buffer->read <= buffer->write);
 
 	return buffer->write - buffer->read;
@@ -178,9 +164,6 @@ mpd_buffer_read(struct mpd_buffer *buffer)
 {
 	assert(mpd_buffer_size(buffer) > 0);
 
-	if (!buffer->data_allocated)
-		mpd_buffer_alloc(buffer);
-
 	return buffer->data + buffer->read;
 }
 
@@ -190,50 +173,42 @@ mpd_buffer_read(struct mpd_buffer *buffer)
 static inline void
 mpd_buffer_consume(struct mpd_buffer *buffer, size_t nbytes)
 {
-	assert(buffer->data_allocated);
 	assert(nbytes <= mpd_buffer_size(buffer));
 
 	buffer->read += nbytes;
 }
 
 /**
- * Makes at least min_size bytes available for writing data.
- * In other words, mpd_buffer_room() will be >= min_size if called after this
- * function.
+ * Makes at least min_avail_len bytes available for reading/writing data.
+ * In other words, mpd_buffer_room() will be >= min_avail_len if called after
+ * this function.
  */
 static inline bool
 mpd_buffer_make_room(struct mpd_buffer *buffer, size_t min_avail_len)
 {
-	size_t newsize;
+	size_t newcap;
 
 	if (mpd_buffer_room(buffer) >= min_avail_len)
 		return true;
 
-	newsize = buffer->data_size * 2;
-	while (newsize < min_avail_len)
-		newsize *= 2;
+	if (mpd_buffer_capacity(buffer) == 0)
+		newcap = min_avail_len;
+	else {
+		newcap = buffer->capacity * 2;
+		while (newcap < min_avail_len)
+			newcap *= 2;
+	}
 
 	/* empty buffer */
-	if (!buffer->data_allocated ||
-	    mpd_buffer_room(buffer) == buffer->data_size) {
-		free(buffer->data);
-		buffer->data = malloc(newsize);
-		buffer->data_allocated = true;
+	if (mpd_buffer_room(buffer) == mpd_buffer_capacity(buffer)) {
+		mpd_buffer_deinit(buffer);
+		buffer->data = malloc(newcap);
 	} else
-		buffer->data = realloc(buffer->data, newsize);
+		buffer->data = realloc(buffer->data, newcap);
 
 	if (buffer->data != NULL)
-		buffer->data_size = newsize;
+		buffer->capacity = newcap;
 	return buffer->data != NULL;
-}
-
-/**
- * Double the buffer area.
- */
-static inline bool
-mpd_buffer_double_buffer_size(struct mpd_buffer *buffer)
-{
-	return mpd_buffer_make_room(buffer, buffer->data_size * 2);
 }
 
 #endif
