@@ -218,6 +218,7 @@ mpd_buffer_make_room(struct mpd_buffer *buffer, size_t min_avail_len)
 	    mpd_buffer_room(buffer) == buffer->data_size) {
 		free(buffer->data);
 		buffer->data = malloc(newsize);
+		buffer->data_allocated = true;
 	} else
 		buffer->data = realloc(buffer->data, newsize);
 
