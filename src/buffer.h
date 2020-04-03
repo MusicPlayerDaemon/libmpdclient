@@ -73,7 +73,7 @@ mpd_buffer_init(struct mpd_buffer *buffer)
  * Free the buffer area.
  */
 static inline void
-mpd_buffer_end(struct mpd_buffer *buffer)
+mpd_buffer_deinit(struct mpd_buffer *buffer)
 {
 	free(buffer->data);
 }
