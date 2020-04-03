@@ -63,8 +63,6 @@ mpd_buffer_init(struct mpd_buffer *buffer)
 	buffer->write = 0;
 	buffer->data_size = std_data_size;
 	buffer->data = malloc(buffer->data_size);
-	if (buffer->data != NULL)
-		memset(buffer->data, 0, buffer->data_size);
 
 	return buffer->data;
 }
@@ -196,20 +194,12 @@ mpd_buffer_make_room(struct mpd_buffer *buffer, size_t min_avail_len)
 	if (mpd_buffer_room(buffer) == buffer->data_size) {
 		free(buffer->data);
 		buffer->data = malloc(newsize);
-		if (buffer->data == NULL)
-			return false;
-		memset(buffer->data, 0, newsize);
-	} else {
+	} else
 		buffer->data = realloc(buffer->data, newsize);
-		if (buffer->data == NULL)
-			return false;
 
-		/* clear region not committed and new region */
-		memset(mpd_buffer_write(buffer), 0,
-		       newsize - (buffer->data_size - mpd_buffer_room(buffer)));
-	}
-	buffer->data_size = newsize;
-	return true;
+	if (buffer->data != NULL)
+		buffer->data_size = newsize;
+	return buffer->data != NULL;
 }
 
 /**
