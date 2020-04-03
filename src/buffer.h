@@ -48,7 +48,7 @@ struct mpd_buffer {
 	unsigned char *data;
 
 	/** size of buffer */
-	size_t data_len;
+	size_t data_size;
 };
 
 /**
@@ -57,14 +57,14 @@ struct mpd_buffer {
 static inline void *
 mpd_buffer_init(struct mpd_buffer *buffer)
 {
-	const size_t std_data_len = 4096;
+	const size_t std_data_size = 4096;
 
 	buffer->read = 0;
 	buffer->write = 0;
-	buffer->data_len = std_data_len;
-	buffer->data = malloc(buffer->data_len);
+	buffer->data_size = std_data_size;
+	buffer->data = malloc(buffer->data_size);
 	if (buffer->data != NULL)
-		memset(buffer->data, 0, buffer->data_len);
+		memset(buffer->data, 0, buffer->data_size);
 
 	return buffer->data;
 }
@@ -99,10 +99,10 @@ mpd_buffer_move(struct mpd_buffer *buffer)
 static inline size_t
 mpd_buffer_room(const struct mpd_buffer *buffer)
 {
-	assert(buffer->write <= buffer->data_len);
+	assert(buffer->write <= buffer->data_size);
 	assert(buffer->read <= buffer->write);
 
-	return buffer->data_len - (buffer->write - buffer->read);
+	return buffer->data_size - (buffer->write - buffer->read);
 }
 
 
@@ -146,7 +146,7 @@ mpd_buffer_expand(struct mpd_buffer *buffer, size_t nbytes)
 static inline size_t
 mpd_buffer_size(const struct mpd_buffer *buffer)
 {
-	assert(buffer->write <= buffer->data_len);
+	assert(buffer->write <= buffer->data_size);
 	assert(buffer->read <= buffer->write);
 
 	return buffer->write - buffer->read;
@@ -188,12 +188,12 @@ mpd_buffer_make_room(struct mpd_buffer *buffer, size_t min_avail_len)
 	if (mpd_buffer_room(buffer) >= min_avail_len)
 		return true;
 
-	newsize = buffer->data_len * 2;
+	newsize = buffer->data_size * 2;
 	while (newsize < min_avail_len)
 		newsize *= 2;
 
 	/* empty buffer */
-	if (mpd_buffer_room(buffer) == buffer->data_len) {
+	if (mpd_buffer_room(buffer) == buffer->data_size) {
 		free(buffer->data);
 		buffer->data = malloc(newsize);
 		if (buffer->data == NULL)
@@ -206,9 +206,9 @@ mpd_buffer_make_room(struct mpd_buffer *buffer, size_t min_avail_len)
 
 		/* clear region not committed and new region */
 		memset(mpd_buffer_write(buffer), 0,
-		       newsize - (buffer->data_len - mpd_buffer_room(buffer)));
+		       newsize - (buffer->data_size - mpd_buffer_room(buffer)));
 	}
-	buffer->data_len = newsize;
+	buffer->data_size = newsize;
 	return true;
 }
 
@@ -218,7 +218,7 @@ mpd_buffer_make_room(struct mpd_buffer *buffer, size_t min_avail_len)
 static inline bool
 mpd_buffer_double_buffer_size(struct mpd_buffer *buffer)
 {
-	return mpd_buffer_make_room(buffer, buffer->data_len * 2);
+	return mpd_buffer_make_room(buffer, buffer->data_size * 2);
 }
 
 #endif
