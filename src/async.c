@@ -100,8 +100,8 @@ mpd_async_free(struct mpd_async *async)
 
 	mpd_socket_close(async->fd);
 	mpd_error_deinit(&async->error);
-	mpd_buffer_end(&async->input);
-	mpd_buffer_end(&async->output);
+	mpd_buffer_deinit(&async->input);
+	mpd_buffer_deinit(&async->output);
 	free(async);
 }
 
