@@ -37,6 +37,7 @@
 /**
  * A buffer which can be appended at the end, and consumed at the beginning.
  */
+#define DEFAULT_BUFFER_SIZE 4096
 struct mpd_buffer {
 	/** the next buffer position to write to */
 	unsigned write;
@@ -47,6 +48,9 @@ struct mpd_buffer {
 	/** the actual buffer */
 	unsigned char *data;
 
+	/** buffer allocated */
+	bool data_allocated;
+
 	/** size of buffer */
 	size_t data_size;
 };
@@ -54,17 +58,14 @@ struct mpd_buffer {
 /**
  * Initialize an empty buffer.
  */
-static inline void *
+static inline void
 mpd_buffer_init(struct mpd_buffer *buffer)
 {
-	const size_t std_data_size = 4096;
-
 	buffer->read = 0;
 	buffer->write = 0;
-	buffer->data_size = std_data_size;
-	buffer->data = malloc(buffer->data_size);
-
-	return buffer->data;
+	buffer->data = NULL;
+	buffer->data_allocated = false;
+	buffer->data_size = DEFAULT_BUFFER_SIZE;
 }
 
 /**
@@ -77,12 +78,26 @@ mpd_buffer_deinit(struct mpd_buffer *buffer)
 }
 
 /**
+ * Allocate the buffer area.
+ */
+static inline void
+mpd_buffer_alloc(struct mpd_buffer *buffer)
+{
+	assert(!buffer->data_allocated);
+
+	buffer->data = malloc(buffer->data_size);
+	buffer->data_allocated = true;
+}
+
+/**
  * Move the start of the valid data to the beginning of the allocated
  * buffer.
  */
 static inline void
 mpd_buffer_move(struct mpd_buffer *buffer)
 {
+	assert(buffer->data_allocated);
+
 	memmove(buffer->data, buffer->data + buffer->read,
 		buffer->write - buffer->read);
 
@@ -122,6 +137,9 @@ mpd_buffer_write(struct mpd_buffer *buffer)
 {
 	assert(mpd_buffer_room(buffer) > 0);
 
+	if (!buffer->data_allocated)
+		mpd_buffer_alloc(buffer);
+
 	mpd_buffer_move(buffer);
 	return buffer->data + buffer->write;
 }
@@ -132,6 +150,7 @@ mpd_buffer_write(struct mpd_buffer *buffer)
 static inline void
 mpd_buffer_expand(struct mpd_buffer *buffer, size_t nbytes)
 {
+	assert(buffer->data_allocated);
 	assert(mpd_buffer_room(buffer) >= nbytes);
 
 	buffer->write += nbytes;
@@ -159,6 +178,9 @@ mpd_buffer_read(struct mpd_buffer *buffer)
 {
 	assert(mpd_buffer_size(buffer) > 0);
 
+	if (!buffer->data_allocated)
+		mpd_buffer_alloc(buffer);
+
 	return buffer->data + buffer->read;
 }
 
@@ -168,6 +190,7 @@ mpd_buffer_read(struct mpd_buffer *buffer)
 static inline void
 mpd_buffer_consume(struct mpd_buffer *buffer, size_t nbytes)
 {
+	assert(buffer->data_allocated);
 	assert(nbytes <= mpd_buffer_size(buffer));
 
 	buffer->read += nbytes;
@@ -191,7 +214,8 @@ mpd_buffer_make_room(struct mpd_buffer *buffer, size_t min_avail_len)
 		newsize *= 2;
 
 	/* empty buffer */
-	if (mpd_buffer_room(buffer) == buffer->data_size) {
+	if (!buffer->data_allocated ||
+	    mpd_buffer_room(buffer) == buffer->data_size) {
 		free(buffer->data);
 		buffer->data = malloc(newsize);
 	} else

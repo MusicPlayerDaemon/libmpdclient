@@ -78,17 +78,8 @@ mpd_async_new(int fd)
 
 	async->fd = fd;
 	mpd_error_init(&async->error);
-
-	if (mpd_buffer_init(&async->input) == NULL) {
-		async->output.data = NULL;
-		mpd_async_free(async);
-		return NULL;
-	}
-
-	if (mpd_buffer_init(&async->output) == NULL) {
-		mpd_async_free(async);
-		return NULL;
-	}
+	mpd_buffer_init(&async->input);
+	mpd_buffer_init(&async->output);
 
 	return async;
 }
@@ -189,6 +180,7 @@ mpd_async_read(struct mpd_async *async)
 {
 	size_t room;
 	ssize_t nbytes;
+	char *write_p;
 	const size_t min_size = 256;
 
 	assert(async != NULL);
@@ -197,12 +189,20 @@ mpd_async_read(struct mpd_async *async)
 
 	if (!mpd_buffer_make_room(&async->input, min_size)) {
 		mpd_error_code(&async->error, MPD_ERROR_OOM);
+		mpd_error_message(&async->error,
+				  "Out of memory for input buffer");
 		return false;
 	}
 	room = mpd_buffer_room(&async->input);
 
-	nbytes = recv(async->fd, mpd_buffer_write(&async->input), room,
-		      MSG_DONTWAIT);
+	write_p = mpd_buffer_write(&async->input);
+	if (write_p == NULL) {
+		mpd_error_code(&async->error, MPD_ERROR_OOM);
+		mpd_error_message(&async->error,
+				  "Out of memory for input buffer");
+		return false;
+	}
+	nbytes = recv(async->fd, write_p, room, MSG_DONTWAIT);
 	if (nbytes < 0) {
 		/* I/O error */
 
@@ -229,6 +229,7 @@ mpd_async_write(struct mpd_async *async)
 {
 	size_t size;
 	ssize_t nbytes;
+	char *dst;
 
 	assert(async != NULL);
 	assert(async->fd != MPD_INVALID_SOCKET);
@@ -238,8 +239,14 @@ mpd_async_write(struct mpd_async *async)
 	if (size == 0)
 		return true;
 
-	nbytes = send(async->fd, mpd_buffer_read(&async->output), size,
-		      MSG_DONTWAIT);
+	dst = mpd_buffer_read(&async->output);
+	if (dst == NULL) {
+		mpd_error_code(&async->error, MPD_ERROR_OOM);
+		mpd_error_message(&async->error,
+				  "Out of memory for output buffer");
+		return NULL;
+	}
+	nbytes = send(async->fd, dst, size, MSG_DONTWAIT);
 	if (nbytes < 0) {
 		/* I/O error */
 
@@ -338,6 +345,7 @@ bool
 mpd_async_send_command_v(struct mpd_async *async, const char *command,
 			 va_list args)
 {
+	const char *error_msg = "Out of memory for output buffer";
 	char *end_pos = NULL, *write_p;
 	bool success = false;
 	size_t length;
@@ -353,11 +361,18 @@ mpd_async_send_command_v(struct mpd_async *async, const char *command,
 	/* we need a '\n' at the end */
 	if (!mpd_buffer_make_room(&async->output, length + 1)) {
 		mpd_error_code(&async->error, MPD_ERROR_OOM);
+		mpd_error_message(&async->error, error_msg);
 		return false;
 	}
 
 	/* copy the command (no quoting, we assume it is "clean") */
-	memcpy(mpd_buffer_write(&async->output), command, length);
+	write_p = mpd_buffer_write(&async->output);
+	if (write_p == NULL) {
+		mpd_error_code(&async->error, MPD_ERROR_OOM);
+		mpd_error_message(&async->error, error_msg);
+		return NULL;
+	}
+	memcpy(write_p, command, length);
 	mpd_buffer_expand(&async->output, length);
 
 	while (!success) {
@@ -368,6 +383,7 @@ mpd_async_send_command_v(struct mpd_async *async, const char *command,
 		if (!success) {
 			if (!mpd_buffer_double_buffer_size(&async->output)) {
 				mpd_error_code(&async->error, MPD_ERROR_OOM);
+				mpd_error_message(&async->error, error_msg);
 				return false;
 			}
 		}
@@ -406,7 +422,12 @@ mpd_async_recv_line(struct mpd_async *async)
 		return NULL;
 
 	src = mpd_buffer_read(&async->input);
-	assert(src != NULL);
+	if (src == NULL) {
+		mpd_error_code(&async->error, MPD_ERROR_OOM);
+		mpd_error_message(&async->error,
+				  "Out of memory for input buffer");
+		return NULL;
+	}
 	newline = memchr(src, '\n', size);
 	if (newline == NULL) {
 		/* line is not finished yet */
@@ -430,14 +451,23 @@ mpd_async_recv_line(struct mpd_async *async)
 size_t
 mpd_async_recv_raw(struct mpd_async *async, void *dest, size_t length)
 {
+	char *src;
 	size_t max_size = mpd_buffer_size(&async->input);
+
 	if (max_size == 0)
 		return 0;
 
 	if (length > max_size)
 		length = max_size;
 
-	memcpy(dest, mpd_buffer_read(&async->input), length);
+	src = mpd_buffer_read(&async->input);
+	if (src == NULL) {
+		mpd_error_code(&async->error, MPD_ERROR_OOM);
+		mpd_error_message(&async->error,
+				  "Out of memory for input buffer");
+		return 0;
+	}
+	memcpy(dest, src, length);
 	mpd_buffer_consume(&async->input, length);
 	return length;
 }
