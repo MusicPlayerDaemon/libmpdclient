@@ -116,15 +116,18 @@ mpd_sync_send_command_v(struct mpd_async *async, const struct timeval *tv0,
 		success = mpd_async_send_command_v(async, command, copy);
 		va_end(copy);
 
-		/* no characters were written to async buffer */
+		if (success)
+			return true;
+
+		/* no characters were written to async buffer
+		 * and no space will be made available with mpd_sync_io()
+		 * hence we do not have enough space */
 		if ((mpd_async_events(async) & MPD_ASYNC_EVENT_WRITE) == 0) {
 			(void)mpd_async_set_error(async, MPD_ERROR_OOM,
 					"Not enough buffer space for message");
 			return false;
 		}
 
-		if (success)
-			return true;
 
 		if (!mpd_sync_io(async, tvp))
 			return false;
