@@ -289,6 +289,14 @@ mpd_async_io(struct mpd_async *async, enum mpd_async_event events)
 	return true;
 }
 
+/* Insert the argument list args into buffer starting from start up to the
+ * available buffer space. The inserted arguments are quoted, and special
+ * characters are properly escaped. Because of these operations, the length to
+ * be written is only known after the fact.
+ *
+ * returns false if the current space available in buffer is insufficient or
+ * true otherwise.
+ */
 static bool
 quote_vargs(struct mpd_buffer *buffer, char *start, char **end_pos,
 	    va_list args)
@@ -297,8 +305,7 @@ quote_vargs(struct mpd_buffer *buffer, char *start, char **end_pos,
 	const char *arg;
 
 	/* -1 because we reserve space for the \n character */
-	/**
-	 * mpd_async_send_command_v() guarantees that mpd_buffer_room() has at
+	/* mpd_async_send_command_v() guarantees that mpd_buffer_room() has at
 	 * least 1 position available (length + 1)
 	 */
 	assert(mpd_buffer_room(buffer) >= 1);
