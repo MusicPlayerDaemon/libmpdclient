@@ -302,8 +302,9 @@ mpd_connection_cmp_server_version(const struct mpd_connection *connection,
 			     (v[1] > minor || (v[1] == minor &&
 					       v[2] > patch))))
 		return 1;
-	else if (v[0] == major && v[1] == minor && v[2] == patch)
+
+	if (v[0] == major && v[1] == minor && v[2] == patch)
 		return 0;
-	else
-		return -1;
+
+	return -1;
 }

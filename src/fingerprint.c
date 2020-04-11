@@ -51,8 +51,8 @@ mpd_parse_fingerprint_type(const char *name)
 {
 	if (strcmp(name, "chromaprint") == 0)
 		return MPD_FINGERPRINT_TYPE_CHROMAPRINT;
-	else
-		return MPD_FINGERPRINT_TYPE_UNKNOWN;
+
+	return MPD_FINGERPRINT_TYPE_UNKNOWN;
 }
 
 const char *

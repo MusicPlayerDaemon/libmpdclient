@@ -91,8 +91,8 @@ mpd_sync_io(struct mpd_async *async, struct timeval *tv)
 
 	if (events)
 		return mpd_async_io(async, events);
-	else
-		return false;
+
+	return false;
 }
 
 bool

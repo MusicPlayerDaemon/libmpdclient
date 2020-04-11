@@ -45,14 +45,14 @@ mpd_parse_replay_gain_name(const char *name)
 {
 	if (strcmp(name, "off") == 0)
 		return MPD_REPLAY_OFF;
-	else if (strcmp(name, "track") == 0)
+	if (strcmp(name, "track") == 0)
 		return MPD_REPLAY_TRACK;
-	else if (strcmp(name, "album") == 0)
+	if (strcmp(name, "album") == 0)
 		return MPD_REPLAY_ALBUM;
-	else if (strcmp(name, "auto") == 0)
+	if (strcmp(name, "auto") == 0)
 		return MPD_REPLAY_AUTO;
-	else
-		return MPD_REPLAY_UNKNOWN;
+
+	return MPD_REPLAY_UNKNOWN;
 }
 
 bool

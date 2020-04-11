@@ -190,12 +190,12 @@ parse_mpd_state(const char *p)
 {
 	if (strcmp(p, "play") == 0)
 		return MPD_STATE_PLAY;
-	else if (strcmp(p, "stop") == 0)
+	if (strcmp(p, "stop") == 0)
 		return MPD_STATE_STOP;
-	else if (strcmp(p, "pause") == 0)
+	if (strcmp(p, "pause") == 0)
 		return MPD_STATE_PAUSE;
-	else
-		return MPD_STATE_UNKNOWN;
+
+	return MPD_STATE_UNKNOWN;
 }
 
 static enum mpd_single_state
@@ -203,12 +203,12 @@ parse_mpd_single_state(const char *p)
 {
 	if (strcmp(p, "0") == 0)
 		return MPD_SINGLE_OFF;
-	else if (strcmp(p, "1") == 0)
+	if (strcmp(p, "1") == 0)
 		return MPD_SINGLE_ON;
-	else if (strcmp(p, "oneshot") == 0)
+	if (strcmp(p, "oneshot") == 0)
 		return MPD_SINGLE_ONESHOT;
-	else
-		return MPD_SINGLE_UNKNOWN;
+
+	return MPD_SINGLE_UNKNOWN;
 }
 
 void

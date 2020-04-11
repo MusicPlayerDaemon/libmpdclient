@@ -97,10 +97,15 @@ mpd_parser_feed(struct mpd_parser *parser, char *line)
 	if (strcmp(line, "OK") == 0) {
 		parser->u.discrete = false;
 		return set_result(parser, MPD_PARSER_SUCCESS);
-	} else if (strcmp(line, "list_OK") == 0) {
+	}
+
+	if (strcmp(line, "list_OK") == 0) {
 		parser->u.discrete = true;
 		return set_result(parser, MPD_PARSER_SUCCESS);
-	} else if (memcmp(line, "ACK", 3) == 0) {
+
+	}
+
+	if (memcmp(line, "ACK", 3) == 0) {
 		char *p, *q;
 
 		parser->u.error.server = MPD_SERVER_ERROR_UNK;
@@ -140,22 +145,22 @@ mpd_parser_feed(struct mpd_parser *parser, char *line)
 			parser->u.error.message = p;
 
 		return set_result(parser, MPD_PARSER_ERROR);
-	} else {
-		/* so this must be a name-value pair */
-
-		char *p;
-
-		p = strchr(line, ':');
-		if (p == NULL || p[1] != ' ')
-			return set_result(parser, MPD_PARSER_MALFORMED);
-
-		*p = 0;
-
-		parser->u.pair.name = line;
-		parser->u.pair.value = p + 2;
-
-		return set_result(parser, MPD_PARSER_PAIR);
 	}
+
+	/* so this must be a name-value pair */
+
+	char *p;
+
+	p = strchr(line, ':');
+	if (p == NULL || p[1] != ' ')
+		return set_result(parser, MPD_PARSER_MALFORMED);
+
+	*p = 0;
+
+	parser->u.pair.name = line;
+	parser->u.pair.value = p + 2;
+
+	return set_result(parser, MPD_PARSER_PAIR);
 }
 
 bool
