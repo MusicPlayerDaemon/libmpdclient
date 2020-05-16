@@ -32,10 +32,10 @@
 #include <assert.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 /**
- * A fixed 4kB buffer which can be appended at the end, and consumed
- * at the beginning.
+ * A buffer which can be appended at the end, and consumed at the beginning.
  */
 struct mpd_buffer {
 	/** the next buffer position to write to */
@@ -45,7 +45,10 @@ struct mpd_buffer {
 	unsigned read;
 
 	/** the actual buffer */
-	unsigned char data[4096];
+	unsigned char *data;
+
+	/** capacity of buffer */
+	size_t capacity;
 };
 
 /**
@@ -56,6 +59,26 @@ mpd_buffer_init(struct mpd_buffer *buffer)
 {
 	buffer->read = 0;
 	buffer->write = 0;
+	buffer->data = NULL;
+	buffer->capacity = 0;
+}
+
+/**
+ * Free the buffer area.
+ */
+static inline void
+mpd_buffer_deinit(struct mpd_buffer *buffer)
+{
+	free(buffer->data);
+}
+
+/**
+ * Return the capacity of the buffer.
+ */
+static inline size_t
+mpd_buffer_capacity(struct mpd_buffer *buffer)
+{
+	return buffer->capacity;
 }
 
 /**
@@ -79,11 +102,12 @@ mpd_buffer_move(struct mpd_buffer *buffer)
 static inline size_t
 mpd_buffer_room(const struct mpd_buffer *buffer)
 {
-	assert(buffer->write <= sizeof(buffer->data));
+	assert(buffer->write <= buffer->capacity);
 	assert(buffer->read <= buffer->write);
 
-	return sizeof(buffer->data) - (buffer->write - buffer->read);
+	return buffer->capacity - (buffer->write - buffer->read);
 }
+
 
 /**
  * Checks if the buffer is full, i.e. nothing can be written.
@@ -125,7 +149,7 @@ mpd_buffer_expand(struct mpd_buffer *buffer, size_t nbytes)
 static inline size_t
 mpd_buffer_size(const struct mpd_buffer *buffer)
 {
-	assert(buffer->write <= sizeof(buffer->data));
+	assert(buffer->write <= buffer->capacity);
 	assert(buffer->read <= buffer->write);
 
 	return buffer->write - buffer->read;
@@ -152,6 +176,39 @@ mpd_buffer_consume(struct mpd_buffer *buffer, size_t nbytes)
 	assert(nbytes <= mpd_buffer_size(buffer));
 
 	buffer->read += nbytes;
+}
+
+/**
+ * Makes at least min_avail_len bytes available for reading/writing data.
+ * In other words, mpd_buffer_room() will be >= min_avail_len if called after
+ * this function.
+ */
+static inline bool
+mpd_buffer_make_room(struct mpd_buffer *buffer, size_t min_avail_len)
+{
+	size_t newcap;
+
+	if (mpd_buffer_room(buffer) >= min_avail_len)
+		return true;
+
+	if (mpd_buffer_capacity(buffer) == 0)
+		newcap = min_avail_len;
+	else {
+		newcap = buffer->capacity * 2;
+		while (newcap < min_avail_len)
+			newcap *= 2;
+	}
+
+	/* empty buffer */
+	if (mpd_buffer_room(buffer) == mpd_buffer_capacity(buffer)) {
+		mpd_buffer_deinit(buffer);
+		buffer->data = malloc(newcap);
+	} else
+		buffer->data = realloc(buffer->data, newcap);
+
+	if (buffer->data != NULL)
+		buffer->capacity = newcap;
+	return buffer->data != NULL;
 }
 
 #endif

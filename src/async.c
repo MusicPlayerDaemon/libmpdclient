@@ -54,6 +54,10 @@ typedef SSIZE_T ssize_t;
 #define MSG_DONTWAIT 0
 #endif
 
+/* minimum buffer space available to initialize input data */
+#define ASYNC_BUFFER_INIT_SIZE 4096
+/* minimum buffer space available to receive input data */
+#define ASYNC_BUFFER_MIN_SIZE 256
 struct mpd_async {
 	mpd_socket_t fd;
 
@@ -77,7 +81,6 @@ mpd_async_new(int fd)
 
 	async->fd = fd;
 	mpd_error_init(&async->error);
-
 	mpd_buffer_init(&async->input);
 	mpd_buffer_init(&async->output);
 
@@ -91,6 +94,8 @@ mpd_async_free(struct mpd_async *async)
 
 	mpd_socket_close(async->fd);
 	mpd_error_deinit(&async->error);
+	mpd_buffer_deinit(&async->input);
+	mpd_buffer_deinit(&async->output);
 	free(async);
 }
 
@@ -176,19 +181,22 @@ mpd_async_events(const struct mpd_async *async)
 static bool
 mpd_async_read(struct mpd_async *async)
 {
-	size_t room;
 	ssize_t nbytes;
 
 	assert(async != NULL);
 	assert(async->fd != MPD_INVALID_SOCKET);
 	assert(!mpd_error_is_defined(&async->error));
 
-	room = mpd_buffer_room(&async->input);
-	if (room == 0)
-		return true;
+	/* make at least ASYNC_BUFFER_MIN_SIZE available for reading */
+	if (!mpd_buffer_make_room(&async->input, ASYNC_BUFFER_MIN_SIZE)) {
+		mpd_error_code(&async->error, MPD_ERROR_OOM);
+		mpd_error_message(&async->error,
+				  "Out of memory for input buffer");
+		return false;
+	}
 
-	nbytes = recv(async->fd, mpd_buffer_write(&async->input), room,
-		      MSG_DONTWAIT);
+	nbytes = recv(async->fd, mpd_buffer_write(&async->input),
+		      mpd_buffer_room(&async->input), MSG_DONTWAIT);
 	if (nbytes < 0) {
 		/* I/O error */
 
@@ -275,39 +283,32 @@ mpd_async_io(struct mpd_async *async, enum mpd_async_event events)
 	return true;
 }
 
-bool
-mpd_async_send_command_v(struct mpd_async *async, const char *command,
-			 va_list args)
+/* Insert the argument list args into buffer starting from start up to the
+ * available buffer space. The inserted arguments are quoted, and special
+ * characters are properly escaped. Because of these operations, the length to
+ * be written is only known after the fact.
+ *
+ * returns false if the current space available in buffer is insufficient or
+ * true otherwise.
+ */
+static bool
+quote_vargs(struct mpd_buffer *buffer, char *start, char **end_pos,
+	    va_list args)
 {
-	size_t room, length;
-	char *dest, *end, *p;
+	char *end, *p;
 	const char *arg;
 
-	assert(async != NULL);
-	assert(command != NULL);
-
-	if (mpd_error_is_defined(&async->error))
-		return false;
-
-	room = mpd_buffer_room(&async->output);
-	length = strlen(command);
-	if (room <= length)
-		return false;
-
-	dest = mpd_buffer_write(&async->output);
 	/* -1 because we reserve space for the \n character */
-	end = dest + room - 1;
-
-	/* copy the command (no quoting, we asumme it is "clean") */
-
-	memcpy(dest, command, length);
-	p = dest + length;
+	/* mpd_async_send_command_v() guarantees that mpd_buffer_room() has at
+	 * least 1 position available (length + 1)
+	 */
+	assert(mpd_buffer_room(buffer) >= 1);
+	end = start + mpd_buffer_room(buffer) - 1;
+	p = start;
 
 	/* now append all arguments (quoted) */
-
 	while ((arg = va_arg(args, const char *)) != NULL) {
 		/* append a space separator */
-
 		if (p >= end)
 			return false;
 
@@ -316,17 +317,61 @@ mpd_async_send_command_v(struct mpd_async *async, const char *command,
 		/* quote the argument into the destination buffer */
 
 		p = quote(p, end, arg);
-		assert(p == NULL || (p >= dest && p <= end));
+		assert(p == NULL || (p >= start && p <= end));
 		if (p == NULL)
 			return false;
 	}
 
-
 	/* append the newline to finish this command */
-
 	*p++ = '\n';
+	*end_pos = p;
+	return true;
+}
 
-	mpd_buffer_expand(&async->output, p - dest);
+bool
+mpd_async_send_command_v(struct mpd_async *async, const char *command,
+			 va_list args)
+{
+	const char *error_msg = "Out of memory for output buffer";
+	char *end_pos = NULL, *write_p;
+	bool success = false;
+	size_t length, newcap;
+	va_list cargs;
+
+	assert(async != NULL);
+	assert(command != NULL);
+
+	if (mpd_error_is_defined(&async->error))
+		return false;
+
+	length = strlen(command);
+	/* we need a '\n' at the end */
+	if (!mpd_buffer_make_room(&async->output, length + 1)) {
+		mpd_error_code(&async->error, MPD_ERROR_OOM);
+		mpd_error_message(&async->error, error_msg);
+		return false;
+	}
+
+	/* copy the command (no quoting, we assume it is "clean") */
+	memcpy(mpd_buffer_write(&async->output), command, length);
+	mpd_buffer_expand(&async->output, length);
+
+	while (!success) {
+		va_copy(cargs, args);
+		write_p = mpd_buffer_write(&async->output);
+		success = quote_vargs(&async->output, write_p, &end_pos, cargs);
+		va_end(cargs);
+		if (!success) {
+			newcap = mpd_buffer_capacity(&async->output) * 2;
+			if (!mpd_buffer_make_room(&async->output, newcap)) {
+				mpd_error_code(&async->error, MPD_ERROR_OOM);
+				mpd_error_message(&async->error, error_msg);
+				return false;
+			}
+		}
+	}
+
+	mpd_buffer_expand(&async->output, end_pos - write_p);
 	return true;
 }
 
@@ -346,6 +391,22 @@ mpd_async_send_command(struct mpd_async *async, const char *command, ...)
 	return success;
 }
 
+/* Initialize the buffer if necessary
+ * Set the error code and message in case of error in mpd_buffer_make_room()
+ */
+static bool
+mpd_async_init_buffer(struct mpd_buffer *buffer,
+			    struct mpd_error_info *error)
+{
+	if (mpd_buffer_capacity(buffer) == 0 &&
+	    !mpd_buffer_make_room(buffer, ASYNC_BUFFER_INIT_SIZE)) {
+		mpd_error_code(error, MPD_ERROR_OOM);
+		mpd_error_message(error, "Out of memory for buffer");
+		return false;
+	} else
+		return true;
+}
+
 char *
 mpd_async_recv_line(struct mpd_async *async)
 {
@@ -354,12 +415,14 @@ mpd_async_recv_line(struct mpd_async *async)
 
 	assert(async != NULL);
 
+	if (!mpd_async_init_buffer(&async->input, &async->error))
+		return NULL;
+
 	size = mpd_buffer_size(&async->input);
 	if (size == 0)
 		return NULL;
 
 	src = mpd_buffer_read(&async->input);
-	assert(src != NULL);
 	newline = memchr(src, '\n', size);
 	if (newline == NULL) {
 		/* line is not finished yet */
@@ -370,7 +433,6 @@ mpd_async_recv_line(struct mpd_async *async)
 			mpd_error_message(&async->error,
 					  "Response line too large");
 		}
-
 		return NULL;
 	}
 
@@ -384,6 +446,10 @@ size_t
 mpd_async_recv_raw(struct mpd_async *async, void *dest, size_t length)
 {
 	size_t max_size = mpd_buffer_size(&async->input);
+
+	if (!mpd_async_init_buffer(&async->input, &async->error))
+		return 0;
+
 	if (max_size == 0)
 		return 0;
 
