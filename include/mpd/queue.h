@@ -222,7 +222,7 @@ mpd_send_add(struct mpd_connection *connection, const char *file);
  * Shortcut for mpd_send_add() and mpd_response_finish().
  *
  * @param connection the connection to MPD
- * @param file URI of a song or directory (added recursively)
+ * @param uri URI of a song or directory (added recursively)
  * @return true on success, false on error
  */
 bool

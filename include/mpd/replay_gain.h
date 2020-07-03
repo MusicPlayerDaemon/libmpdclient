@@ -135,7 +135,7 @@ mpd_send_replay_gain_mode(struct mpd_connection *connection,
  * Shortcut for mpd_send_replay_gain_mode() and mpd_response_finish().
  *
  * @param connection the connection to MPD
- * @mode mode the desired replay gain mode
+ * @param mode mode the desired replay gain mode
  * @return true on success, false on error
  *
  * @since MPD 0.16, libmpdclient 2.19.

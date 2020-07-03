@@ -130,7 +130,7 @@ mpd_run_play_pos(struct mpd_connection *connection, unsigned song_pos);
  * Starts playing the specified song from the beginning.
  *
  * @param connection the connection to MPD
- * @param id the id of the song
+ * @param song_id the id of the song
  * @return true on success, false on error
  */
 bool
@@ -270,7 +270,7 @@ mpd_run_seek_pos(struct mpd_connection *connection,
  * Seeks to the position t (in seconds) of song id song_id.
  *
  * @param connection the connection to MPD
- * @param id the id of the song
+ * @param song_id the id of the song
  * @param t the position within the song, in seconds
  * @return true on success, false on error
  */
