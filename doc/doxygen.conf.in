@@ -35,6 +35,7 @@ WARN_NO_PARAMDOC = NO
 
 INPUT = @abs_top_srcdir@/include/mpd
 FILE_PATTERNS = *.h
+EXCLUDE_PATTERNS = compiler.h
 
 #---------------------------------------------------------------------------
 # configuration options related to source browsing
