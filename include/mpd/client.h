@@ -29,7 +29,8 @@
 /**
  * @mainpage
  *
- * This is a client library for the Music Player Daemon, written in C.
+ * This is a client library for the [Music Player
+ * Daemon](https://www.musicpd.org/), written in C.
  *
  * You can choose one of several APIs, depending on your requirements:
  *
