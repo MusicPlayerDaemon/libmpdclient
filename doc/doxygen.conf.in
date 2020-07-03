@@ -95,7 +95,10 @@ GENERATE_PERLMOD = NO
 # Configuration options related to the preprocessor
 #---------------------------------------------------------------------------
 
-ENABLE_PREPROCESSING = NO
+ENABLE_PREPROCESSING = YES
+MACRO_EXPANSION = YES
+EXPAND_ONLY_PREDEF = YES
+PREDEFINED = mpd_pure= mpd_const= mpd_malloc=
 
 #---------------------------------------------------------------------------
 # Configuration options related to the dot tool
