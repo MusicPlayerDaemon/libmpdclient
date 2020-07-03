@@ -117,6 +117,14 @@ START_TEST(test_queue_commands)
 	ck_assert_str_eq(test_capture_receive(&capture), "cleartagid \"42\"\n");
 	abort_command(&capture, c);
 
+	ck_assert(mpd_send_range_id(c, 42, 0, 666));
+	ck_assert_str_eq(test_capture_receive(&capture), "rangeid \"42\" \"0.000:666.000\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_range_id(c, 42, 6, -1));
+	ck_assert_str_eq(test_capture_receive(&capture), "rangeid \"42\" \"6.000:\"\n");
+	abort_command(&capture, c);
+
 	mpd_connection_free(c);
 	test_capture_deinit(&capture);
 }
