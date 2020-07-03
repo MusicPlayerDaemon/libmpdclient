@@ -455,6 +455,7 @@ global:
 
 	/* mpd/replay_gain.h */
 	mpd_parse_replay_gain_name;
+	mpd_lookup_replay_gain_mode;
 	mpd_send_replay_gain_status;
 	mpd_run_replay_gain_status;
 	mpd_send_replay_gain_mode;
