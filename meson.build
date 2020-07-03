@@ -1,6 +1,7 @@
 project('libmpdclient', 'c', version: '2.19',
   default_options: [
     'c_std=c99',
+    'warning_level=3',
   ],
   license: 'BSD',
 )
