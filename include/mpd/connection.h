@@ -52,7 +52,26 @@ struct mpd_async;
  *
  * This opaque object represents a connection to a MPD server.  Call
  * mpd_connection_new() to create a new instance.  To free an
- * instance, call mpd_connection_free().
+ * instance, call mpd_connection_free().  Example:
+ *
+ *     struct mpd_connection *conn = mpd_connection_new(NULL, 0, 0);
+ *
+ *     // error handling
+ *     if (conn == NULL) {
+ *         fprintf(stderr, "Out of memory\n");
+ *         return;
+ *     }
+ *     if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
+ *         fprintf(stderr, "%s\n", mpd_connection_get_error_message(c));
+ *         mpd_connection_free(c);
+ *         return;
+ *     }
+ *
+ *     // we can now use the connection
+ *     mpd_run_next(conn);
+ *
+ *     // close the connection and free memory
+ *     mpd_connection_free(conn);
  *
  * Error handling: most functions return a `bool` indicating success
  * or failure.  In this case, you may query the nature of the error
@@ -68,6 +87,9 @@ struct mpd_async;
  * Some functions like mpd_recv_pair() cannot differentiate between
  * "end of response" and "error".  If this function returns `NULL`, you
  * have to check mpd_connection_get_error().
+ *
+ * To integrate this object in a non-blocking event I/O loop, use
+ * mpd_connection_get_fd() to obtain the underlying socket descriptor.
  */
 struct mpd_connection;
 
@@ -175,6 +197,22 @@ void mpd_connection_set_timeout(struct mpd_connection *connection,
  * Do not use the file descriptor for anything except polling!  The
  * file descriptor never changes during the lifetime of this
  * #mpd_connection object.
+ *
+ * To integrate this library in a non-blocking event I/O loop, use
+ * this function to obtain the underlying socket descriptor and
+ * register it in the event loop.  As soon as it becomes ready for
+ * reading, use this library's functions to receive responses from
+ * MPD.  Example:
+ *
+ *     if (!mpd_send_idle(conn))
+ *         return handle_error();
+ *     register_socket(mpd_connection_get_fd(conn));
+ *
+ * And in the event callback:
+ *
+ *     enum mpd_idle events = mpd_recv_idle(conn);
+ *     // handle the events
+ *     // .. and then call mpd_send_idle() again to keep listening
  */
 mpd_pure
 int
