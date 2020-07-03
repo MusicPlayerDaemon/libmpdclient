@@ -26,8 +26,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*! \file
- * \brief MPD client library
+/**
+ * @mainpage
  *
  * This is a client library for the Music Player Daemon, written in C.
  *
