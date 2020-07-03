@@ -1,4 +1,4 @@
-libmpdclient 2.19 (not yet released)
+libmpdclient 2.19 (2020/07/03)
 * fix off-by-one bug in MPD_HOST parser
 * add function mpd_lookup_replay_gain_mode()
 * identify messages with length over the buffer limit
