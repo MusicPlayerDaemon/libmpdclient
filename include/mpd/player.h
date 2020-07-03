@@ -332,6 +332,9 @@ mpd_send_seek_current(struct mpd_connection *connection,
  * Shortcut for mpd_send_seek_current() and mpd_response_finish().
  *
  * @param connection the connection to MPD
+ * @param t the new position (in seconds)
+ * @param relative true to seek relative to the current position and
+ * false to seek to an absolute time stamp within the song
  * @return true on success, false on error
  *
  * @since MPD 0.17, libmpdclient 2.15

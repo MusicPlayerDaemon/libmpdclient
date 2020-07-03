@@ -182,6 +182,7 @@ mpd_send_queue_changes_brief(struct mpd_connection *connection,
  * Use mpd_recv_queue_change_brief() for the response.
  *
  * @param connection the connection to MPD
+ * @param version The playlist version you want the diff with.
  * @param start the start position of the range (including)
  * @param end the end position of the range (excluding); the special
  * value "UINT_MAX" makes the end of the range open
@@ -721,6 +722,7 @@ mpd_run_prio_id(struct mpd_connection *connection, int priority,
  * The start/end values are offsets in seconds (fractional seconds allowed);
  * both are optional.
  *
+ * @param connection the connection to MPD
  * @param id the id of the song (cannot be the currently playing song)
  * @param start the offset in seconds for starting the song
  * @param end the offset in seconds for ending the song; a negative
@@ -737,6 +739,7 @@ mpd_send_range_id(struct mpd_connection *connection, unsigned id,
  *
  * Shortcut for mpd_send_range_id() and mpd_response_finish().
  *
+ * @param connection the connection to MPD
  * @param id the id of the song (cannot be the currently playing song)
  * @param start the offset in seconds for starting the song
  * @param end the offset in seconds for ending the song; a negative
