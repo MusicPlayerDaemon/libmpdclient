@@ -115,6 +115,8 @@ global:
 	mpd_run_set_volume;
 	mpd_send_change_volume;
 	mpd_run_change_volume;
+	mpd_send_get_volume;
+	mpd_run_get_volume;
 
 	/* mpd/mount.h */
 	mpd_mount_begin;
