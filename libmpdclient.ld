@@ -465,6 +465,10 @@ global:
 	mpd_send_replay_gain_mode;
 	mpd_run_replay_gain_mode;
 
+	/* mpd/binary.h */
+	mpd_send_binarylimit;
+	mpd_run_binarylimit;
+
 local:
 	*;
 };
