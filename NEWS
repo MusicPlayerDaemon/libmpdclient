@@ -1,4 +1,6 @@
 libmpdclient 2.20 (not yet released)
+* support MPD protocol 0.23
+  - getvol
 
 libmpdclient 2.19 (2020/07/03)
 * fix off-by-one bug in MPD_HOST parser
