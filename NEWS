@@ -3,6 +3,10 @@ libmpdclient 2.20 (not yet released)
   - getvol
 * support MPD protocol 0.22.4
   - binarylimit
+* support MPD protocol 0.22.0
+  - readpicture
+* support MPD protocol 0.21.0
+  - albumart
 * support tags "ComposerSort", "Ensemble", "Movement",
   "MovementNumber", "Location"
 

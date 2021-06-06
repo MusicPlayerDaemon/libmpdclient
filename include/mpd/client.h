@@ -49,6 +49,7 @@
 // IWYU pragma: begin_exports
 
 #include "audio_format.h"
+#include "albumart.h"
 #include "binary.h"
 #include "capabilities.h"
 #include "connection.h"
@@ -69,6 +70,7 @@
 #include "player.h"
 #include "playlist.h"
 #include "queue.h"
+#include "readpicture.h"
 #include "recv.h"
 #include "replay_gain.h"
 #include "response.h"
