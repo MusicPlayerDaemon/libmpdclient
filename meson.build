@@ -21,6 +21,8 @@ conf.set('DEFAULT_PORT', get_option('default_port'))
 
 conf.set('HAVE_STRNDUP', cc.has_function('strndup', prefix: '#define _GNU_SOURCE\n#include <string.h>'))
 
+conf.set('BUFFER_SIZE', get_option('buffer_size'))
+
 platform_deps = []
 if host_machine.system() == 'haiku'
   platform_deps = [cc.find_library('network')]

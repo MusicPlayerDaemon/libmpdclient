@@ -21,3 +21,7 @@ option('documentation', type: 'boolean',
 option('test', type: 'boolean',
   value: false,
   description: 'Enable unit tests')
+
+option('buffer_size', type: 'string',
+  value: '8192',
+  description: 'response buffer size')
