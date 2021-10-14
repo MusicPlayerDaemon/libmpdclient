@@ -310,6 +310,8 @@ global:
 	mpd_run_prio_id;
 	mpd_send_range_id;
 	mpd_run_range_id;
+	mpd_send_add_id_whence;
+	mpd_run_add_id_whence;
 
 	/* mpd/recv.h */
 	mpd_recv_pair;
