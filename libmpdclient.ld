@@ -339,6 +339,7 @@ global:
 	mpd_search_add_sort_name;
 	mpd_search_add_sort_tag;
 	mpd_search_add_window;
+	mpd_search_add_position;
 	mpd_search_commit;
 	mpd_search_cancel;
 	mpd_recv_pair_tag;

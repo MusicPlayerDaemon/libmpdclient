@@ -287,6 +287,16 @@ mpd_search_add_window(struct mpd_connection *connection,
 		      unsigned start, unsigned end);
 
 /**
+ * Adds the search to the specified position in the queue.
+ *
+ * @param connection a #mpd_connection
+ * @param position the position in the queue
+ */
+bool
+mpd_search_add_position(struct mpd_connection *connection,
+            unsigned position);
+
+/**
  * Starts the real search with constraints added with
  * mpd_search_add_constraint().
  *
