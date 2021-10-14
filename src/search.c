@@ -357,6 +357,21 @@ mpd_search_add_window(struct mpd_connection *connection,
 }
 
 bool
+mpd_search_add_position(struct mpd_connection *connection,
+        unsigned position)
+{
+	assert(connection != NULL);
+
+	const size_t size = 64;
+	char *dest = mpd_search_prepare_append(connection, size);
+	if (dest == NULL)
+		return false;
+
+	snprintf(dest, size, " position %u", position);
+	return true;
+}
+
+bool
 mpd_search_commit(struct mpd_connection *connection)
 {
 	assert(connection != NULL);
