@@ -200,6 +200,7 @@ install_headers(
   'include/mpd/password.h',
   'include/mpd/player.h',
   'include/mpd/playlist.h',
+  'include/mpd/position.h',
   'include/mpd/protocol.h',
   'include/mpd/queue.h',
   'include/mpd/recv.h',
