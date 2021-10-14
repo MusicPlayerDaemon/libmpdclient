@@ -202,7 +202,7 @@ mpd_send_add_id_whence(struct mpd_connection *connection, const char *uri,
 	const char *whence_s = mpd_position_whence_char(whence);
 
 	char to_str[64] = "";
-	snprintf(to_str, 64, " position %s%u", whence_s, to);
+	snprintf(to_str, 64, "%s%u", whence_s, to);
 
 	return mpd_send_s_s_command(connection, "addid", uri, to_str);
 }
