@@ -43,6 +43,7 @@
 
 #include "connection.h"
 #include "tag.h"
+#include "position.h"
 #include "compiler.h"
 
 #include <stdbool.h>
@@ -291,10 +292,11 @@ mpd_search_add_window(struct mpd_connection *connection,
  *
  * @param connection a #mpd_connection
  * @param position the position in the queue
+ * @param whence how to interpret the position parameter
  */
 bool
 mpd_search_add_position(struct mpd_connection *connection,
-            unsigned position);
+			unsigned position, enum mpd_position_whence whence);
 
 /**
  * Starts the real search with constraints added with
