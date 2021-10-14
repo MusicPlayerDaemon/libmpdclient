@@ -636,7 +636,7 @@ mpd_run_clear_all_tags_id(struct mpd_connection *connection, unsigned id);
  * @since libmpdclient 2.6
  */
 bool
-mpd_send_prio(struct mpd_connection *connection, int priority,
+mpd_send_prio(struct mpd_connection *connection, unsigned priority,
 	      unsigned position);
 
 /**
@@ -650,7 +650,7 @@ mpd_send_prio(struct mpd_connection *connection, int priority,
  * @since libmpdclient 2.6
  */
 bool
-mpd_run_prio(struct mpd_connection *connection, int priority,
+mpd_run_prio(struct mpd_connection *connection, unsigned priority,
 	     unsigned position);
 
 /**
@@ -667,7 +667,7 @@ mpd_run_prio(struct mpd_connection *connection, int priority,
  * @since libmpdclient 2.8 added support for "UINT_MAX"
  */
 bool
-mpd_send_prio_range(struct mpd_connection *connection, int priority,
+mpd_send_prio_range(struct mpd_connection *connection, unsigned priority,
 		    unsigned start, unsigned end);
 
 /**
@@ -684,7 +684,7 @@ mpd_send_prio_range(struct mpd_connection *connection, int priority,
  * @since libmpdclient 2.8 added support for "UINT_MAX"
  */
 bool
-mpd_run_prio_range(struct mpd_connection *connection, int priority,
+mpd_run_prio_range(struct mpd_connection *connection, unsigned priority,
 		   unsigned start, unsigned end);
 
 /**
@@ -698,7 +698,7 @@ mpd_run_prio_range(struct mpd_connection *connection, int priority,
  * @since libmpdclient 2.6
  */
 bool
-mpd_send_prio_id(struct mpd_connection *connection, int priority,
+mpd_send_prio_id(struct mpd_connection *connection, unsigned priority,
 		 unsigned id);
 
 /**
@@ -712,7 +712,7 @@ mpd_send_prio_id(struct mpd_connection *connection, int priority,
  * @since libmpdclient 2.6
  */
 bool
-mpd_run_prio_id(struct mpd_connection *connection, int priority,
+mpd_run_prio_id(struct mpd_connection *connection, unsigned priority,
 		unsigned id);
 
 /**

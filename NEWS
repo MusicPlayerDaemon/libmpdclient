@@ -9,6 +9,7 @@ libmpdclient 2.20 (not yet released)
   - albumart
 * support tags "ComposerSort", "Ensemble", "Movement",
   "MovementNumber", "Location"
+* queue: make "priority" parameter unsigned
 
 libmpdclient 2.19 (2020/07/03)
 * fix off-by-one bug in MPD_HOST parser
