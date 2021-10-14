@@ -482,6 +482,9 @@ global:
     mpd_recv_readpicture;
     mpd_run_readpicture;
 
+	/* mpd/position.h */
+	mpd_position_whence_char;
+
 local:
 	*;
 };

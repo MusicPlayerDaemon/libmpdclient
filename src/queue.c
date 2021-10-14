@@ -199,19 +199,7 @@ bool
 mpd_send_add_id_whence(struct mpd_connection *connection, const char *uri,
 		   unsigned to, enum mpd_position_whence whence)
 {
-	const char *whence_s = "";
-	switch (whence) {
-	case MPD_POSITION_ABSOLUTE:
-		break;
-
-	case MPD_POSITION_AFTER_CURRENT:
-		whence_s = "+";
-		break;
-
-	case MPD_POSITION_BEFORE_CURRENT:
-		whence_s = "-";
-		break;
-	}
+	const char *whence_s = mpd_position_whence_char(whence);
 
 	char to_str[64] = "";
 	snprintf(to_str, 64, " position %s%u", whence_s, to);

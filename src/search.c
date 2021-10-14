@@ -367,19 +367,7 @@ mpd_search_add_position(struct mpd_connection *connection,
 	if (dest == NULL)
 		return false;
 
-	const char *whence_s = "";
-	switch (whence) {
-	case MPD_POSITION_ABSOLUTE:
-		break;
-
-	case MPD_POSITION_AFTER_CURRENT:
-		whence_s = "+";
-		break;
-
-	case MPD_POSITION_BEFORE_CURRENT:
-		whence_s = "-";
-		break;
-	}
+	const char *whence_s = mpd_position_whence_char(whence);
 
 	snprintf(dest, size, " position %s%u", whence_s, position);
 	return true;
