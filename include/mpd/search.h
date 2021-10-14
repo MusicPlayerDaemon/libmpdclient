@@ -38,8 +38,8 @@
  * Do not include this header directly.  Use mpd/client.h instead.
  */
 
-#ifndef MPD_DB_H
-#define MPD_DB_H
+#ifndef LIBMPDCLIENT_SEARCH_H
+#define LIBMPDCLIENT_SEARCH_H
 
 #include "connection.h"
 #include "tag.h"
