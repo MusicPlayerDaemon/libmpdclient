@@ -1,7 +1,7 @@
 libmpdclient 2.20 (not yet released)
 * support MPD protocol 0.23
   - getvol
-  - position argument for searchadd and findadd
+  - position argument for searchadd, findadd and load
   - whence argument for addid
 * support MPD protocol 0.22.4
   - binarylimit
