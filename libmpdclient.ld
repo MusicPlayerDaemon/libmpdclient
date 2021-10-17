@@ -254,6 +254,8 @@ global:
 	mpd_run_rename;
 	mpd_send_rm;
 	mpd_run_rm;
+	mpd_send_load_range_to;
+	mpd_run_load_range_to;
 
 	/* mpd/queue.h */
 	mpd_send_list_queue_meta;
