@@ -314,6 +314,8 @@ global:
 	mpd_run_range_id;
 	mpd_send_add_id_whence;
 	mpd_run_add_id_whence;
+	mpd_send_add_whence;
+	mpd_run_add_whence;
 
 	/* mpd/recv.h */
 	mpd_recv_pair;
