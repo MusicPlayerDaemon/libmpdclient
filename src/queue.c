@@ -169,9 +169,9 @@ mpd_recv_queue_change_brief(struct mpd_connection *connection,
 }
 
 bool
-mpd_send_add(struct mpd_connection *connection, const char *file)
+mpd_send_add(struct mpd_connection *connection, const char *uri)
 {
-	return mpd_send_command(connection, "add", file, NULL);
+	return mpd_send_command(connection, "add", uri, NULL);
 }
 
 bool
@@ -183,9 +183,9 @@ mpd_run_add(struct mpd_connection *connection, const char *uri)
 }
 
 bool
-mpd_send_add_id(struct mpd_connection *connection, const char *file)
+mpd_send_add_id(struct mpd_connection *connection, const char *uri)
 {
-	return mpd_send_command(connection, "addid", file, NULL);
+	return mpd_send_command(connection, "addid", uri, NULL);
 }
 
 bool
@@ -223,12 +223,12 @@ mpd_recv_song_id(struct mpd_connection *connection)
 }
 
 int
-mpd_run_add_id(struct mpd_connection *connection, const char *file)
+mpd_run_add_id(struct mpd_connection *connection, const char *uri)
 {
 	int id;
 
 	if (!mpd_run_check(connection) ||
-	    !mpd_send_add_id(connection, file))
+	    !mpd_send_add_id(connection, uri))
 		return -1;
 
 	id = mpd_recv_song_id(connection);
