@@ -45,5 +45,5 @@ jobs:
         uses: BSFishy/meson-build@v1.0.3
         with:
           action: test
-          directory: output/full
+          directory: output/mini
           setup-options: -Ddocumentation=false -Dtest=true -Dtcp=false
