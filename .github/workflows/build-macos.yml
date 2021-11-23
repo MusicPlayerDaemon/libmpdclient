@@ -1,0 +1,44 @@
+---
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - 'build/**'
+      - 'doc/**'
+      - 'vapi/**'
+    branches:
+      - master
+  pull_request:
+    paths-ignore:
+      - 'build/**'
+      - 'doc/**'
+      - 'vapi/**'
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - id: checkout
+        uses: actions/checkout@v2
+
+      - id: cache-ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ${{ matrix.os }}-${{ matrix.type }}
+
+      - uses: actions/setup-python@v1
+
+      - name: Install dependencies
+        run: |
+          brew install \
+            meson ninja \
+            check
+
+      - name: Meson Build
+        uses: BSFishy/meson-build@v1.0.3
+        with:
+          action: test
+          directory: output
+          setup-options: -Ddocumentation=false -Dtest=true

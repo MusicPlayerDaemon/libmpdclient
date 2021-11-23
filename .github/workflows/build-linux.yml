@@ -1,0 +1,49 @@
+---
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - 'build/**'
+      - 'doc/**'
+      - 'vapi/**'
+    branches:
+      - master
+  pull_request:
+    paths-ignore:
+      - 'build/**'
+      - 'doc/**'
+      - 'vapi/**'
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        uses: actions/checkout@v2
+
+      - id: cache-ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ${{ matrix.os }}-${{ matrix.type }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt install -y --no-install-recommends \
+            meson \
+            check
+
+      - name: Full Build
+        uses: BSFishy/meson-build@v1.0.3
+        with:
+          action: test
+          directory: output/full
+          setup-options: -Ddocumentation=false -Dtest=true
+
+      - name: Mini Build
+        uses: BSFishy/meson-build@v1.0.3
+        with:
+          action: test
+          directory: output/full
+          setup-options: -Ddocumentation=false -Dtest=true -Dtcp=false
