@@ -207,6 +207,37 @@ mpd_run_playlist_add(struct mpd_connection *connection,
 		     const char *name, const char *path);
 
 /**
+ * Inserts a uri to a playlist for a given position. The playlist 
+ * will be created if it does not exist.
+ *
+ * @param connection the connection to MPD
+ * @param name the name of the playlist
+ * @param uri URI to be added
+ * @param to the desired position
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.20
+ */
+bool
+mpd_send_playlist_add_to(struct mpd_connection *connection, const char *name,
+		      const char *uri, unsigned to);
+
+/**
+ * Shortcut for mpd_send_playlist_add_to() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param name the name of the playlist
+ * @param uri URI to be added
+ * @param to the desired position
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.20
+ */
+bool
+mpd_run_playlist_add_to(struct mpd_connection *connection,
+		     const char *name, const char *uri, unsigned to);
+
+/**
  * Move a song from one position to another in the same playlist.
  *
  * @param connection the connection to MPD
