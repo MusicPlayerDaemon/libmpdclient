@@ -1,4 +1,4 @@
-libmpdclient 2.20 (not yet released)
+libmpdclient 2.20 (2021/11/23)
 * support MPD protocol 0.23
   - getvol
   - position argument for searchadd, findadd, load and playlistadd
