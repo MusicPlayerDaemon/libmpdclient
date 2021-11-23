@@ -3,6 +3,7 @@ libmpdclient 2.20 (not yet released)
   - getvol
   - position argument for searchadd, findadd and load
   - whence argument for addid and add
+  - range argument for playlistdelete
 * support MPD protocol 0.22.4
   - binarylimit
 * support MPD protocol 0.22.0

@@ -259,6 +259,36 @@ mpd_run_playlist_delete(struct mpd_connection *connection,
 			const char *name, unsigned pos);
 
 /**
+ * Delete a range from a playlist.
+ *
+ * @param connection the connection to MPD
+ * @param name the name of the playlist
+ * @param start the start position of the range (including)
+ * @param end the end position of the range (excluding)
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.20
+ */
+bool
+mpd_send_playlist_delete_range(struct mpd_connection *connection, const char *name,
+			 unsigned start, unsigned end);
+
+/**
+ * Shortcut for mpd_send_playlist_delete_range() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param name the name of the playlist
+ * @param start the start position of the range (including)
+ * @param end the end position of the range (excluding)
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.20
+ */
+bool
+mpd_run_playlist_delete_range(struct mpd_connection *connection,
+			const char *name, unsigned start, unsigned end);
+
+/**
  * Saves the current queue as a m3u file in the playlist directory
  * (i.e. name.m3u).
  *

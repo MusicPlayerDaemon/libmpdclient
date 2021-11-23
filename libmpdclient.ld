@@ -256,6 +256,8 @@ global:
 	mpd_run_rm;
 	mpd_send_load_range_to;
 	mpd_run_load_range_to;
+	mpd_send_playlist_delete_range;
+	mpd_run_playlist_delete_range;
 
 	/* mpd/queue.h */
 	mpd_send_list_queue_meta;
