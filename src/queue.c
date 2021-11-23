@@ -183,6 +183,27 @@ mpd_run_add(struct mpd_connection *connection, const char *uri)
 }
 
 bool
+mpd_send_add_whence(struct mpd_connection *connection, const char *uri,
+		   unsigned to, enum mpd_position_whence whence)
+{
+	const char *whence_s = mpd_position_whence_char(whence);
+
+	char to_str[64] = "";
+	snprintf(to_str, 64, "%s%u", whence_s, to);
+
+	return mpd_send_s_s_command(connection, "add", uri, to_str);
+}
+
+bool
+mpd_run_add_whence(struct mpd_connection *connection, const char *uri,
+		  unsigned to, enum mpd_position_whence whence)
+{
+	return mpd_run_check(connection) &&
+		mpd_send_add_whence(connection, uri, to, whence) &&
+		mpd_response_finish(connection);
+}
+
+bool
 mpd_send_add_id(struct mpd_connection *connection, const char *uri)
 {
 	return mpd_send_command(connection, "addid", uri, NULL);

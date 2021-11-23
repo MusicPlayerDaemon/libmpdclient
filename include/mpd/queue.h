@@ -231,6 +231,36 @@ bool
 mpd_run_add(struct mpd_connection *connection, const char *uri);
 
 /**
+ * Inserts a song into the playlist for a given position: either a single file or a directory.
+ *
+ * @param connection A valid and connected mpd_connection.
+ * @param uri URI of a song or directory (added recursively)
+ * @param to the desired position of the song
+ * @param whence how to interpret the position parameter
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.20
+ */
+bool
+mpd_send_add_whence(struct mpd_connection *connection, const char *uri,
+			unsigned to, enum mpd_position_whence whence);
+
+/**
+ * Shortcut for mpd_send_add_whence() and mpd_response_finish().
+ *
+ * @param connection the connection to MPD
+ * @param uri URI of a song or directory (added recursively)
+ * @param to the desired position of the song
+ * @param whence how to interpret the position parameter
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.20
+ */
+bool
+mpd_run_add_whence(struct mpd_connection *connection, const char *uri,
+			unsigned to, enum mpd_position_whence whence);
+
+/**
  * Appends a song to the playlist. Call mpd_recv_song_id() for its id.
  * file is always a single file or URL.
  *
