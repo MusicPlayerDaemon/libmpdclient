@@ -26,7 +26,7 @@ jobs:
       - id: cache-ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
-          key: ${{ matrix.os }}-${{ matrix.type }}
+          key: linux
 
       - name: Install dependencies
         run: |
@@ -57,7 +57,7 @@ jobs:
       - id: cache-ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
-          key: ${{ matrix.os }}-${{ matrix.type }}
+          key: macos
 
       - uses: actions/setup-python@v1
 
