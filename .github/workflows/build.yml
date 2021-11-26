@@ -73,3 +73,16 @@ jobs:
           action: test
           directory: output
           setup-options: -Ddocumentation=false -Dtest=true
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - id: checkout
+        uses: actions/checkout@v2
+
+      - name: Meson Build
+        uses: BSFishy/meson-build@v1.0.3
+        with:
+          action: test
+          directory: output
+          setup-options: -Ddocumentation=false
