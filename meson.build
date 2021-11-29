@@ -42,7 +42,7 @@ if splitted_version.length() >= 3
 else
   version_conf.set('PATCH_VERSION', '0')
 endif
-configure_file(input: 'include/mpd/version.h.in', output: 'version.h', configuration: version_conf)
+version_h = configure_file(input: 'include/mpd/version.h.in', output: 'version.h', configuration: version_conf)
 
 common_cflags = [
   # for strdup() with glibc
@@ -231,7 +231,7 @@ install_headers(
   'include/mpd/binary.h',
   'include/mpd/albumart.h',
   'include/mpd/readpicture.h',
-  join_paths(meson.current_build_dir(), 'version.h'),
+  version_h,
   subdir: 'mpd')
 
 docdir = join_paths(get_option('datadir'), 'doc', meson.project_name())
