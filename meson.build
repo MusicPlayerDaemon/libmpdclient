@@ -65,7 +65,7 @@ foreach f: test_cflags
   endif
 endforeach
 
-add_global_arguments(common_cflags, language: 'c')
+add_project_arguments(common_cflags, language: 'c')
 
 common_ldflags = []
 
