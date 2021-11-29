@@ -231,7 +231,7 @@ install_headers(
   'include/mpd/binary.h',
   'include/mpd/albumart.h',
   'include/mpd/readpicture.h',
-  join_paths(meson.build_root(), 'version.h'),
+  join_paths(meson.current_build_dir(), 'version.h'),
   subdir: 'mpd')
 
 docdir = join_paths(get_option('datadir'), 'doc', meson.project_name())
