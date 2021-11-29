@@ -100,6 +100,13 @@ inc = include_directories(
   '.',
 )
 
+public_inc = include_directories(
+  'include',
+
+  # for the generated version.h
+  '.',
+)
+
 libmpdclient = library('mpdclient',
   'src/async.c',
   'src/audio_format.c',
@@ -169,11 +176,14 @@ libmpdclient = library('mpdclient',
   soversion: splitted_version[0],
   install: true
 )
-libmpdclient_dep = declare_dependency(link_with: libmpdclient)
+
+libmpdclient_dep = declare_dependency(
+  link_with: libmpdclient,
+  include_directories: public_inc,
+)
 
 executable('example',
   'src/example.c',
-  include_directories: inc,
   dependencies: [
     libmpdclient_dep,
   ])
