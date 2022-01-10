@@ -211,6 +211,22 @@ parse_mpd_single_state(const char *p)
 		return MPD_SINGLE_UNKNOWN;
 }
 
+const char *
+mpd_lookup_single_state(enum mpd_single_state state)
+{
+	switch (state) {
+	case MPD_SINGLE_OFF:
+		return "0";
+	case MPD_SINGLE_ON:
+		return "1";
+	case MPD_SINGLE_ONESHOT:
+		return "oneshot";
+	case MPD_SINGLE_UNKNOWN:
+		return NULL;
+	}
+	return NULL;
+}
+
 void
 mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 {

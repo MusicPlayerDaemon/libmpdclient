@@ -422,6 +422,7 @@ global:
 	mpd_status_get_update_id;
 	mpd_status_get_partition;
 	mpd_status_get_error;
+	mpd_lookup_single_state;
 
 	/* mpd/tag.h */
 	mpd_tag_name;
