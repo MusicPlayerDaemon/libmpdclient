@@ -73,6 +73,7 @@ static const char *const mpd_tag_type_names[MPD_TAG_COUNT] =
 	[MPD_TAG_MOVEMENT] = "Movement",
 	[MPD_TAG_MOVEMENTNUMBER] = "MovementNumber",
 	[MPD_TAG_LOCATION] = "Location",
+	[MPD_TAG_MOOD] = "Mood",
 };
 
 const char *
