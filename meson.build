@@ -7,6 +7,7 @@ project('libmpdclient', 'c', version: '2.21',
 )
 
 cc = meson.get_compiler('c')
+project_root = meson.current_source_dir()
 
 conf = configuration_data()
 conf.set_quoted('PACKAGE', meson.project_name())
@@ -73,7 +74,7 @@ test_ldflags = [
 ]
 
 if host_machine.system() == 'linux'
-  test_ldflags += [ '-Wl,--version-script=' + join_paths(meson.source_root(), 'libmpdclient.ld') ]
+  test_ldflags += [ '-Wl,--version-script=' + join_paths(project_root, 'libmpdclient.ld') ]
 endif
 
 if meson.version().version_compare('>=0.46.0')

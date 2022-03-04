@@ -1,6 +1,6 @@
 dconf = configuration_data()
 dconf.set('VERSION', meson.project_version())
-dconf.set('abs_top_srcdir', meson.source_root())
+dconf.set('abs_top_srcdir', project_root)
 
 if find_program('dot', required: false).found()
   dconf.set('HAVE_DOT', 'YES')
