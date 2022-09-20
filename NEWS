@@ -2,6 +2,7 @@ libmpdclient 2.21 (not yet released)
 * meson.build: allow using as a Meson subproject
 * support MPD protocol 0.24.0
   - tag "Mood", "TitleSort"
+  - "oneshot" consume state
 
 libmpdclient 2.20 (2021/11/23)
 * support MPD protocol 0.23
