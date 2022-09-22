@@ -6,6 +6,7 @@ libmpdclient 2.21 (not yet released)
   - "oneshot" consume state
   - allow range in "playlistmove"
   - command "searchcount"
+  - command "save [create|replace|append]"
 
 libmpdclient 2.20 (2021/11/23)
 * support MPD protocol 0.23

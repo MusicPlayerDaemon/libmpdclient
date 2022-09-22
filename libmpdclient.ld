@@ -264,6 +264,10 @@ global:
 	mpd_run_playlist_delete_range;
 	mpd_send_playlist_add_to;
 	mpd_run_playlist_add_to;
+	mpd_send_save_queue;
+	mpd_run_save_queue;
+	mpd_parse_queue_save_mode;
+	mpd_lookup_queue_save_mode;
 
 	/* mpd/queue.h */
 	mpd_send_list_queue_meta;
