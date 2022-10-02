@@ -222,10 +222,9 @@ mpd_lookup_single_state(enum mpd_single_state state)
 		return "1";
 	case MPD_SINGLE_ONESHOT:
 		return "oneshot";
-	case MPD_SINGLE_UNKNOWN:
+	default:
 		return NULL;
 	}
-	return NULL;
 }
 
 void
