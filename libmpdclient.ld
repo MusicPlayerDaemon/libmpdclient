@@ -366,7 +366,9 @@ global:
 	mpd_song_get_duration;
 	mpd_song_get_duration_ms;
 	mpd_song_get_start;
+	mpd_song_get_start_ms;
 	mpd_song_get_end;
+	mpd_song_get_end_ms;
 	mpd_song_get_last_modified;
 	mpd_song_set_pos;
 	mpd_song_get_pos;
