@@ -56,6 +56,13 @@ struct mpd_song {
 	struct mpd_tag_value tags[MPD_TAG_COUNT];
 
 	/**
+	 * The "real" URI, the one to be used for opening the
+	 * resource.  If this attribute is nullptr, then #uri
+	 * shall be used.
+	 */
+	char *real_uri;
+
+	/**
 	 * Duration of the song in seconds, or 0 for unknown.
 	 */
 	unsigned duration;
@@ -136,6 +143,7 @@ mpd_song_new(const char *uri)
 	for (unsigned i = 0; i < MPD_TAG_COUNT; ++i)
 		song->tags[i].value = NULL;
 
+	song->real_uri = NULL;
 	song->duration = 0;
 	song->duration_ms = 0;
 	song->start = 0;
@@ -179,6 +187,8 @@ void mpd_song_free(struct mpd_song *song) {
 		}
 	}
 
+	free(song->real_uri);
+
 	free(song);
 }
 
@@ -216,6 +226,7 @@ mpd_song_dup(const struct mpd_song *song)
 		} while (src_tag != NULL);
 	}
 
+	ret->real_uri = strdup(song->real_uri);
 	ret->duration = song->duration;
 	ret->duration_ms = song->duration_ms;
 	ret->start = song->start;
@@ -329,6 +340,20 @@ mpd_song_get_tag(const struct mpd_song *song,
 	}
 
 	return tag->value;
+}
+
+static void
+mpd_song_set_real_uri(struct mpd_song *song, char *real_uri)
+{
+	song->real_uri = real_uri;
+}
+
+const char *
+mpd_song_get_real_uri(const struct mpd_song *song)
+{
+	assert(song != NULL);
+
+	return song->real_uri;
 }
 
 static void
@@ -546,6 +571,8 @@ mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair)
 		mpd_song_set_prio(song, strtoul(pair->value, NULL, 10));
 	else if (strcmp(pair->name, "Format") == 0)
 		mpd_song_parse_audio_format(song, pair->value);
+	else if (strcmp(pair->name, "RealUri") == 0)
+		mpd_song_set_real_uri(song, strdup(pair->value));
 
 	return true;
 }
