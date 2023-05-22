@@ -320,6 +320,12 @@ global:
 	mpd_run_add_id_whence;
 	mpd_send_add_whence;
 	mpd_run_add_whence;
+	mpd_send_move_whence;
+	mpd_run_move_whence;
+	mpd_send_move_id_whence;
+	mpd_run_move_id_whence;
+	mpd_send_move_range_whence;
+	mpd_run_move_range_whence;
 
 	/* mpd/recv.h */
 	mpd_recv_pair;
