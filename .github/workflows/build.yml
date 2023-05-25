@@ -40,6 +40,7 @@ jobs:
           action: test
           directory: output/full
           setup-options: -Ddocumentation=false -Dtest=true
+          options: --verbose
 
       - name: Mini Build
         uses: BSFishy/meson-build@v1.0.3
@@ -47,6 +48,7 @@ jobs:
           action: test
           directory: output/mini
           setup-options: -Ddocumentation=false -Dtest=true -Dtcp=false
+          options: --verbose
 
   build-macos:
     runs-on: macos-latest
@@ -73,6 +75,7 @@ jobs:
           action: test
           directory: output
           setup-options: -Ddocumentation=false -Dtest=true
+          options: --verbose
 
   build-windows:
     runs-on: windows-latest
@@ -86,3 +89,4 @@ jobs:
           action: test
           directory: output
           setup-options: -Ddocumentation=false
+          options: --verbose
