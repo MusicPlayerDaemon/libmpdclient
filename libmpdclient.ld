@@ -483,6 +483,7 @@ global:
 	mpd_run_replay_gain_status;
 	mpd_send_replay_gain_mode;
 	mpd_run_replay_gain_mode;
+	mpd_recv_replay_gain_status;
 
 	/* mpd/binary.h */
 	mpd_send_binarylimit;

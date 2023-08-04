@@ -1,5 +1,6 @@
 libmpdclient 2.21 (not yet released)
 * meson.build: allow using as a Meson subproject
+* add mpd_recv_replay_gain_status()
 * support MPD protocol 0.24.0
   - tag "Mood", "TitleSort"
 
