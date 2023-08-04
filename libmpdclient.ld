@@ -216,6 +216,8 @@ global:
 	mpd_run_single;
 	mpd_send_consume;
 	mpd_run_consume;
+	mpd_send_consume_state;
+	mpd_run_consume_state;
 	mpd_send_crossfade;
 	mpd_run_crossfade;
 	mpd_send_mixrampdb;
@@ -410,6 +412,7 @@ global:
 	mpd_status_get_single_state;
 	mpd_status_get_single;
 	mpd_status_get_consume;
+	mpd_status_get_consume_state;
 	mpd_status_get_queue_length;
 	mpd_status_get_queue_version;
 	mpd_status_get_state;
@@ -430,6 +433,8 @@ global:
 	mpd_status_get_error;
 	mpd_lookup_single_state;
 	mpd_parse_single_state;
+	mpd_lookup_consume_state;
+	mpd_parse_consume_state;
 
 	/* mpd/tag.h */
 	mpd_tag_name;

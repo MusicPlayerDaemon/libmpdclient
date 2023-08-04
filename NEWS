@@ -3,6 +3,7 @@ libmpdclient 2.21 (not yet released)
 * add mpd_recv_replay_gain_status()
 * support MPD protocol 0.24.0
   - tag "Mood", "TitleSort"
+  - "oneshot" consume state
 
 libmpdclient 2.20 (2021/11/23)
 * support MPD protocol 0.23
