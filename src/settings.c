@@ -27,19 +27,12 @@
 */
 
 #include <mpd/settings.h>
+#include "internal.h"
 #include "config.h"
 
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
-
-struct mpd_settings {
-	char *host;
-
-	unsigned port, timeout_ms;
-
-	char *password;
-};
 
 /**
  * Parses the password from the host specification in the form

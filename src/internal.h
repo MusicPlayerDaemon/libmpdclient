@@ -40,6 +40,36 @@
 #include <sys/time.h>
 #endif
 
+
+/**
+ * This opaque object represents the connection settings used to
+ * connect to a MPD server.
+ * Call mpd_settings_new() to create a new instance.
+ */
+struct mpd_settings {
+    /**
+     * The hostname, in null-terminated string form.
+     * Can also be a local socket path on UNIX systems.
+     */
+    char *host;
+
+    /**
+     * The port number, as an unsigned integer.
+     */
+    unsigned port;
+
+    /**
+     * The timeout in milliseconds, as an unsigned integer.
+     */
+    unsigned timeout_ms;
+
+    /**
+     * The password used to connect to a MPD server, may be null.
+     */
+    char *password;
+};
+
+
 /**
  * This opaque object represents a connection to a MPD server.  Call
  * mpd_connection_new() to create a new instance.
