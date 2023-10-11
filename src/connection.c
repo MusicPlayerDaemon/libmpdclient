@@ -160,7 +160,7 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 
 	/* Host is specified, try to connect, then fail. */
 	if (settings->host != NULL) {
-		/* Set default port only if host is not a unix socket */
+		/* Set default port only if host is not a local socket */
 		if (settings->port == 0 &&
 			*(settings->host) != '/' && *(settings->host) != '@') {
 			settings->port = DEFAULT_PORT;
@@ -174,38 +174,41 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 		goto mpd_connected;
 	}
 
-	/* Default host is a bit more complicated on systems with unix sockets.
+	/* Default host is a bit more complicated on systems with local sockets.
 	 * We want to try the XDG socket location first, then DEFAULT_SOCKET,
 	 *  before finally trying DEFAULT_HOST.
 	 */
 	assert(settings->host == NULL);
 
 #ifdef DEFAULT_SOCKET
-	if (!mpd_get_xdg_socket_location(&settings->host)) {
-		mpd_error_code(&connection->error, MPD_ERROR_OOM);
-		return connection;
-	}
-	fd = mpd_socket_connect(settings->host, 0,
-		&connection->timeout, &connection->error);
-	if (fd != MPD_INVALID_SOCKET) {
-		goto mpd_connected;
-	} else {
-		free(settings->host);
-		settings->host = NULL;
-	}
-
-	mpd_error_clear(&connection->error);
-	fd = mpd_socket_connect(DEFAULT_SOCKET, 0,
-		&connection->timeout, &connection->error);
-	if (fd != MPD_INVALID_SOCKET) {
-		settings->host = strdup(DEFAULT_SOCKET);
-		settings->port = 0;
-		if (settings->host == NULL) {
-			mpd_socket_close(fd);
+	/* default to local socket only if no port was explicitly configured */
+	if (settings->port == 0) {
+		if (!mpd_get_xdg_socket_location(&settings->host)) {
 			mpd_error_code(&connection->error, MPD_ERROR_OOM);
 			return connection;
 		}
-		goto mpd_connected;
+		fd = mpd_socket_connect(settings->host, 0,
+			&connection->timeout, &connection->error);
+		if (fd != MPD_INVALID_SOCKET) {
+			goto mpd_connected;
+		} else {
+			free(settings->host);
+			settings->host = NULL;
+		}
+
+		mpd_error_clear(&connection->error);
+		fd = mpd_socket_connect(DEFAULT_SOCKET, 0,
+			&connection->timeout, &connection->error);
+		if (fd != MPD_INVALID_SOCKET) {
+			settings->host = strdup(DEFAULT_SOCKET);
+			settings->port = 0;
+			if (settings->host == NULL) {
+				mpd_socket_close(fd);
+				mpd_error_code(&connection->error, MPD_ERROR_OOM);
+				return connection;
+			}
+			goto mpd_connected;
+		}
 	}
 #endif
 
