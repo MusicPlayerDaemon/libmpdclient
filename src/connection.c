@@ -86,6 +86,30 @@ mpd_parse_welcome(struct mpd_connection *connection, const char *output)
 	return true;
 }
 
+#ifdef DEFAULT_SOCKET
+static bool
+mpd_get_xdg_socket_location(char **strp)
+{
+	assert(strp != NULL && *strp == NULL);
+
+	char *socket_name;
+	const char *xrd = getenv("XDG_RUNTIME_DIR");
+
+	if (xrd != NULL) {
+		/* Need to append '/mpd/socket' to this. */
+		socket_name = malloc(strlen(xrd) + sizeof("/mpd/socket"));
+		if (socket_name == NULL) {
+			return false;
+		}
+		strcpy(socket_name, xrd);
+		strcat(socket_name, "/mpd/socket");
+		*strp = socket_name;
+	}
+
+	return true;
+}
+#endif
+
 void
 mpd_connection_sync_error(struct mpd_connection *connection)
 {
@@ -151,11 +175,26 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 	}
 
 	/* Default host is a bit more complicated on systems with unix sockets.
-	 * We want to try the DEFAULT_SOCKET first, then DEFAULT_HOST.
+	 * We want to try the XDG socket location first, then DEFAULT_SOCKET,
+	 *  before finally trying DEFAULT_HOST.
 	 */
 	assert(settings->host == NULL);
 
 #ifdef DEFAULT_SOCKET
+	if (!mpd_get_xdg_socket_location(&settings->host)) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return connection;
+	}
+	fd = mpd_socket_connect(settings->host, 0,
+		&connection->timeout, &connection->error);
+	if (fd != MPD_INVALID_SOCKET) {
+		goto mpd_connected;
+	} else {
+		free(settings->host);
+		settings->host = NULL;
+	}
+
+	mpd_error_clear(&connection->error);
 	fd = mpd_socket_connect(DEFAULT_SOCKET, 0,
 		&connection->timeout, &connection->error);
 	if (fd != MPD_INVALID_SOCKET) {
@@ -179,7 +218,7 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 	fd = mpd_socket_connect(DEFAULT_HOST, settings->port,
 		&connection->timeout, &connection->error);
 	if (fd != MPD_INVALID_SOCKET) {
-		settings->host = strdup(DEFAULT_SOCKET);
+		settings->host = strdup(DEFAULT_HOST);
 		if (settings->host == NULL) {
 			mpd_socket_close(fd);
 			mpd_error_code(&connection->error, MPD_ERROR_OOM);
