@@ -19,6 +19,7 @@ endif
 
 conf.set_quoted('DEFAULT_HOST', get_option('default_host'))
 conf.set('DEFAULT_PORT', get_option('default_port'))
+conf.set('DEFAULT_TIMEOUT', get_option('default_timeout'))
 
 conf.set('HAVE_STRNDUP', cc.has_function('strndup', prefix: '#define _GNU_SOURCE\n#include <string.h>'))
 
