@@ -10,6 +10,10 @@ option('default_port', type: 'string',
   value: '6600',
   description: 'The default MPD port')
 
+option('default_timeout', type: 'integer',
+  value: 30000,
+  description: 'The default MPD timeout')
+
 option('tcp', type: 'boolean',
   value: true,
   description: 'Enable TCP support')
