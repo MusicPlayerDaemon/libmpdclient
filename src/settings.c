@@ -33,11 +33,34 @@
 #include <string.h>
 #include <stdlib.h>
 
+
+/**
+ * This opaque object represents the connection settings used to
+ * connect to a MPD server.
+ * Call mpd_settings_new() to create a new instance.
+ */
 struct mpd_settings {
+	/**
+	 * The hostname, in null-terminated string form.
+	 * Can also be a local socket path on UNIX systems.
+	 * Should never be null after mpd_settings_new().
+	 */
 	char *host;
 
-	unsigned port, timeout_ms;
+	/**
+	 * The port number, as an unsigned integer.
+	 * Will be 0 if the host field is a local socket path.
+	 */
+	unsigned port;
 
+	/**
+	 * The timeout in milliseconds, as an unsigned integer. Never zero.
+	 */
+	unsigned timeout_ms;
+
+	/**
+	 * The password used to connect to a MPD server, may be null.
+	 */
 	char *password;
 };
 
