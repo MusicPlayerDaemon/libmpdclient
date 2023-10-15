@@ -244,6 +244,8 @@ global:
 	mpd_run_playlist_add;
 	mpd_send_playlist_move;
 	mpd_run_playlist_move;
+	mpd_send_playlist_move_range;
+	mpd_run_playlist_move_range;
 	mpd_send_playlist_delete;
 	mpd_run_playlist_delete;
 	mpd_send_save;
