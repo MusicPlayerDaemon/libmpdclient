@@ -45,6 +45,7 @@
 #include "config.h"
 
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -134,8 +135,8 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 	host = mpd_settings_get_host(settings);
 	fd = mpd_socket_connect(host, mpd_settings_get_port(settings),
 				&connection->timeout, &connection->error);
-	if (fd == MPD_INVALID_SOCKET) {
 #if defined(DEFAULT_SOCKET) && defined(ENABLE_TCP)
+	if (fd == MPD_INVALID_SOCKET) {
 		if (host == NULL || strcmp(host, DEFAULT_SOCKET) == 0) {
 			/* special case: try the default host if the
 			   default socket failed */
@@ -154,11 +155,40 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 						&connection->timeout,
 						&connection->error);
 		}
+	}
 #endif
 
-		if (fd == MPD_INVALID_SOCKET)
+	if (fd == MPD_INVALID_SOCKET) {
+		/* special case: try socket in XDG_RUNTIME_DIR */
+		mpd_settings_free(settings);
+		const char *xdg_runtime_dir = getenv("XDG_RUNTIME_DIR");
+		if (xdg_runtime_dir == NULL) {
 			return connection;
+		}
+		size_t xdg_socket_len = strlen(xdg_runtime_dir) + sizeof("/mpd/socket") + 1;
+		char *xdg_socket = malloc(xdg_socket_len);
+		if (xdg_socket == NULL)
+			return connection;
+		snprintf(xdg_socket, xdg_socket_len, "%s%s", xdg_runtime_dir, "/mpd/socket");
+		settings = mpd_settings_new(xdg_socket, 0,
+						timeout_ms, NULL, NULL);
+		if (settings == NULL) {
+			mpd_error_code(&connection->error,
+						MPD_ERROR_OOM);
+			free(xdg_socket);
+			return connection;
+		}
+		connection->settings = settings;
+
+		mpd_error_clear(&connection->error);
+		fd = mpd_socket_connect(xdg_socket, 0,
+					&connection->timeout,
+					&connection->error);
+		free(xdg_socket);
 	}
+
+	if (fd == MPD_INVALID_SOCKET)
+		return connection;
 
 	connection->async = mpd_async_new(fd);
 	if (connection->async == NULL) {
