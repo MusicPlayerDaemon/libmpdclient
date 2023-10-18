@@ -166,4 +166,11 @@ mpd_connection_timeout(const struct mpd_connection *connection)
 		: NULL;
 }
 
+/**
+ * Fetches the next alternative set of settings from a settings object.
+ * May return null.
+ */
+const struct mpd_settings *
+mpd_settings_get_next(const struct mpd_settings *settings);
+
 #endif

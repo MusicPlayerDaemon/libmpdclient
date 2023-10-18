@@ -28,6 +28,7 @@
 
 #include <mpd/settings.h>
 #include "config.h"
+#include "internal.h"
 
 #include <assert.h>
 #include <string.h>
@@ -62,6 +63,12 @@ struct mpd_settings {
 	 * The password used to connect to a MPD server, may be null.
 	 */
 	char *password;
+
+	/**
+	 * A pointer to the next alternative set of settings to try, if any.
+	 * Null indicates there are no (more) alternatives to try.
+	 */
+	struct mpd_settings *next;
 };
 
 /**
@@ -185,6 +192,8 @@ mpd_settings_new(const char *host, unsigned port, unsigned timeout_ms,
 	if (settings == NULL)
 		return settings;
 
+	settings->next = NULL;
+
 	if (host != NULL) {
 		settings->host = strdup(host);
 		if (settings->host == NULL) {
@@ -244,6 +253,8 @@ mpd_settings_new(const char *host, unsigned port, unsigned timeout_ms,
 void
 mpd_settings_free(struct mpd_settings *settings)
 {
+	if (settings->next != NULL)
+		mpd_settings_free(settings->next);
 	free(settings->host);
 	free(settings->password);
 	free(settings);
@@ -271,4 +282,10 @@ const char *
 mpd_settings_get_password(const struct mpd_settings *settings)
 {
 	return settings->password;
+}
+
+const struct mpd_settings *
+mpd_settings_get_next(const struct mpd_settings *settings)
+{
+	return settings->next;
 }
