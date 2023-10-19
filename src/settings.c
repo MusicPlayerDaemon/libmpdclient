@@ -223,11 +223,20 @@ mpd_settings_new(const char *host, unsigned port, unsigned timeout_ms,
 
 	if (settings->host == NULL) {
 #ifdef DEFAULT_SOCKET
-		if (port == 0)
+		if (port == 0) {
 			/* default to local socket only if no port was
 			   explicitly configured */
+#ifdef ENABLE_TCP
+			settings->next = mpd_settings_new(DEFAULT_HOST, DEFAULT_PORT, timeout_ms,
+							  reserved, password);
+			if (settings->next == NULL) {
+				mpd_settings_free(settings);
+				return NULL;
+			}
+#endif
+
 			settings->host = strdup(DEFAULT_SOCKET);
-		else
+		} else
 #endif
 			settings->host = strdup(DEFAULT_HOST);
 

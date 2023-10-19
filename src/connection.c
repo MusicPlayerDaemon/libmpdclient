@@ -133,35 +133,21 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 	mpd_connection_set_timeout(connection,
 				   mpd_settings_get_timeout_ms(settings));
 
-	host = mpd_settings_get_host(settings);
-	fd = mpd_socket_connect(host, mpd_settings_get_port(settings),
+	fd = mpd_socket_connect(mpd_settings_get_host(settings),
+				mpd_settings_get_port(settings),
 				&connection->timeout, &connection->error);
-	if (fd == MPD_INVALID_SOCKET) {
-#if defined(DEFAULT_SOCKET) && defined(ENABLE_TCP)
-		if (host == NULL || strcmp(host, DEFAULT_SOCKET) == 0) {
-			/* special case: try the default host if the
-			   default socket failed */
-			mpd_settings_free(initial_settings);
-			initial_settings = mpd_settings_new(DEFAULT_HOST, DEFAULT_PORT,
-						    timeout_ms, NULL, NULL);
-			if (initial_settings == NULL) {
-				mpd_error_code(&connection->error,
-					       MPD_ERROR_OOM);
-				return connection;
-			}
-			connection->initial_settings = initial_settings;
-			connection->settings = settings = initial_settings;
 
-			mpd_error_clear(&connection->error);
-			fd = mpd_socket_connect(DEFAULT_HOST, DEFAULT_PORT,
-						&connection->timeout,
-						&connection->error);
-		}
-#endif
-
-		if (fd == MPD_INVALID_SOCKET)
-			return connection;
+	while (fd == MPD_INVALID_SOCKET &&
+	       (settings = mpd_settings_get_next(settings)) != NULL) {
+		connection->settings = settings;
+		mpd_error_clear(&connection->error);
+		fd = mpd_socket_connect(mpd_settings_get_host(settings),
+					mpd_settings_get_port(settings),
+					&connection->timeout, &connection->error);
 	}
+
+	if (settings == NULL)
+		return connection;
 
 	connection->async = mpd_async_new(fd);
 	if (connection->async == NULL) {
