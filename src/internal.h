@@ -46,9 +46,14 @@
  */
 struct mpd_connection {
 	/**
-	 * The connection settings.
+	 * The initial set of settings.
 	 */
-	struct mpd_settings *settings;
+	struct mpd_settings *initial_settings;
+
+	/**
+	 * The connection settings in use.
+	 */
+	const struct mpd_settings *settings;
 
 	/**
 	 * The version number received by the MPD server.
