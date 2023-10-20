@@ -6,6 +6,8 @@ libmpdclient 2.21 (not yet released)
   - "oneshot" consume state
   - allow range in "playlistmove"
   - command "searchcount"
+* support MPD protocol 0.20.0
+  - "sticker find" can match sticker values
 
 libmpdclient 2.20 (2021/11/23)
 * support MPD protocol 0.23

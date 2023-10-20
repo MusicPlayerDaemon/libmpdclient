@@ -452,6 +452,7 @@ global:
 	mpd_send_sticker_get;
 	mpd_send_sticker_list;
 	mpd_send_sticker_find;
+	mpd_send_sticker_find_value;
 	mpd_parse_sticker;
 	mpd_recv_sticker;
 	mpd_return_sticker;
