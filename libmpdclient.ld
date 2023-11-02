@@ -378,6 +378,7 @@ global:
 	mpd_song_get_start;
 	mpd_song_get_end;
 	mpd_song_get_last_modified;
+	mpd_song_get_added;
 	mpd_song_set_pos;
 	mpd_song_get_pos;
 	mpd_song_get_id;
