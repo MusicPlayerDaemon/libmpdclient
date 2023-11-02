@@ -455,6 +455,7 @@ global:
 	mpd_parse_sticker;
 	mpd_recv_sticker;
 	mpd_return_sticker;
+	mpd_send_stickernames;
 
 	/* mpd/fingerprint.h */
 	mpd_parse_fingerprint_type;
