@@ -32,9 +32,13 @@
 #include <mpd/recv.h>
 #include <mpd/pair.h>
 #include <mpd/response.h>
+#include "internal.h"
+#include "isearch.h"
 #include "run.h"
 
 #include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 bool
@@ -159,4 +163,114 @@ void
 mpd_return_sticker(struct mpd_connection *connection, struct mpd_pair *pair)
 {
 	mpd_return_pair(connection, pair);
+}
+
+bool
+mpd_sticker_search_begin(struct mpd_connection *connection, const char *type,
+			 const char *base_uri, const char *name)
+{
+	assert(name != NULL);
+
+	if (!mpd_request_begin(connection)) 
+		return false;
+
+	if (base_uri == NULL)
+		base_uri = "";
+
+	char *arg_base_uri = mpd_sanitize_arg(base_uri);
+	if (arg_base_uri == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return false;
+	}
+
+	char *arg_name = mpd_sanitize_arg(name);
+	if (arg_name == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		free(arg_base_uri);
+		return false;
+	}
+
+	const size_t size = 13 + strlen(type) + 2 + strlen(arg_base_uri) + 3 + strlen(arg_name) + 2;
+	connection->request = malloc(size);
+	if (connection->request == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		free(arg_base_uri);
+		free(arg_name);
+		return false;
+	}
+
+	snprintf(connection->request, size, "sticker find %s \"%s\" \"%s\"",
+		type, arg_base_uri, arg_name);
+
+	free(arg_base_uri);
+	free(arg_name);
+	return true;
+}
+
+static const char *get_sticker_oper_str(enum mpd_sticker_operator oper) {
+	switch(oper) {
+	case MPD_STICKER_OP_EQ: return "=";
+	case MPD_STICKER_OP_GT: return ">";
+	case MPD_STICKER_OP_LT: return "<";
+	case MPD_STICKER_OP_UNKOWN: return NULL;
+	}
+	return NULL;
+}
+
+bool
+mpd_sticker_search_add_value_constraint(struct mpd_connection *connection,
+					enum mpd_sticker_operator oper,
+					const char *value)
+{
+	assert(connection != NULL);
+	assert(value != NULL);
+
+	char *arg = mpd_sanitize_arg(value);
+	if (arg == NULL) {
+		mpd_error_code(&connection->error, MPD_ERROR_OOM);
+		return false;
+	}
+
+	const size_t size = 4 + strlen(arg) + 2;
+	char *dest = mpd_request_prepare_append(connection, size);
+	if (dest == NULL) {
+		free(arg);
+		return false;
+	}
+
+	const char *oper_str = get_sticker_oper_str(oper);
+	if (oper_str == NULL)
+		return false;
+
+	snprintf(dest, size, " %s \"%s\"",
+		 oper_str,
+		 arg);
+	free(arg);
+	return true;
+}
+
+bool
+mpd_sticker_search_add_sort(struct mpd_connection *connection,
+			    const char *name, bool descending)
+{
+	return mpd_request_add_sort(connection, name, descending);
+}
+
+bool
+mpd_sticker_search_add_window(struct mpd_connection *connection,
+			      unsigned start, unsigned end)
+{
+	return mpd_request_add_window(connection, start, end);
+}
+
+bool
+mpd_sticker_search_commit(struct mpd_connection *connection)
+{
+	return mpd_request_commit(connection);
+}
+
+void
+mpd_sticker_search_cancel(struct mpd_connection *connection)
+{
+	mpd_request_cancel(connection);
 }

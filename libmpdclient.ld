@@ -455,6 +455,12 @@ global:
 	mpd_parse_sticker;
 	mpd_recv_sticker;
 	mpd_return_sticker;
+	mpd_sticker_search_begin;
+	mpd_sticker_search_add_value_constraint;
+	mpd_sticker_search_add_sort;
+	mpd_sticker_search_add_window;
+	mpd_sticker_search_commit;
+	mpd_sticker_search_cancel;
 
 	/* mpd/fingerprint.h */
 	mpd_parse_fingerprint_type;
