@@ -5,7 +5,7 @@ libmpdclient 2.21 (not yet released)
   - tag "Mood", "TitleSort"
   - "oneshot" consume state
   - allow range in "playlistmove"
-  - command "searchcount"
+  - commands "searchcount", "stickernames"
   - added attribute for songs
   - search: support constraint "added-since"
 
