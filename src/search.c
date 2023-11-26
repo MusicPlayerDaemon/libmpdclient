@@ -281,6 +281,23 @@ mpd_search_add_modified_since_constraint(struct mpd_connection *connection,
 }
 
 bool
+mpd_search_add_added_since_constraint(struct mpd_connection *connection,
+				      enum mpd_operator oper,
+				      time_t value)
+{
+	char buffer[64];
+	if (!iso8601_datetime_format(buffer, sizeof(buffer), value)) {
+		mpd_error_code(&connection->error, MPD_ERROR_ARGUMENT);
+		mpd_error_message(&connection->error,
+				  "failed to format time stamp");
+		return false;
+	}
+
+	return mpd_search_add_constraint(connection, oper,
+					 "added-since", buffer);
+}
+
+bool
 mpd_search_add_expression(struct mpd_connection *connection,
 			  const char *expression)
 {
