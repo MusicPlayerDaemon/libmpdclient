@@ -1,5 +1,5 @@
 option('default_socket', type: 'string',
-  value: '/var/run/mpd/socket',
+  value: '/run/mpd/socket',
   description: 'The default MPD socket path')
 
 option('default_host', type: 'string',
