@@ -103,10 +103,10 @@ mpd_error_system_message(struct mpd_error_info *error, int code)
 	mpd_error_system(error, code);
 
 #ifdef _WIN32
-	nbytes = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM |
-			       FORMAT_MESSAGE_IGNORE_INSERTS |
-			       FORMAT_MESSAGE_MAX_WIDTH_MASK, NULL, code, 0,
-			       (LPSTR)buffer, sizeof(buffer), NULL);
+	nbytes = FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM |
+				FORMAT_MESSAGE_IGNORE_INSERTS |
+				FORMAT_MESSAGE_MAX_WIDTH_MASK, NULL, code, 0,
+				(LPSTR)buffer, sizeof(buffer), NULL);
 	mpd_error_message(error, nbytes > 0 ? buffer : "Unknown error");
 #else
 	mpd_error_message(error, strerror(code));
