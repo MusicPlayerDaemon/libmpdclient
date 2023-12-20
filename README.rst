@@ -23,7 +23,7 @@ You need:
 
 Run ``meson``:
 
- meson . output
+ meson setup output
 
 Compile and install::
 
