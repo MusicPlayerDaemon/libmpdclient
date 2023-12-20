@@ -28,17 +28,47 @@
 
 #include <mpd/settings.h>
 #include "config.h"
+#include "internal.h"
 
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 
+
+/**
+ * This opaque object represents the connection settings used to
+ * connect to a MPD server.
+ * Call mpd_settings_new() to create a new instance.
+ */
 struct mpd_settings {
+	/**
+	 * The hostname, in null-terminated string form.
+	 * Can also be a local socket path on UNIX systems.
+	 * Should never be null after mpd_settings_new().
+	 */
 	char *host;
 
-	unsigned port, timeout_ms;
+	/**
+	 * The port number, as an unsigned integer.
+	 * Will be 0 if the host field is a local socket path.
+	 */
+	unsigned port;
 
+	/**
+	 * The timeout in milliseconds, as an unsigned integer. Never zero.
+	 */
+	unsigned timeout_ms;
+
+	/**
+	 * The password used to connect to a MPD server, may be null.
+	 */
 	char *password;
+
+	/**
+	 * A pointer to the next alternative set of settings to try, if any.
+	 * Null indicates there are no (more) alternatives to try.
+	 */
+	struct mpd_settings *next;
 };
 
 /**
@@ -162,6 +192,8 @@ mpd_settings_new(const char *host, unsigned port, unsigned timeout_ms,
 	if (settings == NULL)
 		return settings;
 
+	settings->next = NULL;
+
 	if (host != NULL) {
 		settings->host = strdup(host);
 		if (settings->host == NULL) {
@@ -191,11 +223,20 @@ mpd_settings_new(const char *host, unsigned port, unsigned timeout_ms,
 
 	if (settings->host == NULL) {
 #ifdef DEFAULT_SOCKET
-		if (port == 0)
+		if (port == 0) {
 			/* default to local socket only if no port was
 			   explicitly configured */
+#ifdef ENABLE_TCP
+			settings->next = mpd_settings_new(DEFAULT_HOST, DEFAULT_PORT, timeout_ms,
+							  reserved, password);
+			if (settings->next == NULL) {
+				mpd_settings_free(settings);
+				return NULL;
+			}
+#endif
+
 			settings->host = strdup(DEFAULT_SOCKET);
-		else
+		} else
 #endif
 			settings->host = strdup(DEFAULT_HOST);
 
@@ -221,6 +262,8 @@ mpd_settings_new(const char *host, unsigned port, unsigned timeout_ms,
 void
 mpd_settings_free(struct mpd_settings *settings)
 {
+	if (settings->next != NULL)
+		mpd_settings_free(settings->next);
 	free(settings->host);
 	free(settings->password);
 	free(settings);
@@ -248,4 +291,10 @@ const char *
 mpd_settings_get_password(const struct mpd_settings *settings)
 {
 	return settings->password;
+}
+
+const struct mpd_settings *
+mpd_settings_get_next(const struct mpd_settings *settings)
+{
+	return settings->next;
 }

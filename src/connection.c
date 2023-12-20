@@ -100,18 +100,20 @@ mpd_connection_sync_error(struct mpd_connection *connection)
 struct mpd_connection *
 mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 {
-	struct mpd_settings *settings =
+	struct mpd_settings *initial_settings =
 		mpd_settings_new(host, port, timeout_ms, NULL, NULL);
-	if (settings == NULL)
+	if (initial_settings == NULL)
 		return NULL;
 
 	struct mpd_connection *connection = malloc(sizeof(*connection));
 	if (connection == NULL) {
-		mpd_settings_free(settings);
+		mpd_settings_free(initial_settings);
 		return NULL;
 	}
 
-	connection->settings = settings;
+	const struct mpd_settings *settings;
+	connection->initial_settings = initial_settings;
+	connection->settings = settings = initial_settings;
 
 	bool success;
 	mpd_socket_t fd;
@@ -131,34 +133,21 @@ mpd_connection_new(const char *host, unsigned port, unsigned timeout_ms)
 	mpd_connection_set_timeout(connection,
 				   mpd_settings_get_timeout_ms(settings));
 
-	host = mpd_settings_get_host(settings);
-	fd = mpd_socket_connect(host, mpd_settings_get_port(settings),
+	fd = mpd_socket_connect(mpd_settings_get_host(settings),
+				mpd_settings_get_port(settings),
 				&connection->timeout, &connection->error);
-	if (fd == MPD_INVALID_SOCKET) {
-#if defined(DEFAULT_SOCKET) && defined(ENABLE_TCP)
-		if (host == NULL || strcmp(host, DEFAULT_SOCKET) == 0) {
-			/* special case: try the default host if the
-			   default socket failed */
-			mpd_settings_free(settings);
-			settings = mpd_settings_new(DEFAULT_HOST, DEFAULT_PORT,
-						    timeout_ms, NULL, NULL);
-			if (settings == NULL) {
-				mpd_error_code(&connection->error,
-					       MPD_ERROR_OOM);
-				return connection;
-			}
-			connection->settings = settings;
 
-			mpd_error_clear(&connection->error);
-			fd = mpd_socket_connect(DEFAULT_HOST, DEFAULT_PORT,
-						&connection->timeout,
-						&connection->error);
-		}
-#endif
-
-		if (fd == MPD_INVALID_SOCKET)
-			return connection;
+	while (fd == MPD_INVALID_SOCKET &&
+	       (settings = mpd_settings_get_next(settings)) != NULL) {
+		connection->settings = settings;
+		mpd_error_clear(&connection->error);
+		fd = mpd_socket_connect(mpd_settings_get_host(settings),
+					mpd_settings_get_port(settings),
+					&connection->timeout, &connection->error);
 	}
+
+	if (settings == NULL)
+		return connection;
 
 	connection->async = mpd_async_new(fd);
 	if (connection->async == NULL) {
@@ -202,6 +191,7 @@ mpd_connection_new_async(struct mpd_async *async, const char *welcome)
 		return NULL;
 
 	mpd_error_init(&connection->error);
+	connection->initial_settings = NULL;
 	connection->settings = NULL;
 	connection->async = async;
 	connection->timeout.tv_sec = 30;
@@ -240,8 +230,8 @@ void mpd_connection_free(struct mpd_connection *connection)
 
 	mpd_error_deinit(&connection->error);
 
-	if (connection->settings != NULL)
-		mpd_settings_free(connection->settings);
+	if (connection->initial_settings != NULL)
+		mpd_settings_free(connection->initial_settings);
 
 	free(connection);
 }
