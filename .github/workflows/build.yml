@@ -88,3 +88,4 @@ jobs:
           directory: output
           setup-options: -Ddocumentation=false
           options: --verbose
+          meson-version: 1.3.0
