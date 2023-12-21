@@ -1,4 +1,5 @@
 project('libmpdclient', 'c', version: '2.22',
+  meson_version: '>= 0.56.0',
   default_options: [
     'c_std=c99',
     'warning_level=3',
@@ -77,17 +78,7 @@ if host_machine.system() == 'linux'
   test_ldflags += [ '-Wl,--version-script=' + join_paths(project_root, 'libmpdclient.ld') ]
 endif
 
-if meson.version().version_compare('>=0.46.0')
-  # compiler.has_link_argument() was added in Meson 0.46.0
-  foreach f: test_ldflags
-    if cc.has_link_argument(f)
-      common_ldflags += [ f ]
-    endif
-  endforeach
-else
-  # Meson too old: assume the linker supports all flags
-  common_ldflags += test_ldflags
-endif
+common_ldflags += cc.get_supported_link_arguments(test_ldflags)
 
 if host_machine.system() == 'windows'
   platform_deps = [cc.find_library('ws2_32')]
