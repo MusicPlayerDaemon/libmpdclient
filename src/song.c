@@ -276,7 +276,7 @@ mpd_song_add_tag(struct mpd_song *song,
 		prev = tag;
 		tag = malloc(sizeof(*tag));
 		if (tag == NULL)
-			return NULL;
+			return false;
 
 		tag->value = strdup(value);
 		if (tag->value == NULL) {
