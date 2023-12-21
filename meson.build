@@ -71,14 +71,9 @@ add_project_arguments(common_cflags, language: 'c')
 
 common_ldflags = []
 
-test_ldflags = [
-]
-
-if host_machine.system() == 'linux'
-  test_ldflags += [ '-Wl,--version-script=' + join_paths(project_root, 'libmpdclient.ld') ]
+if host_machine.system() == 'linux' and cc.has_link_argument('-Wl,--version-script=' + join_paths(project_root, 'test.ld'))
+  common_ldflags += '-Wl,--version-script=' + join_paths(project_root, 'libmpdclient.ld')
 endif
-
-common_ldflags += cc.get_supported_link_arguments(test_ldflags)
 
 if host_machine.system() == 'windows'
   platform_deps = [cc.find_library('ws2_32')]
