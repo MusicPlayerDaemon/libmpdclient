@@ -239,9 +239,6 @@ docdir = join_paths(get_option('datadir'), 'doc', meson.project_name())
 install_data('AUTHORS', 'COPYING', 'NEWS', 'README.rst',
   install_dir: docdir)
 
-install_data('vapi/libmpdclient.vapi',
-  install_dir : join_paths(get_option('datadir'), 'vala', 'vapi'))
-
 pkg_mod = import('pkgconfig')
 pkg_mod.generate(
   libraries: libmpdclient,
