@@ -47,9 +47,12 @@ endif
 version_h = configure_file(input: 'include/mpd/version.h.in', output: 'version.h', configuration: version_conf)
 
 common_cflags = [
-  # for strdup() with glibc
-  '-D_GNU_SOURCE',
 ]
+
+if cc.get_id() != 'msvc'
+  # for strdup() with glibc
+  common_cflags += '-D_GNU_SOURCE'
+endif
 
 test_cflags = [
   '-Wcast-align',
