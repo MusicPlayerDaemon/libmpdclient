@@ -52,12 +52,12 @@ common_cflags = [
 ]
 
 test_cflags = [
-  '-Wno-deprecated-declarations',
-  '-Wmissing-prototypes',
-  '-Wshadow',
-  '-Wpointer-arith',
-  '-Wstrict-prototypes',
   '-Wcast-qual',
+  '-Wmissing-prototypes',
+  '-Wno-deprecated-declarations',
+  '-Wpointer-arith',
+  '-Wshadow',
+  '-Wstrict-prototypes',
   '-Wwrite-strings',
 ]
 
