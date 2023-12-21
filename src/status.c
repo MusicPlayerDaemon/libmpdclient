@@ -281,13 +281,13 @@ mpd_status_feed(struct mpd_status *status, const struct mpd_pair *pair)
 	else if (strcmp(pair->name, "state") == 0)
 		status->state = parse_mpd_state(pair->value);
 	else if (strcmp(pair->name, "song") == 0)
-		status->song_pos = strtoimax(pair->value, NULL, 10);
+		status->song_pos = (int)strtoimax(pair->value, NULL, 10);
 	else if (strcmp(pair->name, "songid") == 0)
-		status->song_id = strtoimax(pair->value, NULL, 10);
+		status->song_id = (int)strtoimax(pair->value, NULL, 10);
 	else if (strcmp(pair->name, "nextsong") == 0)
-		status->next_song_pos = strtoimax(pair->value, NULL, 10);
+		status->next_song_pos = (int)strtoimax(pair->value, NULL, 10);
 	else if (strcmp(pair->name, "nextsongid") == 0)
-		status->next_song_id = strtoimax(pair->value, NULL, 10);
+		status->next_song_id = (int)strtoimax(pair->value, NULL, 10);
 	else if (strcmp(pair->name, "time") == 0) {
 		char *endptr;
 
