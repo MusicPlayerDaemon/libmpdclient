@@ -46,7 +46,12 @@
 #define mpd_pure __attribute__((pure))
 #define mpd_const __attribute__((const))
 #define mpd_sentinel __attribute__((sentinel))
+
+#ifdef __clang__
 #define mpd_printf(a,b) __attribute__((format(printf, a, b)))
+#else
+#define mpd_printf(a,b) __attribute__((format(gnu_printf, a, b)))
+#endif
 
 #else
 
