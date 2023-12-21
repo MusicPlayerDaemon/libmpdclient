@@ -437,7 +437,7 @@ int main(int argc, char ** argv) {
 
 		printf("Volume: %d\n", volume);
 	} else if (argc == 3 && strcmp(argv[1], "binarylimit") == 0) {
-		unsigned long long limit = strtoull(argv[2], NULL, 10);
+		unsigned limit = (unsigned)strtoul(argv[2], NULL, 10);
 		if (!mpd_run_binarylimit(conn, limit))
 			return handle_error(conn);
 	}

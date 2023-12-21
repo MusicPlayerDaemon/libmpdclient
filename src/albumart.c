@@ -62,7 +62,7 @@ mpd_recv_albumart(struct mpd_connection *connection, void *buffer, size_t buffer
 		return -1;
 	}
 
-	return retrieve_bytes;
+	return (int)retrieve_bytes;
 }
 
 int

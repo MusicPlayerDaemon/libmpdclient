@@ -115,7 +115,7 @@ mpd_buffer_expand(struct mpd_buffer *buffer, size_t nbytes)
 {
 	assert(mpd_buffer_room(buffer) >= nbytes);
 
-	buffer->write += nbytes;
+	buffer->write += (unsigned)nbytes;
 }
 
 /**
@@ -151,7 +151,7 @@ mpd_buffer_consume(struct mpd_buffer *buffer, size_t nbytes)
 {
 	assert(nbytes <= mpd_buffer_size(buffer));
 
-	buffer->read += nbytes;
+	buffer->read += (unsigned)nbytes;
 }
 
 #endif

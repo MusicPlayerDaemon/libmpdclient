@@ -62,7 +62,7 @@ mpd_recv_readpicture(struct mpd_connection *connection, void *buffer, size_t buf
 		return -1;
 	}
 
-	return retrieve_bytes;
+	return (int)retrieve_bytes;
 }
 
 int
