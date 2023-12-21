@@ -84,7 +84,6 @@ jobs:
       - name: Meson Build
         uses: BSFishy/meson-build@v1.0.3
         with:
-          action: test
           directory: output
           setup-options: -Ddocumentation=false
           options: --verbose
@@ -102,7 +101,6 @@ jobs:
       - name: Meson Build
         uses: BSFishy/meson-build@v1.0.3
         with:
-          action: test
           directory: output
           setup-options: -Ddocumentation=false
           options: --verbose
