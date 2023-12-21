@@ -58,9 +58,9 @@ format_frange(char *buffer, size_t size, float start, float end)
 {
 	/* the special value 0.0 means "open range" */
 	if (end >= 0)
-		snprintf(buffer, size, "%1.3f:%1.3f", start, end);
+		snprintf(buffer, size, "%1.3f:%1.3f", (double)start, (double)end);
 	else
-		snprintf(buffer, size, "%1.3f:", start);
+		snprintf(buffer, size, "%1.3f:", (double)start);
 }
 
 /**
@@ -180,7 +180,7 @@ mpd_send_float_command(struct mpd_connection *connection, const char *command,
 {
 	char arg_string[FLOATLEN];
 
-	snprintf(arg_string, sizeof(arg_string), "%f", arg);
+	snprintf(arg_string, sizeof(arg_string), "%f", (double)arg);
 	return mpd_send_command(connection, command, arg_string, NULL);
 }
 
@@ -215,7 +215,7 @@ mpd_send_u_f_command(struct mpd_connection *connection, const char *command,
 	char arg1_string[INTLEN], arg2_string[FLOATLEN];
 
 	snprintf(arg1_string, sizeof(arg1_string), "%u", arg1);
-	snprintf(arg2_string, sizeof(arg2_string), "%.3f", arg2);
+	snprintf(arg2_string, sizeof(arg2_string), "%.3f", (double)arg2);
 	return mpd_send_command(connection, command,
 				arg1_string, arg2_string, NULL);
 }

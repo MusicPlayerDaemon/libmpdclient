@@ -223,9 +223,9 @@ mpd_send_seek_current(struct mpd_connection *connection,
 {
 	char ts[32];
 	if (relative)
-		snprintf(ts, sizeof(ts), "%+.3f", t);
+		snprintf(ts, sizeof(ts), "%+.3f", (double)t);
 	else
-		snprintf(ts, sizeof(ts), "%.3f", t);
+		snprintf(ts, sizeof(ts), "%.3f", (double)t);
 
 	return mpd_send_command(connection, "seekcur", ts, NULL);
 }
