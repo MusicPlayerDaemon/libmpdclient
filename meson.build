@@ -61,13 +61,8 @@ test_cflags = [
   '-Wwrite-strings',
 ]
 
-foreach f: test_cflags
-  if cc.has_argument(f)
-    common_cflags += [ f ]
-  endif
-endforeach
-
 add_project_arguments(common_cflags, language: 'c')
+add_project_arguments(cc.get_supported_arguments(test_cflags), language: 'c')
 
 common_ldflags = []
 
