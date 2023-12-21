@@ -52,13 +52,26 @@ common_cflags = [
 ]
 
 test_cflags = [
+  '-Wcast-align',
   '-Wcast-qual',
+  '-Wdouble-promotion',
+  '-Wfloat-equal',
+  '-Wmissing-declarations',
+  '-Wmissing-noreturn',
+  '-Wmissing-format-attribute',
   '-Wmissing-prototypes',
   '-Wno-deprecated-declarations',
   '-Wpointer-arith',
+  '-Wredundant-decls',
   '-Wshadow',
   '-Wstrict-prototypes',
+  '-Wundef',
+  '-Wunused',
   '-Wwrite-strings',
+
+  # clang specific warning options:
+  '-Wunreachable-code-aggressive',
+  '-Wused-but-marked-unused',
 ]
 
 add_project_arguments(common_cflags, language: 'c')
