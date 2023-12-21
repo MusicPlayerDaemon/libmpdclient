@@ -71,7 +71,6 @@ test_cflags = [
 
   # clang specific warning options:
   '-Wunreachable-code-aggressive',
-  '-Wused-but-marked-unused',
 ]
 
 add_project_arguments(common_cflags, language: 'c')
