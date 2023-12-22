@@ -176,7 +176,7 @@ executable('example',
   ])
 
 docdir = join_paths(get_option('datadir'), 'doc', meson.project_name())
-install_data('AUTHORS', 'COPYING', 'NEWS', 'README.rst',
+install_data('AUTHORS', 'LICENSES/BSD-2-Clause.txt', 'LICENSES/BSD-3-Clause.txt', 'NEWS', 'README.rst',
   install_dir: docdir)
 
 pkg_mod = import('pkgconfig')
