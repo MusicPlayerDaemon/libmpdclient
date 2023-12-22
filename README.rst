@@ -10,7 +10,8 @@ doxygen.  You may browse it online:
 http://www.musicpd.org/doc/libmpdclient/
 
 libmpdclient is released under the revised BSD License.
-For the full license, see `COPYING <COPYING>`__.
+The full license can be found in the `LICENSES <LICENSES/>`__
+directory.
 
 
 Installing from source
