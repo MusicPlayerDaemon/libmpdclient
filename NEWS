@@ -1,4 +1,4 @@
-libmpdclient 2.22 (not yet released)
+libmpdclient 2.22 (2023/12/22)
 * drop the unmaintained Vala bindings
 * fix "version.h" conflicts when used as a Meson subproject
 * support MPD protocol 0.24.0
