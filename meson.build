@@ -35,16 +35,7 @@ endif
 
 configure_file(output: 'config.h', configuration: conf)
 
-version_conf = configuration_data()
 splitted_version = meson.project_version().split('.')
-version_conf.set('MAJOR_VERSION', splitted_version[0])
-version_conf.set('MINOR_VERSION', splitted_version[1])
-if splitted_version.length() >= 3
-  version_conf.set('PATCH_VERSION', splitted_version[2])
-else
-  version_conf.set('PATCH_VERSION', '0')
-endif
-version_h = configure_file(input: 'include/mpd/version.h.in', output: 'version.h', configuration: version_conf)
 
 common_cflags = [
 ]
@@ -99,9 +90,6 @@ inc = include_directories(
 
 public_inc = include_directories(
   'include',
-
-  # for the generated version.h
-  '.',
 )
 
 subdir('include/mpd')

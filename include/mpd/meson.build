@@ -1,3 +1,13 @@
+version_conf = configuration_data()
+version_conf.set('MAJOR_VERSION', splitted_version[0])
+version_conf.set('MINOR_VERSION', splitted_version[1])
+if splitted_version.length() >= 3
+  version_conf.set('PATCH_VERSION', splitted_version[2])
+else
+  version_conf.set('PATCH_VERSION', '0')
+endif
+version_h = configure_file(input: 'version.h.in', output: 'version.h', configuration: version_conf)
+
 install_headers(
   'async.h',
   'audio_format.h',

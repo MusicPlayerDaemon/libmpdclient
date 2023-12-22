@@ -81,7 +81,10 @@
 #include "stats.h"
 #include "status.h"
 #include "sticker.h"
-#include "version.h"
+
+/* this is a generated header and may be installed in a different
+   filesystem tree, therefore we can't use just "version.h" */
+#include <mpd/version.h>
 
 // IWYU pragma: end_exports
 
