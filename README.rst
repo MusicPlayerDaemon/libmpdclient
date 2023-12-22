@@ -19,7 +19,7 @@ Installing from source
 You need:
 
 - a C99 compliant compiler (e.g. gcc)
-- `Meson 0.37 <http://mesonbuild.com/>`__ and `Ninja <https://ninja-build.org/>`__
+- `Meson 0.56 <http://mesonbuild.com/>`__ and `Ninja <https://ninja-build.org/>`__
 
 Run ``meson``:
 
