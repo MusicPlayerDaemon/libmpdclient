@@ -104,6 +104,8 @@ public_inc = include_directories(
   '.',
 )
 
+subdir('include/mpd')
+
 libmpdclient = library('mpdclient',
   'src/async.c',
   'src/audio_format.c',
@@ -184,52 +186,6 @@ executable('example',
   dependencies: [
     libmpdclient_dep,
   ])
-
-install_headers(
-  'include/mpd/async.h',
-  'include/mpd/audio_format.h',
-  'include/mpd/client.h',
-  'include/mpd/capabilities.h',
-  'include/mpd/compiler.h',
-  'include/mpd/connection.h',
-  'include/mpd/database.h',
-  'include/mpd/directory.h',
-  'include/mpd/entity.h',
-  'include/mpd/error.h',
-  'include/mpd/fingerprint.h',
-  'include/mpd/idle.h',
-  'include/mpd/list.h',
-  'include/mpd/mixer.h',
-  'include/mpd/mount.h',
-  'include/mpd/neighbor.h',
-  'include/mpd/parser.h',
-  'include/mpd/partition.h',
-  'include/mpd/password.h',
-  'include/mpd/player.h',
-  'include/mpd/playlist.h',
-  'include/mpd/position.h',
-  'include/mpd/protocol.h',
-  'include/mpd/queue.h',
-  'include/mpd/recv.h',
-  'include/mpd/replay_gain.h',
-  'include/mpd/response.h',
-  'include/mpd/send.h',
-  'include/mpd/status.h',
-  'include/mpd/stats.h',
-  'include/mpd/tag.h',
-  'include/mpd/output.h',
-  'include/mpd/pair.h',
-  'include/mpd/search.h',
-  'include/mpd/socket.h',
-  'include/mpd/song.h',
-  'include/mpd/sticker.h',
-  'include/mpd/settings.h',
-  'include/mpd/message.h',
-  'include/mpd/binary.h',
-  'include/mpd/albumart.h',
-  'include/mpd/readpicture.h',
-  version_h,
-  subdir: 'mpd')
 
 docdir = join_paths(get_option('datadir'), 'doc', meson.project_name())
 install_data('AUTHORS', 'COPYING', 'NEWS', 'README.rst',
