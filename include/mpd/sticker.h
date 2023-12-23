@@ -187,7 +187,7 @@ void
 mpd_return_sticker(struct mpd_connection *connection, struct mpd_pair *pair);
 
 /**
- * Obtains an uniq and sortes list of all sticker names. Call
+ * Obtains an uniq and sorted list of all sticker names. Call
  * mpd_recv_pair() to receive each response item.
  *
  * @param connection the connection to MPD
