@@ -30,9 +30,23 @@ mpd_send_list_playlist(struct mpd_connection *connection, const char *name)
 }
 
 bool
+mpd_send_list_playlist_range(struct mpd_connection *connection, const char *name,
+			     unsigned start, unsigned end)
+{
+	return mpd_send_s_range_command(connection, "listplaylist", name, start, end);
+}
+
+bool
 mpd_send_list_playlist_meta(struct mpd_connection *connection, const char *name)
 {
 	return mpd_send_command(connection, "listplaylistinfo", name, NULL);
+}
+
+bool
+mpd_send_list_playlist_range_meta(struct mpd_connection *connection, const char *name,
+				  unsigned start, unsigned end)
+{
+	return mpd_send_s_range_command(connection, "listplaylistinfo", name, start, end);
 }
 
 bool

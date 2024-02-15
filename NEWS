@@ -1,4 +1,6 @@
 libmpdclient 2.23 (not yet released)
+* support MPD protocol 0.24.0
+  - allow window for listplaylist and listplaylistinfo
 
 libmpdclient 2.22 (2023/12/22)
 * drop the unmaintained Vala bindings

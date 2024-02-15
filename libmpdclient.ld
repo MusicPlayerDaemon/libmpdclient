@@ -237,7 +237,9 @@ global:
 	mpd_send_list_playlists;
 	mpd_recv_playlist;
 	mpd_send_list_playlist;
+	mpd_send_list_playlist_range;
 	mpd_send_list_playlist_meta;
+	mpd_send_list_playlist_range_meta;
 	mpd_send_playlist_clear;
 	mpd_run_playlist_clear;
 	mpd_send_playlist_add;
