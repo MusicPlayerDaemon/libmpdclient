@@ -586,6 +586,19 @@ mpd_send_rm(struct mpd_connection *connection, const char *name);
 bool
 mpd_run_rm(struct mpd_connection *connection, const char *name);
 
+/**
+ * Count the number of songs and their total playtime (seconds) in the
+ * playlist.
+ *
+ * @param connection the connection to MPD
+ * @param name the name of the playlist file
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.23, MPD 0.24
+ */
+bool
+mpd_send_playlistlength(struct mpd_connection *connection, const char *name);
+
 #ifdef __cplusplus
 }
 #endif

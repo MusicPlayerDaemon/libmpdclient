@@ -270,6 +270,7 @@ global:
 	mpd_run_save_queue;
 	mpd_parse_queue_save_mode;
 	mpd_lookup_queue_save_mode;
+	mpd_send_playlistlength;
 
 	/* mpd/queue.h */
 	mpd_send_list_queue_meta;

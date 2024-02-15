@@ -313,3 +313,9 @@ mpd_run_rm(struct mpd_connection *connection, const char *name)
 		mpd_send_rm(connection, name) &&
 		mpd_response_finish(connection);
 }
+
+bool
+mpd_send_playlistlength(struct mpd_connection *connection, const char *name)
+{
+	return mpd_send_command(connection, "playlistlength", name, NULL);
+}
