@@ -2,6 +2,7 @@ libmpdclient 2.23 (not yet released)
 * support MPD protocol 0.24.0
   - allow window for listplaylist and listplaylistinfo
   - command "playlistlength"
+  - tag "ShowMovement"
 * Support open end for mpd_search_add_window
 
 libmpdclient 2.22 (2023/12/22)
