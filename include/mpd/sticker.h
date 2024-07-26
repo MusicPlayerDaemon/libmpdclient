@@ -198,6 +198,18 @@ mpd_return_sticker(struct mpd_connection *connection, struct mpd_pair *pair);
 bool
 mpd_send_stickernames(struct mpd_connection *connection);
 
+/**
+ * Obtains an uniq list of all sticker types. Call
+ * mpd_recv_pair() to receive each response item.
+ *
+ * @param connection the connection to MPD
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.23, MPD 0.24
+ */
+bool
+mpd_send_stickertypes(struct mpd_connection *connection);
+
 #ifdef __cplusplus
 }
 #endif
