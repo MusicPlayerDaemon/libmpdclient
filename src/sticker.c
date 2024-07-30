@@ -157,6 +157,14 @@ mpd_send_stickertypes(struct mpd_connection *connection)
 }
 
 bool
+mpd_send_stickernamestypes(struct mpd_connection *connection, const char *type)
+{
+	assert(connection != NULL);
+
+	return mpd_send_command(connection, "stickernamestypes", type, NULL);
+}
+
+bool
 mpd_sticker_search_begin(struct mpd_connection *connection, const char *type,
 			 const char *base_uri, const char *name)
 {

@@ -470,6 +470,7 @@ global:
 	mpd_return_sticker;
 	mpd_send_stickernames;
 	mpd_send_stickertypes;
+	mpd_send_stickernamestypes;
 	mpd_sticker_search_begin;
 	mpd_sticker_search_add_value_constraint;
 	mpd_sticker_search_add_sort;

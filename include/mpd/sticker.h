@@ -231,9 +231,23 @@ mpd_send_stickernames(struct mpd_connection *connection);
  * @return true on success, false on error
  *
  * @since libmpdclient 2.23, MPD 0.24
+ *
  */
 bool
 mpd_send_stickertypes(struct mpd_connection *connection);
+
+/**
+ * Obtains an uniq and sorted list of all sticker names and their types. Call
+ * mpd_recv_pair() to receive each response item.
+ *
+ * @param connection the connection to MPD
+ * @param type the object type, e.g. "song" or NULL for all types
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.23, MPD 0.24
+ */
+bool
+mpd_send_stickernamestypes(struct mpd_connection *connection, const char *type);
 
 /**
  * Search for stickers in the database.
