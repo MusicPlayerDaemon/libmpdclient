@@ -271,6 +271,10 @@ global:
 	mpd_parse_queue_save_mode;
 	mpd_lookup_queue_save_mode;
 	mpd_send_playlistlength;
+	mpd_playlist_search_begin;
+	mpd_playlist_search_add_window;
+	mpd_playlist_search_commit;
+	mpd_playlist_search_cancel;
 
 	/* mpd/queue.h */
 	mpd_send_list_queue_meta;
