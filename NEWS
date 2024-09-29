@@ -1,10 +1,10 @@
 libmpdclient 2.23 (not yet released)
 * support MPD protocol 0.24.0
   - allow window for listplaylist and listplaylistinfo
-  - command "playlistlength", "stickertypes""
+  - command "playlistlength", "stickertypes", "searchplaylist"
   - tag "ShowMovement"
+  - new sticker find api
 * Support open end for mpd_search_add_window
-* new sticker find api
 
 libmpdclient 2.22 (2023/12/22)
 * drop the unmaintained Vala bindings
