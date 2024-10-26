@@ -35,6 +35,12 @@ mpd_send_list_tag_types(struct mpd_connection *connection)
 	return mpd_send_command(connection, "tagtypes", NULL);
 }
 
+bool
+mpd_send_list_tag_types_available(struct mpd_connection *connection)
+{
+	return mpd_send_command(connection, "tagtypes", "available", NULL);
+}
+
 static bool
 mpd_send_tag_types_v(struct mpd_connection *connection,
 		     const char *sub_command,

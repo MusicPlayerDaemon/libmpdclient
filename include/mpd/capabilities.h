@@ -98,6 +98,19 @@ bool
 mpd_send_list_tag_types(struct mpd_connection *connection);
 
 /**
+ * Requests a list of available tag types. This are the tags enabled in
+ * the configuration. Use mpd_recv_tag_type_pair() to obtain the list
+ * of "tagtype" pairs.
+ *
+ * @param connection the connection to MPD
+ * @return true on success, false on error
+ *
+ * @since libmpdclient 2.23, MPD 0.24
+ */
+bool
+mpd_send_list_tag_types_available(struct mpd_connection *connection);
+
+/**
  * Receives the next tag type name.  Call this in a loop after
  * mpd_send_list_tag_types().
  *
