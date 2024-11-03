@@ -28,6 +28,8 @@ global:
 	mpd_run_clear_tag_types;
 	mpd_send_all_tag_types;
 	mpd_run_all_tag_types;
+	mpd_send_reset_tag_types;
+	mpd_run_reset_tag_types;
 	mpd_send_list_protocol_features;
 	mpd_send_list_protocol_features_available;
 	mpd_recv_protocol_feature_pair;
