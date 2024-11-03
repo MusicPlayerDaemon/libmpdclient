@@ -4,7 +4,7 @@ libmpdclient 2.23 (not yet released)
   - command "playlistlength", "protocol", "stickertypes", "stickernamestypes", "searchplaylist"
   - tag "ShowMovement"
   - new sticker find api
-  - new subcommand "tagtypes available"
+  - new subcommands for "tagtypes": "available", "reset"
 * Support open end for mpd_search_add_window
 
 libmpdclient 2.22 (2023/12/22)
