@@ -153,14 +153,12 @@ libmpdclient = library('mpdclient',
   'src/albumart.c',
   'src/readpicture.c',
   'src/position.c',
-  link_depends: [
-    'libmpdclient.ld'
-  ],
   include_directories: inc,
   dependencies: [
     platform_deps,
   ],
   link_args: common_ldflags,
+  vs_module_defs: 'libmpdclient.def',
   version: meson.project_version(),
   soversion: splitted_version[0],
   install: true
