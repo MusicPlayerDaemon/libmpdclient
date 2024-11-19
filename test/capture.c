@@ -11,8 +11,10 @@
 
 #ifdef _WIN32
 #  include <winsock2.h>
+#ifndef __MINGW32__
 #  include <basetsd.h> /* for SSIZE_T */
 typedef SSIZE_T ssize_t;
+#endif
 #else
 #  include <sys/socket.h>
 #  include <unistd.h>
