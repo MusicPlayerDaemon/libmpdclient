@@ -494,6 +494,10 @@ global:
 	mpd_sticker_search_add_window;
 	mpd_sticker_search_commit;
 	mpd_sticker_search_cancel;
+	mpd_send_sticker_inc;
+	mpd_run_sticker_inc;
+	mpd_send_sticker_dec;
+	mpd_run_sticker_dec;
 
 	/* mpd/fingerprint.h */
 	mpd_parse_fingerprint_type;
