@@ -1,4 +1,5 @@
 #include "capture.h"
+#include "config.h"
 #include <mpd/connection.h>
 #include <mpd/response.h>
 #include <mpd/capabilities.h>
@@ -14,6 +15,10 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <time.h>
+
+#ifdef HAVE_SETLOCALE
+#include <locale.h>
+#endif
 
 static void
 abort_command(struct test_capture *capture,
@@ -360,6 +365,31 @@ START_TEST(test_mount_commands)
 }
 END_TEST
 
+#ifdef HAVE_SETLOCALE
+
+START_TEST(test_locale)
+{
+	/* choosing a locale that uses the comma instead of the dot as
+	   the decimal separator to see if this affects libmpdclient
+	   (it should not because MPD expects the dot) */
+	setlocale(LC_ALL, "de_DE@UTF-8");
+
+	struct test_capture capture;
+	struct mpd_connection *c = test_capture_init(&capture);
+
+	ck_assert(mpd_send_seek_current(c, -42.5, false));
+	ck_assert_str_eq(test_capture_receive(&capture), "seekcur \"-42.500\"\n");
+	abort_command(&capture, c);
+
+	mpd_connection_free(c);
+	test_capture_deinit(&capture);
+
+	setlocale(LC_ALL, "C");
+}
+END_TEST
+
+#endif // HAVE_SETLOCALE
+
 static Suite *
 create_suite(void)
 {
@@ -395,6 +425,12 @@ create_suite(void)
 	TCase *tc_mount = tcase_create("mount");
 	tcase_add_test(tc_mount, test_mount_commands);
 	suite_add_tcase(s, tc_mount);
+
+#ifdef HAVE_SETLOCALE
+	TCase *tc_locale = tcase_create("locale");
+	tcase_add_test(tc_locale, test_locale);
+	suite_add_tcase(s, tc_locale);
+#endif // HAVE_SETLOCALE
 
 	return s;
 }
