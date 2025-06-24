@@ -23,6 +23,7 @@ conf.set('DEFAULT_PORT', get_option('default_port'))
 
 conf.set('HAVE_STRNDUP', cc.has_function('strndup', prefix: '#define _GNU_SOURCE\n#include <string.h>'))
 conf.set('HAVE_SETLOCALE', cc.has_function('setlocale', prefix: '#include <locale.h>'))
+conf.set('HAVE_USELOCALE', cc.has_function('uselocale', prefix: '#define _GNU_SOURCE\n#include <locale.h>'))
 
 platform_deps = []
 if host_machine.system() == 'haiku'

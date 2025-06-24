@@ -6,6 +6,7 @@ libmpdclient 2.23 (not yet released)
   - new sticker find api
   - new subcommands for "tagtypes": "available", "reset"
 * Support open end for mpd_search_add_window
+* format floating-point numbers with the POSIX localew
 
 libmpdclient 2.22 (2023/12/22)
 * drop the unmaintained Vala bindings
