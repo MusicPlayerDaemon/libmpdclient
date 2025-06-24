@@ -1,4 +1,4 @@
-libmpdclient 2.23 (not yet released)
+libmpdclient 2.23 (2025/06/24)
 * support MPD protocol 0.24.0
   - allow window for listplaylist and listplaylistinfo
   - command "playlistlength", "protocol", "stickertypes", "stickernamestypes", "searchplaylist"
