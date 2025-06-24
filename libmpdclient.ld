@@ -32,7 +32,6 @@ global:
 	mpd_run_reset_tag_types;
 	mpd_send_list_protocol_features;
 	mpd_send_list_protocol_features_available;
-	mpd_recv_protocol_feature_pair;
 	mpd_send_disable_protocol_features;
 	mpd_run_disable_protocol_features;
 	mpd_send_enable_protocol_features;
