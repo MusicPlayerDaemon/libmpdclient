@@ -1,4 +1,6 @@
 libmpdclient 2.24 (not yet released)
+* support MPD protocol 0.25
+  - stringnormalization
 
 libmpdclient 2.23 (2025/06/24)
 * support MPD protocol 0.24.0

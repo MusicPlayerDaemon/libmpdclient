@@ -155,6 +155,7 @@ libmpdclient = library('mpdclient',
   'src/albumart.c',
   'src/readpicture.c',
   'src/position.c',
+  'src/stringnormalization.c',
   link_depends: [
     'libmpdclient.ld'
   ],

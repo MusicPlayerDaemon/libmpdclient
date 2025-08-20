@@ -468,6 +468,20 @@ global:
 	mpd_lookup_consume_state;
 	mpd_parse_consume_state;
 
+	/* mpd/stringnormalization.h */
+	mpd_stringnormalization_name;
+	mpd_stringnormalization_name_parse;
+	mpd_send_list_stringnormalization;
+	mpd_send_list_stringnormalization_available;
+	mpd_send_disable_stringnormalization;
+	mpd_run_disable_stringnormalization;
+	mpd_send_enable_stringnormalization;
+	mpd_run_enable_stringnormalization;
+	mpd_send_clear_stringnormalization;
+	mpd_run_clear_stringnormalization;
+	mpd_send_all_stringnormalization;
+	mpd_run_all_stringnormalization;
+
 	/* mpd/tag.h */
 	mpd_tag_name;
 	mpd_tag_name_parse;
