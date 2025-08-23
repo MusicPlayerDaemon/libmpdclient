@@ -1,4 +1,5 @@
 libmpdclient 2.24 (not yet released)
+* fix missing "mpd_send_list_tag_types_available" in libmpdclient.ld
 * support MPD protocol 0.25
   - stringnormalization
 
