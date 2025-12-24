@@ -1,4 +1,5 @@
 libmpdclient 2.25 (not yet released)
+* fix typos in MPD_STICKER_SORT_UNKOWN and MPD_STICKER_SORT_UNKOWN
 
 libmpdclient 2.24 (2025/08/23)
 * fix missing "mpd_send_list_tag_types_available" in libmpdclient.ld
