@@ -1,4 +1,4 @@
-project('libmpdclient', 'c', version: '2.25',
+project('libmpdclient', 'c', version: '2.26',
   meson_version: '>= 0.56.0',
   default_options: [
     'c_std=c11',
