@@ -1,6 +1,7 @@
 libmpdclient 2.25 (not yet released)
 * fix typos in MPD_STICKER_SORT_UNKOWN and MPD_STICKER_SORT_UNKOWN
 * support MPD protocol 0.25
+  - song properties "RealUri", "start_ms", "end_ms"
   - tag "DiscSubtitle"
 * switch to C11
 
