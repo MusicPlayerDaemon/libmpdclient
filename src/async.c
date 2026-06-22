@@ -214,7 +214,7 @@ mpd_async_write(struct mpd_async *async)
 		return true;
 
 	nbytes = send(async->fd, mpd_buffer_read(&async->output), size,
-		      MSG_DONTWAIT);
+		      MSG_DONTWAIT | MSG_NOSIGNAL);
 	if (nbytes < 0) {
 		/* I/O error */
 
