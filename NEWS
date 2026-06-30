@@ -1,4 +1,4 @@
-libmpdclient 2.26 (not yet released)
+libmpdclient 2.26 (2026/06/30)
 * fix NULL pointer dereference in mpd_song_dup() (2.25 regression)
 
 libmpdclient 2.25 (2026/06/17)
