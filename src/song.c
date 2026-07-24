@@ -326,10 +326,10 @@ mpd_song_add_tag(struct mpd_song *song,
 static void
 mpd_song_clear_tag(struct mpd_song *song, enum mpd_tag_type type)
 {
-	struct mpd_tag_value *tag = &song->tags[type];
-
-	if ((unsigned)type >= MPD_TAG_COUNT)
+	if ((int)type < 0 || (unsigned)type >= MPD_TAG_COUNT)
 		return;
+
+	struct mpd_tag_value *tag = &song->tags[type];
 
 	if (tag->value == NULL)
 		/* this tag type is empty */
@@ -350,10 +350,10 @@ const char *
 mpd_song_get_tag(const struct mpd_song *song,
 		 enum mpd_tag_type type, unsigned idx)
 {
-	const struct mpd_tag_value *tag = &song->tags[type];
-
-	if ((int)type < 0)
+	if ((int)type < 0 || (unsigned)type >= MPD_TAG_COUNT)
 		return NULL;
+
+	const struct mpd_tag_value *tag = &song->tags[type];
 
 	if (tag->value == NULL)
 		return NULL;
