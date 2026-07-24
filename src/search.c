@@ -224,12 +224,16 @@ mpd_search_add_group_tag(struct mpd_connection *connection,
 {
 	assert(connection != NULL);
 
+	const char *tag_name = mpd_tag_name(type);
+	if (tag_name == NULL)
+		return false;
+
 	const size_t size = 64;
 	char *dest = mpd_request_prepare_append(connection, size);
 	if (dest == NULL)
 		return false;
 
-	snprintf(dest, size, " group %s", mpd_tag_name(type));
+	snprintf(dest, size, " group %s", tag_name);
 	return true;
 }
 

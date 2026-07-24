@@ -316,6 +316,9 @@ mpd_sticker_search_add_sort(struct mpd_connection *connection,
 			    enum mpd_sticker_sort sort, bool descending)
 {
 	const char *sort_str = get_sticker_sort_name(sort);
+	if (sort_str == NULL)
+		return false;
+
 	return mpd_request_add_sort(connection, sort_str, descending);
 }
 
