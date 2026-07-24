@@ -282,8 +282,10 @@ mpd_sticker_search_add_value_constraint(struct mpd_connection *connection,
 	}
 
 	const char *oper_str = get_sticker_oper_str(oper);
-	if (oper_str == NULL)
+	if (oper_str == NULL) {
+		free(arg);
 		return false;
+	}
 
 	const size_t size = 1 + strlen(oper_str) + 2 + strlen(arg) + 2;
 	char *dest = mpd_request_prepare_append(connection, size);

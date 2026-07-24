@@ -3,7 +3,7 @@ libmpdclient 2.27 (not yet released)
 * use strncmp() instead of memcmp() to avoid over-read
 * fix several NULL pointer dereference bugs on OOM
 * fail instead of crashing if socket descriptor is >= 1024
-* capabilities: fix memory leak on OOM
+* capabilities, sticker: fix memory leak on OOM
 * song: fix memory leak in the "RealUri" parser
 * song: parse floating-point numbers with the POSIX localew
 * connection: fix microsecond/millisecond mixup in mpd_connection_set_timeout()
