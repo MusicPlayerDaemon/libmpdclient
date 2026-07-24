@@ -317,7 +317,7 @@ mpd_search_add_db_songs_to_playlist(struct mpd_connection *connection,
 		return false;
 	}
 
-	const size_t len = 13 + strlen(arg) + 2;
+	const size_t len = 15 + strlen(arg) + 2;
 	connection->request = malloc(len);
 	if (connection->request == NULL) {
 		free(arg);
