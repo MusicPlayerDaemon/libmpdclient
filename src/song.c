@@ -578,7 +578,8 @@ parse_duration_ms(const char *s)
 		/* out of range, cast to integer may be UB */
 		return 0;
 
-	return 1000 * d;
+	/* poor man's lrint() (because we want to avoid linking -lm) */
+	return (unsigned)(1000 * d + 0.5);
 }
 
 bool
