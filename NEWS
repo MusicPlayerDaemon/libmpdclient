@@ -1,4 +1,5 @@
 libmpdclient 2.27 (not yet released)
+* refuse to send newline and carriage return characters
 
 libmpdclient 2.26 (2026/06/30)
 * fix NULL pointer dereference in mpd_song_dup() (2.25 regression)
