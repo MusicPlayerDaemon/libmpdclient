@@ -543,7 +543,7 @@ mpd_song_parse_range(struct mpd_song *song, const char *value)
 		song->end = (unsigned)end;
 		song->end_ms = (unsigned)(end * 1000);
 		if (song->end == 0)
-			/* round up, because the caller must sees that
+			/* round up, because the caller must see that
 			   there's an upper limit */
 			song->end = 1;
 	} else {
