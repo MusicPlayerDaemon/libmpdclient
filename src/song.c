@@ -15,6 +15,8 @@
 #include <string.h>
 #include <errno.h>
 
+#define MAX_DURATION_S 1000000
+
 struct mpd_tag_value {
 	struct mpd_tag_value *next;
 
@@ -570,6 +572,10 @@ parse_duration_ms(const char *s)
 	const double d = strtod(s, &endptr);
 	if (endptr == s || *endptr != '\0')
 		/* garbage */
+		return 0;
+
+	if (d < 0 || d > MAX_DURATION_S)
+		/* out of range, cast to integer may be UB */
 		return 0;
 
 	return 1000 * d;
