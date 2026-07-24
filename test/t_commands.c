@@ -29,6 +29,41 @@ abort_command(struct test_capture *capture,
 	ck_assert(mpd_connection_clear_error(connection));
 }
 
+START_TEST(test_quote)
+{
+	struct test_capture capture;
+	struct mpd_connection *c = test_capture_init(&capture);
+
+	ck_assert(mpd_send_add(c, "foo"));
+	ck_assert_str_eq(test_capture_receive(&capture), "add \"foo\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_add(c, ""));
+	ck_assert_str_eq(test_capture_receive(&capture), "add \"\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_add(c, "'"));
+	ck_assert_str_eq(test_capture_receive(&capture), "add \"'\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_add(c, "\""));
+	ck_assert_str_eq(test_capture_receive(&capture), "add \"\\\"\"\n");
+	abort_command(&capture, c);
+
+	ck_assert(mpd_send_add(c, "\\"));
+	ck_assert_str_eq(test_capture_receive(&capture), "add \"\\\\\"\n");
+	abort_command(&capture, c);
+
+	/* CR and LF cannot be represented in the MPD protocol and are
+	   thus illegal; libmpdclient will reject them */
+	ck_assert(!mpd_send_add(c, "\n"));
+	ck_assert(!mpd_send_add(c, "\r"));
+
+	mpd_connection_free(c);
+	test_capture_deinit(&capture);
+}
+END_TEST
+
 START_TEST(test_capabilities_commands)
 {
 	struct test_capture capture;
@@ -394,6 +429,10 @@ static Suite *
 create_suite(void)
 {
 	Suite *s = suite_create("commands");
+
+	TCase *tc_quote = tcase_create("quote");
+	tcase_add_test(tc_quote, test_quote);
+	suite_add_tcase(s, tc_quote);
 
 	TCase *tc_capabilities = tcase_create("capabilities");
 	tcase_add_test(tc_capabilities, test_capabilities_commands);
