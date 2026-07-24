@@ -5,6 +5,7 @@ libmpdclient 2.27 (not yet released)
 * song: fix memory leak in the "RealUri" parser
 * song: parse floating-point numbers with the POSIX localew
 * connection: fix microsecond/millisecond mixup in mpd_connection_set_timeout()
+* queue: fix assertion failure on missing "Id" line
 
 libmpdclient 2.26 (2026/06/30)
 * fix NULL pointer dereference in mpd_song_dup() (2.25 regression)
