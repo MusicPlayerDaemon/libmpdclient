@@ -566,7 +566,13 @@ mpd_pure
 static unsigned
 parse_duration_ms(const char *s)
 {
-	return 1000 * atof(s);
+	char *endptr;
+	const double d = strtod(s, &endptr);
+	if (endptr == s || *endptr != '\0')
+		/* garbage */
+		return 0;
+
+	return 1000 * d;
 }
 
 bool
