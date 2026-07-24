@@ -9,11 +9,16 @@
 #include "iso8601.h"
 #include "uri.h"
 #include "iaf.h"
+#include "config.h" // for HAVE_USELOCALE
 
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+
+#ifdef HAVE_USELOCALE
+#include <locale.h>
+#endif
 
 #define MAX_DURATION_S 1000000
 
@@ -112,6 +117,25 @@ struct mpd_song {
 	 */
 	struct mpd_audio_format audio_format;
 };
+
+static double
+my_strtod(const char *src, char **endptr)
+{
+#ifdef HAVE_USELOCALE
+	// use the POSIX locale to format floating point numbers
+	const locale_t my_locale = newlocale(LC_NUMERIC_MASK, "C", NULL);
+	const locale_t old_locale = uselocale(my_locale);
+#endif
+
+	const double result = strtod(src, endptr);
+
+#ifdef HAVE_USELOCALE
+	uselocale(old_locale);
+	freelocale(my_locale);
+#endif
+
+	return result;
+}
 
 static struct mpd_song *
 mpd_song_new(const char *uri)
@@ -530,13 +554,13 @@ mpd_song_parse_range(struct mpd_song *song, const char *value)
 
 	if (*value == '-') {
 		start = 0.0;
-		end = strtod(value + 1, NULL);
+		end = my_strtod(value + 1, NULL);
 	} else {
-		start = strtod(value, &endptr);
+		start = my_strtod(value, &endptr);
 		if (*endptr != '-')
 			return;
 
-		end = strtod(endptr + 1, NULL);
+		end = my_strtod(endptr + 1, NULL);
 	}
 
 	song->start = start > 0.0 ? (unsigned)start : 0;
@@ -569,7 +593,7 @@ static unsigned
 parse_duration_ms(const char *s)
 {
 	char *endptr;
-	const double d = strtod(s, &endptr);
+	const double d = my_strtod(s, &endptr);
 	if (endptr == s || *endptr != '\0')
 		/* garbage */
 		return 0;
