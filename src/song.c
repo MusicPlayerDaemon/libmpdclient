@@ -344,6 +344,7 @@ mpd_song_get_tag(const struct mpd_song *song,
 static void
 mpd_song_set_real_uri(struct mpd_song *song, char *real_uri)
 {
+	free(song->real_uri);
 	song->real_uri = real_uri;
 }
 
