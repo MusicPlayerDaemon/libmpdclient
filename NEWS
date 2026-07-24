@@ -1,6 +1,7 @@
 libmpdclient 2.27 (not yet released)
 * refuse to send newline and carriage return characters
 * use strncmp() instead of memcmp() to avoid over-read
+* fix several NULL pointer dereference bugs on OOM
 * song: fix memory leak in the "RealUri" parser
 * song: parse floating-point numbers with the POSIX localew
 
