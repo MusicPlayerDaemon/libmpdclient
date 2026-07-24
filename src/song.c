@@ -562,6 +562,13 @@ mpd_song_parse_audio_format(struct mpd_song *song, const char *value)
 	mpd_parse_audio_format(&song->audio_format, value);
 }
 
+mpd_pure
+static unsigned
+parse_duration_ms(const char *s)
+{
+	return 1000 * atof(s);
+}
+
 bool
 mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair)
 {
@@ -592,7 +599,7 @@ mpd_song_feed(struct mpd_song *song, const struct mpd_pair *pair)
 	if (strcmp(pair->name, "Time") == 0)
 		mpd_song_set_duration(song, strtoul(pair->value, NULL, 10));
 	else if (strcmp(pair->name, "duration") == 0)
-		mpd_song_set_duration_ms(song, 1000 * atof(pair->value));
+		mpd_song_set_duration_ms(song, parse_duration_ms(pair->value));
 	else if (strcmp(pair->name, "Range") == 0)
 		mpd_song_parse_range(song, pair->value);
 	else if (strcmp(pair->name, "Last-Modified") == 0)
