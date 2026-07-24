@@ -287,10 +287,10 @@ static bool
 mpd_song_add_tag(struct mpd_song *song,
 		 enum mpd_tag_type type, const char *value)
 {
-	struct mpd_tag_value *tag = &song->tags[type], *prev;
-
 	if ((int)type < 0 || type >= MPD_TAG_COUNT)
 		return false;
+
+	struct mpd_tag_value *tag = &song->tags[type], *prev;
 
 	if (tag->value == NULL) {
 		tag->next = NULL;
