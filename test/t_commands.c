@@ -216,6 +216,119 @@ START_TEST(test_playlist_commands)
 }
 END_TEST
 
+START_TEST(test_playlist_search)
+{
+	struct test_capture capture;
+	struct mpd_connection *c = test_capture_init(&capture);
+
+	/* a search without window */
+	ck_assert(mpd_playlist_search_begin(c, "foo", "(Artist == \"Queen\")"));
+	ck_assert(mpd_playlist_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture),
+			 "searchplaylist \"foo\" \"(Artist == \\\"Queen\\\")\"\n");
+	abort_command(&capture, c);
+
+	/* with a window */
+	ck_assert(mpd_playlist_search_begin(c, "foo", "(Artist == \"Queen\")"));
+	ck_assert(mpd_playlist_search_add_window(c, 0, 10));
+	ck_assert(mpd_playlist_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture),
+			 "searchplaylist \"foo\" \"(Artist == \\\"Queen\\\")\" window 0:10\n");
+	abort_command(&capture, c);
+
+	/* an open-ended window */
+	ck_assert(mpd_playlist_search_begin(c, "foo", "(Artist == \"Queen\")"));
+	ck_assert(mpd_playlist_search_add_window(c, 5, UINT_MAX));
+	ck_assert(mpd_playlist_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture),
+			 "searchplaylist \"foo\" \"(Artist == \\\"Queen\\\")\" window 5:\n");
+	abort_command(&capture, c);
+
+	mpd_connection_free(c);
+	test_capture_deinit(&capture);
+}
+END_TEST
+
+START_TEST(test_playlist_search_quote)
+{
+	struct test_capture capture;
+	struct mpd_connection *c = test_capture_init(&capture);
+
+	/* both the playlist name and the expression must be escaped */
+	ck_assert(mpd_playlist_search_begin(c, "double \" quote",
+					    "back\\slash"));
+	ck_assert(mpd_playlist_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture),
+			 "searchplaylist \"double \\\" quote\" \"back\\\\slash\"\n");
+	abort_command(&capture, c);
+
+	/* empty strings are passed through as empty quoted arguments */
+	ck_assert(mpd_playlist_search_begin(c, "", ""));
+	ck_assert(mpd_playlist_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture),
+			 "searchplaylist \"\" \"\"\n");
+	abort_command(&capture, c);
+
+	mpd_connection_free(c);
+	test_capture_deinit(&capture);
+}
+END_TEST
+
+START_TEST(test_playlist_search_cancel)
+{
+	struct test_capture capture;
+	struct mpd_connection *c = test_capture_init(&capture);
+
+	/* start a search, but cancel it */
+	ck_assert(mpd_playlist_search_begin(c, "foo", "(Artist == \"Queen\")"));
+	ck_assert(mpd_playlist_search_add_window(c, 0, 10));
+	mpd_playlist_search_cancel(c);
+
+	/* after cancelling, a new search can be started, and the
+	   cancelled one leaves no remains */
+	ck_assert(mpd_playlist_search_begin(c, "bar", "(Album == \"News\")"));
+	ck_assert(mpd_playlist_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture),
+			 "searchplaylist \"bar\" \"(Album == \\\"News\\\")\"\n");
+	abort_command(&capture, c);
+
+	mpd_connection_free(c);
+	test_capture_deinit(&capture);
+}
+END_TEST
+
+START_TEST(test_playlist_search_state)
+{
+	struct test_capture capture;
+	struct mpd_connection *c = test_capture_init(&capture);
+
+	/* committing without a search in progress fails */
+	ck_assert(!mpd_playlist_search_commit(c));
+	ck_assert_int_eq(mpd_connection_get_error(c), MPD_ERROR_STATE);
+	ck_assert(mpd_connection_clear_error(c));
+
+	/* so does adding a window */
+	ck_assert(!mpd_playlist_search_add_window(c, 0, 10));
+	ck_assert_int_eq(mpd_connection_get_error(c), MPD_ERROR_STATE);
+	ck_assert(mpd_connection_clear_error(c));
+
+	/* a second mpd_playlist_search_begin() without commit fails */
+	ck_assert(mpd_playlist_search_begin(c, "foo", "(Artist == \"Queen\")"));
+	ck_assert(!mpd_playlist_search_begin(c, "bar", "(Album == \"News\")"));
+	ck_assert_int_eq(mpd_connection_get_error(c), MPD_ERROR_STATE);
+	ck_assert(mpd_connection_clear_error(c));
+
+	/* the first search is still intact and can be committed */
+	ck_assert(mpd_playlist_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture),
+			 "searchplaylist \"foo\" \"(Artist == \\\"Queen\\\")\"\n");
+	abort_command(&capture, c);
+
+	mpd_connection_free(c);
+	test_capture_deinit(&capture);
+}
+END_TEST
+
 START_TEST(test_database_commands)
 {
 	struct test_capture capture;
@@ -445,6 +558,13 @@ create_suite(void)
 	TCase *tc_playlist = tcase_create("playlist");
 	tcase_add_test(tc_playlist, test_playlist_commands);
 	suite_add_tcase(s, tc_playlist);
+
+	TCase *tc_playlist_search = tcase_create("playlist_search");
+	tcase_add_test(tc_playlist_search, test_playlist_search);
+	tcase_add_test(tc_playlist_search, test_playlist_search_quote);
+	tcase_add_test(tc_playlist_search, test_playlist_search_cancel);
+	tcase_add_test(tc_playlist_search, test_playlist_search_state);
+	suite_add_tcase(s, tc_playlist_search);
 
 	TCase *tc_database = tcase_create("database");
 	tcase_add_test(tc_database, test_database_commands);
