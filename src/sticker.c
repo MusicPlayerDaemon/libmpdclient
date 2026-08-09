@@ -300,11 +300,12 @@ mpd_sticker_search_add_value_constraint(struct mpd_connection *connection,
 
 	/* worst-case allocation */
 	const size_t size = 1 + oper_str_length + 2 + strlen(value) * 2 + 2;
-	char *p = mpd_request_prepare_append(connection, size);
-	if (p == NULL)
+	char *const start = mpd_request_prepare_append(connection, size);
+	if (start == NULL)
 		return false;
 
-	char *const end = p + size - 1;
+	char *p = start;
+	char *const end = start + size - 1;
 
 	*p++ = ' ';
 
@@ -315,6 +316,10 @@ mpd_sticker_search_add_value_constraint(struct mpd_connection *connection,
 
 	p = quote(p, end, value);
 	if (p == NULL) {
+		/* undo this partial append: the null terminator of
+		   the previous request was overwritten above */
+		*start = '\0';
+
 		mpd_error_code(&connection->error, MPD_ERROR_ARGUMENT);
 		mpd_error_message(&connection->error, "bad string");
 		return false;
