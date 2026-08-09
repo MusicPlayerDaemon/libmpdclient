@@ -8,6 +8,7 @@
 #include "internal.h"
 #include "request.h"
 #include "iso8601.h"
+#include "check_tag.h"
 
 #include <assert.h>
 #include <limits.h>
@@ -47,13 +48,9 @@ mpd_search_db_tags(struct mpd_connection *connection, enum mpd_tag_type type)
 	if (!mpd_request_begin(connection)) 
 		return false;
 
-	const char *strtype = mpd_tag_name(type);
-	if (strtype == NULL) {
-		mpd_error_code(&connection->error, MPD_ERROR_ARGUMENT);
-		mpd_error_message(&connection->error,
-				  "invalid type specified");
+	const char *strtype = mpd_check_tag_name(type, &connection->error);
+	if (strtype == NULL)
 		return false;
-	}
 
 	const size_t len = 5 + strlen(strtype) + 1;
 	connection->request = malloc(len);
@@ -138,13 +135,9 @@ mpd_search_add_tag_constraint(struct mpd_connection *connection,
 	assert(connection != NULL);
 	assert(value != NULL);
 
-	const char *strtype = mpd_tag_name(type);
-	if (strtype == NULL) {
-		mpd_error_code(&connection->error, MPD_ERROR_ARGUMENT);
-		mpd_error_message(&connection->error,
-				  "invalid type specified");
+	const char *strtype = mpd_check_tag_name(type, &connection->error);
+	if (strtype == NULL)
 		return false;
-	}
 
 	return mpd_search_add_constraint(connection, oper, strtype, value);
 }
