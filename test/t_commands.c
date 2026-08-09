@@ -457,6 +457,77 @@ START_TEST(test_count)
 }
 END_TEST
 
+START_TEST(test_search_add_db_songs_to_playlist)
+{
+	struct test_capture capture;
+	struct mpd_connection *c = test_capture_init(&capture);
+
+	/* mpd_search_add_db_songs_to_playlist() emits a trailing space;
+	   without a constraint it is the last character of the command
+	   (this pins the string truncation bug fixed in 4754e8da) */
+	ck_assert(mpd_search_add_db_songs_to_playlist(c, "foo"));
+	ck_assert(mpd_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture),
+			 "searchaddpl \"foo\" \n");
+	abort_command(&capture, c);
+
+	/* each constraint adds a leading space of its own, so there are
+	   two spaces after the playlist name */
+	ck_assert(mpd_search_add_db_songs_to_playlist(c, "foo"));
+	ck_assert(mpd_search_add_tag_constraint(c, MPD_OPERATOR_DEFAULT,
+						MPD_TAG_ARTIST, "Queen"));
+	ck_assert(mpd_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture),
+			 "searchaddpl \"foo\"  Artist \"Queen\"\n");
+	abort_command(&capture, c);
+
+	/* with sort and window */
+	ck_assert(mpd_search_add_db_songs_to_playlist(c, "foo"));
+	ck_assert(mpd_search_add_tag_constraint(c, MPD_OPERATOR_DEFAULT,
+						MPD_TAG_ARTIST, "Queen"));
+	ck_assert(mpd_search_add_sort_tag(c, MPD_TAG_DATE, false));
+	ck_assert(mpd_search_add_window(c, 0, 10));
+	ck_assert(mpd_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture),
+			 "searchaddpl \"foo\"  Artist \"Queen\" sort Date window 0:10\n");
+	abort_command(&capture, c);
+
+	/* the playlist name must be escaped */
+	ck_assert(mpd_search_add_db_songs_to_playlist(c, "double \" quote"));
+	ck_assert(mpd_search_add_expression(c, "(Artist == \"Queen\")"));
+	ck_assert(mpd_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture),
+			 "searchaddpl \"double \\\" quote\"  \"(Artist == \\\"Queen\\\")\"\n");
+	abort_command(&capture, c);
+
+	/* an empty playlist name */
+	ck_assert(mpd_search_add_db_songs_to_playlist(c, ""));
+	ck_assert(mpd_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture),
+			 "searchaddpl \"\" \n");
+	abort_command(&capture, c);
+
+	/* a cancelled request leaves no remains */
+	ck_assert(mpd_search_add_db_songs_to_playlist(c, "foo"));
+	mpd_search_cancel(c);
+	ck_assert(mpd_search_add_db_songs_to_playlist(c, "bar"));
+	ck_assert(mpd_search_commit(c));
+	ck_assert_str_eq(test_capture_receive(&capture),
+			 "searchaddpl \"bar\" \n");
+	abort_command(&capture, c);
+
+	/* a second request without commit fails */
+	ck_assert(mpd_search_add_db_songs_to_playlist(c, "foo"));
+	ck_assert(!mpd_search_add_db_songs_to_playlist(c, "bar"));
+	ck_assert_int_eq(mpd_connection_get_error(c), MPD_ERROR_STATE);
+	ck_assert(mpd_connection_clear_error(c));
+	mpd_search_cancel(c);
+
+	mpd_connection_free(c);
+	test_capture_deinit(&capture);
+}
+END_TEST
+
 START_TEST(test_player_commands)
 {
 	struct test_capture capture;
@@ -575,6 +646,7 @@ create_suite(void)
 	tcase_add_test(tc_search, test_expression);
 	tcase_add_test(tc_search, test_list);
 	tcase_add_test(tc_search, test_count);
+	tcase_add_test(tc_search, test_search_add_db_songs_to_playlist);
 	suite_add_tcase(s, tc_search);
 
 	TCase *tc_player = tcase_create("player");
