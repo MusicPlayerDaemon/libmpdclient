@@ -217,7 +217,7 @@ mpd_search_add_group_tag(struct mpd_connection *connection,
 {
 	assert(connection != NULL);
 
-	const char *tag_name = mpd_tag_name(type);
+	const char *tag_name = mpd_check_tag_name(type, &connection->error);
 	if (tag_name == NULL)
 		return false;
 
@@ -241,9 +241,11 @@ bool
 mpd_search_add_sort_tag(struct mpd_connection *connection,
 			enum mpd_tag_type type, bool descending)
 {
-	return mpd_search_add_sort_name(connection,
-					mpd_tag_name(type),
-					descending);
+	const char *tag_name = mpd_check_tag_name(type, &connection->error);
+	if (tag_name == NULL)
+		return false;
+
+	return mpd_search_add_sort_name(connection, tag_name, descending);
 }
 
 bool
@@ -287,7 +289,7 @@ mpd_recv_pair_tag(struct mpd_connection *connection, enum mpd_tag_type type)
 {
 	assert(connection != NULL);
 
-	const char *name = mpd_tag_name(type);
+	const char *name = mpd_check_tag_name(type, &connection->error);
 	if (name == NULL)
 		return NULL;
 
