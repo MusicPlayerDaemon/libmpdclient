@@ -214,6 +214,7 @@ bool
 mpd_sticker_search_begin(struct mpd_connection *connection, const char *type,
 			 const char *base_uri, const char *name)
 {
+	assert(type != NULL);
 	assert(name != NULL);
 
 	if (!mpd_request_begin(connection)) 
