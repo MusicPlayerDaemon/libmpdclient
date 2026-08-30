@@ -28,6 +28,9 @@ typedef SSIZE_T ssize_t;
 #ifndef MSG_DONTWAIT
 #define MSG_DONTWAIT 0
 #endif
+#ifndef MSG_NOSIGNAL
+#define MSG_NOSIGNAL 0
+#endif
 
 struct mpd_async {
 	mpd_socket_t fd;
@@ -214,7 +217,7 @@ mpd_async_write(struct mpd_async *async)
 		return true;
 
 	nbytes = send(async->fd, mpd_buffer_read(&async->output), size,
-		      MSG_DONTWAIT);
+		      MSG_DONTWAIT | MSG_NOSIGNAL);
 	if (nbytes < 0) {
 		/* I/O error */
 
