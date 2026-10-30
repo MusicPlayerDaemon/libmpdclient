@@ -1,5 +1,7 @@
 libmpdclient 2.28 (not yet released)
 * song: fix floating point rounding error
+* support MPD protocol 0.25
+  - tag "ReleaseType"
 
 libmpdclient 2.27 (2026/08/09)
 * refuse to send newline and carriage return characters
